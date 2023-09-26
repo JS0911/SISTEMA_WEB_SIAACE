@@ -11,8 +11,22 @@ class Usuario extends Conectar
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function get_usuario($ID_USUARIO)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT * FROM usuarios WHERE id = :id";
+        $sql = $conectar->prepare($sql);
+
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':USUARIO', $ID_USUARIO, PDO::PARAM_STR);
+
+        $sql->execute();
+        return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CONTRASENA, $CORREO_ELECTRONICO, $ID_ROL)
-{
+                                                                        {
     try {
         $conectar = parent::conexion();
         parent::set_names();
@@ -44,6 +58,17 @@ class Usuario extends Conectar
     }
 }
 
-    
+public function EditUsuarios($NOMBRE_USUARIO,$ID_ESTADO_USUARIO,$CORREO_ELECTRONICO,$ID_ROL){
+    $conectar = parent::conexion();
+    parent::set_names();
+
+    $sql = "SELECT INTO `siaace`.`tbl_ms_usuario` (`NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CORREO_ELECTRONICO`, `ID_ROL`) VALUES ( :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CORREO_ELECTRONICO, :ID_ROL)";
+    $stmt = $conectar->prepare($sql);
+
+    $stmt->bindParam(':NOMBRE_USUARIO', $NOMBRE_USUARIO, PDO::PARAM_STR);
+    $stmt->bindParam(':ID_ESTADO_USUARIO', $ID_ESTADO_USUARIO, PDO::PARAM_INT);
+    $stmt->bindParam(':CORREO_ELECTRONICO', $CORREO_ELECTRONICO, PDO::PARAM_STR);
+    $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
+}
     
 }
