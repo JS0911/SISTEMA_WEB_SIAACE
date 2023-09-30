@@ -30,4 +30,9 @@ switch ($_GET["op"]) {
         $datos = $com->insert_usuarios($body["USUARIO"], $body["NOMBRE_USUARIO"], $body["ID_ESTADO_USUARIO"], $body["CONTRASENA"], $body["CORREO_ELECTRONICO"], $body["ID_ROL"]);
         echo json_encode("Usuario Insertado");
         break;
+
+    /* case "EditUsuarios":
+        $datos = $com->EditUsuarios($body["ID_USUARIO"],$body["USUARIO"], $body["NOMBRE_USUARIO"], $body["ID_ESTADO_USUARIO"], $body["CORREO_ELECTRONICO"], $body["ID_ROL"]);
+        echo json_encode("Usuario Modificado");
+        break; */
 }

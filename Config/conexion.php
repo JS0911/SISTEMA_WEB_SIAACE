@@ -3,7 +3,6 @@
         protected $dbh;
 
         public function Conexion() {
-            $Conectado = ""; // Inicializamos la variable
 
             try {
                 $conectar = $this->dbh = new PDO("mysql:host=127.0.0.1;dbname=siaace", "root", 'lunamar123');
