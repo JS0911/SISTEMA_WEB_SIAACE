@@ -11,6 +11,13 @@
 	
 ?>
 
+<style>
+    .logo {
+    width: 50px; /* Ancho deseado del logo */
+    margin-right: 10px; /* Espacio a la derecha del logo para separarlo del texto */
+}
+</style>
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -26,16 +33,17 @@
 	</head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.html">SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button
+            <a class="navbar-brand" href="index.php">
+            <img src="src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button
 			><!-- Navbar Search-->
-            <!--<form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <form class="d-none d-md-inline-block form-inline mr-0 my-2 my-md-0 order-2">
                 <div class="input-group">
-				<input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
-				<div class="input-group-append">
-				<button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
-				</div>
+                    <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                    </div>
                 </div>
-			</form>-->
+            </form>
             <!-- Navbar-->
             <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
                 <li class="nav-item dropdown">
@@ -53,11 +61,10 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <a class="nav-link" href="index.html"
+                            <a class="nav-link" href="index.php"
 							><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard</a
 							>
-							
 							<?php if($id_usuario == 1) { ?>
 								
 								<div class="sb-sidenav-menu-heading">Interface</div>
@@ -95,8 +102,6 @@
 										
 							<?php } ?>
                             <?php if($id_usuario == 2) { ?>
-								
-					
 										
 							<?php } ?>
 							
@@ -104,9 +109,9 @@
 							<a class="nav-link" href="charts.html"
 							><div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
 								Charts</a
-								><a class="nav-link" href="tabla.php"
-								><div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-									Tables</a
+								><a class="nav-link" href="Vistas/MantenimientoUsuario/Index.php"
+								><div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+									Usuarios</a
 								>
 							</div>
 					</div>
@@ -120,93 +125,21 @@
                 <main>
                     <div class="container-fluid">
                         <h1 class="mt-4">Dashboard</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Dashboard</li>
-						</ol>
-                        <div class="row">
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Primary Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-									</div>
-								</div>
-							</div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">Warning Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-									</div>
-								</div>
-							</div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">Success Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-									</div>
-								</div>
-							</div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Danger Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-									</div>
-								</div>
-							</div>
-						</div>
-                        <div class="row">
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Area Chart Example</div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-								</div>
-							</div>
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Bar Chart Example</div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-								</div>
-							</div>
-						</div>
-                        <div class="card mb-4">
-                            <div class="card-header"><i class="fas fa-table mr-1"></i>DataTable Example</div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Age</th>
-                                                <th>Start date</th>
-                                                <th>Salary</th>
-											</tr>
-										</thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Age</th>
-                                                <th>Start date</th>
-                                                <th>Salary</th>
-											</tr>
-										</tfoot>
-                                        <tbody>
-                                            
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
+                        <div class="container-fluid">
+                            <!-- Mensaje de Bienvenida -->
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <h1 style="font-size: 24px; font-weight: bold;">¡Bienvenido al Sistema Informático para la Administración de Ahorro y Crédito de los Empleados SIAACE para IDH Microfinanciera!</h1>
+                                    <h2 style="font-size: 16px; font-weight: bold;">Este dashboard es tu ventana al mundo de la información crítica que necesitas para tomar decisiones informadas y estratégicas.</h2>
+                                    <img src="src/Dashboard.jpg" alt="Imagen de Bienvenida">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <p style="font-style: italic; font-size: 14px;">No dudes en ponerte en contacto con nuestro equipo de soporte si tienes alguna pregunta o necesitas ayuda en cualquier momento.</p>
+                                </div>
+                            </div>
+                        </div>
 					</div>
 				</main>
                 <footer class="py-4 bg-light mt-auto">
@@ -219,8 +152,6 @@
 			</div>
 		</div>
                             
- 
-
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>

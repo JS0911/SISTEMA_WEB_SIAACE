@@ -1,4 +1,5 @@
-<?php
+<<?php
+
 //CREAR CONEXION
 require "Config/conexion.php";
 session_start();
@@ -45,6 +46,13 @@ if ($_POST) {
 }
 ?>
 
+<style>
+   .logo {
+    width: 100px; /* Ancho deseado del logo */
+    margin: 0 auto; /* Auto-centrar horizontalmente */
+    display: block; /* Asegurarse de que sea un bloque para que el auto-centrado funcione */
+}
+</style>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -66,21 +74,19 @@ if ($_POST) {
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">IDH Microfinanciera</h3></div>
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">SIAACE LOGIN</h3><img src="src/Logo.png" alt="Logo SIAACE" class="logo"></div>
                                     <div class="card-body">
                                         <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                                             <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Usuario</label><input class="form-control py-4" id="inputEmailAddress" name="usuario" type="text" placeholder="Ingresa tu usuario:" /></div>
                                             <div class="form-group"><label class="small mb-1" for="inputPassword">Contraseña</label><input class="form-control py-4" id="inputPassword" name="contrasena" type="password" placeholder="Ingresa tu contraseña:" /></div>
-                                            <div class="form-group">
-                                                <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" /><label class="custom-control-label" for="rememberPasswordCheck">Recordar contraseña</label></div>
-											</div>
-                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><a class="small" href="password.php">¿Olvido su contraseña? Recuperar aquí</a></div>
-											<div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><a class="small" href="register.php">¿No tienes cuenta? Crea una aqui</a>
-                                            <button type="submit" class="btn btn-primary">Ingresar</button></div>
+                                            <div style="text-align: center;">
+                                                <button type="submit" class="btn btn-primary">Ingresar</button>
+                                            </div>
+                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><a class="small" href="password.php">¿Olvido su contraseña? Recuperar aquí</a>
 										</form>
 									</div>
                                     <div class="card-footer text-center">
-                                    <button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Cuenta</button>
+                                        <div class="small"><a href="register.php">Registrarse</a></div>
 									</div>
 								</div>
 							</div>
@@ -98,59 +104,8 @@ if ($_POST) {
 				</footer>
 			</div>
 		</div>
-
-    <!-- Modal para crear un nuevo registro -->
-    <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="crearModalLabel">Crear Nuevo Registro</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <!-- Formulario de creación -->
-                    <form>
-                        <div class="form-group">
-                            <label for="nombre">Usuario</label>
-                            <input type="text" class="form-control" id="agregar-usuario">
-
-                            <label for="nombre">Nombre</label>
-                            <input type="text" class="form-control" id="agregar-nombre">
-
-                            <label for="estado">Estado</label>
-                            <input type="text" class="form-control" id="agregar-estado">
-
-                            <label for="estado">Correo Electronico</label>
-                            <input type="text" class="form-control" id="agregar-correo">
-
-                            <label for="estado">Rol</label>
-                            <input type="text" class="form-control" id="agregar-rol">
-
-                            <label for="estado">Contraseña</label>
-                            <input type="password" class="form-control" id="agregar-contrasena">
-
-                            <label for="estado">Confirmar Contraseña</label>
-                            <input type="password" class="form-control" id="confirmar-contrasena">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Final de la modal de autoregistro -->
-    
-        <script src="Vistas/MantenimientoUsuario/Insertar_Usuario.js"></script>
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
-
 	</body>
-
 </html>

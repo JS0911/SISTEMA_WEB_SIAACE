@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +9,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <header>
+        <?php
+            require_once('../../header.php');
+        ?>
+    </header>
 </head>
 <body>
+    
     <div class="container mt-5">
         <h1>Lista De Usuarios</h1>
         <hr>
@@ -115,9 +120,16 @@
         </div>
     </div>
 
+    <footer>
+        <?php
+            require_once('../../footer.php');
+        ?>
+    </footer>
+
     <script src="Insertar_Usuario.js"></script>
     <script src="Lista_Usuarios.js"></script>
 
 </body>
 </html>
+
 
