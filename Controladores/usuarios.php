@@ -25,14 +25,26 @@ switch ($_GET["op"]) {
         $datos = $com->get_usuarios();
         echo json_encode($datos);
         break;
-    
+
     case "InsertUsuarios":
         $datos = $com->insert_usuarios($body["USUARIO"], $body["NOMBRE_USUARIO"], $body["ID_ESTADO_USUARIO"], $body["CONTRASENA"], $body["CORREO_ELECTRONICO"], $body["ID_ROL"]);
         echo json_encode("Usuario Insertado");
         break;
 
-    /* case "EditUsuarios":
-        $datos = $com->EditUsuarios($body["ID_USUARIO"],$body["USUARIO"], $body["NOMBRE_USUARIO"], $body["ID_ESTADO_USUARIO"], $body["CORREO_ELECTRONICO"], $body["ID_ROL"]);
-        echo json_encode("Usuario Modificado");
-        break; */
+    case "GetUsuario":
+        $datos = $com->get_usuario($body["ID_USUARIO"]);
+        echo json_encode($datos);
+        break;
+
+    case "updateUsuario":
+        $ID_USUARIO = $body["ID_USUARIO"];
+        $USUARIO = $body["USUARIO"];
+        $NOMBRE_USUARIO = $body["NOMBRE_USUARIO"];
+        $ID_ESTADO_USUARIO = $body["ID_ESTADO_USUARIO"];
+        $CORREO_ELECTRONICO = $body["CORREO_ELECTRONICO"];
+        $ID_ROL = $body["ID_ROL"];
+
+        $datos = $com->update_usuario($ID_USUARIO, $USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CORREO_ELECTRONICO, $ID_ROL);
+        echo json_encode($datos);
+        break;
 }
