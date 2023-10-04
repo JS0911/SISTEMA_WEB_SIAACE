@@ -1,19 +1,23 @@
-<<?php
+<?php
 
 //CREAR CONEXION
-require "Config/conexion.php";
+require "../Config/conexion.php";
 session_start();
 
 if ($_POST) {
     $usuario = $_POST['usuario'];
     $contrasena = $_POST['contrasena'];
+    //$id_usuario = $_POST['id_usuario'];
+    //$id_estado_usuario = $_POST['id_estado_usuario'];
+    //$id_rol = $_POST['id_rol'];
 
+    //$ID_ROL = $_SESSION ['ID_ROL'];
     // Crear una instancia de la clase Conectar
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
 
     if ($conn) { // Verificar si la conexión se estableció correctamente
-        $sql = "SELECT id_usuario, usuario, contrasena FROM tbl_ms_usuario WHERE usuario='$usuario'";
+        $sql = "SELECT id_usuario, usuario, contrasena, id_estado_usuario ,id_rol FROM tbl_ms_usuario WHERE usuario='$usuario'";
         //echo $sql;
         $stmt = $conn->query($sql);
 
@@ -30,6 +34,9 @@ if ($_POST) {
                 if (password_verify($contrasena, $password_bd)) {
                     $_SESSION['id_usuario'] = $row['id_usuario'];
                     $_SESSION['usuario'] = $row['usuario'];
+                    $_SESSION['id_estado_usuario'] =$row['id_estado_usuario'] ;
+                    $_SESSION['id_rol'] =$row['id_rol'] ;
+
                     header("Location: index.php");
                 } else {
                     echo "La contraseña no coincide";
@@ -63,7 +70,7 @@ if ($_POST) {
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>SIAACE - Login</title>
-        <link href="css/styles.css" rel="stylesheet" />
+        <link href="../css/styles.css" rel= "stylesheet"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
 	</head>
     <body class="bg-primary">
@@ -74,7 +81,7 @@ if ($_POST) {
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">SIAACE LOGIN</h3><img src="src/Logo.png" alt="Logo SIAACE" class="logo"></div>
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">SIAACE LOGIN</h3><img src="../src/Logo.png" alt="Logo SIAACE" class="logo"></div>
                                     <div class="card-body">
                                         <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                                             <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Usuario</label><input class="form-control py-4" id="inputEmailAddress" name="usuario" type="text" placeholder="Ingresa tu usuario:" /></div>
@@ -106,6 +113,6 @@ if ($_POST) {
 		</div>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
+        <script src= "../js/scripts.js"></script>
 	</body>
 </html>

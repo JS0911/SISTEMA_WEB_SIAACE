@@ -1,5 +1,5 @@
 <?php
-require "Config/conexion.php"; // Incluye el archivo de conexión a la base de datos
+require "../Config/conexion.php"; // Incluye el archivo de conexión a la base de datos
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $usuario = $_POST['usuario'];
@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>SIAACE - Registro</title>
-        <link href="css/styles.css" rel="stylesheet" />
+        <link href="../css//styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="bg-primary">
@@ -101,6 +101,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
+        <script src="../js/scripts.js"></script>
     </body>
 </html>
