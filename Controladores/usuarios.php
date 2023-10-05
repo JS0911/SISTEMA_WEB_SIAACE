@@ -47,4 +47,10 @@ switch ($_GET["op"]) {
         $datos = $com->update_usuario($ID_USUARIO, $USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CORREO_ELECTRONICO, $ID_ROL);
         echo json_encode($datos);
         break;
+    case "eliminarUsuario":
+        $ID_USUARIO = $body["ID_USUARIO"];
+        $datos = $com->eliminar_usuario($ID_USUARIO);
+        echo json_encode("Usuario eliminado");
+        break;
 }
+?>

@@ -20,7 +20,6 @@ class Usuario extends Conectar
         $sql = "SELECT * FROM tbl_ms_usuario WHERE ID_USUARIO = :ID";
         $stmt = $conectar->prepare($sql);
         $stmt->bindParam(':ID', $ID_USUARIO, PDO::PARAM_INT); 
-    
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC); 
     }
@@ -92,6 +91,25 @@ class Usuario extends Conectar
         }
     }
     
+    // ELIMINA UN USUARIO
+public function eliminar_usuario($ID_USUARIO) {
+    try {
+        $conectar = parent::conexion();
+        parent::set_names();
+        // Consulta SQL para eliminar el usuario
+        $sql = "DELETE FROM `tbl_ms_usuario` WHERE `ID_USUARIO` = :ID_USUARIO";
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID_USUARIO', $ID_USUARIO, PDO::PARAM_INT);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            return "Usuario eliminado correctamente";
+        } else {
+            return "No se realizó ninguna eliminación, o el usuario no existe";
+        }
+    } catch (PDOException $e) {
+        return "Error al eliminar el usuario: " . $e->getMessage();
+    }
+}
 
-    
+  
 }
