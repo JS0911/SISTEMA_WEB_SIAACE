@@ -8,7 +8,7 @@ require "../../Config/conexion.php";
 
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
-$id_rol = "1";
+$id_rol = $_SESSION['id_rol'];
 $id_objeto_Usuario = "2";
 ?>
 <style>
@@ -108,6 +108,9 @@ $id_objeto_Usuario = "2";
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                             Roles
                         </a>
+                        <a class="nav-link" href="../Vistas/MantenimientoUsuario/permisos.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Permisos
+                        </a>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -126,7 +129,7 @@ $id_objeto_Usuario = "2";
                     <!-- Botón para abrir el formulario de creación -->
                     <?php
                     if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                        echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
+                        echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModalPermisos">Crear Nuevo</button>';
                     }
                     ?>
 
@@ -149,11 +152,11 @@ $id_objeto_Usuario = "2";
                 </div>
 
                 <!-- Modal para crear un nuevo registro -->
-                <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
+                <div class="modal fade" id="crearModalPermiso" tabindex="-1" role="dialog" aria-labelledby="crearModalPermisoLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="crearModalLabel">Crear Nuevo Registro</h5>
+                                <h5 class="modal-title" id="crearModalPermisoLabel">Crear Nuevo Permiso</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -162,32 +165,30 @@ $id_objeto_Usuario = "2";
                                 <!-- Formulario de creación -->
                                 <form>
                                     <div class="form-group">
-                                        <label for="nombre">Usuario</label>
-                                        <input type="text" class="form-control" id="agregar-usuario">
+                                        <label for="nombre">Id Rol</label>
+                                        <input type="text" class="form-control" id="agregar-idRol">
 
-                                        <label for="nombre">Nombre</label>
-                                        <input type="text" class="form-control" id="agregar-nombre">
+                                        <label for="nombre">Id Objeto</label>
+                                        <input type="text" class="form-control" id="agregar-idObjeto">
 
-                                        <label for="estado">Estado</label>
-                                        <input type="text" class="form-control" id="agregar-estado">
+                                        <label for="estado">Permisos Inserción</label>
+                                        <input type="text" class="form-control" id="agregar-pInsercion">
 
-                                        <label for="estado">Correo Electronico</label>
-                                        <input type="text" class="form-control" id="agregar-correo">
+                                        <label for="estado">Permisos Eliminación</label>
+                                        <input type="text" class="form-control" id="agregar-pEliminacion">
 
-                                        <label for="estado">Rol</label>
-                                        <input type="text" class="form-control" id="agregar-rol">
+                                        <label for="estado">Permisos Actualización</label>
+                                        <input type="text" class="form-control" id="agregar-pActualizacion">
 
-                                        <label for="estado">Contraseña</label>
-                                        <input type="password" class="form-control" id="agregar-contrasena">
+                                        <label for="estado">Permisos Consultar</label>
+                                        <input type="password" class="form-control" id="agregar-pConsultar">
 
-                                        <label for="estado">Confirmar Contraseña</label>
-                                        <input type="password" class="form-control" id="confirmar-contrasena">
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-agregarPermiso">Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -248,7 +249,7 @@ $id_objeto_Usuario = "2";
         </div>
     </div>
     </script>
-
+   
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

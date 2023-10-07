@@ -12,7 +12,7 @@ if (!isset($_SESSION['usuario'])) {
 
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
-$id_rol = "1";
+$id_rol = $_SESSION['id_rol'];
 $id_objeto_Usuario = "2";
 
 $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario);
@@ -121,14 +121,25 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                         <div class="sb-sidenav-menu-heading">Addons</div>
                         <a class="nav-link" href="../charts.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            Charts
-                        </a><a class="nav-link" href="usuarios.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                            Usuarios
-                        </a>
+                            Charts</a>
+                            <?php
+                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            // Mostrar la pestaña de "Usuarios" si PERMISOS_CONSULTAR es igual a 1
+                            echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/usuarios.php">';
+                            echo '<div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Usuarios';
+                            echo '</a>';
+
+                        } else{
+                            echo "No tiene permiso";
+                        }
+                        
+                        ?>
                         <a class="nav-link" href="../../roles.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                             Roles
+                        </a>
+                        <a class="nav-link" href="permisos.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Permisos
                         </a>
                     </div>
                 </div>
@@ -307,6 +318,7 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
+
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarUsuario(' + usuario.ID_USUARIO + ')">Editar</button>';
                         }

@@ -10,7 +10,7 @@ if ($_POST) {
     $contrasena = $_POST['contrasena'];
     //$id_usuario = $_POST['id_usuario'];
     //$id_estado_usuario = $_POST['id_estado_usuario'];
-    //$id_rol = $_POST['id_rol'];
+    $id_rol = $_POST['id_rol'];
 
     //$ID_ROL = $_SESSION ['ID_ROL'];
     // Crear una instancia de la clase Conectar
@@ -18,9 +18,15 @@ if ($_POST) {
     $conn = $conexion->Conexion();
 
     if ($conn) { // Verificar si la conexión se estableció correctamente
-        $sql = "SELECT id_usuario, usuario, contrasena, id_estado_usuario ,id_rol FROM tbl_ms_usuario WHERE usuario='$usuario'";
+        $sql = "SELECT id_usuario, usuario, contrasena, id_estado_usuario ,id_rol, preguntas_contestadas,id_rol FROM tbl_ms_usuario WHERE usuario='$usuario'";
+        $sql1 = "SELECT * FROM tbl_ms_parametros WHERE PARAMETRO = 'BLOQUEO'";
         //echo $sql;
         $stmt = $conn->query($sql);
+        $filaintentos = $conn->query($sql1);
+
+        //BLOQUEO SI SUPERA LOS INTENTOS FALLIDOS: OBTENCION DE VALOR DE INTENTOS
+        $row1 = $filaintentos->fetch(PDO::FETCH_ASSOC);
+        $cantMaximaIntentos = $row1['VALOR'];
 
         if ($stmt) {
             $num = $stmt->rowCount();
@@ -38,13 +44,66 @@ if ($_POST) {
                     $_SESSION['id_estado_usuario'] = $row['id_estado_usuario'];
                     $_SESSION['id_rol'] = $row['id_rol'];
 
-                    header("Location: index.php");
+                    //ESTADO DEL USUARIO
+                    if($row['id_estado_usuario'] == 2)
+                    {
+                        $mensajeEstado = 'Su usuario se encuentra inactivo';
+                    }
+                    else if($row['id_estado_usuario'] == 3)
+                    {
+                        //Cambiar la ruta a login por primera vez
+                        header("Location: ../Vistas/MantenimientoUsuario/Contestar_preguntas.php");
+                    }
+                    else if($row['id_estado_usuario'] == 4)
+                    {
+                        $mensajeEstado = 'Su usuario se encuentra bloqueado.';
+                    }
+                    else
+                    {
+                        header("Location: index.php");
+                        echo $id_rol;
+                    }
+
                 } else {
+                    
                     $contrasenaNoCoincice = "La contraseña no coincide";
-                   // echo "La contraseña no coincide";
+                    // echo "La contraseña no coincide";
+
+                    if(!isset($_COOKIE['intentosFallidos']))
+                    {
+                        setcookie('intentosFallidos', 1, time() + (86400));
+                        setcookie('usuarioIntento', $usuario, time() + (86400));
+                    }
+                    else
+                    {
+                        $cont = $_COOKIE['intentosFallidos'];
+                        $usuarioAnterior = $_COOKIE['usuarioIntento'];
+
+                        if($usuarioAnterior != $usuario)
+                        {
+                            setcookie('intentosFallidos', 1, time() + (86400));
+                            setcookie('usuarioIntento', $usuario, time() + (86400));
+                        }
+                        else
+                        {
+                            $cont++;
+                            setcookie('intentosFallidos', $cont, time() + (86400));
+                    
+                            if($cantMaximaIntentos <= $_COOKIE['intentosFallidos'])
+                            {
+                                $contrasenaNoCoincice = "Su usuario ha sido bloqueado debido a que excedio la cantidad de intentos.";
+                                $sql2 = "UPDATE tbl_ms_usuario SET ID_ESTADO_USUARIO = 4 WHERE USUARIO = '$usuario'";
+                                $conn->query($sql2);
+                                setcookie('intentosFallidos', "", time() - 3600);
+                                setcookie('usuarioIntento', "", time() - 3600);
+                            }
+                        }
+                        
+                    }
                 }
             } else {
-                $NoExisteUsuario = "No existe usuario";
+                $NoExisteUsuario = "No existe usuario"; 
+                
                 //echo"No existe usuario";
             }
         } else {
@@ -107,6 +166,7 @@ if ($_POST) {
 
                                     <div class="card-footer text-center">
                                         <div class="small"><a href="register.php">Registrarse</a></div>
+                                        
                                     </div>
 
                                 </div>
@@ -118,6 +178,9 @@ if ($_POST) {
                                     <?php if (!empty($NoExisteUsuario)) : ?>
                                         <div class="alert alert-danger"><?php echo $NoExisteUsuario; ?></div>
                                     <?php endif; ?>
+                                    <?php if(!empty($mensajeEstado)) : ?>
+                                        <div class="alert alert-danger"><?php echo $mensajeEstado; ?></div>
+                                    <?php endif ?>
                                 </div>
                             </div>
                         </div>

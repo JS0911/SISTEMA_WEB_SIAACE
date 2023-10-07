@@ -15,7 +15,6 @@ $usuario = $_SESSION['usuario'];
 //$id_estado_usuario = $_POST['id_estado_usuario'];
 $id_rol = $_SESSION['id_rol'];
 //   $ID_ROL = $_SESSION ['ID_ROL'];
-$id_rol = "1";
 $id_objeto_Usuario = "2";
 
 $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario);
@@ -90,7 +89,9 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                             echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/usuarios.php">';
                             echo '<div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Usuarios';
                             echo '</a>';
+                           
                         } 
+                    
                         ?>
                         <a class="nav-link" href="../roles.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Roles

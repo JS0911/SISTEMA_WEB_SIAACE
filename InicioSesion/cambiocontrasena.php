@@ -8,7 +8,7 @@ $permisosUsuarios = new PermisosUsuarios();
 
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
-$id_rol = "1";
+$id_rol =$_SESSION['id_rol'];
 $id_objeto_Usuario = "2";
 
 $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario);
@@ -169,7 +169,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
                         ?>
 
-
+                        <a class="nav-link" href="../Vistas/MantenimientoUsuario/permisos.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Permisos
+                        </a>
                         <a class="nav-link" href="../roles.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Roles
                         </a>
