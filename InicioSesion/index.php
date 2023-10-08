@@ -78,27 +78,34 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                         <a class="nav-link" href="index.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div> Inicio
                         </a>
-                        <div class="sb-sidenav-menu-heading">Addons</div>
+                        <div class="sb-sidenav-menu-heading">Pestañas</div>
                         <a class="nav-link" href="../charts.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>Charts
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>Dashboard
                         </a>
 
                         <?php
-                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                            // Mostrar la pestaña de "Usuarios" si PERMISOS_CONSULTAR es igual a 1
-                            echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/usuarios.php">';
-                            echo '<div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Usuarios';
-                            echo '</a>';
-                           
-                        } 
-                    
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
+                                    Modulo seguridad
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
+                                echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
+                                echo '<nav class="sb-sidenav-menu-nested nav">';
+                                
+                                if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/usuarios.php"><i class="fas fa-user"></i> Usuarios</a>';
+                                }
+                                
+                                echo '<a class="nav-link" href="../roles.php"><i class="fas fa-user-lock"></i> Roles</a>';
+                                echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/permisos.php"><i class="fas fa-key"></i> Permisos</a>';
+                                echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"></i> Objetos</a>';
+                                
+                                echo '</nav>';
+                                echo '</div>';
+                            }
                         ?>
-                        <a class="nav-link" href="../roles.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Roles
-                        </a>
-                        <a class="nav-link" href="../Vistas/MantenimientoUsuario/permisos.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Permisos
-                        </a>
+
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
