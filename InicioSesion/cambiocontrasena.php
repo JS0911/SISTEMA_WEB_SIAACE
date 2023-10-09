@@ -239,7 +239,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
                                 <!-- Este div se utilizará para mostrar mensajes -->
                                 <div id="mensajeDiv">
-
+                                <?php if (!empty($contrasenaActualError)) : ?>
+                                        <div class="alert alert-danger"><?php echo $contrasenaActualError; ?></div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($contrasenaCambiadaExito)) : ?>
+                                        <div class="alert alert-danger"><?php echo $contrasenaCambiadaExito; ?></div>
+                                    <?php endif; ?>
                                     <?php if (!empty($nuevaContrasenaError)) : ?>
                                         <div class="alert alert-danger"><?php echo $nuevaContrasenaError; ?></div>
                                     <?php endif; ?>
@@ -256,33 +261,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </main>
         </div>
     </div>
-    <script>
-        <?php
-
-        if (!empty($contrasenaActualError)) {
-            echo '<script>';
-            echo 'Swal.fire({';
-            echo '  title: "Error",';
-            echo '  text: "' . $contrasenaActualError . '",';
-            echo '  icon: "error",';
-            echo '  confirmButtonColor: "#3085d6"';
-            echo '});';
-            echo '</script>';
-        }
-
-        if (!empty($contrasenaCambiadaExito)) {
-            echo '<script>';
-            echo 'Swal.fire({';
-            echo '  title: "Éxito",';
-            echo '  text: "' . $contrasenaCambiadaExito . '",';
-            echo '  icon: "success",';
-            echo '  confirmButtonColor: "#3085d6"';
-            echo '});';
-            echo '</script>';
-        }
-
-        ?>
-    </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>

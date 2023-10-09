@@ -2,101 +2,150 @@
 
 class PermisosUsuarios extends Conectar
 {
-    public function get_Permisos_Usuarios($id_rol, $id_objeto) 
-{
-    $conectar = parent::conexion();
-    parent::set_names();
-    $sql = "SELECT PERMISOS_INSERCION, PERMISOS_ELIMINACION, PERMISOS_ACTUALIZACION, PERMISOS_CONSULTAR 
-            FROM siaace.tbl_ms_permisos 
-            WHERE id_rol = :id_rol AND id_objeto = :id_objeto";
-    $sql = $conectar->prepare($sql);
-    $sql->bindParam(':id_rol', $id_rol, PDO::PARAM_INT);
-    $sql->bindParam(':id_objeto', $id_objeto, PDO::PARAM_INT);
-    $sql->execute();
-    return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-}
+    public function get_Permisos_Usuarios($id_rol, $id_objeto)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT PERMISOS_INSERCION, PERMISOS_ELIMINACION, PERMISOS_ACTUALIZACION, PERMISOS_CONSULTAR 
+                FROM siaace.tbl_ms_permisos 
+                WHERE id_rol = :id_rol AND id_objeto = :id_objeto";
+        $sql = $conectar->prepare($sql);
+        $sql->bindParam(':id_rol', $id_rol, PDO::PARAM_INT);
+        $sql->bindParam(':id_objeto', $id_objeto, PDO::PARAM_INT);
+        $sql->execute();
+        //echo $sql;
+        // Verificar si se obtuvieron resultados
+        if ($sql->rowCount() > 0) {
+            // echo "Si se obtuvieron resultados";
+            return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            //echo "no se encontraron resultado, puedes manejarlo como desees";
+            // En este caso, no se encontraron resultados, puedes manejarlo como desees
+            return array(); // Devuelve un array vacío o un valor que indique la ausencia de resultados
+        }
+    }
 
 
-    //TRAE SOLO UN PERMISO
-    // public function get_PermisoUsuario($ID_ROL, $ID_OBJETO) 
-    // {
-    //     $conectar = parent::conexion();
-    //     parent::set_names();
-    //     $sql = "SELECT * FROM tbl_ms_permisos WHERE ID_ROL = :ID , ID_OBJETO = :ID_OBJETO";
-    //     $stmt = $conectar->prepare($sql);
-    //     $stmt->bindParam(':ID', $ID_ROL, PDO::PARAM_INT ,':ID_OBJETO', $ID_OBJETO, PDO::PARAM_INT ); 
-    
-    //     $stmt->execute();
-    //     return $stmt->fetch(PDO::FETCH_ASSOC); 
-    // }
-    
-    // //INSERTA UN USUARIO
-    // public function insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CONTRASENA, $CORREO_ELECTRONICO, $ID_ROL) {
-    // try {
-    //     $contrasenaEncriptada = password_hash($CONTRASENA, PASSWORD_DEFAULT);
-    //     //echo $contrasenaEncriptada;
-    //     $conectar = parent::conexion();
-    //     parent::set_names();
-    //     $sql = "INSERT INTO `siaace`.`tbl_ms_usuario` (`USUARIO`, `NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CONTRASENA`, `CORREO_ELECTRONICO`, `ID_ROL`) VALUES ( :USUARIO, :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CONTRASENA, :CORREO_ELECTRONICO, :ID_ROL)";
+    //TRAE TODA LA TABLA PERMISOS
+    public function get_Permisos()
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT * FROM siaace.tbl_ms_permisos";
+        $sql = $conectar->prepare($sql);
+        $sql->execute();
+        //echo $sql;
+        // Verificar si se obtuvieron resultados
+        if ($sql->rowCount() > 0) {
+            // echo "Si se obtuvieron resultados";
+            return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            //echo "no se encontraron resultado, puedes manejarlo como desees";
+            // En este caso, no se encontraron resultados, puedes manejarlo como desees
+            return array(); // Devuelve un array vacío o un valor que indique la ausencia de resultados
+        }
+    }
 
-    //     $stmt = $conectar->prepare($sql);
-      
-    //     $stmt->bindParam(':USUARIO', $USUARIO, PDO::PARAM_STR);
-    //     $stmt->bindParam(':NOMBRE_USUARIO', $NOMBRE_USUARIO, PDO::PARAM_STR);
-    //     $stmt->bindParam(':ID_ESTADO_USUARIO', $ID_ESTADO_USUARIO, PDO::PARAM_INT);
-    //     $stmt->bindParam(':CONTRASENA', $contrasenaEncriptada, PDO::PARAM_STR);
-    //     $stmt->bindParam(':CORREO_ELECTRONICO', $CORREO_ELECTRONICO, PDO::PARAM_STR);
-    //     $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
-        
-    //     $stmt->execute();
 
-    //     if ($stmt->rowCount() > 0) {
-    //         return "Usuario Insertado";
-    //     } else {
-    //         return "Error al insertar el usuario"; 
-    //     }
-    // } catch (PDOException $e) {
-       
-    //     return "Error al insertar el usuario: " . $e->getMessage();
-    // }
-    // }
+    //INSERTA UN PERMISO
+    public function insert_permiso($ID_ROL, $ID_OBJETO, $PERMISOS_INSERCION, $PERMISOS_ELIMINACION, $PERMISOS_ACTUALIZACION, $PERMISOS_CONSULTAR)
+    {
+        try {
 
-    // //EDITA UN USUARIO
-    // public function update_usuario($ID_USUARIO, $USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CORREO_ELECTRONICO, $ID_ROL) {
-    //     try {
-    //         $conectar = parent::conexion();
-    //         parent::set_names();
-    
-    //         // Consulta SQL para actualizar los campos del usuario
-    //         $sql = "UPDATE `tbl_ms_usuario` 
-    //                 SET `USUARIO` = :USUARIO, 
-    //                     `NOMBRE_USUARIO` = :NOMBRE_USUARIO, 
-    //                     `ID_ESTADO_USUARIO` = :ID_ESTADO_USUARIO, 
-    //                     `CORREO_ELECTRONICO` = :CORREO_ELECTRONICO, 
-    //                     `ID_ROL` = :ID_ROL 
-    //                 WHERE `ID_USUARIO` = :ID_USUARIO";
-    
-    //         $stmt = $conectar->prepare($sql);
-    
-    //         $stmt->bindParam(':ID_USUARIO', $ID_USUARIO, PDO::PARAM_INT);
-    //         $stmt->bindParam(':USUARIO', $USUARIO, PDO::PARAM_STR);
-    //         $stmt->bindParam(':NOMBRE_USUARIO', $NOMBRE_USUARIO, PDO::PARAM_STR);
-    //         $stmt->bindParam(':ID_ESTADO_USUARIO', $ID_ESTADO_USUARIO, PDO::PARAM_INT);
-    //         $stmt->bindParam(':CORREO_ELECTRONICO', $CORREO_ELECTRONICO, PDO::PARAM_STR);
-    //         $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
-    
-    //         $stmt->execute();
-    
-    //         if ($stmt->rowCount() > 0) {
-    //             return "Usuario actualizado correctamente";
-    //         } else {
-    //             return "No se realizó ninguna actualización, o el usuario no existe";
-    //         }
-    //     } catch (PDOException $e) {
-    //         return "Error al actualizar el usuario: " . $e->getMessage();
-    //     }
-    // }
-    
+            $conectar = parent::conexion();
+            parent::set_names();
+            $sql = "INSERT INTO `siaace`.`tbl_ms_permisos` (`ID_ROL`, `ID_OBJETO`, `PERMISOS_INSERCION`, `PERMISOS_ELIMINACION`, `PERMISOS_ACTUALIZACION`, `PERMISOS_CONSULTAR`) VALUES ( :ID_ROL, :ID_OBJETO, :PERMISOS_INSERCION, :PERMISOS_ELIMINACION, :PERMISOS_ACTUALIZACION, :PERMISOS_CONSULTAR)";
 
-    
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
+            $stmt->bindParam(':ID_OBJETO', $ID_OBJETO, PDO::PARAM_INT);
+            $stmt->bindParam(':PERMISOS_INSERCION', $PERMISOS_INSERCION, PDO::PARAM_INT);
+            $stmt->bindParam(':PERMISOS_ELIMINACION', $PERMISOS_ELIMINACION, PDO::PARAM_INT);
+            $stmt->bindParam(':PERMISOS_ACTUALIZACION', $PERMISOS_ACTUALIZACION, PDO::PARAM_INT);
+            $stmt->bindParam(':PERMISOS_CONSULTAR', $PERMISOS_CONSULTAR, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                return "Permiso Insertado";
+            } else {
+                return "Error al insertar el permiso";
+            }
+        } catch (PDOException $e) {
+
+            return "Error al insertar el permiso: " . $e->getMessage();
+        }
+    }
+
+    // //EDITA UN PERMISO
+    public function update_permiso($ID_ROL, $ID_OBJETO, $PERMISOS_INSERCION, $PERMISOS_ELIMINACION, $PERMISOS_ACTUALIZACION, $PERMISOS_CONSULTAR)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+
+            // Consulta SQL para actualizar los campos del usuario
+            $sql = "UPDATE `tbl_ms_permisos` 
+                    SET `PERMISOS_INSERCION` = :PERMISOS_INSERCION, 
+                        `PERMISOS_ELIMINACION` = :PERMISOS_ELIMINACION, 
+                        `PERMISOS_ACTUALIZACION` = :PERMISOS_ACTUALIZACION, 
+                        `PERMISOS_CONSULTAR` = :PERMISOS_CONSULTAR 
+                         
+                    WHERE `ID_ROL` = :ID_ROL AND `ID_OBJETO` = :ID_OBJETO";
+
+            $stmt = $conectar->prepare($sql);
+
+            $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
+            $stmt->bindParam(':ID_OBJETO', $ID_OBJETO, PDO::PARAM_INT);
+            $stmt->bindParam(':PERMISOS_INSERCION', $PERMISOS_INSERCION, PDO::PARAM_INT);
+            $stmt->bindParam(':PERMISOS_ELIMINACION', $PERMISOS_ELIMINACION, PDO::PARAM_INT);
+            $stmt->bindParam(':PERMISOS_ACTUALIZACION', $PERMISOS_ACTUALIZACION, PDO::PARAM_INT);
+            $stmt->bindParam(':PERMISOS_CONSULTAR', $PERMISOS_CONSULTAR, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                return "Permiso actualizado correctamente";
+            } else {
+                return "No se realizó ninguna actualización, o el rol u objeto no existe";
+            }
+        } catch (PDOException $e) {
+            return "Error al actualizar el permiso: " . $e->getMessage();
+        }
+    }
+
+    // ELIMINA UN PERMISO
+    public function eliminar_permiso($ID_ROL, $ID_OBJETO)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+
+            // Consulta SELECT para verificar si el permiso existe
+            $select_sql = "SELECT * FROM `tbl_ms_permisos` WHERE `ID_ROL` = :ID_ROL AND `ID_OBJETO` = :ID_OBJETO";
+            $stmt_select = $conectar->prepare($select_sql);
+            $stmt_select->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
+            $stmt_select->bindParam(':ID_OBJETO', $ID_OBJETO, PDO::PARAM_INT);
+            $stmt_select->execute();
+
+            // Verificar si se encontró el permiso
+            if ($stmt_select->rowCount() > 0) {
+                // El permiso existe, proceder con la eliminación
+                $delete_sql = "DELETE FROM `tbl_ms_permisos` WHERE `ID_ROL` = :ID_ROL AND `ID_OBJETO` = :ID_OBJETO";
+                $stmt_delete = $conectar->prepare($delete_sql);
+                $stmt_delete->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
+                $stmt_delete->bindParam(':ID_OBJETO', $ID_OBJETO, PDO::PARAM_INT);
+                $stmt_delete->execute();
+
+                if ($stmt_delete->rowCount() > 0) {
+                    return "Permiso eliminado correctamente";
+                } else {
+                    return "No se realizó ninguna eliminación, o el rol u objeto no existe";
+                }
+            } else {
+                return "El permiso no existe";
+            }
+        } catch (PDOException $e) {
+            return "Error al eliminar el objeto: " . $e->getMessage();
+        }
+    }
 }

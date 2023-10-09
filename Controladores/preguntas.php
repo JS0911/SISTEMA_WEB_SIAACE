@@ -22,7 +22,7 @@ $body = json_decode(file_get_contents("php://input"), true);
 
 switch ($_GET["op"]) {
     case "GetPreguntas":
-        $datos = $com->get_preguntas();
+        $datos = $com->get_preguntas($body["ID_USUARIO"]);
         echo json_encode($datos);
         break; 
            
@@ -30,4 +30,9 @@ switch ($_GET["op"]) {
         $datos = $com->insert_respuesta($body["ID_PREGUNTA"],$body["ID_USUARIO"],$body["RESPUESTAS"]);
         echo json_encode($datos);
         break;  
+
+    case "ContarPregunta":
+        $datos = $com->ContarPreguntas($body["ID_USUARIO"]);
+        echo json_encode($datos);
+        break; 
 }

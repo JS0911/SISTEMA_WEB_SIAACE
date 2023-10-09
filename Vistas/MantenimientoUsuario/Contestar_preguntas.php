@@ -1,3 +1,15 @@
+<?php
+
+session_start();
+require "../../Config/conexion.php";
+
+$id_usuario = $_SESSION['id_usuario'];
+$conexion = new Conectar();
+$conn = $conexion->Conexion();
+  
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -22,7 +34,7 @@
             <label for="respuestaSeguridad">Tu respuesta:</label>
             <input type="text" class="form-control" id="respuestaSeguridad" name="respuestaSeguridad" required>
         </div>
-        <button type="submit" class="btn btn-primary" id="btn-enviar">Enviar</button>
+        <button type="submit" class="btn btn-primary" id="btn-enviar" onclick="EnviarRespuestas()">Enviar</button>
     </form>
 </div>
 
@@ -31,35 +43,84 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+
 <script>
 function cargarPreguntas() {
+    var ID = <?php echo json_encode($id_usuario); ?>;
+    var data = {
+        "ID_USUARIO": ID
+    };
+
     // Realiza una solicitud fetch para obtener la lista de preguntas desde tu servidor
-    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/preguntas.php?op=GetPreguntas')
-        .then(response => response.json()) // Parsea la respuesta como JSON
-        .then(data => {
-            // 'data' contiene la lista de preguntas en formato JSON
+    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/preguntas.php?op=GetPreguntas', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data) // Convierte el objeto en formato JSON
+    })
+    .then(response => response.json()) // Parsea la respuesta como JSON
+    .then(data => {
+        // Limpia el select actual
+        var selectElement = document.getElementById('preguntaSeguridad');
+        selectElement.innerHTML = '';
 
-            // Limpia el select actual
-            document.getElementById('preguntaSeguridad').innerHTML = '';
-
-            // Itera sobre las preguntas y agrega cada una como una opción al select
-            data.forEach(function(pregunta) {
+        // Itera sobre las preguntas y agrega cada una como una opción al select
+        data.forEach(function(pregunta) {
             var option = document.createElement('option');
             option.value = pregunta.ID_PREGUNTA; // El valor de la opción
-            option.text = pregunta.PREGUNTA; // El valor de la opción
-            document.getElementById('preguntaSeguridad').appendChild(option);
-});
-
-        })
-        .catch(error => {
-            console.error('Error al cargar las preguntas: ', error);
+            option.text = pregunta.PREGUNTA; // El texto visible de la opción
+            selectElement.appendChild(option);
         });
+
+    })
+    .catch(error => {
+        console.error('Error al cargar las preguntas: ', error);
+    });
 }
 
-function GuardarRespuestas() {
-    
- 
+function EnviarRespuestas() {
+    var ID = <?php echo json_encode($id_usuario); ?>;
+    var RESP = document.getElementById("respuestaSeguridad").value; // Obtener el valor de la respuesta
+
+    // Obtener el elemento <select> y su opción seleccionada
+    var selectElement = document.getElementById('preguntaSeguridad');
+    var selectedOption = selectElement.options[selectElement.selectedIndex];
+
+    // Obtener el valor de la opción seleccionada (que representa el ID de la pregunta)
+    var ID_PREGUNTA = selectedOption.value;
+
+    // Crear el objeto de datos con el ID de pregunta, ID de usuario y respuesta
+    var data = {
+        "ID_PREGUNTA": ID_PREGUNTA,
+        "ID_USUARIO": ID,
+        "RESPUESTAS": RESP
+    };
+
+    // Realizar una solicitud POST utilizando fetch
+    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/preguntas.php?op=InsertRespuesta', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data) // Convertir el objeto de datos a JSON
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Manejar la respuesta del servidor si es necesario
+        console.log(data);
+    })
+    .catch(error => {
+        // Manejar errores si ocurren durante la solicitud
+        console.error('Error:', error);
+    });
 }
+
+function ContarPreguntas(){
+
+}
+
 
 // Llama a la función cargarPreguntas para cargar las preguntas al cargar la página
 document.addEventListener('DOMContentLoaded', function() {

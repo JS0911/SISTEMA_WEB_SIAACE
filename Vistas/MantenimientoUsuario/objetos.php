@@ -2,9 +2,9 @@
 
 session_start();
 require "../../Config/conexion.php";
-require_once '../../Modelos/permisoUsuario.php';
+require_once "../../Modelos/permisoUsuario.php";
 
-$permisosUsuarios = new PermisosUsuarios();
+$permisosObjetos = new PermisosUsuarios();
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
@@ -13,9 +13,9 @@ if (!isset($_SESSION['usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Usuario = "2";
+$id_objeto_Objetos = "5";
 
-$permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario)
+$permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
 
 // Verificar si se obtuvieron resultados
 // if (!empty($permisos)) {
@@ -118,29 +118,35 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div> Inicio
                         </a>
 
-                        <div class="sb-sidenav-menu-heading">Addons</div>
+                        <div class="sb-sidenav-menu-heading">Pestañas</div>
                         <a class="nav-link" href="../charts.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            Charts</a>
-                            <?php
-                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                            // Mostrar la pestaña de "objetos" si PERMISOS_CONSULTAR es igual a 1
-                            echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/objetos.php">';
-                            echo '<div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Objetos';
-                            echo '</a>';
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>Dashboard
+                        </a>
 
-                        } else{
-                            echo "No tiene permiso";
-                        }
-                        
+                        <?php
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
+                                    Modulo seguridad
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
+                                echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
+                                echo '<nav class="sb-sidenav-menu-nested nav">';
+                                
+                                if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                }
+                                
+                                echo '<a class="nav-link" href="../../roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                                echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                                echo '<a class="nav-link" href="/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                                echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+
+                                echo '</nav>';
+                                echo '</div>';
+                            }
                         ?>
-                        <a class="nav-link" href="../../roles.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                            Roles
-                        </a>
-                        <a class="nav-link" href="permisos.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Permisos
-                        </a>
+                        
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">

@@ -10,7 +10,7 @@ if ($_POST) {
     $contrasena = $_POST['contrasena'];
     //$id_usuario = $_POST['id_usuario'];
     //$id_estado_usuario = $_POST['id_estado_usuario'];
-    $id_rol = $_POST['id_rol'];
+   // $id_rol = $_POST['id_rol'];
 
     //$ID_ROL = $_SESSION ['ID_ROL'];
     // Crear una instancia de la clase Conectar
@@ -160,7 +160,7 @@ if ($_POST) {
                                         <div style="text-align: center;">
                                             <button type="submit" class="btn btn-primary">Ingresar</button>
                                         </div>
-                                        <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><a class="small" href="password.php">¿Olvido su contraseña? Recuperar aquí</a>
+                                        <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><a class="small" href="../Vistas/RecuperacionContrasenia/RecuperacionCorreo.php">¿Olvido su contraseña? Recuperar aquí</a>
 
                                     </form>
 
