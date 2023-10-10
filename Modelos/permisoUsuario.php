@@ -31,20 +31,26 @@ class PermisosUsuarios extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_ms_permisos";
+        
+        $sql = "SELECT 
+                    ID_ROL,
+                    ID_OBJETO,
+                    CASE WHEN PERMISOS_INSERCION = 1 THEN 'Sí' ELSE 'No' END as PERMISOS_INSERCION,
+                    CASE WHEN PERMISOS_ELIMINACION = 1 THEN 'Sí' ELSE 'No' END as PERMISOS_ELIMINACION,
+                    CASE WHEN PERMISOS_ACTUALIZACION = 1 THEN 'Sí' ELSE 'No' END as PERMISOS_ACTUALIZACION,
+                    CASE WHEN PERMISOS_CONSULTAR = 1 THEN 'Sí' ELSE 'No' END as PERMISOS_CONSULTAR
+                FROM siaace.tbl_ms_permisos";
+        
         $sql = $conectar->prepare($sql);
         $sql->execute();
-        //echo $sql;
-        // Verificar si se obtuvieron resultados
+    
         if ($sql->rowCount() > 0) {
-            // echo "Si se obtuvieron resultados";
             return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
         } else {
-            //echo "no se encontraron resultado, puedes manejarlo como desees";
-            // En este caso, no se encontraron resultados, puedes manejarlo como desees
-            return array(); // Devuelve un array vacío o un valor que indique la ausencia de resultados
+            return array();
         }
     }
+    
 
 
     //INSERTA UN PERMISO

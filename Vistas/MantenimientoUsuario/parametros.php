@@ -122,7 +122,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                 echo '<nav class="sb-sidenav-menu-nested nav">';
                                 
                                 if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="/usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                    echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
                                 }
                                 
                                 echo '<a class="nav-link" href="../../roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
@@ -161,6 +161,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                 <th>Id Parametro</th>
                                 <th>Parametro</th>
                                 <th>Valor</th>
+                                <th>Acciones</th>
                                 <!-- <th>Id Usuario</th>
                                 <th>Creado por</th>
                                 <th>Modificado por</th>
@@ -240,6 +241,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                         <input type="text" class="form-control" id="editar-parametro">
                                         <label for="nombre">Valor</label>
                                         <input type="text" class="form-control" id="editar-valor">
+
                                         <!-- <label for="estado">Id Usuario</label> -->
                                         <!-- <input type="text" class="form-control" id="editar-id-usuario">
                                         <label for="estado">Creado por</label>
@@ -310,6 +312,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                             '<td>' + parametro.ID_PARAMETRO + '</td>' +
                             '<td>' + parametro.PARAMETRO + '</td>' +
                             '<td>' + parametro.VALOR + '</td>' +
+
                             // '<td>' + parametro.ID_USUARIO + '</td>' +
                             // '<td>' + parametro.CREADO_POR + '</td>' +
                             // '<td>' + parametro.MODIFICADO_POR + '</td>' +

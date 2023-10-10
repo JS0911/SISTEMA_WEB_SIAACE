@@ -127,7 +127,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                                 echo '<nav class="sb-sidenav-menu-nested nav">';
                                 
                                 if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="/usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                    echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
                                 }
                                 
                                 echo '<a class="nav-link" href="../../roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
@@ -171,6 +171,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                                 <th>Permisos Eliminación</th>
                                 <th>Permisos Actualización</th>
                                 <th>Permisos Consultar</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
