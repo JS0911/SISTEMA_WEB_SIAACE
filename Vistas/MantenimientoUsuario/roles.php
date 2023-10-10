@@ -2,22 +2,22 @@
 
 session_start();
 require "../../Config/conexion.php";
-require_once '../../Modelos/parametros.php';
-require_once "../../Modelos/permisoUsuario.php";
+require_once '../../Modelos/permisoUsuario.php';
 
-$permisosParametros = new PermisosUsuarios();
+$permisosRoles = new PermisosUsuarios();
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
 }
 
-
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Parametro = "4";
+$id_objeto_Rol = "1";
 
-$permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Parametro);
+$permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
+
+
 ?>
 
 <style>
@@ -40,7 +40,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento Parametros</title>
+    <title>Mantenimiento Usuario</title>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
@@ -48,13 +48,13 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <style>
         /* Estilo para la tabla */
-        #Lista-Parametros {
+        #Lista-roles {
             border-collapse: collapse; /* Combina los bordes de las celdas */
             width: 100%;
         }
 
         /* Estilo para las celdas del encabezado (th) */
-        #Lista-Parametros th {
+        #Lista-roles th {
             border: 2px solid white; /* Bordes negros para las celdas del encabezado */
             background-color: #333;
             color: white;
@@ -64,7 +64,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
         }
 
         /* Estilo para las celdas de datos (td) */
-        #Lista-Parametros td {
+        #Lista-roles td {
             border: 1px solid grey; /* Bordes negros para las celdas de datos */
             padding: 8px; /* Espaciado interno para las celdas */
             text-align: center; /* Alineación del texto al centro */
@@ -106,12 +106,11 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div> Inicio
                         </a>
 
-                        <div class="sb-sidenav-menu-heading">Pestañas</div>
+                        <div class="sb-sidenav-menu-heading">Addons</div>
                         <a class="nav-link" href="../charts.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>Dashboard
-                        </a>
-
-                        <?php
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            Charts</a>
+                            <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
@@ -134,6 +133,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                 echo '</div>';
                             }
                         ?>
+                    
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -144,44 +144,55 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
         </div>
         <div id="layoutSidenav_content">
 
-            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE PARAMETROS -->
+            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE ROLES -->
             <main>
                 <div class="container-fluid">
-                    <h1 class="mt-4">Mantenimiento Parametros</h1>
+                    <h1 class="mt-4">Mantenimiento Roles</h1>
 
                     <!-- Botón para abrir el formulario de creación -->
-
-                        <button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
-
-
+                    <?php
+                    if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
+                        echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
+                    }
+                    ?>
+                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
                     <!-- Tabla para mostrar los datos -->
-                    <table class="table table-bordered" id="Lista-Parametros">
+                    <table class="table table-bordered" id="Lista-Roles">
                         <thead>
                             <tr>
-                                <th>Id Parametro</th>
-                                <th>Parametro</th>
-                                <th>Valor</th>
+                                <th>Id</th>
+                                <th>Rol</th>
+                                <th>Descripcion</th>
                                 <th>Acciones</th>
-                                <!-- <th>Id Usuario</th>
-                                <th>Creado por</th>
-                                <th>Modificado por</th>
-                                <th>fecha creacion</th>
-                                <th>fecha modificacion</th> -->
-
                             </tr>
                         </thead>
                         <tbody>
 
                         </tbody>
                     </table>
+                    <nav aria-label="Pagination">
+                        <ul class="pagination">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Atrás</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">2</span>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Siguiente</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
 
-                <!-- Modal para crear un nuevo Parametro -->
+                <!-- Modal para crear un nuevo registro -->
                 <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="crearModalLabel">Crear Nuevo Parametro</h5>
+                                <h5 class="modal-title" id="crearModalLabel">Crear Nuevo Registro</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -190,26 +201,13 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                 <!-- Formulario de creación -->
                                 <form>
                                     <div class="form-group">
-                                        <label for="nombre">Parametro</label>
-                                        <input type="text" class="form-control" id="agregar-parametro">
+                                        <label for="nombre">Rol</label>
+                                        <input type="text" class="form-control" id="agregar-rol">
 
-                                        <label for="nombre">Valor</label>
-                                        <input type="text" class="form-control" id="agregar-valor">
+                                        <label for="nombre">Descripcion</label>
+                                        <input type="text" class="form-control" id="agregar-descripcion">
 
-                                        <!-- <label for="nombre">Id Usuario</label>
-                                        <input type="text" class="form-control" id="agregar-id-usuario">
-
-                                        <label for="nombre">Creado por</label>
-                                        <input type="text" class="form-control" id="agregar-creado-por">
-
-                                        <label for="nombre">modificado por</label>
-                                        <input type="text" class="form-control" id="agregar-modificado-por"> -->
-
-                                        <!-- <label for="nombre">fecha creacion</label>
-                                        <input type="text" class="form-control" id="agregar-fecha-creacion">
-
-                                        <label for="nombre">fecha modificacion</label>
-                                        <input type="text" class="form-control" id="agregar-fecha-modificacion"> -->
+                                        
                                     </div>
                                 </form>
                             </div>
@@ -221,12 +219,12 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                     </div>
                 </div>
 
-                <!-- Modal para editar un Parametro -->
+                <!-- Modal para editar un registro -->
                 <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="editarModalLabel">Editar Parametro</h5>
+                                <h5 class="modal-title" id="editarModalLabel">Editar Registro</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -235,46 +233,31 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                 <!-- Formulario de edición -->
                                 <form>
                                     <div class="form-group">
-                                        <label for="nombre">Id Parametro</label>
-                                        <input type="text" class="form-control" id="editar-id-parametro">
-                                        <label for="nombre">Parametro</label>
-                                        <input type="text" class="form-control" id="editar-parametro">
-                                        <label for="nombre">Valor</label>
-                                        <input type="text" class="form-control" id="editar-valor">
-
-                                        <!-- <label for="estado">Id Usuario</label> -->
-                                        <!-- <input type="text" class="form-control" id="editar-id-usuario">
-                                        <label for="estado">Creado por</label>
-                                        <input type="text" class="form-control" id="editar-creado-por">
-                                        <label for="estado">modificado por</label>
-                                        <input type="text" class="form-control" id="editar-modificado-por"> -->
-                                        <!-- <label for="estado">Fecha Creacion</label>
-                                        <input type="text" class="form-control" id="editar-fecha-creacion">
-                                        <label for="estado">Fecha Modificacion </label>
-                                        <input type="text" class="form-control" id="editar-fecha-modificacion"> -->
+                                        <label for="nombre">Id</label>
+                                        <input type="text" class="form-control" id="editar-id-rol">
+                                        <label for="nombre">Rol</label>
+                                        <input type="text" class="form-control" id="editar-rol">
+                                        <label for="nombre">Descripcion</label>
+                                        <input type="text" class="form-control" id="editar-descripcion">
+                                     
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary" onclick="updateParametro()">Guardar
+                                <button type="button" class="btn btn-primary" onclick="updateRol()">Guardar
                                     Cambios</button>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> 
             </main>
-            <!-- AQUI FINALIZA EL MANTENIMIENTO DE PARAMETROS -->
+            <!-- AQUI FINALIZA EL MANTENIMIENTO DE ROLES -->
 
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2019</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
+                    <div class="d-flex align-items-start justify-content-center small">
+                        <div class="text-muted">Copyright &copy; IA-UNAH 2023</div>
                     </div>
                 </div>
             </footer>
@@ -283,11 +266,11 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
 
     <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
     <script>
-       
+        var permisos = <?php echo json_encode($permisos); ?>;
 
-        function Lista_Parametros() {
+        function Lista_Roles() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=GetParametros', {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=GetRoles', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
@@ -304,24 +287,28 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                 })
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
-                    var tbody = document.querySelector('#Lista-parametros tbody');
+                    var tbody = document.querySelector('#Lista-Roles tbody');
 
 
-                    data.forEach(function(parametro) {
+                    data.forEach(function(rol) {
                         var row = '<tr>' +
-                            '<td>' + parametro.ID_PARAMETRO + '</td>' +
-                            '<td>' + parametro.PARAMETRO + '</td>' +
-                            '<td>' + parametro.VALOR + '</td>' +
+                            '<td>' + rol.ID_ROL + '</td>' +
+                            '<td>' + rol.ROL+ '</td>' +
+                            '<td>' + rol.DESCRIPCION + '</td>' +
+                            
+                            '<td>';
 
-                            // '<td>' + parametro.ID_USUARIO + '</td>' +
-                            // '<td>' + parametro.CREADO_POR + '</td>' +
-                            // '<td>' + parametro.MODIFICADO_POR + '</td>' +
-                            // '<td>' + parametro.FECHA_CREACION + '</td>' +
-                            // '<td>' + parametro.FECHA_MODIFICACION + '</td>' +
-                            '<td>'+
+                        // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
-                        '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarParametro(' + parametro.ID_PARAMETRO + ')">Editar</button>'+
-                         '<button class="btn btn-danger eliminar-usuario" data-id="' + parametro.ID_PARAMETRO + '" onclick="eliminarParametro(' + parametro.ID_PARAMETRO + ')">Eliminar</button>';
+                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
+                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarRol(' + rol.ID_ROL + ')">Editar</button>';
+                        }
+
+                        if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
+                            row += '<button class="btn btn-danger eliminar-rol" data-id="' + rol.ID_rol + '" onclick="eliminarRol(' + rol.ID_ROL + ')">Eliminar</button>';
+                        }
+
+
                         row += '</td>' +
                             '</tr>';
                         tbody.innerHTML += row;
@@ -337,36 +324,22 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
 
         }
 
-
-        function Insertar_Parametro() {
+        function Insertar_Rol() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
-                var parametro = $("#agregar-parametro").val();
-                var valor = $("#agregar-valor").val();
-                // var id_usuario = $("#agregar-id-usuario").val();
-                // var creado_por = $("#agregar-creado-por").val();
-                // var modificado_por = $("#agregar-modificado-por").val();
-                // var fecha_creacion = $("#agregar-fecha-creacion").val();
-                // var fecha_modificacion = $("#agregar-fecha-modificacion").val();
-
-                // // Verificar que las contraseñas coincidan
-                // if (contrasena !== confirmarContrasena) {
-                //     alert("Las contraseñas no coinciden.");
-                //     return;
-                // }
+                var rol = $("#agregar-rol").val();
+                var descripcion = $("#agregar-descripcion").val();
+               
 
                 // Crear un objeto con los datos a enviar al servidor
                 var datos = {
-                    PARAMETRO: parametro,
-                    VALOR: valor
-                    // ID_USUARIO: id_usuario,
-                    // CREADO_POR: creado_por,
-                    // MODIFICADO_POR: modificado_por,
-                    // FECHA_CREACION: fecha_creacion,
-                    // FECHA_MODIFICACION: fecha_modificacion
+                    ROL: rol,
+                    DESCRIPCION: descripcion,
+                    
+                    
                 };
 
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=InsertParametros', {
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=InsertRol', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -390,26 +363,24 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
 
                         // Recargar la página para mostrar los nuevos datos
                         location.reload();
-                        Lista_Parametros();
-                       
 
                     })
                     .catch(function(error) {
                         // Manejar el error aquí
-                        alert('Error al guardar el parametro: ' + error.message);
+                        alert('Error al guardar el rol: ' + error.message);
                         console.log(error.message);
                     });
             });
         }
 
-        function cargarParametro(id) {
-            // Crear un objeto con el ID del parametro
+        function cargarRol(id) {
+            // Crear un rol con el ID del rol
             var data = {
-                "ID_PARAMETRO": id
+                "ID_ROL": id
             };
 
-            // Realiza una solicitud FETCH para obtener los detalles del usuario por su ID
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=GetParametro', {
+            // Realiza una solicitud FETCH para obtener los detalles del objeto por su ID
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=GetRol', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -424,52 +395,36 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                         throw new Error('Error en la solicitud');
                     }
                 })
-                .then(function(parametro) {
-                    // Llena los campos del modal con los datos del parametro
-                    document.getElementById('editar-id-parametro').value = parametro.ID_PARAMETRO;
-                    document.getElementById('editar-parametro').value = parametro.PARAMETRO;
-                    document.getElementById('editar-valor').value = parametro.VALOR;
-                    // document.getElementById('editar-id-usuario').value = parametro.ID_USUARIO;
-                    // document.getElementById('editar-creado-por').value = parametro.CREADO_POR;
-                    // document.getElementById('editar-modificado-por').value = parametro.MODIFICADO_POR;
-                    // document.getElementById('editar-fecha-creacion').value = parametro.FECHA_CREACION;
-                    // document.getElementById('editar-fecha-modificacion').value = parametro.FECHA_MODIFICACION;
+                .then(function(rol) {
+                    // Llena los campos del modal con los datos del objeto
+                    document.getElementById('editar-id-rol').value = rol.ID_ROL;
+                    document.getElementById('editar-rol').value = rol.ROL;
+                    document.getElementById('editar-descripcion').value = rol.DESCRIPCION;
+                    
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
-                    alert('Error al cargar los datos del parametro: ' + error.message);
+                    alert('Error al cargar los datos del rol : ' + error.message);
                 });
         }
 
-        function updateParametro() {
-            // Obtén el ID del parametro 
-            var idparametro = document.getElementById('editar-id-parametro').value;
-            // Obtén los valores de los campos de edición
-            var parametro = document.getElementById('editar-parametro').value;
-            var valor = document.getElementById('editar-valor').value;
-            // var idusuario = document.getElementById('editar-id-usuario').value;
-            // var creadopor = document.getElementById('editar-creado-por').value;
-            // var modificadopor = document.getElementById('editar-modificado-por').value;
-            // var fechacreacion = document.getElementById('editar-fecha-creacion').value;
-            // var fechamodificacion = document.getElementById('editar-fecha-modificacion').value;
+        function updateRol() {
+            var id_rol = document.getElementById('editar-id-rol').value;
+            var rol = document.getElementById('editar-rol').value;
+            var descripcion = document.getElementById('editar-descripcion').value;
            
 
-            // Realiza una solicitud FETCH para actualizar los datos del usuario
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=updateParametro', {
+            // Realiza una solicitud FETCH para actualizar los datos del objeto
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=UpdateRol', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        "ID_PARAMETRO": idparametro,
-                        "PARAMETRO": parametro,
-                        "VALOR": valor
-                        // "ID_USUARIO": idusuario,
-                        // "CREADO_POR": creadopor,
-                        // "MODIFICADO_POR": modificadopor,
-                        // "FECHA_CREACION": fechacreacion,
-                        // "FECHA_MODIFICACION": fechamodificacion
+                        "ID_ROL": id_rol,
+                        "ROL": rol,
+                        "DESCRIPCION": descripcion
                     }) // Convierte los datos en formato JSON
                 })
                 .then(function(response) {
@@ -487,13 +442,13 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
-                    alert('Error al actualizar los datos del parametro: ' + error.message);
+                    alert('Error al actualizar los datos del usuario: ' + error.message);
                 });
 
         }
 
         //FUNCION CON EL SWEETALERT
-        function eliminarParametro(idparametro) {
+        function eliminarRol(id_rol) {
             Swal.fire({
                 title: '¿Estás seguro?',
                 text: 'No podrás revertir esto.',
@@ -504,25 +459,25 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                 confirmButtonText: 'Sí, eliminarlo'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=eliminarParametro', {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=EliminarRol', {
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
-                                "ID_PARAMETRO": idparametro
+                                "ID_ROL": id_rol
                             })
                         })
                         .then(function(response) {
                             if (response.ok) {
                                 // Eliminación exitosa, puedes hacer algo aquí si es necesario
-                                Swal.fire('parametro eliminado', '', 'success')
+                                Swal.fire('Rol eliminado', '', 'success')
                                     .then(() => {
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
-                                        // Recargar la lista de parametros después de eliminar
-                                       
+                                        // Recargar la lista de objetos después de eliminar
+                                        Lista_Roles();
                                     });
                             } else {
                                 throw new Error('Error en la solicitud de eliminación');
@@ -530,21 +485,28 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                         })
                         .catch(function(error) {
                             // Manejar el error aquí
-                            Swal.fire('Error', 'Error al eliminar el usuario: ' + error.message, 'error');
+                            Swal.fire('Error', 'Error al eliminar el rol: ' + error.message, 'error');
                         });
                 }
             });
         }
 
         $(document).ready(function() {
-          
-            Insertar_Parametro();
-            Lista_Parametros();
-            
+            Lista_Roles();
+            Insertar_Rol();
         });
     </script>
 
-    
+    <script>
+    $(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#Lista-roles tbody tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    });
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
