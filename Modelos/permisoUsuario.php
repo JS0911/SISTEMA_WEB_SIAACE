@@ -31,26 +31,32 @@ class PermisosUsuarios extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        
+
         $sql = "SELECT 
-                    ID_ROL,
-                    ID_OBJETO,
-                    CASE WHEN PERMISOS_INSERCION = 1 THEN 'Sí' ELSE 'No' END as PERMISOS_INSERCION,
-                    CASE WHEN PERMISOS_ELIMINACION = 1 THEN 'Sí' ELSE 'No' END as PERMISOS_ELIMINACION,
-                    CASE WHEN PERMISOS_ACTUALIZACION = 1 THEN 'Sí' ELSE 'No' END as PERMISOS_ACTUALIZACION,
-                    CASE WHEN PERMISOS_CONSULTAR = 1 THEN 'Sí' ELSE 'No' END as PERMISOS_CONSULTAR
-                FROM siaace.tbl_ms_permisos";
-        
+                    P.ID_ROL,
+                    R.ROL,
+                    P.ID_OBJETO,
+                    O.OBJETO,
+                    CASE WHEN P.PERMISOS_INSERCION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_INSERCION,
+                    CASE WHEN P.PERMISOS_ELIMINACION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_ELIMINACION,
+                    CASE WHEN P.PERMISOS_ACTUALIZACION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_ACTUALIZACION,
+                    CASE WHEN P.PERMISOS_CONSULTAR = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_CONSULTAR
+                FROM siaace.tbl_ms_permisos P
+                INNER JOIN siaace.tbl_ms_roles R ON P.ID_ROL = R.ID_ROL
+                INNER JOIN siaace.tbl_ms_objetos O ON P.ID_OBJETO = O.ID_OBJETO";
+
         $sql = $conectar->prepare($sql);
+
         $sql->execute();
-    
+
         if ($sql->rowCount() > 0) {
             return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
         } else {
             return array();
         }
     }
-    
+
+
 
 
     //INSERTA UN PERMISO

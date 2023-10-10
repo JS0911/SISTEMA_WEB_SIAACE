@@ -179,11 +179,12 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                     <table class="table table-bordered" id="Lista-Usuarios">
                         <thead>
                             <tr>
-                                <th>Id</th>
+                                <th style="display: none;">Id</th>
                                 <th>Usuario</th>
                                 <th>Nombre</th>
                                 <th>Estado</th>
                                 <th>Correo Electronico</th>
+                                <th style="display: none;">Id Rol</th>
                                 <th>Rol</th>
                                 <th>Acciones</th>
                             </tr>
@@ -220,8 +221,30 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                                         <label for="estado">Correo Electronico</label>
                                         <input type="text" class="form-control" id="agregar-correo">
 
-                                        <label for="estado">Rol</label>
-                                        <input type="text" class="form-control" id="agregar-rol">
+                                        <?php
+                                        //---------CONEXION A LA TABLA ROLES --------
+                                        // Crear una instancia de la clase Conectar
+                                        $conexion = new Conectar();
+                                        $conn = $conexion->Conexion();
+
+                                        // Consultar la contraseña actual del usuario desde la base de datos
+                                        $sql = "SELECT id_rol ,rol FROM tbl_ms_roles";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
+
+                                        // Obtener los resultados en un array asociativo
+                                        $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                        ?>
+
+                                        <!------- SELECT DE ROLES -------------->
+                                        <label for="id-rol">Rol</label>
+                                        <select class="form-control" id="agregar-rol" name="IdRol">
+                                            <option value="">Selecciona una opción</option>
+                                            <?php foreach ($roles as $rol) : ?>
+                                                <option value="<?php echo $rol['id_rol']; ?>"><?php echo $rol['rol']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
 
                                         <label for="estado">Contraseña</label>
                                         <input type="password" class="form-control" id="agregar-contrasena">
@@ -263,8 +286,31 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                                         <input type="text" class="form-control" id="editar-estado">
                                         <label for="estado">Correo Electronico</label>
                                         <input type="text" class="form-control" id="editar-correo">
-                                        <label for="estado">Rol</label>
-                                        <input type="text" class="form-control" id="editar-rol">
+                                        <?php
+                                        //---------CONEXION A LA TABLA ROLES --------
+                                        // Crear una instancia de la clase Conectar
+                                        $conexion = new Conectar();
+                                        $conn = $conexion->Conexion();
+
+                                        // Consultar la contraseña actual del usuario desde la base de datos
+                                        $sql = "SELECT id_rol ,rol FROM tbl_ms_roles";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
+
+                                        // Obtener los resultados en un array asociativo
+                                        $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                        ?>
+
+                                        <!------- SELECT DE ROLES -------------->
+                                        <label for="id-rol">Rol</label>
+                                        <select class="form-control" id="editar-rol" name="IdRol">
+                                            <option value="">Selecciona una opción</option>
+                                            <?php foreach ($roles as $rol) : ?>
+                                                <option value="<?php echo $rol['id_rol']; ?>"><?php echo $rol['rol']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+
                                     </div>
                                 </form>
                             </div>
@@ -322,12 +368,13 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
 
                     data.forEach(function(usuario) {
                         var row = '<tr>' +
-                            '<td>' + usuario.ID_USUARIO + '</td>' +
+                            '<td style="display:none;">' + usuario.ID_USUARIO + '</td>' +
                             '<td>' + usuario.USUARIO + '</td>' +
                             '<td>' + usuario.NOMBRE_USUARIO + '</td>' +
                             '<td>' + usuario.ID_ESTADO_USUARIO + '</td>' +
                             '<td>' + usuario.CORREO_ELECTRONICO + '</td>' +
-                            '<td>' + usuario.ID_ROL + '</td>' +
+                            '<td style="display:none;">' + usuario.ID_ROL + '</td>' +
+                            '<td>' + usuario.ROL + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -370,7 +417,11 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
 
                 // Verificar que las contraseñas coincidan
                 if (contrasena !== confirmarContrasena) {
-                    alert("Las contraseñas no coinciden.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Las contraseñas no coinciden.'
+                    });
                     return;
                 }
 
@@ -402,18 +453,30 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                     })
                     .then(function(data) {
                         console.log(data);
-                        alert(data);
+
                         // Cerrar la modal después de guardar
                         $('#crearModal').modal('hide');
 
-                        // Recargar la página para mostrar los nuevos datos
-                        location.reload();
+                        // Mostrar SweetAlert de éxito
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Guardado exitoso',
+                            text: 'Los datos se han guardado correctamente.'
+                        }).then(function() {
+                            // Recargar la página para mostrar los nuevos datos
+                            location.reload();
+                        });
 
                     })
                     .catch(function(error) {
-                        // Manejar el error aquí
-                        alert('Error al guardar el usuario: ' + error.message);
                         console.log(error.message);
+
+                        // Mostrar SweetAlert de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al guardar los datos: ' + error.message
+                        });
                     });
             });
         }
@@ -485,10 +548,16 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                     if (response.ok) {
                         // Cerrar la modal después de guardar
                         $('#editarModal').modal('hide');
-                        // Actualización exitosa, puedes hacer algo aquí si es necesario
-                        // Recargar la página para mostrar los nuevos datos
-                        location.reload();
-                        alert('Datos actualizados correctamente');
+
+                        // Mostrar SweetAlert de éxito
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Actualización exitosa',
+                            text: 'Los datos se han actualizado correctamente.'
+                        }).then(function() {
+                            // Recargar la página para mostrar los nuevos datos
+                            location.reload();
+                        });
 
                     } else {
                         throw new Error('Error en la solicitud de actualización');
@@ -496,10 +565,17 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
-                    alert('Error al actualizar los datos del usuario: ' + error.message);
-                });
+                    console.log(error.message);
 
+                    // Mostrar SweetAlert de error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al actualizar los datos del usuario: ' + error.message
+                    });
+                });
         }
+
 
         //FUNCION CON EL SWEETALERT
         function eliminarUsuario(idUsuario) {

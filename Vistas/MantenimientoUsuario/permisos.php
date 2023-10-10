@@ -106,7 +106,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
         <div id="layoutSidenav_nav">
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
-                <div class="nav">
+                    <div class="nav">
                         <a class="nav-link" href="../../InicioSesion/index.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div> Inicio
                         </a>
@@ -117,27 +117,27 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                         </a>
 
                         <?php
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
+                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
                                     Modulo seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
-                                echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
-                                echo '<nav class="sb-sidenav-menu-nested nav">';
-                                
-                                if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
-                                }
-                                
-                                echo '<a class="nav-link" href="../../roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                                echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                                echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
-                                echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                            echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                                echo '</nav>';
-                                echo '</div>';
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
                             }
+
+                            echo '<a class="nav-link" href="../../roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                            echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                            echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                            echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+
+                            echo '</nav>';
+                            echo '</div>';
+                        }
                         ?>
                     </div>
                 </div>
@@ -165,8 +165,10 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                     <table class="table table-bordered" id="Lista-Permiso" style="background-color: lightblue;">
                         <thead>
                             <tr>
-                                <th>Id Rol</th>
-                                <th>Id Objeto</th>
+                                <th style="display: none;">Id Rol</th> <!--OCULTAR LAS CABEZERAS -->
+                                <th> Rol</th>
+                                <th style="display: none;">Id Objeto</th>
+                                <th>Objeto</th>
                                 <th>Permisos Inserción</th>
                                 <th>Permisos Eliminación</th>
                                 <th>Permisos Actualización</th>
@@ -349,38 +351,38 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                                             <?php foreach ($objetos as $objeto) : ?>
                                                 <option value="<?php echo $objeto['id_objeto']; ?>"><?php echo $objeto['objeto']; ?></option>
                                             <?php endforeach; ?>
-                                            </select>
+                                        </select>
 
 
 
-                                            <label for="Permisos Insercion">Permisos Inserción</label>
-                                            <select class="form-control" id="editar-pInsercion" name="permisos_Inser">
-                                                <option value="" disabled selected>Selecciona una opción</option>
-                                                <option value="1">Sí</option>
-                                                <option value="0">No</option>
-                                            </select>
+                                        <label for="Permisos Insercion">Permisos Inserción</label>
+                                        <select class="form-control" id="editar-pInsercion" name="permisos_Inser">
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <option value="1">Sí</option>
+                                            <option value="0">No</option>
+                                        </select>
 
-                                            <label for="Permisos Eliminacion">Permisos Eliminación</label>
-                                            <select class="form-control" id="editar-pEliminacion" name="permisos_elim">
-                                                <option value="" disabled selected>Selecciona una opción</option>
-                                                <option value="1">Sí</option>
-                                                <option value="0">No</option>
-                                            </select>
+                                        <label for="Permisos Eliminacion">Permisos Eliminación</label>
+                                        <select class="form-control" id="editar-pEliminacion" name="permisos_elim">
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <option value="1">Sí</option>
+                                            <option value="0">No</option>
+                                        </select>
 
 
-                                            <div> </div>
-                                            <label for="Permisos Eliminacion">Permisos Actualizacion</label>
-                                            <select class="form-control" id="editar-pActualizacion" name="permisos_actu">
-                                                <option value="" disabled selected>Selecciona una opción</option>
-                                                <option value="1">Sí</option>
-                                                <option value="0">No</option>
-                                            </select>
-                                            <label for="Permisos Consultar">Permisos Consultar</label>
-                                            <select class="form-control" id="editar-pConsultar" name="permisos_cons">
-                                                <option value="" disabled selected>Selecciona una opción</option>
-                                                <option value="1">Sí</option>
-                                                <option value="0">No</option>
-                                            </select>
+                                        <div> </div>
+                                        <label for="Permisos Eliminacion">Permisos Actualizacion</label>
+                                        <select class="form-control" id="editar-pActualizacion" name="permisos_actu">
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <option value="1">Sí</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                        <label for="Permisos Consultar">Permisos Consultar</label>
+                                        <select class="form-control" id="editar-pConsultar" name="permisos_cons">
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <option value="1">Sí</option>
+                                            <option value="0">No</option>
+                                        </select>
 
                                     </div>
                                 </form>
@@ -438,8 +440,10 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
 
                     data.forEach(function(permiso) {
                         var row = '<tr>' +
-                            '<td>' + permiso.ID_ROL + '</td>' +
-                            '<td>' + permiso.ID_OBJETO + '</td>' +
+                            '<td style="display:none;">' + permiso.ID_ROL + '</td>' + /* OCULTAR LAS COLUMNAS */
+                            '<td>' + permiso.ROL + '</td>' +
+                            '<td style="display:none;">' + permiso.ID_OBJETO + '</td>' +
+                            '<td>' + permiso.OBJETO + '</td>' +
                             '<td>' + permiso.PERMISOS_INSERCION + '</td>' +
                             '<td>' + permiso.PERMISOS_ELIMINACION + '</td>' +
                             '<td>' + permiso.PERMISOS_ACTUALIZACION + '</td>' +
@@ -452,7 +456,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-permiso" data-id="' + permiso.ID_ROL + ',' + permiso.ID_OBJETO +  '" onclick="eliminarPermiso(' + permiso.ID_ROL + ',' + permiso.ID_OBJETO +')">Eliminar</button>';
+                            row += '<button class="btn btn-danger eliminar-permiso" data-id="' + permiso.ID_ROL + ',' + permiso.ID_OBJETO + '" onclick="eliminarPermiso(' + permiso.ID_ROL + ',' + permiso.ID_OBJETO + ')">Eliminar</button>';
                         }
 
 
@@ -473,9 +477,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
 
 
         function Insertar_Permiso() {
-
             $("#btn-agregar").click(function() {
-                console.log("entra a la funcion");
                 // Obtener los valores de los campos del formulario
                 var idRol = $("#agregar-IdRol").val();
                 var idObjeto = $("#agregar-IdObjeto").val();
@@ -483,7 +485,6 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                 var pEliminacion = $("#agregar-pEliminacion").val();
                 var pActualizacion = $("#agregar-pActualizacion").val();
                 var pConsultar = $("#agregar-pConsultar").val();
-
 
                 // Crear un objeto con los datos a enviar al servidor
                 var datos = {
@@ -513,21 +514,39 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                     })
                     .then(function(data) {
                         console.log(data);
-                        alert(data);
                         // Cerrar la modal después de guardar
                         $('#crearModalPermisos').modal('hide');
 
-                        // Recargar la página para mostrar los nuevos datos
-                        location.reload();
+
+
+                        // Mostrar SweetAlert de éxito
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Guardado exitoso',
+                            text: 'Los datos se han guardado correctamente.'
+                        }).then(function() {
+                            // Recargar la página para mostrar los nuevos datos
+                            location.reload();
+                        });
 
                     })
                     .catch(function(error) {
                         // Manejar el error aquí
-                        alert('Error al guardar el usuario: ' + error.message);
                         console.log(error.message);
+
+                        // Mostrar SweetAlert de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al guardar los datos: ' + error.message
+                        });
                     });
+
+                    
+
             });
         }
+
 
         function cargarPermiso(id_rol, id_objeto) {
             // Crear un objeto con el ID del PERMISO
@@ -578,15 +597,12 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
             // Obtén el ID del usuario 
             var idRol = parseInt(document.getElementById('editar-IdRol').value);
             // Obtén los valores de los campos de edición
-            var idObjeto = parseInt(document.getElementById('editar-IdObjeto').value); 
-            var insercion = parseInt(document.getElementById('editar-pInsercion').value); 
-            var eliminacion = parseInt(document.getElementById('editar-pEliminacion').value); 
-            var actualizacion= parseInt(document.getElementById('editar-pActualizacion').value);
+            var idObjeto = parseInt(document.getElementById('editar-IdObjeto').value);
+            var insercion = parseInt(document.getElementById('editar-pInsercion').value);
+            var eliminacion = parseInt(document.getElementById('editar-pEliminacion').value);
+            var actualizacion = parseInt(document.getElementById('editar-pActualizacion').value);
             var consultar = parseInt(document.getElementById('editar-pConsultar').value);
-            console.log(insercion)
-            console.log(eliminacion)
-            console.log(actualizacion)
-            console.log(consultar)
+
             // Realiza una solicitud FETCH para actualizar los datos del usuario
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=updatePermiso', {
                     method: 'POST',
@@ -601,32 +617,37 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                         "PERMISOS_ELIMINACION": eliminacion,
                         "PERMISOS_ACTUALIZACION": actualizacion,
                         "PERMISOS_CONSULTAR": consultar
-
-
                     }) // Convierte los datos en formato JSON
                 })
                 .then(function(response) {
                     if (response.ok) {
                         // Cerrar la modal después de guardar
                         $('#editarModal').modal('hide');
-                        // Actualización exitosa, puedes hacer algo aquí si es necesario
-                        // Recargar la página para mostrar los nuevos datos
-                        location.reload();
-                        alert('Datos actualizados correctamente');
-
+                        // Actualización exitosa
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Actualización exitosa',
+                            text: 'Los datos se han actualizado correctamente.'
+                        }).then(function() {
+                            // Recargar la página para mostrar los nuevos datos
+                            location.reload();
+                        });
                     } else {
                         throw new Error('Error en la solicitud de actualización');
                     }
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
-                    alert('Error al actualizar los datos del permiso: ' + error.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al actualizar los datos del permiso: ' + error.message
+                    });
                 });
-
         }
 
         // //FUNCION CON EL SWEETALERT
-        function eliminarPermiso(idRol,idObjeto) {
+        function eliminarPermiso(idRol, idObjeto) {
             Swal.fire({
                 title: '¿Estás seguro?',
                 text: 'No podrás revertir esto.',
@@ -675,6 +696,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
             Insertar_Permiso();
         });
     </script>
+
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
