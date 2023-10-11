@@ -137,9 +137,9 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                                     echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
                                 }
                                 
-                                echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                                echo '<a class="nav-link" href="../../roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
                                 echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                                echo '<a class="nav-link" href="/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                                echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
 
                                 echo '</nav>';
@@ -355,7 +355,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                     
                 };
 
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=InsertObjeto', {
+                fetch('http://localhost:90/SISTEMA1/Controladores/objetos.php?op=InsertObjeto', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -373,17 +373,26 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                     })
                     .then(function(data) {
                         console.log(data);
-                        alert(data);
                         // Cerrar la modal después de guardar
                         $('#crearModal').modal('hide');
 
-                        // Recargar la página para mostrar los nuevos datos
-                        location.reload();
-
+                         // Mostrar SweetAlert de éxito
+                         Swal.fire({
+                            icon: 'success',
+                            title: 'Guardado exitoso',
+                            text: 'Los datos se han guardado correctamente.'
+                        }).then(function() {
+                            // Recargar la página para mostrar los nuevos datos
+                            location.reload();
+                        });
                     })
                     .catch(function(error) {
-                        // Manejar el error aquí
-                        alert('Error al guardar el objeto: ' + error.message);
+                        // Mostrar SweetAlert de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al guardar los datos: ' + error.message
+                        });
                         console.log(error.message);
                     });
             });
@@ -448,10 +457,14 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                     if (response.ok) {
                         // Cerrar la modal después de guardar
                         $('#editarModal').modal('hide');
-                        // Actualización exitosa, puedes hacer algo aquí si es necesario
-                        // Recargar la página para mostrar los nuevos datos
-                        location.reload();
-                        alert('Datos actualizados correctamente');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Actualización exitosa',
+                            text: 'Los datos se han actualizado correctamente.'
+                        }).then(function() {
+                            // Recargar la página para mostrar los nuevos datos
+                            location.reload();
+                        });
 
                     } else {
                         throw new Error('Error en la solicitud de actualización');
@@ -459,7 +472,11 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
-                    alert('Error al actualizar los datos del usuario: ' + error.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al actualizar los datos del permiso: ' + error.message
+                    });
                 });
 
         }

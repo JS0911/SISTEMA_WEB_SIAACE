@@ -26,7 +26,6 @@ switch ($_GET["op"]) {
 
     case "InsertRol":
         $datos = $com->insert_rol(
-            $body["ID_ROL"],
             $body["ROL"],
             $body["DESCRIPCION"]
         );

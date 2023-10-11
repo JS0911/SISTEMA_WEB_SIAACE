@@ -49,25 +49,33 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
     <style>
         /* Estilo para la tabla */
         #Lista-Parametros {
-            border-collapse: collapse; /* Combina los bordes de las celdas */
+            border-collapse: collapse;
+            /* Combina los bordes de las celdas */
             width: 100%;
         }
 
         /* Estilo para las celdas del encabezado (th) */
         #Lista-Parametros th {
-            border: 2px solid white; /* Bordes negros para las celdas del encabezado */
+            border: 2px solid white;
+            /* Bordes negros para las celdas del encabezado */
             background-color: #333;
             color: white;
-            font-family: Arial, sans-serif; /* Cambia el tipo de letra */
-            padding: 8px; /* Espaciado interno para las celdas */
-            text-align: center; /* Alineación del texto al centro */
+            font-family: Arial, sans-serif;
+            /* Cambia el tipo de letra */
+            padding: 8px;
+            /* Espaciado interno para las celdas */
+            text-align: center;
+            /* Alineación del texto al centro */
         }
 
         /* Estilo para las celdas de datos (td) */
         #Lista-Parametros td {
-            border: 1px solid grey; /* Bordes negros para las celdas de datos */
-            padding: 8px; /* Espaciado interno para las celdas */
-            text-align: center; /* Alineación del texto al centro */
+            border: 1px solid grey;
+            /* Bordes negros para las celdas de datos */
+            padding: 8px;
+            /* Espaciado interno para las celdas */
+            text-align: center;
+            /* Alineación del texto al centro */
         }
     </style>
 </head>
@@ -112,27 +120,27 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                         </a>
 
                         <?php
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
+                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
                                     Modulo seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
-                                echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
-                                echo '<nav class="sb-sidenav-menu-nested nav">';
-                                
-                                if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
-                                }
-                                
-                                echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                                echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                                echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
-                                echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                            echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                                echo '</nav>';
-                                echo '</div>';
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
                             }
+
+                            echo '<a class="nav-link" href="../../roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                            echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                            echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                            echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+
+                            echo '</nav>';
+                            echo '</div>';
+                        }
                         ?>
                     </div>
                 </div>
@@ -151,8 +159,14 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
 
                     <!-- Botón para abrir el formulario de creación -->
 
-                        <button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
-
+                    <!-- <button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button> -->
+                     <!-- Botón para abrir el formulario de creación -->
+                     <?php
+                    if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
+                        echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
+                    }
+                    ?>
+                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
 
                     <!-- Tabla para mostrar los datos -->
                     <table class="table table-bordered" id="Lista-Parametros">
@@ -174,6 +188,21 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
 
                         </tbody>
                     </table>
+                    <nav aria-label="Pagination">
+                        <ul class="pagination">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Atrás</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">2</span>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Siguiente</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
 
                 <!-- Modal para crear un nuevo Parametro -->
@@ -283,7 +312,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
 
     <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
     <script>
-       
+        var permisos = <?php echo json_encode($permisos); ?>;
 
         function Lista_Parametros() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
@@ -318,10 +347,17 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                             // '<td>' + parametro.MODIFICADO_POR + '</td>' +
                             // '<td>' + parametro.FECHA_CREACION + '</td>' +
                             // '<td>' + parametro.FECHA_MODIFICACION + '</td>' +
-                            '<td>'+
+                            '<td>';
 
-                        '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarParametro(' + parametro.ID_PARAMETRO + ')">Editar</button>'+
-                         '<button class="btn btn-danger eliminar-usuario" data-id="' + parametro.ID_PARAMETRO + '" onclick="eliminarParametro(' + parametro.ID_PARAMETRO + ')">Eliminar</button>';
+                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
+                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarParametro(' + parametro.ID_PARAMETRO + ')">Editar</button> ';
+                        }
+
+                        if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
+                            row += '<button class="btn btn-danger eliminar-usuario" data-id="' + parametro.ID_PARAMETRO + '" onclick="eliminarParametro(' + parametro.ID_PARAMETRO + ')">Eliminar</button>';
+                        }
+
+
                         row += '</td>' +
                             '</tr>';
                         tbody.innerHTML += row;
@@ -366,7 +402,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                     // FECHA_MODIFICACION: fecha_modificacion
                 };
 
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=InsertParametros', {
+                fetch('http://localhost:90/SISTEMA1/Controladores/parametros.php?op=InsertParametros', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -384,19 +420,28 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                     })
                     .then(function(data) {
                         console.log(data);
-                        alert(data);
                         // Cerrar la modal después de guardar
                         $('#crearModal').modal('hide');
+                        // Mostrar SweetAlert de éxito
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Guardado exitoso',
+                            text: 'Los datos se han guardado correctamente.'
+                        }).then(function() {
+                            // Recargar la página para mostrar los nuevos datos
+                            location.reload();
+                            Lista_Parametros();
+                        });
 
-                        // Recargar la página para mostrar los nuevos datos
-                        location.reload();
-                        Lista_Parametros();
-                       
 
                     })
                     .catch(function(error) {
-                        // Manejar el error aquí
-                        alert('Error al guardar el parametro: ' + error.message);
+                        // Mostrar SweetAlert de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al guardar los datos: ' + error.message
+                        });
                         console.log(error.message);
                     });
             });
@@ -452,7 +497,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
             // var modificadopor = document.getElementById('editar-modificado-por').value;
             // var fechacreacion = document.getElementById('editar-fecha-creacion').value;
             // var fechamodificacion = document.getElementById('editar-fecha-modificacion').value;
-           
+
 
             // Realiza una solicitud FETCH para actualizar los datos del usuario
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=updateParametro', {
@@ -476,18 +521,26 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                     if (response.ok) {
                         // Cerrar la modal después de guardar
                         $('#editarModal').modal('hide');
-                        // Actualización exitosa, puedes hacer algo aquí si es necesario
-                        // Recargar la página para mostrar los nuevos datos
-                        location.reload();
-                        alert('Datos actualizados correctamente');
+                        // Actualización exitosa
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Actualización exitosa',
+                            text: 'Los datos se han actualizado correctamente.'
+                        }).then(function() {
+                            // Recargar la página para mostrar los nuevos datos
+                            location.reload();
+                        });
 
                     } else {
                         throw new Error('Error en la solicitud de actualización');
                     }
                 })
                 .catch(function(error) {
-                    // Manejar el error aquí
-                    alert('Error al actualizar los datos del parametro: ' + error.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al actualizar los datos del permiso: ' + error.message
+                    });
                 });
 
         }
@@ -522,7 +575,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
                                         // Recargar la lista de parametros después de eliminar
-                                       
+
                                     });
                             } else {
                                 throw new Error('Error en la solicitud de eliminación');
@@ -537,14 +590,14 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
         }
 
         $(document).ready(function() {
-          
+
             Insertar_Parametro();
             Lista_Parametros();
-            
+
         });
     </script>
 
-    
+
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

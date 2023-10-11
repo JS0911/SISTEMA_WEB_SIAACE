@@ -26,7 +26,6 @@ switch ($_GET["op"]) {
 
     case "InsertObjeto":
         $datos = $com->insert_objeto(
-            $body["ID_OBJETO"],
             $body["OBJETO"],
             $body["DESCRIPCION"],
             $body["TIPO_OBJETO"]

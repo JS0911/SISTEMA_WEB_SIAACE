@@ -17,6 +17,23 @@ $id_objeto_Usuario = "2";
 
 $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario);
 
+ //---------CONEXION A LA TABLA ROLES --------
+ // Crear una instancia de la clase Conectar
+ $conexion = new Conectar();
+ $conn = $conexion->Conexion();
+ // Consultar la contraseña actual del usuario desde la base de datos
+ $sql = "SELECT id_rol ,rol FROM tbl_ms_roles";
+ $sql1 = "SELECT ID_ESTADO_USUARIO, NOMBRE FROM tbl_ms_estadousuario";
+ $stmt = $conn->prepare($sql);
+ $stmt1 = $conn->prepare($sql1);
+
+ $stmt->execute();
+ $stmt1->execute();
+
+  // Obtener los resultados en un array asociativo
+$roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
 // Verificar si se obtuvieron resultados
 // if (!empty($permisos)) {
 //     // Recorrer el array de permisos y mostrar los valores
@@ -174,7 +191,7 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                         echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
                     }
                     ?>
-
+                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
                     <!-- Tabla para mostrar los datos -->
                     <table class="table table-bordered" id="Lista-Usuarios">
                         <thead>
@@ -184,7 +201,6 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                                 <th>Nombre</th>
                                 <th>Estado</th>
                                 <th>Correo Electronico</th>
-                                <th style="display: none;">Id Rol</th>
                                 <th>Rol</th>
                                 <th>Acciones</th>
                             </tr>
@@ -193,6 +209,21 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
 
                         </tbody>
                     </table>
+                    <nav aria-label="Pagination">
+                        <ul class="pagination">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Atrás</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">2</span>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Siguiente</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
 
                 <!-- Modal para crear un nuevo registro -->
@@ -215,27 +246,16 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                                         <label for="nombre">Nombre</label>
                                         <input type="text" class="form-control" id="agregar-nombre">
 
-                                        <label for="estado">Estado</label>
-                                        <input type="text" class="form-control" id="agregar-estado">
+                                        <label for="id-estado">Estado</label>
+                                        <select class="form-control" id="agregar-estado" name="IdEstado">
+                                            <option value="">Selecciona una opción</option>
+                                            <?php foreach ($Estados as $Estado) : ?>
+                                                <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
 
                                         <label for="estado">Correo Electronico</label>
                                         <input type="text" class="form-control" id="agregar-correo">
-
-                                        <?php
-                                        //---------CONEXION A LA TABLA ROLES --------
-                                        // Crear una instancia de la clase Conectar
-                                        $conexion = new Conectar();
-                                        $conn = $conexion->Conexion();
-
-                                        // Consultar la contraseña actual del usuario desde la base de datos
-                                        $sql = "SELECT id_rol ,rol FROM tbl_ms_roles";
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
-
-                                        // Obtener los resultados en un array asociativo
-                                        $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                                        ?>
 
                                         <!------- SELECT DE ROLES -------------->
                                         <label for="id-rol">Rol</label>
@@ -287,7 +307,7 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                                         <label for="estado">Correo Electronico</label>
                                         <input type="text" class="form-control" id="editar-correo">
                                         <?php
-                                        //---------CONEXION A LA TABLA ROLES --------
+                                        //---------TRAER ROLES Y ESTADOS --------
                                         // Crear una instancia de la clase Conectar
                                         $conexion = new Conectar();
                                         $conn = $conexion->Conexion();
@@ -299,7 +319,6 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
 
                                         // Obtener los resultados en un array asociativo
                                         $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
                                         ?>
 
                                         <!------- SELECT DE ROLES -------------->
@@ -310,6 +329,8 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                                                 <option value="<?php echo $rol['id_rol']; ?>"><?php echo $rol['rol']; ?></option>
                                             <?php endforeach; ?>
                                         </select>
+
+                                        
 
                                     </div>
                                 </form>
@@ -371,7 +392,8 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                             '<td style="display:none;">' + usuario.ID_USUARIO + '</td>' +
                             '<td>' + usuario.USUARIO + '</td>' +
                             '<td>' + usuario.NOMBRE_USUARIO + '</td>' +
-                            '<td>' + usuario.ID_ESTADO_USUARIO + '</td>' +
+                            '<td style="display:none;">' + usuario.ID_ESTADO_USUARIO + '</td>' +
+                            '<td>' + usuario.NOMBRE + '</td>' +
                             '<td>' + usuario.CORREO_ELECTRONICO + '</td>' +
                             '<td style="display:none;">' + usuario.ID_ROL + '</td>' +
                             '<td>' + usuario.ROL + '</td>' +

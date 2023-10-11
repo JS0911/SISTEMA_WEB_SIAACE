@@ -25,15 +25,14 @@ class Objetos extends Conectar
     }
     
     // INSERTA UN OBJETO
-    public function insert_objeto($ID_OBJETO, $OBJETO, $DESCRIPCION, $TIPO_OBJETO) {
+    public function insert_objeto( $OBJETO, $DESCRIPCION, $TIPO_OBJETO) {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_objetos` (`ID_OBJETO`, `OBJETO`, `DESCRIPCION`, `TIPO_OBJETO`) VALUES (:ID_OBJETO, :OBJETO, :DESCRIPCION, :TIPO_OBJETO)";
+            $sql = "INSERT INTO `siaace`.`tbl_ms_objetos` ( `OBJETO`, `DESCRIPCION`, `TIPO_OBJETO`) VALUES ( :OBJETO, :DESCRIPCION, :TIPO_OBJETO)";
     
             $stmt = $conectar->prepare($sql);
           
-            $stmt->bindParam(':ID_OBJETO', $ID_OBJETO, PDO::PARAM_INT);
             $stmt->bindParam(':OBJETO', $OBJETO, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
             $stmt->bindParam(':TIPO_OBJETO', $TIPO_OBJETO, PDO::PARAM_STR);

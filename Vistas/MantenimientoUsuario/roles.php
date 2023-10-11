@@ -357,17 +357,27 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                     })
                     .then(function(data) {
                         console.log(data);
-                        alert(data);
                         // Cerrar la modal después de guardar
                         $('#crearModal').modal('hide');
 
-                        // Recargar la página para mostrar los nuevos datos
-                        location.reload();
+                        // Mostrar SweetAlert de éxito
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Guardado exitoso',
+                            text: 'Los datos se han guardado correctamente.'
+                        }).then(function() {
+                            // Recargar la página para mostrar los nuevos datos
+                            location.reload();
+                        });
 
                     })
                     .catch(function(error) {
-                        // Manejar el error aquí
-                        alert('Error al guardar el rol: ' + error.message);
+                        // Mostrar SweetAlert de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al guardar los datos: ' + error.message
+                        });
                         console.log(error.message);
                     });
             });
@@ -431,10 +441,14 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                     if (response.ok) {
                         // Cerrar la modal después de guardar
                         $('#editarModal').modal('hide');
-                        // Actualización exitosa, puedes hacer algo aquí si es necesario
-                        // Recargar la página para mostrar los nuevos datos
-                        location.reload();
-                        alert('Datos actualizados correctamente');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Actualización exitosa',
+                            text: 'Los datos se han actualizado correctamente.'
+                        }).then(function() {
+                            // Recargar la página para mostrar los nuevos datos
+                            location.reload();
+                        });
 
                     } else {
                         throw new Error('Error en la solicitud de actualización');
@@ -442,7 +456,11 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
-                    alert('Error al actualizar los datos del usuario: ' + error.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al actualizar los datos del permiso: ' + error.message
+                    });
                 });
 
         }

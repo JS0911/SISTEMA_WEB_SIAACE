@@ -25,15 +25,14 @@ class Roles extends Conectar
     }
     
     // INSERTA UN ROL
-    public function insert_rol($ID_ROL, $ROL, $DESCRIPCION) {
+    public function insert_rol( $ROL, $DESCRIPCION) {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_roles` (`ID_ROL`, `ROL`, `DESCRIPCION`) VALUES (:ID_ROL, :ROL, :DESCRIPCION)";
+            $sql = "INSERT INTO `siaace`.`tbl_ms_roles` ( `ROL`, `DESCRIPCION`) VALUES ( :ROL, :DESCRIPCION)";
     
             $stmt = $conectar->prepare($sql);
           
-            $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
             $stmt->bindParam(':ROL', $ROL, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
           
