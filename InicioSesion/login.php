@@ -5,17 +5,33 @@ session_start();
 //CREAR CONEXION
 require "../Config/conexion.php";
 
+//Crear una instancia de la clase Conectar
+$conexion = new Conectar();
+$conn = $conexion->Conexion();
+
 if ($_POST) {
     $usuario = $_POST['usuario'];
     $contrasena = $_POST['contrasena'];
     //$id_usuario = $_POST['id_usuario'];
     //$id_estado_usuario = $_POST['id_estado_usuario'];
-   // $id_rol = $_POST['id_rol'];
+    //$id_rol = $_POST['id_rol'];
 
     //$ID_ROL = $_SESSION ['ID_ROL'];
-    // Crear una instancia de la clase Conectar
-    $conexion = new Conectar();
-    $conn = $conexion->Conexion();
+    
+    // V A L I D A C I O N E S 
+    
+    define('MAX_LONGITUD_USUARIO', 15); 
+    define('MAX_LONGITUD_CONTRASENA', 100); 
+    $usuario = strtoupper($usuario);
+    if (empty($usuario) || empty($contrasena)) {
+        $mensajeCampos = "Ambos campos deben estar llenos.";
+    } elseif (strlen($usuario) > MAX_LONGITUD_USUARIO || strlen($contrasena) > MAX_LONGITUD_CONTRASENA) {
+        $mensajeLimite = "Se ha excedido la longitud máxima permitida para uno o ambos campos.";
+    } elseif (empty($usuario) || empty($contrasena) || strpos($usuario, ' ') !== false || strpos($contrasena, ' ') !== false) {
+        $mensajeEspacio = "Ambos campos no pueden contener espacios en blanco."; 
+    } else {
+        $mensajeError = "Lo siento, ha ocurrido un error inesperado."; 
+    }
 
     if ($conn) { // Verificar si la conexión se estableció correctamente
         $sql = "SELECT id_usuario, usuario, contrasena, id_estado_usuario ,id_rol, preguntas_contestadas,id_rol FROM tbl_ms_usuario WHERE usuario='$usuario'";
@@ -155,8 +171,8 @@ if ($_POST) {
                                 </div>
                                 <div class="card-body">
                                     <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                                        <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Usuario</label><input class="form-control py-4" id="inputEmailAddress" name="usuario" type="text" placeholder="Ingresa tu usuario:" /></div>
-                                        <div class="form-group"><label class="small mb-1" for="inputPassword">Contraseña</label><input class="form-control py-4" id="inputPassword" name="contrasena" type="password" placeholder="Ingresa tu contraseña:" /></div>
+                                        <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Usuario</label><input class="form-control py-4" id="inputEmailAddress" name="usuario" type="text" maxlength="15" placeholder="Ingresa tu usuario:" required pattern="^\S.*$" title="No se permiten espacios en blanco al principio." oninput="this.value = this.value.toUpperCase()" /></div>
+                                        <div class="form-group"><label class="small mb-1" for="inputPassword">Contraseña</label><input class="form-control py-4" id="inputPassword" name="contrasena" type="password" maxlength="100" placeholder="Ingresa tu contraseña:" required pattern="^\S.*$" title="No se permiten espacios en blanco al principio."/></div>
                                         <div style="text-align: center;">
                                             <button type="submit" class="btn btn-primary">Ingresar</button>
                                         </div>
@@ -181,6 +197,18 @@ if ($_POST) {
                                     <?php if(!empty($mensajeEstado)) : ?>
                                         <div class="alert alert-danger"><?php echo $mensajeEstado; ?></div>
                                     <?php endif ?>
+                                    <?php if (!empty($mensajeCampos)) : ?>
+                                        <div class="alert alert-danger"><?php echo $mensajeCampos; ?></div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($mensajeLimite)) : ?>
+                                        <div class="alert alert-danger"><?php echo $mensajeLimite; ?></div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($mensajeEspacio)) : ?>
+                                        <div class="alert alert-danger"><?php echo $mensajeEspacio; ?></div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($mensajeError)) : ?>
+                                        <div class="alert alert-danger"><?php echo $mensajeError; ?></div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
