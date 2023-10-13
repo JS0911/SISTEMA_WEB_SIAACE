@@ -77,6 +77,26 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
             text-align: center;
             /* Alineación del texto al centro */
         }
+
+        /* Estilo personalizado para el placeholder */
+        #myInput {
+            border: 2px solid #000;
+            /* Borde más oscuro, en este caso, negro (#000) */
+
+        }
+
+
+        /*BOTON DE CREAR NUEVO */
+        .custom-button {
+            background-color: #4CAF50;
+            /* Verde */
+            color: #fff;
+            /* Texto en blanco */
+            border: 2px solid #4CAF50;
+            /* Borde verde */
+            margin-top: 1px;
+
+        }
     </style>
 </head>
 
@@ -155,54 +175,67 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
             <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE PARAMETROS -->
             <main>
                 <div class="container-fluid">
-                    <h1 class="mt-4">Mantenimiento Parametros</h1>
 
                     <!-- Botón para abrir el formulario de creación -->
+                    <div class="container" style="max-width: 1400px;">
+                        <center>
+                            <h1 class="mt-4 mb-4">Mantenimiento Parametros</h1>
+                        </center>
 
-                    <!-- <button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button> -->
-                     <!-- Botón para abrir el formulario de creación -->
-                     <?php
-                    if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                        echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
-                    }
-                    ?>
-                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <?php
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
+                                echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
+                            }
+                            ?>
+                            <div class="d-flex align-items-center w-50">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-search"></i> <!-- Puedes usar una fuente de iconos como Font Awesome -->
+                                        </span>
+                                    </div>
+                                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
+                                </div>
+                            </div>
+                        </div>
 
-                    <!-- Tabla para mostrar los datos -->
-                    <table class="table table-bordered" id="Lista-Parametros">
-                        <thead>
-                            <tr>
-                                <th>Id Parametro</th>
-                                <th>Parametro</th>
-                                <th>Valor</th>
-                                <th>Acciones</th>
-                                <!-- <th>Id Usuario</th>
+                        <!-- Tabla para mostrar los datos -->
+                        <table class="table table-bordered mx-auto" id="Lista-Parametros" style="margin-top: 20px; margin-bottom: 20px">
+                            <thead>
+                                <tr>
+                                    <th>Id Parametro</th>
+                                    <th>Parametro</th>
+                                    <th>Valor</th>
+                                    <th>Acciones</th>
+                                    <!-- <th>Id Usuario</th>
                                 <th>Creado por</th>
                                 <th>Modificado por</th>
                                 <th>fecha creacion</th>
                                 <th>fecha modificacion</th> -->
 
-                            </tr>
-                        </thead>
-                        <tbody>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        </tbody>
-                    </table>
-                    <nav aria-label="Pagination">
-                        <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Atrás</a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item active" aria-current="page">
-                                <span class="page-link">2</span>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Siguiente</a>
-                            </li>
-                        </ul>
-                    </nav>
+                            </tbody>
+                        </table>
+                        <nav aria-label="Pagination" class="pagination-container">
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Atrás</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">2</span>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
 
                 <!-- Modal para crear un nuevo Parametro -->
@@ -243,7 +276,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
                             </div>
                         </div>
@@ -265,9 +298,9 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Id Parametro</label>
-                                        <input type="text" class="form-control" id="editar-id-parametro">
+                                        <input type="text" class="form-control" id="editar-id-parametro" disabled>
                                         <label for="nombre">Parametro</label>
-                                        <input type="text" class="form-control" id="editar-parametro">
+                                        <input type="text" class="form-control" id="editar-parametro" disabled>
                                         <label for="nombre">Valor</label>
                                         <input type="text" class="form-control" id="editar-valor">
 
@@ -285,9 +318,8 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary" onclick="updateParametro()">Guardar
-                                    Cambios</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" onclick="updateParametro()">Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -402,7 +434,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                     // FECHA_MODIFICACION: fecha_modificacion
                 };
 
-                fetch('http://localhost:90/SISTEMA1/Controladores/parametros.php?op=InsertParametros', {
+                fetch('http://localhost:90//SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=InsertParametros', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -554,7 +586,8 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, eliminarlo'
+                cancelButtonText: 'Cancelar' ,
+                confirmButtonText: 'eliminar'
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=eliminarParametro', {
@@ -596,7 +629,16 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
 
         });
     </script>
-
+    <script>
+        $(document).ready(function() {
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#Lista-Parametros tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
 
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>

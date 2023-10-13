@@ -17,20 +17,20 @@ $id_objeto_Usuario = "2";
 
 $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario);
 
- //---------CONEXION A LA TABLA ROLES --------
- // Crear una instancia de la clase Conectar
- $conexion = new Conectar();
- $conn = $conexion->Conexion();
- // Consultar la contraseña actual del usuario desde la base de datos
- $sql = "SELECT id_rol ,rol FROM tbl_ms_roles";
- $sql1 = "SELECT ID_ESTADO_USUARIO, NOMBRE FROM tbl_ms_estadousuario";
- $stmt = $conn->prepare($sql);
- $stmt1 = $conn->prepare($sql1);
+//---------CONEXION A LA TABLA ROLES --------
+// Crear una instancia de la clase Conectar
+$conexion = new Conectar();
+$conn = $conexion->Conexion();
+// Consultar la contraseña actual del usuario desde la base de datos
+$sql = "SELECT id_rol ,rol FROM tbl_ms_roles";
+$sql1 = "SELECT ID_ESTADO_USUARIO, NOMBRE FROM tbl_ms_estadousuario";
+$stmt = $conn->prepare($sql);
+$stmt1 = $conn->prepare($sql1);
 
- $stmt->execute();
- $stmt1->execute();
+$stmt->execute();
+$stmt1->execute();
 
-  // Obtener los resultados en un array asociativo
+// Obtener los resultados en un array asociativo
 $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
@@ -105,6 +105,24 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             /* Espaciado interno para las celdas */
             text-align: center;
             /* Alineación del texto al centro */
+        }
+
+        /* Estilo personalizado para el placeholder */
+        #myInput {
+            border: 2px solid #000;
+            /* Borde más oscuro, en este caso, negro (#000) */
+
+        }
+        /* BOTON DE CREAR NUEVO */
+        .custom-button {
+            background-color: #4CAF50;
+            /* Verde */
+            color: #fff;
+            /* Texto en blanco */
+            border: 2px solid #4CAF50;
+            /* Borde verde */
+            margin-top: 1px;
+
         }
     </style>
 </head>
@@ -183,47 +201,65 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE USUARIO -->
             <main>
                 <div class="container-fluid">
-                    <h1 class="mt-4">Mantenimiento Usuario</h1>
+
 
                     <!-- Botón para abrir el formulario de creación -->
-                    <?php
-                    if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                        echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
-                    }
-                    ?>
-                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
-                    <!-- Tabla para mostrar los datos -->
-                    <table class="table table-bordered" id="Lista-Usuarios">
-                        <thead>
-                            <tr>
-                                <th style="display: none;">Id</th>
-                                <th>Usuario</th>
-                                <th>Nombre</th>
-                                <th>Estado</th>
-                                <th>Correo Electronico</th>
-                                <th>Rol</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div class="container" style="max-width: 1400px;">
+                        <center>
+                            <h1 class="mt-4 mb-4">Mantenimiento Usuario</h1>
+                        </center>
 
-                        </tbody>
-                    </table>
-                    <nav aria-label="Pagination">
-                        <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Atrás</a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item active" aria-current="page">
-                                <span class="page-link">2</span>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Siguiente</a>
-                            </li>
-                        </ul>
-                    </nav>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <?php
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
+                                echo '<button class="btn btn-success" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
+                            }
+                            ?>
+                            <div class="d-flex align-items-center w-50">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-search"></i> <!-- Puedes usar una fuente de iconos como Font Awesome -->
+                                        </span>
+                                    </div>
+                                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabla para mostrar los datos -->
+                        <table class="table table-bordered mx-auto" id="Lista-Usuarios" style="margin-top: 20px; margin-bottom: 20px">
+                            <thead>
+                                <tr>
+                                    <th style="display: none;">Id</th>
+                                    <th>Usuario</th>
+                                    <th>Nombre</th>
+                                    <th>Estado</th>
+                                    <th>Correo Electrónico</th>
+                                    <th>Rol</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <nav aria-label="Pagination" class="pagination-container">
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Atrás</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">2</span>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
                 </div>
 
                 <!-- Modal para crear un nuevo registro -->
@@ -275,7 +311,7 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
                             </div>
                         </div>
@@ -297,13 +333,18 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Id Usuario</label>
-                                        <input type="text" class="form-control" id="editar-id-usuario">
+                                        <input type="text" class="form-control" id="editar-id-usuario" disabled>
                                         <label for="nombre">Usuario</label>
                                         <input type="text" class="form-control" id="editar-usuario">
                                         <label for="nombre">Nombre</label>
                                         <input type="text" class="form-control" id="editar-nombre">
                                         <label for="estado">Estado</label>
-                                        <input type="text" class="form-control" id="editar-estado">
+                                        <select class="form-control" id="editar-estado" name="IdEstado">
+                                            <option value="">Selecciona una opción</option>
+                                            <?php foreach ($Estados as $Estado) : ?>
+                                                <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                         <label for="estado">Correo Electronico</label>
                                         <input type="text" class="form-control" id="editar-correo">
                                         <?php
@@ -330,15 +371,14 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                             <?php endforeach; ?>
                                         </select>
 
-                                        
+
 
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary" onclick="updateUsuario()">Guardar
-                                    Cambios</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" onclick="updateUsuario()">Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -608,7 +648,8 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, eliminarlo'
+                confirmButtonText: 'eliminar',
+                cancelButtonText: 'Cancelar' 
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=eliminarUsuario', {
@@ -649,7 +690,16 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
         });
     </script>
 
-
+    <script>
+        $(document).ready(function() {
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#Lista-Usuarios tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

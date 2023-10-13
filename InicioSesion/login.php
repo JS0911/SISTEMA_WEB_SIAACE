@@ -43,7 +43,7 @@ if ($_POST) {
         //BLOQUEO SI SUPERA LOS INTENTOS FALLIDOS: OBTENCION DE VALOR DE INTENTOS
         $row1 = $filaintentos->fetch(PDO::FETCH_ASSOC);
         $cantMaximaIntentos = $row1['VALOR'];
-
+        
         if ($stmt) {
             $num = $stmt->rowCount();
 
@@ -129,7 +129,7 @@ if ($_POST) {
     } else {
         echo "Error al conectar a la base de datos.";
     }
-    header("refresh: 1; url=login.php");
+    header("refresh: 2; url=login.php");
 }
 ?>
 

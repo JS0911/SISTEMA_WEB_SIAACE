@@ -61,26 +61,55 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
     <style>
         /* Estilo para la tabla */
         #Lista-objetos {
-            border-collapse: collapse; /* Combina los bordes de las celdas */
+            border-collapse: collapse;
+            /* Combina los bordes de las celdas */
             width: 100%;
         }
 
         /* Estilo para las celdas del encabezado (th) */
         #Lista-objetos th {
-            border: 2px solid white; /* Bordes negros para las celdas del encabezado */
+            border: 2px solid white;
+            /* Bordes negros para las celdas del encabezado */
             background-color: #333;
             color: white;
-            font-family: Arial, sans-serif; /* Cambia el tipo de letra */
-            padding: 8px; /* Espaciado interno para las celdas */
-            text-align: center; /* Alineación del texto al centro */
+            font-family: Arial, sans-serif;
+            /* Cambia el tipo de letra */
+            padding: 8px;
+            /* Espaciado interno para las celdas */
+            text-align: center;
+            /* Alineación del texto al centro */
         }
 
         /* Estilo para las celdas de datos (td) */
         #Lista-objetos td {
-            border: 1px solid grey; /* Bordes negros para las celdas de datos */
-            padding: 8px; /* Espaciado interno para las celdas */
-            text-align: center; /* Alineación del texto al centro */
+            border: 1px solid grey;
+            /* Bordes negros para las celdas de datos */
+            padding: 8px;
+            /* Espaciado interno para las celdas */
+            text-align: center;
+            /* Alineación del texto al centro */
         }
+
+
+        /* Estilo personalizado para el placeholder */
+        #myInput {
+            border: 1px solid #000;
+            /* Borde más oscuro, en este caso, negro (#000) */
+        }
+
+        /*BOTON DE CREAR NUEVO */
+        .custom-button {
+            background-color: #4CAF50;
+            /* Verde */
+            color: #fff;
+            /* Texto en blanco */
+            border: 2px solid #4CAF50;
+            /* Borde verde */
+            margin-top: 1px;
+
+        }
+    </style>
+
     </style>
 </head>
 
@@ -124,29 +153,29 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                         </a>
 
                         <?php
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
+                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
                                     Modulo seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
-                                echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
-                                echo '<nav class="sb-sidenav-menu-nested nav">';
-                                
-                                if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
-                                }
-                                
-                                echo '<a class="nav-link" href="../../roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                                echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                                echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
-                                echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                            echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                                echo '</nav>';
-                                echo '</div>';
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
                             }
+
+                            echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                            echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                            echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                            echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+
+                            echo '</nav>';
+                            echo '</div>';
+                        }
                         ?>
-                        
+
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -160,45 +189,64 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
             <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE OBJETOS -->
             <main>
                 <div class="container-fluid">
-                    <h1 class="mt-4">Mantenimiento Objetos</h1>
+
 
                     <!-- Botón para abrir el formulario de creación -->
-                    <?php
-                    if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                        echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
-                    }
-                    ?>
-                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
-                    <!-- Tabla para mostrar los datos -->
-                    <table class="table table-bordered" id="Lista-objetos">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Objeto</th>
-                                <th>Descripcion</th>
-                                <th>Tipo Objeto</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div class="container" style="max-width: 1400px;">
+                        <center>
+                            <h1 class="mt-4 mb-4">Mantenimiento Objetos</h1>
+                        </center>
 
-                        </tbody>
-                    </table>
-                    <nav aria-label="Pagination">
-                        <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Atrás</a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item active" aria-current="page">
-                                <span class="page-link">2</span>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Siguiente</a>
-                            </li>
-                        </ul>
-                    </nav>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <?php
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
+                                echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
+                            }
+                            ?>
+                            <div class="d-flex align-items-center w-50">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-search"></i> <!-- Puedes usar una fuente de iconos como Font Awesome -->
+                                        </span>
+                                    </div>
+                                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabla para mostrar los datos -->
+                        <table class="table table-bordered mx-auto" id="Lista-objetos" style="margin-top: 20px; margin-bottom: 20px">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Objeto</th>
+                                    <th>Descripcion</th>
+                                    <th>Tipo Objeto</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                        <nav aria-label="Pagination" class="pagination-container">
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Atrás</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">2</span>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
                 </div>
 
                 <!-- Modal para crear un nuevo registro -->
@@ -227,7 +275,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
                             </div>
                         </div>
@@ -249,9 +297,9 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Id</label>
-                                        <input type="text" class="form-control" id="editar-id-objeto">
+                                        <input type="text" class="form-control" id="editar-id-objeto" disabled>
                                         <label for="nombre">Objeto</label>
-                                        <input type="text" class="form-control" id="editar-objeto">
+                                        <input type="text" class="form-control" id="editar-objeto" disabled>
                                         <label for="nombre">Descripcion</label>
                                         <input type="text" class="form-control" id="editar-descripcion">
                                         <label for="estado">Tipo Objeto</label>
@@ -260,13 +308,12 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary" onclick="updateObjeto()">Guardar
-                                    Cambios</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" onclick="updateObjeto()">Guardar</button>
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
             </main>
             <!-- AQUI FINALIZA EL MANTENIMIENTO DE OBJETOS -->
 
@@ -352,10 +399,10 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                     OBJETO: objeto,
                     DESCRIPCION: descripcion,
                     TIPO_OBJETO: tipo_objeto,
-                    
+
                 };
 
-                fetch('http://localhost:90/SISTEMA1/Controladores/objetos.php?op=InsertObjeto', {
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=InsertObjeto', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -376,8 +423,8 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                         // Cerrar la modal después de guardar
                         $('#crearModal').modal('hide');
 
-                         // Mostrar SweetAlert de éxito
-                         Swal.fire({
+                        // Mostrar SweetAlert de éxito
+                        Swal.fire({
                             icon: 'success',
                             title: 'Guardado exitoso',
                             text: 'Los datos se han guardado correctamente.'
@@ -490,7 +537,8 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, eliminarlo'
+                confirmButtonText: 'eliminar',
+                cancelButtonText: 'Cancelar' 
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=EliminarObjeto', {
@@ -532,14 +580,14 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
     </script>
 
     <script>
-    $(document).ready(function(){
-    $("#myInput").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#Lista-objetos tbody tr").filter(function() {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        $(document).ready(function() {
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#Lista-objetos tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
         });
-    });
-    });
     </script>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>

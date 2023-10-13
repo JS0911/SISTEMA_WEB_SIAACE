@@ -74,6 +74,27 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
             text-align: center;
             /* Alineación del texto al centro */
         }
+
+        /* Estilo personalizado para el placeholder */
+        #myInput {
+            border: 2px solid #000;
+            /* Borde más oscuro, en este caso, negro (#000) */
+
+        }
+
+
+        /*BOTON DE CREAR NUEVO */
+        .custom-button {
+            background-color: #4CAF50;
+            /* Verde */
+            color: #fff;
+            /* Texto en blanco */
+            border: 2px solid #4CAF50;
+            /* Borde verde */
+            margin-top: 1px;
+
+
+        }
     </style>
 </head>
 
@@ -123,17 +144,17 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                                     Modulo seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
-                                echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
-                                echo '<nav class="sb-sidenav-menu-nested nav">';
-                                
-                                if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
-                                }
-                                
-                                echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                                echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                                echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
-                                echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                            echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                            }
+
+                            echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                            echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                            echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                            echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
 
                             echo '</nav>';
                             echo '</div>';
@@ -149,54 +170,71 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
         </div>
         <div id="layoutSidenav_content">
 
-            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE USUARIO -->
+            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO PERMISO -->
             <main>
                 <div class="container-fluid">
-                    <h1 class="mt-4">Mantenimiento Permisos</h1>
 
                     <!-- Botón para abrir el formulario de creación -->
-                    <?php
-                    if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                        echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModalPermisos">Crear Nuevo</button>';
-                    }
-                    ?>
-                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
-                    <!-- Tabla para mostrar los datos -->
-                    <table class="table table-bordered" id="Lista-Permiso">
-                        <thead>
-                            <tr>
-                                <th style="display: none;">Id Rol</th> <!--OCULTAR LAS CABEZERAS -->
-                                <th> Rol</th>
-                                <th style="display: none;">Id Objeto</th>
-                                <th>Objeto</th>
-                                <th>Permisos Inserción</th>
-                                <th>Permisos Eliminación</th>
-                                <th>Permisos Actualización</th>
-                                <th>Permisos Consultar</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div class="container" style="max-width: 1400px;">
+                        <center>
+                            <h1 class="mt-4 mb-4">Mantenimiento Permisos</h1>
+                        </center>
 
-                        </tbody>
-                    </table>
-                    <nav aria-label="Pagination">
-                        <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Atrás</a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item active" aria-current="page">
-                                <span class="page-link">2</span>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Siguiente</a>
-                            </li>
-                        </ul>
-                    </nav>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <?php
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
+                                echo '<button class="btn btn-success mb-1 custom-button" data-toggle="modal" data-target="#crearModalPermisos">Crear Nuevo</button>';
+                            }
+                            ?>
+                            <div class="d-flex align-items-center w-50">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-search"></i> <!-- Puedes usar una fuente de iconos como Font Awesome -->
+                                        </span>
+                                    </div>
+                                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabla para mostrar los datos -->
+                        <table class="table table-bordered mx-auto" id="Lista-Permiso" style="margin-top: 20px; margin-bottom: 20px">
+                            <thead>
+                                <tr>
+                                    <th style="display: none;">Id Rol</th> <!--OCULTAR LAS CABEZERAS -->
+                                    <th> Rol</th>
+                                    <th style="display: none;">Id Objeto</th>
+                                    <th>Objeto</th>
+                                    <th>Permisos Inserción</th>
+                                    <th>Permisos Eliminación</th>
+                                    <th>Permisos Actualización</th>
+                                    <th>Permisos Consultar</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                        <nav aria-label="Pagination" class="pagination-container">
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Atrás</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">2</span>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
                 </div>
-
                 <!-- Modal para crear un nuevo registro -->
                 <div class="modal fade" id="crearModalPermisos" tabindex="-1" role="dialog" aria-labelledby="crearModalPermisoLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -261,42 +299,38 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                                                 <option value="<?php echo $objeto['id_objeto']; ?>"><?php echo $objeto['objeto']; ?></option>
                                             <?php endforeach; ?>
                                         </select>
+                                        <label>Permisos</label>
 
+                                        <!-- Checkbox para Insertar -->
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="agregar-pInsercion" name="permisos_Inser" value="1">
+                                            <label class="form-check-label" for="agregar-pInsercion">Insertar</label>
+                                        </div>
 
-                                        <label for="Permisos Insercion">Permisos Inserción</label>
-                                        <select class="form-control" id="agregar-pInsercion" name="permisos_Inser">
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="1">Sí</option>
-                                            <option value="0">No</option>
-                                        </select>
+                                        <!-- Checkbox para Eliminar -->
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="agregar-pEliminacion" name="permisos_elim" value="1">
+                                            <label class="form-check-label" for="agregar-pEliminacion">Eliminar</label>
+                                        </div>
 
-                                        <label for="Permisos Eliminacion">Permisos Eliminación</label>
-                                        <select class="form-control" id="agregar-pEliminacion" name="permisos_elim">
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="1">Sí</option>
-                                            <option value="0">No</option>
-                                        </select>
+                                        <!-- Checkbox para Actualizar -->
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="agregar-pActualizacion" name="permisos_actu" value="1">
+                                            <label class="form-check-label" for="agregar-pActualizacion">Actualizar</label>
+                                        </div>
 
-
-                                        <div> </div>
-                                        <label for="Permisos Eliminacion">Permisos Actualizacion</label>
-                                        <select class="form-control" id="agregar-pActualizacion" name="permisos_actu">
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="1">Sí</option>
-                                            <option value="0">No</option>
-                                        </select>
-                                        <label for="Permisos Consultar">Permisos Consultar</label>
-                                        <select class="form-control" id="agregar-pConsultar" name="permisos_cons">
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="1">Sí</option>
-                                            <option value="0">No</option>
-                                        </select>
+                                        <!-- Checkbox para Consultar -->
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="agregar-pConsultar" name="permisos_cons" value="1">
+                                            <label class="form-check-label" for="agregar-pConsultar">Consultar</label>
+                                        </div>
 
                                     </div>
+
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
                             </div>
                         </div>
@@ -370,42 +404,39 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
 
 
 
-                                        <label for="Permisos Insercion">Permisos Inserción</label>
-                                        <select class="form-control" id="editar-pInsercion" name="permisos_Inser">
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="1">Sí</option>
-                                            <option value="0">No</option>
-                                        </select>
+                                        <label>Permisos</label>
 
-                                        <label for="Permisos Eliminacion">Permisos Eliminación</label>
-                                        <select class="form-control" id="editar-pEliminacion" name="permisos_elim">
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="1">Sí</option>
-                                            <option value="0">No</option>
-                                        </select>
+                                        <!-- Checkbox para Insertar -->
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="editar-pInsercion" name="permisos_Inser" value="1">
+                                            <label class="form-check-label" for="editar-pInsercion">Insertar</label>
+                                        </div>
 
+                                        <!-- Checkbox para Eliminar -->
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="editar-pEliminacion" name="permisos_elim" value="1">
+                                            <label class="form-check-label" for="editar-pEliminacion">Eliminar</label>
+                                        </div>
 
-                                        <div> </div>
-                                        <label for="Permisos Eliminacion">Permisos Actualizacion</label>
-                                        <select class="form-control" id="editar-pActualizacion" name="permisos_actu">
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="1">Sí</option>
-                                            <option value="0">No</option>
-                                        </select>
-                                        <label for="Permisos Consultar">Permisos Consultar</label>
-                                        <select class="form-control" id="editar-pConsultar" name="permisos_cons">
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="1">Sí</option>
-                                            <option value="0">No</option>
-                                        </select>
+                                        <!-- Checkbox para Actualizar -->
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="editar-pActualizacion" name="permisos_actu" value="1">
+                                            <label class="form-check-label" for="editar-pActualizacion">Actualizar</label>
+                                        </div>
+
+                                        <!-- Checkbox para Consultar -->
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="editar-pConsultar" name="permisos_cons" value="1">
+                                            <label class="form-check-label" for="editar-pConsultar">Consultar</label>
+                                        </div>
 
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" onclick="updatePermiso()">Guardar
-                                    Cambios</button>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -496,11 +527,11 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                 // Obtener los valores de los campos del formulario
                 var idRol = $("#agregar-IdRol").val();
                 var idObjeto = $("#agregar-IdObjeto").val();
-                var pInsercion = $("#agregar-pInsercion").val();
-                var pEliminacion = $("#agregar-pEliminacion").val();
-                var pActualizacion = $("#agregar-pActualizacion").val();
-                var pConsultar = $("#agregar-pConsultar").val();
-
+                var pInsercion = $("#agregar-pInsercion").prop("checked") ? "1" : "0";
+                var pEliminacion = $("#agregar-pEliminacion").prop("checked") ? "1" : "0";
+                var pActualizacion = $("#agregar-pActualizacion").prop("checked") ? "1" : "0";
+                var pConsultar = $("#agregar-pConsultar").prop("checked") ? "1" : "0";
+                console.log(pEliminacion);
                 // Crear un objeto con los datos a enviar al servidor
                 var datos = {
                     ID_ROL: idRol,
@@ -557,7 +588,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                         });
                     });
 
-                    
+
 
             });
         }
@@ -613,10 +644,10 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
             var idRol = parseInt(document.getElementById('editar-IdRol').value);
             // Obtén los valores de los campos de edición
             var idObjeto = parseInt(document.getElementById('editar-IdObjeto').value);
-            var insercion = parseInt(document.getElementById('editar-pInsercion').value);
-            var eliminacion = parseInt(document.getElementById('editar-pEliminacion').value);
-            var actualizacion = parseInt(document.getElementById('editar-pActualizacion').value);
-            var consultar = parseInt(document.getElementById('editar-pConsultar').value);
+            var insercion = document.getElementById('editar-pInsercion').checked ? 1 : 0;
+            var eliminacion = document.getElementById('editar-pEliminacion').checked ? 1 : 0;
+            var actualizacion = document.getElementById('editar-pActualizacion').checked ? 1 : 0;
+            var consultar = document.getElementById('editar-pConsultar').checked ? 1 : 0;
 
             // Realiza una solicitud FETCH para actualizar los datos del usuario
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=updatePermiso', {
@@ -668,9 +699,11 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                 text: 'No podrás revertir esto.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
+                cancelButtonText: 'Cancelar',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, eliminarlo'
+                confirmButtonText: 'Eliminar',
+                confirmButtonColor: '#3085d6'
+               
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=deletePermiso', {
@@ -711,7 +744,16 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
             Insertar_Permiso();
         });
     </script>
-
+    <script>
+        $(document).ready(function() {
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#Lista-Permiso tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

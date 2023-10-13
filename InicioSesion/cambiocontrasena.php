@@ -237,8 +237,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <input type="password" class="form-control input" name="confirmarContraseña" id="password2" maxlength="15" placeholder="Confirmar Contraseña">
                                             <!-- <i class="form-control__validacion-estado fas fa-times-circle"></i> -->
                                             <p class="mensaje"></p>
-                                            <button type="submit" class="btn btn-primary" name="submit" id="click">Confirmar</button>
                                             <button type="button" class="btn btn-danger" name="cancelar" id="clickCancelar">Cancelar</button>
+                                            <button type="submit" class="btn btn-primary" name="submit" id="click">Guardar</button>
+                                            
                                             <script>
                                                 document.getElementById("clickCancelar").addEventListener("click", function() {
                                                     window.location.href = "index.php";
