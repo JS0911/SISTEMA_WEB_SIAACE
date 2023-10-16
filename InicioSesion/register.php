@@ -11,7 +11,7 @@ if (isset($_POST['submit'])) {
     $usuario = $_POST['usuario'];
     $nombre_usuario = $_POST['nombre_usuario'];
     $id_estado_usuario = 3;
-   // $preguntas_contestadas=0;
+    $preguntas_contestadas=0;
     $correo_electronico = $_POST['correo_electronico'];
     $contrasena = $_POST['contrasena'];
     $confirmar_contrasena = $_POST['confirmar_contrasena'];
@@ -55,9 +55,9 @@ if (isset($_POST['submit'])) {
 
             if ($conn) { // Verificar si la conexión se estableció correctamente
                 // Preparar la consulta SQL para insertar el nuevo usuario
-                $sql = "INSERT INTO tbl_ms_usuario (usuario, nombre_usuario, correo_electronico, contrasena,id_estado_usuario) VALUES (?, ?, ?, ?,?)";
+                $sql = "INSERT INTO tbl_ms_usuario (usuario, nombre_usuario, correo_electronico, contrasena,id_estado_usuario,preguntas_contestadas) VALUES (?, ?, ?, ?,?,?)";
                 $stmt = $conn->prepare($sql);
-                $stmt->execute([$usuario, $nombre_usuario, $correo_electronico, $hashed_password,$id_estado_usuario]);
+                $stmt->execute([$usuario, $nombre_usuario, $correo_electronico, $hashed_password,$id_estado_usuario,$preguntas_contestadas]);
 
 
                 header("Location: login.php");

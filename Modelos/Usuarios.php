@@ -44,7 +44,7 @@ class Usuario extends Conectar
             $stmt->bindParam(':ID_ESTADO_USUARIO', $ID_ESTADO_USUARIO, PDO::PARAM_INT);
             $stmt->bindParam(':CONTRASENA', $contrasenaEncriptada, PDO::PARAM_STR);
             $stmt->bindParam(':CORREO_ELECTRONICO', $CORREO_ELECTRONICO, PDO::PARAM_STR);
-            $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
+            $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);;
 
             $stmt->execute();
 
