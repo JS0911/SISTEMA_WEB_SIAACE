@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 require "../../Config/conexion.php";
 
@@ -8,46 +7,25 @@ $id_usuario = $_SESSION['id_usuario'];
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
-$sql = "SELECT * FROM tbl_ms_parametros";
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-$parametros = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Obtener el valor de la columna 'valor' en la tabla 'tbl_ms_parametros' con id_parametro igual a 3
-$sqlParametros = "SELECT valor FROM tbl_ms_parametros WHERE id_parametro = 3";
-$stmtParametros = $conn->prepare($sqlParametros);
-$stmtParametros->execute();
-$parametro = $stmtParametros->fetch(PDO::FETCH_ASSOC);
-
-$valorParametro = $parametro['valor']; // Valor de la columna 'valor'
-
-if ($valorParametro < 0) {
-    // Obtener la cantidad de preguntas contestadas por el usuario
-    $sqlPreguntasContestadas = "SELECT PREGUNTAS_CONTESTADAS FROM tbl_ms_usuario WHERE ID_USUARIO = $id_usuario";
-    $stmtPreguntasContestadas = $conn->prepare($sqlPreguntasContestadas);
-    $stmtPreguntasContestadas->execute();
-    $preguntasContestadas = $stmtPreguntasContestadas->fetchColumn();
-    echo($preguntasContestadas);
-    if ($preguntasContestadas == $valorParametro) {
-        echo($preguntasContestadas);
-        // Actualizar el estado del usuario en tbl_ms_estadoUsuario
-        $sqlActualizarEstado = "UPDATE `siaace`.`tbl_ms_usuario` SET ID_ESTADO_USUARIO = 1 WHERE ID_USUARIO = $id_usuario";
-        $stmtActualizarEstado = $conn->prepare($sqlActualizarEstado);
-        $stmtActualizarEstado->execute();
-        // Redirigir al usuario a login.php
-        echo "<script>window.location.href = '../../InicioSesion/cambiocontrasena.php';</script>";
-        exit;
-    }
-}
-
-$sql1 = "UPDATE `siaace`.`tbl_ms_usuario` SET `PREGUNTAS_CONTESTADAS` = `PREGUNTAS_CONTESTADAS`+1
-        WHERE  (`ID_USUARIO` = $id_usuario)";
+$sql1 = "UPDATE `siaace`.`tbl_ms_usuario` SET `ID_ESTADO_USUARIO` = 1 WHERE (`ID_USUARIO` = $id_usuario);";
 $stmt1 = $conn->prepare($sql1);
 
 
-// $sql2 = "UPDATE `siaace`.`tbl_ms_usuario` SET `ID_ESTADO_USUARIO` = 1
-//         WHERE  (`ID_USUARIO` = $id_usuario)";
-// $stmt2 = $conn->prepare($sql2);
+//TRAIGO EL VALOR DEL PARAMETRO PREGUNTAS MAXIMAS
+$sql2 = "SELECT VALOR FROM siaace.tbl_ms_parametros WHERE ID_PARAMETRO = 3";
+$stmt2 = $conn->prepare($sql2);
+$stmt2->execute();
+$valorParametro=$stmt2->fetchColumn();;
+echo $valorParametro;
+
+//TRAIGO EL VALOR DE PREGUNTAS CONTESTADAS
+$sql3 = "SELECT PREGUNTAS_CONTESTADAS FROM siaace.tbl_ms_usuario WHERE ID_USUARIO = $id_usuario";
+$stmt3 = $conn->prepare($sql3);
+$stmt3->execute();
+$PregunContes = $stmt3->fetchColumn();
+echo $PregunContes;
+
+
 ?>
 <style>
     .logo {
@@ -125,7 +103,15 @@ $stmt1 = $conn->prepare($sql1);
 
     <script>
         function cargarPreguntas() {
+            <?php
+             if ($PregunContes==$valorParametro) 
+             {
+               $stmt1->execute();
 
+               header("Location: ../../InicioSesion/login.php");
+
+             }       
+           ?>
 
             var ID = <?php echo json_encode($id_usuario); ?>;
             var data = {
@@ -193,23 +179,15 @@ $stmt1 = $conn->prepare($sql1);
                 .then(data => {
                     // Manejar la respuesta del servidor si es necesario
                     console.log(data);
-                    <?php
 
-                    $stmt1->execute();
-
-                    ?>;
                 })
                 .catch(error => {
                     // Manejar errores si ocurren durante la solicitud
                     console.error('Error:', error);
                 });
-
-
+                cargarPreguntas();
 
         }
-
-
-
         // Llama a la función cargarPreguntas para cargar las preguntas al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
             cargarPreguntas();

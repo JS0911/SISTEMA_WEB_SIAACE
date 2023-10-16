@@ -10,7 +10,7 @@ $mensajeUsuarioExistente = $mensajeCampos = $mensajeLetras = $mensajeCorreoInval
 if (isset($_POST['submit'])) {
     $usuario = $_POST['usuario'];
     $nombre_usuario = $_POST['nombre_usuario'];
-    $id_estado_usuario=3;
+    $id_estado_usuario = 3;
    // $preguntas_contestadas=0;
     $correo_electronico = $_POST['correo_electronico'];
     $contrasena = $_POST['contrasena'];

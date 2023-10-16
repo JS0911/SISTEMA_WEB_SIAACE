@@ -35,6 +35,12 @@ class preguntas extends Conectar
         $stmt->bindParam(':ID_USUARIO', $ID_USUARIO, PDO::PARAM_INT);
         $stmt->bindParam(':RESPUESTAS', $RESPUESTAS, PDO::PARAM_STR);
 
+        $sql1 = "UPDATE `siaace`.`tbl_ms_usuario` SET `PREGUNTAS_CONTESTADAS` = `PREGUNTAS_CONTESTADAS`+1
+        WHERE  (`ID_USUARIO` = $ID_USUARIO)";
+        $sql1 = $conectar->prepare($sql1);
+        $sql1->execute();
+    
+
         $stmt->execute();
         return $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
