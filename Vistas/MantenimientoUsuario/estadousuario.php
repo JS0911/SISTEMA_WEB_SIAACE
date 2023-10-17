@@ -4,7 +4,7 @@ session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
 
-$permisosObjetos = new PermisosUsuarios();
+$permisosEstados = new PermisosUsuarios();
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
@@ -13,9 +13,9 @@ if (!isset($_SESSION['usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Objetos = "5";
+$id_objeto_Estados = "6";
 
-$permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos);
+$permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
 
 // Verificar si se obtuvieron resultados
 // if (!empty($permisos)) {
@@ -51,7 +51,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento Usuario</title>
+    <title>Mantenimiento Estado Usuario</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
@@ -60,14 +60,14 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <style>
         /* Estilo para la tabla */
-        #Lista-objetos {
+        #Lista-estados {
             border-collapse: collapse;
             /* Combina los bordes de las celdas */
             width: 100%;
         }
 
         /* Estilo para las celdas del encabezado (th) */
-        #Lista-objetos th {
+        #Lista-estados th {
             border: 2px solid white;
             /* Bordes negros para las celdas del encabezado */
             background-color: #333;
@@ -81,7 +81,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
         }
 
         /* Estilo para las celdas de datos (td) */
-        #Lista-objetos td {
+        #Lista-estados td {
             border: 1px solid grey;
             /* Bordes negros para las celdas de datos */
             padding: 8px;
@@ -169,7 +169,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                             echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
                             echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                             echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                            echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+
                             echo '</nav>';
                             echo '</div>';
                         }
@@ -185,13 +185,13 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
         </div>
         <div id="layoutSidenav_content">
 
-            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE OBJETOS -->
+            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE ESTADOS -->
             <main>
                 <div class="container-fluid">
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
-                            <h1 class="mt-4 mb-4">Mantenimiento Objetos</h1>
+                            <h1 class="mt-4 mb-4">Mantenimiento Estados de Usuario</h1>
                         </center>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -199,16 +199,26 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
                                 echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
                             }
-                            ?> 
+                            ?>
+                            <!--<div class="d-flex align-items-center w-50">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-search"></i>--> <!-- Puedes usar una fuente de iconos como Font Awesome -->
+                                        <!--</span>
+                                    </div>
+                                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
+                                </div>
+                            </div>-->
                         </div>
+
                         <!-- Tabla para mostrar los datos -->
-                        <table class="table table-bordered mx-auto" id="Lista-objetos" style="margin-top: 20px; margin-bottom: 20px">
+                        <table class="table table-bordered mx-auto" id="Lista-estados" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-                                    <th style="display: none;">Id</th>
-                                    <th>Objeto</th>
+                                    <th style="display: none;">Id</th> <!-- Ocultar el ID -->
+                                    <th>Nombre</th>
                                     <th>Descripcion</th>
-                                    <th>Tipo Objeto</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -216,15 +226,32 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
 
                             </tbody>
                         </table>
+
+                        <!--<nav aria-label="Pagination" class="pagination-container">
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Atrás</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">2</span>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>-->
                     </div>
+
                 </div>
 
-                <!-- Modal para crear un nuevo registro -->
+                <!-- Modal para crear un nuevo estado -->
                 <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="crearModalLabel">Crear Nuevo Registro</h5>
+                                <h5 class="modal-title" id="crearModalLabel">Nuevo Estado</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -233,20 +260,13 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                                 <!-- Formulario de creación -->
                                 <form>
                                     <div class="form-group">
-                                        <label for="nombre">Objeto</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-objeto" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <label for="nombre">Nombre</label>
+                                        <input type="text" class="form-control" id="agregar-nombre" maxlength="15">
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" class="form-control" id="agregar-descripcion" maxlength="15">
                                         <div id="mensaje2"></div>
-
-                                        <label for="estado">Tipo Objeto</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-tipoObjeto" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje3"></div>
                                     </div>
                                 </form>
                             </div>
@@ -258,12 +278,12 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                     </div>
                 </div>
 
-                <!-- Modal para editar un registro -->
+                <!-- Modal para editar un estado -->
                 <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="editarModalLabel">Editar Registro</h5>
+                                <h5 class="modal-title" id="editarModalLabel">Editar Estado</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -273,31 +293,25 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Id</label>
-                                        <input type="text" class="form-control" id="editar-id-objeto" disabled>
-                                        <label for="nombre">Objeto</label>
-                                        <input type="text" class="form-control" id="editar-objeto" disabled>
-                                        
+                                        <input type="text" class="form-control" id="editar-id-estado" disabled>
+                                        <label for="nombre">Nombre</label>
+                                        <input type="text" class="form-control" id="editar-nombre" maxlength="15">
+                                        <div id="mensaje3"></div>
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" class="form-control" id="editar-descripcion" maxlength="15">
                                         <div id="mensaje4"></div>
-                                        
-                                        <label for="estado">Tipo Objeto</label>
-                                        <input type="text" maxlength="15" class="form-control" id="editar-tipoObjeto" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje5"></div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateObjeto()" disabled>Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateEstado()" disabled>Guardar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
-            <!-- AQUI FINALIZA EL MANTENIMIENTO DE OBJETOS -->
+            <!-- AQUI FINALIZA EL MANTENIMIENTO DE ESTADOS -->
 
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid">
@@ -312,11 +326,10 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
     <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-                                
-        function Lista_Objetos() {
+
+        function Lista_Estados() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
-            // Actualizar el valor predeterminado
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=GetObjetos', {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/estadousuario.php?op=GetEstados', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
@@ -333,25 +346,24 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                 })
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
-                    var tbody = document.querySelector('#Lista-objetos tbody');
-                    tbody.innerHTML = ''; // Limpia el contenido anterior
+                    var tbody = document.querySelector('#Lista-estados tbody');
+                    tbody.innerHTML = ''; // Limpiar el contenido anterior////////////////////////////
 
-                    data.forEach(function(objeto) {
+                    data.forEach(function(estado) {
                         var row = '<tr>' +
-                            '<td style="display:none;">' + objeto.ID_OBJETO + '</td>' +
-                            '<td>' + objeto.OBJETO + '</td>' +
-                            '<td>' + objeto.DESCRIPCION + '</td>' +
-                            '<td>' + objeto.TIPO_OBJETO + '</td>' +
+                            '<td style="display:none;">' + estado.ID_ESTADO_USUARIO + '</td>' + // Ocultar el ID
+                            '<td>' + estado.NOMBRE + '</td>' +
+                            '<td>' + estado.DESCRIPCION + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarObjeto(' + objeto.ID_OBJETO + ')">Editar</button>';
+                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarEstado(' + estado.ID_ESTADO_USUARIO + ')">Editar</button>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-objeto" data-id="' + objeto.ID_OBJETO + '" onclick="eliminarObjeto(' + objeto.ID_OBJETO + ')">Eliminar</button>';
+                            row += '<button class="btn btn-danger eliminar-estado" data-id="' + estado.ID_ESTADO_USUARIO + '" onclick="eliminarEstado(' + estado.ID_ESTADO_USUARIO + ')">Eliminar</button>';
                         }
 
 
@@ -359,6 +371,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                             '</tr>';
                         tbody.innerHTML += row;
                     });
+
                     habilitarPaginacion();
                 })
 
@@ -367,27 +380,26 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                     alert('Error al cargar los datos: ' + error.message);
                 });
 
-        } 
+        }
 
         function habilitarPaginacion() {
-            $('#Lista-objetos').DataTable({
+            $('#Lista-estados').DataTable({
                 "paging": true, 
                 "pageLength": 10,
-                "lengthMenu": [10, 20, 30, 50, 100],
+                "lengthMenu": [10, 25, 50, 100],
                 "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
             });
         }
 
-        function Insertar_Objeto() {
+        function Insertar_Estado() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
-                var objeto = $("#agregar-objeto").val();
+                var nombre = $("#agregar-nombre").val();
                 var descripcion = $("#agregar-descripcion").val();
-                var tipo_objeto = $("#agregar-tipoObjeto").val();
 
-                if (objeto == "" || descripcion == "" || tipo_objeto == "") {
+                if (nombre == "" || descripcion == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
@@ -396,70 +408,69 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                 } else {
                     // Crear un objeto con los datos a enviar al servidor
                     var datos = {
-                        OBJETO: objeto,
+                        NOMBRE: nombre,
                         DESCRIPCION: descripcion,
-                        TIPO_OBJETO: tipo_objeto,
 
                     };
 
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=InsertObjeto', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(datos)
-                    })
-                    .then(function(response) {
-                        if (response.ok) {
-                            // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
-                            return response.json();
-                        } else {
-                            // Si hubo un error en la solicitud, maneja el error aquí
-                            throw new Error('Error en la solicitud');
-                        }
-                    })
-                    .then(function(data) {
-                        console.log(data);
-                        // Cerrar la modal después de guardar
-                        $('#crearModal').modal('hide');
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/estadousuario.php?op=InsertEstado', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(datos)
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+                                return response.json();
+                            } else {
+                                // Si hubo un error en la solicitud, maneja el error aquí
+                                throw new Error('Error en la solicitud');
+                            }
+                        })
+                        .then(function(data) {
+                            console.log(data);
+                            // Cerrar la modal después de guardar
+                            $('#crearModal').modal('hide');
 
-                        // Mostrar SweetAlert de éxito
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Guardado exitoso',
-                            text: 'Los datos se han guardado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
+                            // Mostrar SweetAlert de éxito
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Guardado exitoso',
+                                text: 'Los datos se han guardado correctamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                            });
+                        })
+                        .catch(function(error) {
+                            // Mostrar SweetAlert de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al guardar los datos: ' + error.message
+                            });
+                            console.log(error.message);
                         });
-                    })
-                    .catch(function(error) {
-                        // Mostrar SweetAlert de error
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error al guardar los datos: ' + error.message
-                        });
-                        console.log(error.message);
-                    });
-                }                
+                }
             });
         }
 
-        function cargarObjeto(id) {
-            // Crear un objeto con el ID del objeto
+        function cargarEstado(id) {
+            // Crear un objeto con el ID del estado
             var data = {
-                "ID_OBJETO": id
+                "ID_ESTADO_USUARIO": id
             };
 
-            // Realiza una solicitud FETCH para obtener los detalles del objeto por su ID
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=GetObjeto', {
+            // Realiza una solicitud FETCH para obtener los detalles del estado por su ID
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/estadousuario.php?op=GetEstado', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data) // Convierte el objeto en formato JSON
+                    body: JSON.stringify(data) // Convierte el estado en formato JSON
                 })
                 .then(function(response) {
                     if (response.ok) {
@@ -468,76 +479,74 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                         throw new Error('Error en la solicitud');
                     }
                 })
-                .then(function(objeto) {
-                    // Llena los campos del modal con los datos del objeto
-                    document.getElementById('editar-id-objeto').value = objeto.ID_OBJETO;
-                    document.getElementById('editar-objeto').value = objeto.OBJETO;
-                    document.getElementById('editar-descripcion').value = objeto.DESCRIPCION;
-                    document.getElementById('editar-tipoObjeto').value = objeto.TIPO_OBJETO;
+                .then(function(estado) {
+                    // Llena los campos del modal con los datos del estado
+                    document.getElementById('editar-id-estado').value = estado.ID_ESTADO_USUARIO;
+                    document.getElementById('editar-nombre').value = estado.NOMBRE;
+                    document.getElementById('editar-descripcion').value = estado.DESCRIPCION;
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
-                    alert('Error al cargar los datos del Objeto : ' + error.message);
+                    alert('Error al cargar los datos del estado : ' + error.message);
                 });
         }
 
-        function updateObjeto() {
-            var id_objeto = document.getElementById('editar-id-objeto').value;
-            var objeto = document.getElementById('editar-objeto').value;
+        function updateEstado() {
+            var id_estado = document.getElementById('editar-id-estado').value;
+            var nombre = document.getElementById('editar-nombre').value;
             var descripcion = document.getElementById('editar-descripcion').value;
-            var tipo_objeto = document.getElementById('editar-tipoObjeto').value;
 
-            if (objeto == "" || descripcion == "" || tipo_objeto == "") {
+
+            if (nombre == "" || descripcion == "") {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
                     text: 'No se pueden enviar Campos Vacios.'
                 })
             } else {
-            // Realiza una solicitud FETCH para actualizar los datos del objeto
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=UpdateObjeto', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "ID_OBJETO": id_objeto,
-                        "OBJETO": objeto,
-                        "DESCRIPCION": descripcion,
-                        "TIPO_OBJETO": tipo_objeto
-                    }) // Convierte los datos en formato JSON
-                })
-                .then(function(response) {
-                    if (response.ok) {
-                        // Cerrar la modal después de guardar
-                        $('#editarModal').modal('hide');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Actualización exitosa',
-                            text: 'Los datos se han actualizado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
-                        });
+                // Realiza una solicitud FETCH para actualizar los datos del estado
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/estadousuario.php?op=UpdateEstado', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "ID_ESTADO_USUARIO": id_estado,
+                            "NOMBRE": nombre,
+                            "DESCRIPCION": descripcion
+                        }) // Convierte los datos en formato JSON
+                    })
+                    .then(function(response) {
+                        if (response.ok) {
+                            // Cerrar la modal después de guardar
+                            $('#editarModal').modal('hide');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Actualización exitosa',
+                                text: 'Los datos se han actualizado correctamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                            });
 
-                    } else {
-                        throw new Error('Error en la solicitud de actualización');
-                    }
-                })
-                .catch(function(error) {
-                    // Manejar el error aquí
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error al actualizar los datos del permiso: ' + error.message
+                        } else {
+                            throw new Error('Error en la solicitud de actualización');
+                        }
+                    })
+                    .catch(function(error) {
+                        // Manejar el error aquí
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al actualizar los datos del estado: ' + error.message
+                        });
                     });
-                });
-            }    
+            }
         }
 
         //FUNCION CON EL SWEETALERT
-        function eliminarObjeto(id_objeto) {
+        function eliminarEstado(id_estado) {
             Swal.fire({
                 title: '¿Estás seguro?',
                 text: 'No podrás revertir esto.',
@@ -546,28 +555,28 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar' 
+                cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=EliminarObjeto', {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/estadousuario.php?op=EliminarEstado', {
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
-                                "ID_OBJETO": id_objeto
+                                "ID_ESTADO_USUARIO": id_estado
                             })
                         })
                         .then(function(response) {
                             if (response.ok) {
                                 // Eliminación exitosa, puedes hacer algo aquí si es necesario
-                                Swal.fire('Objeto eliminado', '', 'success')
+                                Swal.fire('Estado eliminado', '', 'success')
                                     .then(() => {
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
-                                        // Recargar la lista de objetos después de eliminar
-                                        Lista_objetos();
+                                        // Recargar la lista de estados después de eliminar
+                                        Lista_estados();
                                     });
                             } else {
                                 throw new Error('Error en la solicitud de eliminación');
@@ -575,32 +584,31 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                         })
                         .catch(function(error) {
                             // Manejar el error aquí
-                            Swal.fire('Error', 'Error al eliminar el Objeto: ' + error.message, 'error');
+                            Swal.fire('Error', 'Error al eliminar el estado: ' + error.message, 'error');
                         });
                 }
             });
         }
 
-        // VALIDACIONES FUNCIONES    
+        // VALIDACIONES FUNCIONES  
         function validarNombre() {
-            nombreObjeto = document.getElementById("agregar-objeto");
+            nombreUsuario = document.getElementById("agregar-nombre");
             descripcion = document.getElementById("agregar-descripcion");
-            tipoObjeto = document.getElementById("agregar-tipoObjeto");
+            nombreUsuarioEditar = document.getElementById("editar-nombre");
             descripcionEditar = document.getElementById("editar-descripcion");
-            tipoObjetoEditar = document.getElementById("editar-tipoObjeto");
 
-            nombreObjeto.addEventListener("keypress", function(e) {
+            nombreUsuario.addEventListener("keypress", function(e) {
                 expresionValidadora1 = /^[A-Z]+$/;
 
                 if (!expresionValidadora1.test(e.key)) {
-                    nombreObjeto.style.borderColor = "red";
-                    nombreObjeto.style.boxShadow = "0 0 10px red";
+                    nombreUsuario.style.borderColor = "red";
+                    nombreUsuario.style.boxShadow = "0 0 10px red";
                     document.getElementById("mensaje1").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
                     document.getElementById("mensaje1").style.color = "red";
                     e.preventDefault();
                 } else {
-                    nombreObjeto.style.borderColor = "green";
-                    nombreObjeto.style.boxShadow = "0 0 10px green";
+                    nombreUsuario.style.borderColor = "green";
+                    nombreUsuario.style.boxShadow = "0 0 10px green";
                     document.getElementById("mensaje1").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
                     document.getElementById("mensaje1").style.color = "green";
                 }
@@ -629,20 +637,20 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                         document.getElementById("mensaje2").style.color = "green";
                     }
                 }
-            });
+            })
 
-            tipoObjeto.addEventListener("keypress", function(e) {
+            nombreUsuarioEditar.addEventListener("keypress", function(e) {
                 expresionValidadora1 = /^[A-Z]+$/;
 
                 if (!expresionValidadora1.test(e.key)) {
-                    tipoObjeto.style.borderColor = "red";
-                    tipoObjeto.style.boxShadow = "0 0 10px red";
+                    nombreUsuarioEditar.style.borderColor = "red";
+                    nombreUsuarioEditar.style.boxShadow = "0 0 10px red";
                     document.getElementById("mensaje3").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
                     document.getElementById("mensaje3").style.color = "red";
                     e.preventDefault();
                 } else {
-                    tipoObjeto.style.borderColor = "green";
-                    tipoObjeto.style.boxShadow = "0 0 10px green";
+                    nombreUsuarioEditar.style.borderColor = "green";
+                    nombreUsuarioEditar.style.boxShadow = "0 0 10px green";
                     document.getElementById("mensaje3").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
                     document.getElementById("mensaje3").style.color = "green";
                 }
@@ -671,29 +679,12 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                         document.getElementById("mensaje4").style.color = "green";
                     }
                 }
-            });
-
-            tipoObjetoEditar.addEventListener("keypress", function(e) {
-                expresionValidadora1 = /^[A-Z]+$/;
-
-                if (!expresionValidadora1.test(e.key)) {
-                    tipoObjetoEditar.style.borderColor = "red";
-                    tipoObjetoEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                    document.getElementById("mensaje5").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    tipoObjetoEditar.style.borderColor = "green";
-                    tipoObjetoEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje5").style.color = "green";
-                }
-            });
+            })
         }
 
         $(document).ready(function() {
-            Lista_Objetos();
-            Insertar_Objeto();
+            Lista_Estados();
+            Insertar_Estado();
             validarNombre();
         });
     </script>
@@ -701,43 +692,41 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
     <!-- VALIDACIONES SCRIPT -->
     <script>
         // Obtén los campos de entrada y el botón "Guardar para insertar"
-        const objetoInput = document.getElementById('agregar-objeto');
+        const nombreInput = document.getElementById('agregar-nombre');
         const descripcionInput = document.getElementById('agregar-descripcion');
-        const tipoObjetoInput = document.getElementById('agregar-tipoObjeto');
         const guardarButton = document.getElementById('btn-agregar');
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = objetoInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && tipoObjetoInput.value.trim() !== '';
+            const isFormValid = nombreInput.value.trim() !== '' && descripcionInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
-        objetoInput.addEventListener('input', checkForm);
+        nombreInput.addEventListener('input', checkForm);
         descripcionInput.addEventListener('input', checkForm);
-        tipoObjetoInput.addEventListener('input', checkForm);
     </script>
     
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
+        const nombreInput1 = document.getElementById('editar-nombre');
         const descripcionInput1 = document.getElementById('editar-descripcion');
-        const tipoObjetoInput1 = document.getElementById('editar-tipoObjeto');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = descripcionInput1.value.trim() !== '' && tipoObjetoInput1.value.trim() !== '';
+            const isFormValid = nombreInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '';
             guardarButton1.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
+        nombreInput1.addEventListener('input', checkForm);
         descripcionInput1.addEventListener('input', checkForm);
-        tipoObjetoInput1.addEventListener('input', checkForm);
     </script>
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-objeto, #agregar-tipoObjeto').on('input', function() {
+        $('#agregar-nombre').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -752,7 +741,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
         });
 
         // Escuchar eventos de cambio en los campos de entrada deshabilitados para eliminar espacios en blanco al principio y al final
-        $('#editar-objeto, #editar-tipoObjeto').on('input', function() {
+        $('#editar-nombre').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -770,6 +759,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
+
 </body>
 
 </html>

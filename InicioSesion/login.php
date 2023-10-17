@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 session_start();
 
@@ -17,21 +17,6 @@ if ($_POST) {
     //$id_rol = $_POST['id_rol'];
 
     //$ID_ROL = $_SESSION ['ID_ROL'];
-    
-    // V A L I D A C I O N E S 
-    
-    define('MAX_LONGITUD_USUARIO', 15); 
-    define('MAX_LONGITUD_CONTRASENA', 100); 
-    $usuario = strtoupper($usuario);
-    if (empty($usuario) || empty($contrasena)) {
-        $mensajeCampos = "Ambos campos deben estar llenos.";
-    } elseif (strlen($usuario) > MAX_LONGITUD_USUARIO || strlen($contrasena) > MAX_LONGITUD_CONTRASENA) {
-        $mensajeLimite = "Se ha excedido la longitud máxima permitida para uno o ambos campos.";
-    } elseif (empty($usuario) || empty($contrasena) || strpos($usuario, ' ') !== false || strpos($contrasena, ' ') !== false) {
-        $mensajeEspacio = "Ambos campos no pueden contener espacios en blanco."; 
-    } else {
-        $mensajeError = "Lo siento, ha ocurrido un error inesperado."; 
-    }
 
     if ($conn) { // Verificar si la conexión se estableció correctamente
         $sql = "SELECT id_usuario, usuario, contrasena, id_estado_usuario ,id_rol, preguntas_contestadas,id_rol FROM tbl_ms_usuario WHERE usuario='$usuario'";
@@ -82,7 +67,7 @@ if ($_POST) {
 
                 } else {
                     
-                    $contrasenaNoCoincice = "La contraseña no coincide";
+                    $contrasenaNoCoincide = "La contraseña no coincide";
                     // echo "La contraseña no coincide";
 
                     if(!isset($_COOKIE['intentosFallidos']))
@@ -107,7 +92,7 @@ if ($_POST) {
                     
                             if($cantMaximaIntentos <= $_COOKIE['intentosFallidos'])
                             {
-                                $contrasenaNoCoincice = "Su usuario ha sido bloqueado debido a que excedio la cantidad de intentos.";
+                                $contrasenaNoCoincide = "Su usuario ha sido bloqueado debido a que excedio la cantidad de intentos.";
                                 $sql2 = "UPDATE tbl_ms_usuario SET ID_ESTADO_USUARIO = 4 WHERE USUARIO = '$usuario'";
                                 $conn->query($sql2);
                                 setcookie('intentosFallidos', "", time() - 3600);
@@ -119,7 +104,6 @@ if ($_POST) {
                 }
             } else {
                 $NoExisteUsuario = "No existe usuario"; 
-                
                 //echo"No existe usuario";
             }
         } else {
@@ -167,12 +151,15 @@ if ($_POST) {
                         <div class="col-lg-5">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
                                 <div class="card-header">
-                                    <h3 class="text-center font-weight-light my-4">SIAACE LOGIN</h3><img src="../src/Logo.png" alt="Logo SIAACE" class="logo">
+                                    <h3 class="text-center font-weight-light my-4">SIAACE</h3><img src="../src/Logo.png" alt="Logo SIAACE" class="logo">
                                 </div>
                                 <div class="card-body">
                                     <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                                        <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Usuario</label><input class="form-control py-4" id="inputEmailAddress" name="usuario" type="text" maxlength="15" placeholder="Ingresa tu usuario:" required pattern="^\S.*$" title="No se permiten espacios en blanco al principio." oninput="this.value = this.value.toUpperCase()" /></div>
-                                        <div class="form-group"><label class="small mb-1" for="inputPassword">Contraseña</label><input class="form-control py-4" id="inputPassword" name="contrasena" type="password" maxlength="100" placeholder="Ingresa tu contraseña:" required pattern="^\S.*$" title="No se permiten espacios en blanco al principio."/></div>
+                                        <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Usuario</label><input class="form-control py-4" id="inputEmailAddress" name="usuario" type="text" maxlength="15" placeholder="Ingresa tu usuario:" 
+                                        required pattern="^(?!.*\s).*$" title="No se permiten espacios en blanco o campos vacios." oninput="this.value = this.value.toUpperCase()" /></div>
+                                        
+                                        <div class="form-group"><label class="small mb-1" for="inputPassword">Contraseña</label><input class="form-control py-4" id="inputPassword" name="contrasena" type="password" maxlength="100" placeholder="Ingresa tu contraseña:" 
+                                        required pattern="^[^\s]{1,100}$" title="No se permiten espacios en blanco o campos vacios." /></div>
                                         <div style="text-align: center;">
                                             <button type="submit" class="btn btn-primary">Ingresar</button>
                                         </div>
@@ -188,8 +175,8 @@ if ($_POST) {
                                 </div>
                                 <!-- Este div se utilizará para mostrar mensajes -->
                                 <div id="mensajeDiv">
-                                    <?php if (!empty($contrasenaNoCoincice)) : ?>
-                                        <div class="alert alert-danger"><?php echo $contrasenaNoCoincice; ?></div>
+                                    <?php if (!empty($contrasenaNoCoincide)) : ?>
+                                        <div class="alert alert-danger"><?php echo $contrasenaNoCoincide; ?></div>
                                     <?php endif; ?>
                                     <?php if (!empty($NoExisteUsuario)) : ?>
                                         <div class="alert alert-danger"><?php echo $NoExisteUsuario; ?></div>
@@ -197,17 +184,8 @@ if ($_POST) {
                                     <?php if(!empty($mensajeEstado)) : ?>
                                         <div class="alert alert-danger"><?php echo $mensajeEstado; ?></div>
                                     <?php endif ?>
-                                    <?php if (!empty($mensajeCampos)) : ?>
-                                        <div class="alert alert-danger"><?php echo $mensajeCampos; ?></div>
-                                    <?php endif; ?>
                                     <?php if (!empty($mensajeLimite)) : ?>
                                         <div class="alert alert-danger"><?php echo $mensajeLimite; ?></div>
-                                    <?php endif; ?>
-                                    <?php if (!empty($mensajeEspacio)) : ?>
-                                        <div class="alert alert-danger"><?php echo $mensajeEspacio; ?></div>
-                                    <?php endif; ?>
-                                    <?php if (!empty($mensajeError)) : ?>
-                                        <div class="alert alert-danger"><?php echo $mensajeError; ?></div>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -227,6 +205,7 @@ if ($_POST) {
             </footer>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../js/scripts.js"></script>
