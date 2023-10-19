@@ -1,8 +1,8 @@
-<?php
+<?php 
 
 session_start();
 require "../../Config/conexion.php";
-require_once '../../Modelos/permisoUsuario.php';
+require_once "../../Modelos/permisoUsuario.php";
 
 $permisosRoles = new PermisosUsuarios();
 
@@ -13,11 +13,22 @@ if (!isset($_SESSION['usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Rol = "1";
+$id_objeto_Roles = "1";
 
-$permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
+$permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
 
-
+// Verificar si se obtuvieron resultados
+// if (!empty($permisos)) {
+//     // Recorrer el array de permisos y mostrar los valores
+//     foreach ($permisos as $permiso) {
+//         echo "PERMISOS_INSERCION: " . $permiso['PERMISOS_INSERCION'] . "<br>";
+//         echo "PERMISOS_ELIMINACION: " . $permiso['PERMISOS_ELIMINACION'] . "<br>";
+//         echo "PERMISOS_ACTUALIZACION: " . $permiso['PERMISOS_ACTUALIZACION'] . "<br>";
+//         echo "PERMISOS_CONSULTAR: " . $permiso['PERMISOS_CONSULTAR'] . "<br>";
+//     }
+// } else {
+//     echo "No se encontraron permisos para el rol y objeto especificados.";
+// }
 ?>
 
 <style>
@@ -40,22 +51,23 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento Usuario</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <title>Mantenimiento Roles</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <style>
         /* Estilo para la tabla */
-        #Lista-roles {
+        #Lista-rol {
             border-collapse: collapse;
             /* Combina los bordes de las celdas */
             width: 100%;
         }
 
         /* Estilo para las celdas del encabezado (th) */
-        #Lista-roles th {
+        #Lista-rol th {
             border: 2px solid white;
             /* Bordes negros para las celdas del encabezado */
             background-color: #333;
@@ -69,7 +81,7 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
         }
 
         /* Estilo para las celdas de datos (td) */
-        #Lista-roles td {
+        #Lista-rol td {
             border: 1px solid grey;
             /* Bordes negros para las celdas de datos */
             padding: 8px;
@@ -80,9 +92,8 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
 
         /* Estilo personalizado para el placeholder */
         #myInput {
-            border: 2px solid #000;
+            border: 1px solid #000;
             /* Borde más oscuro, en este caso, negro (#000) */
-
         }
 
         /*BOTON DE CREAR NUEVO */
@@ -96,6 +107,8 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
             margin-top: 1px;
 
         }
+    </style>
+
     </style>
 </head>
 
@@ -133,11 +146,11 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div> Inicio
                         </a>
 
-                        <div class="sb-sidenav-menu-heading">Addons</div>
+                        <div class="sb-sidenav-menu-heading">Pestañas</div>
                         <a class="nav-link" href="../charts.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            Charts
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>Dashboard
                         </a>
+
                         <?php
                         if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
@@ -156,7 +169,7 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                             echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
                             echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                             echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-
+                            echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
                             echo '</nav>';
                             echo '</div>';
                         }
@@ -175,7 +188,6 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
             <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE ROLES -->
             <main>
                 <div class="container-fluid">
-
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
@@ -185,52 +197,25 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
+                                echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
                             }
-                            ?>
-                            <div class="d-flex align-items-center w-50">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-search"></i> <!-- Puedes usar una fuente de iconos como Font Awesome -->
-                                        </span>
-                                    </div>
-                                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
-                                </div>
-                            </div>
+                            ?> 
                         </div>
-
                         <!-- Tabla para mostrar los datos -->
-                    <table class="table table-bordered mx-auto" id="Lista-Roles" style="margin-top: 20px; margin-bottom: 20px">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Rol</th>
-                                <th>Descripcion</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                        <table class="table table-bordered mx-auto" id="Lista-rol" style="margin-top: 20px; margin-bottom: 20px">
+                            <thead>
+                                <tr>
+                                    <th style="display: none;">Id</th>
+                                    <th>Rol</th>
+                                    <th>Descripcion</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        </tbody>
-                    </table>
-                        <nav aria-label="Pagination" class="pagination-container">
-                            <ul class="pagination">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Atrás</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link">2</span>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Siguiente</a>
-                                </li>
-                            </ul>
-                        </nav>
+                            </tbody>
+                        </table>
                     </div>
-
                 </div>
 
                 <!-- Modal para crear un nuevo registro -->
@@ -247,19 +232,23 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                                 <!-- Formulario de creación -->
                                 <form>
                                     <div class="form-group">
+
+
                                         <label for="nombre">Rol</label>
-                                        <input type="text" class="form-control" id="agregar-rol">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-rol" 
+                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje2"></div>
 
-                                        <label for="nombre">Descripcion</label>
-                                        <input type="text" class="form-control" id="agregar-descripcion">
-
-
+                                        <label for="estado">Descripcion</label>
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-descripcion" 
+                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje3"></div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -281,17 +270,22 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                                     <div class="form-group">
                                         <label for="nombre">Id</label>
                                         <input type="text" class="form-control" id="editar-id-rol" disabled>
+                            
                                         <label for="nombre">Rol</label>
-                                        <input type="text" class="form-control" id="editar-rol" disabled>
-                                        <label for="nombre">Descripcion</label>
-                                        <input type="text" class="form-control" id="editar-descripcion">
-
+                                        <input type="text" maxlength="100" class="form-control" id="editar-rol" 
+                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje4"></div>
+                                        
+                                        <label for="estado">Desripcion</label>
+                                        <input type="text" maxlength="15" class="form-control" id="editar-descripcion" 
+                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje5"></div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" onclick="updateRol()">Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateRol()" disabled>Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -312,9 +306,10 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
     <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-
+                                
         function Lista_Roles() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
+            // Actualizar el valor predeterminado
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=GetRoles', {
                     method: 'GET',
                     headers: {
@@ -332,12 +327,12 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                 })
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
-                    var tbody = document.querySelector('#Lista-Roles tbody');
-
+                    var tbody = document.querySelector('#Lista-rol tbody');
+                    tbody.innerHTML = ''; // Limpia el contenido anterior
 
                     data.forEach(function(rol) {
                         var row = '<tr>' +
-                            '<td>' + rol.ID_ROL + '</td>' +
+                            '<td style="display:none;">' + rol.ID_ROL + '</td>' +
                             '<td>' + rol.ROL + '</td>' +
                             '<td>' + rol.DESCRIPCION + '</td>' +
 
@@ -346,11 +341,11 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarRol(' + rol.ID_ROL + ')">Editar</button>';
+                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarRol(' + rol.ID_ROL+ ')">Editar</button>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-rol" data-id="' + rol.ID_rol + '" onclick="eliminarRol(' + rol.ID_ROL + ')">Eliminar</button>';
+                            row += '<button class="btn btn-danger eliminar-rol" data-id="' + rol.ID_ROL + '" onclick="eliminarRol(' + rol.ID_ROL + ')">Eliminar</button>';
                         }
 
 
@@ -358,8 +353,7 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                             '</tr>';
                         tbody.innerHTML += row;
                     });
-
-
+                    habilitarPaginacion();
                 })
 
                 .catch(function(error) {
@@ -367,6 +361,17 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                     alert('Error al cargar los datos: ' + error.message);
                 });
 
+        } 
+
+        function habilitarPaginacion() {
+            $('#Lista-rol').DataTable({
+                "paging": true, 
+                "pageLength": 10,
+                "lengthMenu": [10, 20, 30, 50, 100],
+                "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                },
+            });
         }
 
         function Insertar_Rol() {
@@ -375,14 +380,19 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                 var rol = $("#agregar-rol").val();
                 var descripcion = $("#agregar-descripcion").val();
 
+                if (rol == "" || descripcion == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'No se pueden enviar Campos Vacios.'
+                    })
+                } else {
+                    // Crear un rol con los datos a enviar al servidor
+                    var datos = {
+                        ROL: rol,
+                    DESCRIPCION: descripcion,                                       
 
-                // Crear un objeto con los datos a enviar al servidor
-                var datos = {
-                    ROL: rol,
-                    DESCRIPCION: descripcion,
-
-
-                };
+                    };
 
                 fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=InsertRol', {
                         method: 'POST',
@@ -414,7 +424,6 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                             // Recargar la página para mostrar los nuevos datos
                             location.reload();
                         });
-
                     })
                     .catch(function(error) {
                         // Mostrar SweetAlert de error
@@ -425,6 +434,7 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                         });
                         console.log(error.message);
                     });
+                }                
             });
         }
 
@@ -434,14 +444,14 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                 "ID_ROL": id
             };
 
-            // Realiza una solicitud FETCH para obtener los detalles del objeto por su ID
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=GetRol', {
+            // Realiza una solicitud FETCH para obtener los detalles del rol por su ID
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=GetRoles', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data) // Convierte el objeto en formato JSON
+                    body: JSON.stringify(data) // Convierte el rol en formato JSON
                 })
                 .then(function(response) {
                     if (response.ok) {
@@ -451,15 +461,14 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                     }
                 })
                 .then(function(rol) {
-                    // Llena los campos del modal con los datos del objeto
+                    // Llena los campos del modal con los datos del rol
                     document.getElementById('editar-id-rol').value = rol.ID_ROL;
                     document.getElementById('editar-rol').value = rol.ROL;
                     document.getElementById('editar-descripcion').value = rol.DESCRIPCION;
-
-                })
+               })
                 .catch(function(error) {
                     // Manejar el error aquí
-                    alert('Error al cargar los datos del rol : ' + error.message);
+                    alert('Error al cargar los datos del Rol : ' + error.message);
                 });
         }
 
@@ -468,8 +477,14 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
             var rol = document.getElementById('editar-rol').value;
             var descripcion = document.getElementById('editar-descripcion').value;
 
-
-            // Realiza una solicitud FETCH para actualizar los datos del objeto
+            if (rol == "" || descripcion == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'No se pueden enviar Campos Vacios.'
+                })
+            } else {
+            // Realiza una solicitud FETCH para actualizar los datos del rol
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=UpdateRol', {
                     method: 'POST',
                     headers: {
@@ -507,7 +522,7 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
                         text: 'Error al actualizar los datos del permiso: ' + error.message
                     });
                 });
-
+            }    
         }
 
         //FUNCION CON EL SWEETALERT
@@ -555,30 +570,177 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Rol)
             });
         }
 
+        // VALIDACIONES FUNCIONES    
+        function validarNombre() {
+            rol = document.getElementById("agregar-rol");
+            descripcion = document.getElementById("agregar-descripcion");
+            rolEditar = document.getElementById("editar-rol");
+            descripcionEditar = document.getElementById("editar-descripcion");
+
+           
+            rol.addEventListener("keypress", function(e) {
+                expresionValidadora2 = /^[A-Z0-9\s]+$/;
+                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
+                    rol.style.borderColor = "red";
+                    rol.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
+                    document.getElementById("mensaje2").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    if (!expresionValidadora2.test(e.key)) {
+                        rol.style.borderColor = "red";
+                        rol.style.boxShadow = "0 0 10px red";
+                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                        document.getElementById("mensaje2").style.color = "red";
+                        e.preventDefault();
+                    } else {
+                        localStorage.setItem("letraAnterior", e.keyCode);
+                        rol.style.borderColor = "green";
+                        rol.style.boxShadow = "0 0 10px green";
+                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                        document.getElementById("mensaje2").style.color = "green";
+                    }
+                }
+            });
+
+            descripcion.addEventListener("keypress", function(e) {
+                expresionValidadora1 = /^[A-Z]+$/;
+
+                if (!expresionValidadora1.test(e.key)) {
+                    descripcion.style.borderColor = "red";
+                    descripcion.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                    document.getElementById("mensaje3").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    descripcion.style.borderColor = "green";
+                    descripcion.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                    document.getElementById("mensaje3").style.color = "green";
+                }
+            });
+
+            rolEditar.addEventListener("keypress", function(e) {
+                expresionValidadora2 = /^[A-Z0-9\s]+$/;
+                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
+                    rolEditar.style.borderColor = "red";
+                    rolEditar.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
+                    document.getElementById("mensaje4").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    if (!expresionValidadora2.test(e.key)) {
+                        rolEditar.style.borderColor = "red";
+                        rolEditar.style.boxShadow = "0 0 10px red";
+                        document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                        document.getElementById("mensaje4").style.color = "red";
+                        e.preventDefault();
+                    } else {
+                        localStorage.setItem("letraAnterior", e.keyCode);
+                        rolEditar.style.borderColor = "green";
+                        rolEditar.style.boxShadow = "0 0 10px green";
+                        document.getElementById("mensaje4").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                        document.getElementById("mensaje4").style.color = "green";
+                    }
+                }
+            });
+
+            descripcionEditar.addEventListener("keypress", function(e) {
+                expresionValidadora1 = /^[A-Z]+$/;
+
+                if (!expresionValidadora1.test(e.key)) {
+                    descripcionEditar.style.borderColor = "red";
+                    descripcionEditar.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                    document.getElementById("mensaje5").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    descripcionEditar.style.borderColor = "green";
+                    descripcionEditar.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                    document.getElementById("mensaje5").style.color = "green";
+                }
+            });
+        }
+
         $(document).ready(function() {
             Lista_Roles();
             Insertar_Rol();
+            validarNombre();
         });
+    </script>
+
+    <!-- VALIDACIONES SCRIPT -->
+    <script>
+        // Obtén los campos de entrada y el botón "Guardar para insertar"
+       
+        const rolInput = document.getElementById('agregar-rol');
+        const descripcionInput = document.getElementById('agregar-descripcion');
+        const guardarButton = document.getElementById('btn-agregar');
+
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isFormValid =  rolInput.value.trim() !== '' && descripcionInput.value.trim() !== '';
+            guardarButton.disabled = !isFormValid;
+        }
+
+        // Agrega un evento input a cada campo de entrada
+        rolInput.addEventListener('input', checkForm);
+        descripcionInput.addEventListener('input', checkForm);
+    </script>
+    
+    <script>
+        // Obtén los campos de entrada y el botón "Guardar para editar"
+        const rolInput1 = document.getElementById('editar-rol');
+        const descripcionInput1 = document.getElementById('editar-descripcion');
+        const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
+
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isFormValid = rolInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '';
+            guardarButton1.disabled = !isFormValid;
+        }
+
+        // Agrega un evento input a cada campo de entrada
+        rolInput1.addEventListener('input', checkForm);
+        descripcionInput1.addEventListener('input', checkForm);
     </script>
 
     <script>
-        $(document).ready(function() {
-            $("#myInput").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#Lista-roles tbody tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
+        $('#agregar-rol, #agregar-descripcion').on('input', function() {
+            var input = $(this);
+            var trimmedValue = input.val().trim();
+            input.val(trimmedValue);
+            
+            if (trimmedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'El campo no puede estar vacío',
+                    icon: 'warning',
                 });
-            });
+            }
+        });
+
+        // Escuchar eventos de cambio en los campos de entrada deshabilitados para eliminar espacios en blanco al principio y al final
+        $('#editar-rol, #editar-descripcion').on('input', function() {
+            var input = $(this);
+            var trimmedValue = input.val().trim();
+            input.val(trimmedValue);
+
+            if (trimmedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'El campo no puede estar vacío',
+                    icon: 'warning',
+                });
+            }
         });
     </script>
 
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-    <script src="../../assets/demo/datatables-demo.js"></script>
 </body>
 
 </html>
