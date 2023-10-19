@@ -1,9 +1,10 @@
-<?php
+<?php 
 
 session_start();
 require "../../Config/conexion.php";
 require_once '../../Modelos/parametros.php';
 require_once "../../Modelos/permisoUsuario.php";
+require_once '../../Modelos/parametros.php';
 
 $permisosParametros = new PermisosUsuarios();
 
@@ -11,13 +12,24 @@ if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
 }
 
-
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_Parametro = "4";
 
 $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Parametro);
+// Verificar si se obtuvieron resultados
+// if (!empty($permisos)) {
+//     // Recorrer el array de permisos y mostrar los valores
+//     foreach ($permisos as $permiso) {
+//         echo "PERMISOS_INSERCION: " . $permiso['PERMISOS_INSERCION'] . "<br>";
+//         echo "PERMISOS_ELIMINACION: " . $permiso['PERMISOS_ELIMINACION'] . "<br>";
+//         echo "PERMISOS_ACTUALIZACION: " . $permiso['PERMISOS_ACTUALIZACION'] . "<br>";
+//         echo "PERMISOS_CONSULTAR: " . $permiso['PERMISOS_CONSULTAR'] . "<br>";
+//     }
+// } else {
+//     echo "No se encontraron permisos para el rol y objeto especificados.";
+// }
 ?>
 
 <style>
@@ -40,12 +52,13 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento Parametros</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <title>Mantenimiento Usuario</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <style>
         /* Estilo para la tabla */
         #Lista-Parametros {
@@ -80,11 +93,9 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
 
         /* Estilo personalizado para el placeholder */
         #myInput {
-            border: 2px solid #000;
+            border: 1px solid #000;
             /* Borde más oscuro, en este caso, negro (#000) */
-
         }
-
 
         /*BOTON DE CREAR NUEVO */
         .custom-button {
@@ -97,6 +108,8 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
             margin-top: 1px;
 
         }
+    </style>
+
     </style>
 </head>
 
@@ -153,15 +166,16 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                 echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
                             }
 
-                            echo '<a class="nav-link" href="../../roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                            echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
                             echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
                             echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                             echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-
+                            echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
                             echo '</nav>';
                             echo '</div>';
                         }
                         ?>
+
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -175,7 +189,6 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
             <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE PARAMETROS -->
             <main>
                 <div class="container-fluid">
-
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
@@ -185,65 +198,33 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
+                                echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
                             }
-                            ?>
-                            <div class="d-flex align-items-center w-50">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-search"></i> <!-- Puedes usar una fuente de iconos como Font Awesome -->
-                                        </span>
-                                    </div>
-                                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
-                                </div>
-                            </div>
+                            ?> 
                         </div>
-
                         <!-- Tabla para mostrar los datos -->
-                        <table class="table table-bordered mx-auto" id="Lista-Parametros" style="margin-top: 20px; margin-bottom: 20px">
+                        <table class="table table-bordered mx-auto" id="Lista-parametros" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-                                    <th>Id Parametro</th>
+                                <th style="display: none;">Id Parametro</th>
                                     <th>Parametro</th>
                                     <th>Valor</th>
                                     <th>Acciones</th>
-                                    <!-- <th>Id Usuario</th>
-                                <th>Creado por</th>
-                                <th>Modificado por</th>
-                                <th>fecha creacion</th>
-                                <th>fecha modificacion</th> -->
-
                                 </tr>
                             </thead>
                             <tbody>
 
                             </tbody>
                         </table>
-                        <nav aria-label="Pagination" class="pagination-container">
-                            <ul class="pagination">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Atrás</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link">2</span>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Siguiente</a>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                 </div>
 
-                <!-- Modal para crear un nuevo Parametro -->
+                <!-- Modal para crear un nuevo registro -->
                 <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="crearModalLabel">Crear Nuevo Parametro</h5>
+                                <h5 class="modal-title" id="crearModalLabel">Crear Nuevo Registro</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -253,37 +234,26 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Parametro</label>
-                                        <input type="text" class="form-control" id="agregar-parametro">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-parametro" 
+                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje1"></div>
 
-                                        <label for="nombre">Valor</label>
-                                        <input type="text" class="form-control" id="agregar-valor">
-
-                                        <!-- <label for="nombre">Id Usuario</label>
-                                        <input type="text" class="form-control" id="agregar-id-usuario">
-
-                                        <label for="nombre">Creado por</label>
-                                        <input type="text" class="form-control" id="agregar-creado-por">
-
-                                        <label for="nombre">modificado por</label>
-                                        <input type="text" class="form-control" id="agregar-modificado-por"> -->
-
-                                        <!-- <label for="nombre">fecha creacion</label>
-                                        <input type="text" class="form-control" id="agregar-fecha-creacion">
-
-                                        <label for="nombre">fecha modificacion</label>
-                                        <input type="text" class="form-control" id="agregar-fecha-modificacion"> -->
+                                        <label for="nombre">valor</label>
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-valor" 
+                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje2"></div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Modal para editar un Parametro -->
+                <!-- Modal para editar un registro -->
                 <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -299,43 +269,33 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                                     <div class="form-group">
                                         <label for="nombre">Id Parametro</label>
                                         <input type="text" class="form-control" id="editar-id-parametro" disabled>
-                                        <label for="nombre">Parametro</label>
-                                        <input type="text" class="form-control" id="editar-parametro" disabled>
-                                        <label for="nombre">Valor</label>
-                                        <input type="text" class="form-control" id="editar-valor">
 
-                                        <!-- <label for="estado">Id Usuario</label> -->
-                                        <!-- <input type="text" class="form-control" id="editar-id-usuario">
-                                        <label for="estado">Creado por</label>
-                                        <input type="text" class="form-control" id="editar-creado-por">
-                                        <label for="estado">modificado por</label>
-                                        <input type="text" class="form-control" id="editar-modificado-por"> -->
-                                        <!-- <label for="estado">Fecha Creacion</label>
-                                        <input type="text" class="form-control" id="editar-fecha-creacion">
-                                        <label for="estado">Fecha Modificacion </label>
-                                        <input type="text" class="form-control" id="editar-fecha-modificacion"> -->
+                                        <label for="nombre">Parametro</label>
+                                        <input type="text" maxlength="100" class="form-control" id="editar-parametro" 
+                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje4"></div>
+                                        
+                                        <label for="nombre"> Valor</label>
+                                        <input type="text" maxlength="15" class="form-control" id="editar-valor" 
+                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje5"></div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" onclick="updateParametro()">Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateParametro()" disabled>Guardar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
-            <!-- AQUI FINALIZA EL MANTENIMIENTO DE PARAMETROS -->
+            <!-- AQUI FINALIZA EL MANTENIMIENTO DE OBJETOS -->
 
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2019</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
+                    <div class="d-flex align-items-start justify-content-center small">
+                        <div class="text-muted">Copyright &copy; IA-UNAH 2023</div>
                     </div>
                 </div>
             </footer>
@@ -345,6 +305,8 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
     <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
+
+
 
         function Lista_Parametros() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
@@ -366,27 +328,21 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-parametros tbody');
-
+                    tbody.innerHTML = ''; // Limpia el contenido anterior
 
                     data.forEach(function(parametro) {
                         var row = '<tr>' +
-                            '<td>' + parametro.ID_PARAMETRO + '</td>' +
+                            '<td style="display:none;">' + parametro.ID_PARAMETRO + '</td>' +
                             '<td>' + parametro.PARAMETRO + '</td>' +
                             '<td>' + parametro.VALOR + '</td>' +
-
-                            // '<td>' + parametro.ID_USUARIO + '</td>' +
-                            // '<td>' + parametro.CREADO_POR + '</td>' +
-                            // '<td>' + parametro.MODIFICADO_POR + '</td>' +
-                            // '<td>' + parametro.FECHA_CREACION + '</td>' +
-                            // '<td>' + parametro.FECHA_MODIFICACION + '</td>' +
                             '<td>';
-
+                        // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarParametro(' + parametro.ID_PARAMETRO + ')">Editar</button> ';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-usuario" data-id="' + parametro.ID_PARAMETRO + '" onclick="eliminarParametro(' + parametro.ID_PARAMETRO + ')">Eliminar</button>';
+                            row += '<button class="btn btn-danger eliminar-parametro" data-id="' + parametro.ID_PARAMETRO + '" onclick="eliminarParametro(' + parametro.ID_PARAMETRO + ')">Eliminar</button>';
                         }
 
 
@@ -395,7 +351,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                         tbody.innerHTML += row;
                     });
 
-
+                    habilitarPaginacion();
                 })
 
                 .catch(function(error) {
@@ -404,34 +360,38 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                 });
 
         }
+                
+        
+        function habilitarPaginacion() {
+            $('#Lista-parametros').DataTable({
+                "paging": true, 
+                "pageLength": 10,
+                "lengthMenu": [10, 20, 30, 50, 100],
+                "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                },
+            });
+        }
 
+        
 
         function Insertar_Parametro() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
                 var parametro = $("#agregar-parametro").val();
                 var valor = $("#agregar-valor").val();
-                // var id_usuario = $("#agregar-id-usuario").val();
-                // var creado_por = $("#agregar-creado-por").val();
-                // var modificado_por = $("#agregar-modificado-por").val();
-                // var fecha_creacion = $("#agregar-fecha-creacion").val();
-                // var fecha_modificacion = $("#agregar-fecha-modificacion").val();
 
-                // // Verificar que las contraseñas coincidan
-                // if (contrasena !== confirmarContrasena) {
-                //     alert("Las contraseñas no coinciden.");
-                //     return;
-                // }
-
+                if (parametro == "" || valor == "" ) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'No se pueden enviar Campos Vacios.'
+                    })
+                } else {
                 // Crear un objeto con los datos a enviar al servidor
                 var datos = {
                     PARAMETRO: parametro,
                     VALOR: valor
-                    // ID_USUARIO: id_usuario,
-                    // CREADO_POR: creado_por,
-                    // MODIFICADO_POR: modificado_por,
-                    // FECHA_CREACION: fecha_creacion,
-                    // FECHA_MODIFICACION: fecha_modificacion
                 };
 
                 fetch('http://localhost:90//SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=InsertParametros', {
@@ -462,7 +422,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                         }).then(function() {
                             // Recargar la página para mostrar los nuevos datos
                             location.reload();
-                            Lista_Parametros();
+
                         });
 
 
@@ -476,10 +436,11 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                         });
                         console.log(error.message);
                     });
+                }
             });
         }
 
-        function cargarParametro(id) {
+                function cargarParametro(id) {
             // Crear un objeto con el ID del parametro
             var data = {
                 "ID_PARAMETRO": id
@@ -506,11 +467,6 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                     document.getElementById('editar-id-parametro').value = parametro.ID_PARAMETRO;
                     document.getElementById('editar-parametro').value = parametro.PARAMETRO;
                     document.getElementById('editar-valor').value = parametro.VALOR;
-                    // document.getElementById('editar-id-usuario').value = parametro.ID_USUARIO;
-                    // document.getElementById('editar-creado-por').value = parametro.CREADO_POR;
-                    // document.getElementById('editar-modificado-por').value = parametro.MODIFICADO_POR;
-                    // document.getElementById('editar-fecha-creacion').value = parametro.FECHA_CREACION;
-                    // document.getElementById('editar-fecha-modificacion').value = parametro.FECHA_MODIFICACION;
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
@@ -518,19 +474,21 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                 });
         }
 
+
         function updateParametro() {
             // Obtén el ID del parametro 
             var idparametro = document.getElementById('editar-id-parametro').value;
             // Obtén los valores de los campos de edición
             var parametro = document.getElementById('editar-parametro').value;
             var valor = document.getElementById('editar-valor').value;
-            // var idusuario = document.getElementById('editar-id-usuario').value;
-            // var creadopor = document.getElementById('editar-creado-por').value;
-            // var modificadopor = document.getElementById('editar-modificado-por').value;
-            // var fechacreacion = document.getElementById('editar-fecha-creacion').value;
-            // var fechamodificacion = document.getElementById('editar-fecha-modificacion').value;
 
-
+            if (parametro == "" || valor == "" ) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'No se pueden enviar Campos Vacios.'
+                    })
+                } else {
             // Realiza una solicitud FETCH para actualizar los datos del usuario
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=updateParametro', {
                     method: 'POST',
@@ -542,11 +500,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                         "ID_PARAMETRO": idparametro,
                         "PARAMETRO": parametro,
                         "VALOR": valor
-                        // "ID_USUARIO": idusuario,
-                        // "CREADO_POR": creadopor,
-                        // "MODIFICADO_POR": modificadopor,
-                        // "FECHA_CREACION": fechacreacion,
-                        // "FECHA_MODIFICACION": fechamodificacion
+                  
                     }) // Convierte los datos en formato JSON
                 })
                 .then(function(response) {
@@ -571,10 +525,10 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'Error al actualizar los datos del permiso: ' + error.message
+                        text: 'Error al actualizar los datos del parametro: ' + error.message
                     });
                 });
-
+            }
         }
 
         //FUNCION CON EL SWEETALERT
@@ -603,7 +557,7 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                         .then(function(response) {
                             if (response.ok) {
                                 // Eliminación exitosa, puedes hacer algo aquí si es necesario
-                                Swal.fire('parametro eliminado', '', 'success')
+                                Swal.fire('Parametro eliminado', '', 'success')
                                     .then(() => {
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
@@ -616,38 +570,186 @@ $permisos = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Param
                         })
                         .catch(function(error) {
                             // Manejar el error aquí
-                            Swal.fire('Error', 'Error al eliminar el usuario: ' + error.message, 'error');
+                            Swal.fire('Error', 'Error al eliminar el parametro: ' + error.message, 'error');
                         });
                 }
             });
         }
+        // VALIDACIONES FUNCIONES    
+        function validarNombre() {
+            nombreParametro = document.getElementById("agregar-parametro");
+            valor = document.getElementById("agregar-valor");
+            parametroEditar = document.getElementById("editar-parametro");
+            valorEditar = document.getElementById("editar-valor");
+
+            nombreObjeto.addEventListener("keypress", function(e) {
+                expresionValidadora1 = /^[A-Z]+$/;
+
+                if (!expresionValidadora1.test(e.key)) {
+                    nombreParametro.style.borderColor = "red";
+                    nombreParametro.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                    document.getElementById("mensaje1").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    nombreParametro.style.borderColor = "green";
+                    nombreParametro.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                    document.getElementById("mensaje1").style.color = "green";
+                }
+            });
+
+            valor.addEventListener("keypress", function(e) {
+                expresionValidadora2 = /^[A-Z0-9\s]+$/;
+                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
+                    valor.style.borderColor = "red";
+                    valor.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
+                    document.getElementById("mensaje2").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    if (!expresionValidadora2.test(e.key)) {
+                        valor.style.borderColor = "red";
+                        valor.style.boxShadow = "0 0 10px red";
+                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                        document.getElementById("mensaje2").style.color = "red";
+                        e.preventDefault();
+                    } else {
+                        localStorage.setItem("letraAnterior", e.keyCode);
+                        valor.style.borderColor = "green";
+                        valor.style.boxShadow = "0 0 10px green";
+                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                        document.getElementById("mensaje2").style.color = "green";
+                    }
+                }
+            });
+
+            
+
+            parametroEditar.addEventListener("keypress", function(e) {
+                expresionValidadora2 = /^[A-Z0-9\s]+$/;
+                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
+                    parametroEditar.style.borderColor = "red";
+                    parametroEditar.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
+                    document.getElementById("mensaje4").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    if (!expresionValidadora2.test(e.key)) {
+                        parametroEditar.style.borderColor = "red";
+                        parametroEditar.style.boxShadow = "0 0 10px red";
+                        document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                        document.getElementById("mensaje4").style.color = "red";
+                        e.preventDefault();
+                    } else {
+                        localStorage.setItem("letraAnterior", e.keyCode);
+                        parametroEditar.style.borderColor = "green";
+                        parametroEditar.style.boxShadow = "0 0 10px green";
+                        document.getElementById("mensaje4").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                        document.getElementById("mensaje4").style.color = "green";
+                    }
+                }
+            });
+
+            valorEditar.addEventListener("keypress", function(e) {
+                expresionValidadora1 = /^[A-Z]+$/;
+
+                if (!expresionValidadora1.test(e.key)) {
+                    valorEditar.style.borderColor = "red";
+                    valorEditar.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                    document.getElementById("mensaje5").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    valorEditar.style.borderColor = "green";
+                    valorEditar.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                    document.getElementById("mensaje5").style.color = "green";
+                }
+            });
+        }
+
+
 
         $(document).ready(function() {
-
             Insertar_Parametro();
             Lista_Parametros();
-
+            validarNombre();
         });
     </script>
+
+    <!-- VALIDACIONES SCRIPT -->
     <script>
-        $(document).ready(function() {
-            $("#myInput").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#Lista-Parametros tbody tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        // Obtén los campos de entrada y el botón "Guardar para insertar"
+        const parametroInput = document.getElementById('agregar-parametro');
+        const valorInput = document.getElementById('agregar-valor');
+        const guardarButton = document.getElementById('btn-agregar');
+
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isFormValid = parametroInput.value.trim() !== '' && valorInput.value.trim() !== '';
+            guardarButton.disabled = !isFormValid;
+        }
+        // Agrega un evento input a cada campo de entrada
+        parametroInput.addEventListener('input', checkForm);
+        valorInput.addEventListener('input', checkForm);
+        guardarButton.addEventListener('input', checkForm);
+    </script>
+
+<script>
+        // Obtén los campos de entrada y el botón "Guardar para editar"
+        const parametroInput1 = document.getElementById('editar-parametro');
+        const valorInput1 = document.getElementById('editar-valor');
+        const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
+
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isFormValid = parametroInput1.value.trim() !== '' && valorInput1.value.trim() !== '';
+            guardarButton1.disabled = !isFormValid;
+        }
+
+        // Agrega un evento input a cada campo de entrada
+        parametroInput1.addEventListener('input', checkForm);
+        valorInput1.addEventListener('input', checkForm);
+    </script>
+
+<script>
+        // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
+        $('#agregar-parametro, #agregar-valor').on('input', function() {
+            var input = $(this);
+            var trimmedValue = input.val().trim();
+            input.val(trimmedValue);
+            
+            if (trimmedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'El campo no puede estar vacío',
+                    icon: 'warning',
                 });
-            });
+            }
+        });
+
+        // Escuchar eventos de cambio en los campos de entrada deshabilitados para eliminar espacios en blanco al principio y al final
+        $('#editar-parametro, #editar-valor').on('input', function() {
+            var input = $(this);
+            var trimmedValue = input.val().trim();
+            input.val(trimmedValue);
+
+            if (trimmedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'El campo no puede estar vacío',
+                    icon: 'warning',
+                });
+            }
         });
     </script>
 
 
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-    <script src="../../assets/demo/datatables-demo.js"></script>
 </body>
 
 </html>
