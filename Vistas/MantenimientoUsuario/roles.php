@@ -445,7 +445,7 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
             };
 
             // Realiza una solicitud FETCH para obtener los detalles del rol por su ID
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=GetRoles', {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=GetRol', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
