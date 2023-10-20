@@ -185,8 +185,7 @@ echo $PregunContes;
                     // Manejar errores si ocurren durante la solicitud
                     console.error('Error:', error);
                 });
-                cargarPreguntas();
-
+              
         }
         // Llama a la función cargarPreguntas para cargar las preguntas al cargar la página
         document.addEventListener('DOMContentLoaded', function() {

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 session_start();
 require "../../Config/conexion.php";
@@ -199,7 +199,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
                                 echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
                             }
-                            ?> 
+                            ?>
                         </div>
                         <!-- Tabla para mostrar los datos -->
                         <table class="table table-bordered mx-auto" id="Lista-objetos" style="margin-top: 20px; margin-bottom: 20px">
@@ -234,18 +234,15 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Objeto</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-objeto" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-objeto" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
                                         <label for="estado">Tipo Objeto</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-tipoObjeto" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-tipoObjeto" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje3"></div>
                                     </div>
                                 </form>
@@ -276,15 +273,13 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                                         <input type="text" class="form-control" id="editar-id-objeto" disabled>
                                         <label for="nombre">Objeto</label>
                                         <input type="text" class="form-control" id="editar-objeto" disabled>
-                                        
+
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje4"></div>
-                                        
+
                                         <label for="estado">Tipo Objeto</label>
-                                        <input type="text" maxlength="15" class="form-control" id="editar-tipoObjeto" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="15" class="form-control" id="editar-tipoObjeto" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje5"></div>
                                     </div>
                                 </form>
@@ -312,7 +307,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
     <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-                                
+
         function Lista_Objetos() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             // Actualizar el valor predeterminado
@@ -367,15 +362,15 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                     alert('Error al cargar los datos: ' + error.message);
                 });
 
-        } 
+        }
 
         function habilitarPaginacion() {
             $('#Lista-objetos').DataTable({
-                "paging": true, 
+                "paging": true,
                 "pageLength": 10,
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
             });
         }
@@ -402,47 +397,47 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
 
                     };
 
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=InsertObjeto', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(datos)
-                    })
-                    .then(function(response) {
-                        if (response.ok) {
-                            // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
-                            return response.json();
-                        } else {
-                            // Si hubo un error en la solicitud, maneja el error aquí
-                            throw new Error('Error en la solicitud');
-                        }
-                    })
-                    .then(function(data) {
-                        console.log(data);
-                        // Cerrar la modal después de guardar
-                        $('#crearModal').modal('hide');
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=InsertObjeto', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(datos)
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+                                return response.json();
+                            } else {
+                                // Si hubo un error en la solicitud, maneja el error aquí
+                                throw new Error('Error en la solicitud');
+                            }
+                        })
+                        .then(function(data) {
+                            console.log(data);
+                            // Cerrar la modal después de guardar
+                            $('#crearModal').modal('hide');
 
-                        // Mostrar SweetAlert de éxito
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Guardado exitoso',
-                            text: 'Los datos se han guardado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
+                            // Mostrar SweetAlert de éxito
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Guardado exitoso',
+                                text: 'Los datos se han guardado correctamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                            });
+                        })
+                        .catch(function(error) {
+                            // Mostrar SweetAlert de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al guardar los datos: ' + error.message
+                            });
+                            console.log(error.message);
                         });
-                    })
-                    .catch(function(error) {
-                        // Mostrar SweetAlert de error
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error al guardar los datos: ' + error.message
-                        });
-                        console.log(error.message);
-                    });
-                }                
+                }
             });
         }
 
@@ -494,46 +489,46 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                     text: 'No se pueden enviar Campos Vacios.'
                 })
             } else {
-            // Realiza una solicitud FETCH para actualizar los datos del objeto
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=UpdateObjeto', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "ID_OBJETO": id_objeto,
-                        "OBJETO": objeto,
-                        "DESCRIPCION": descripcion,
-                        "TIPO_OBJETO": tipo_objeto
-                    }) // Convierte los datos en formato JSON
-                })
-                .then(function(response) {
-                    if (response.ok) {
-                        // Cerrar la modal después de guardar
-                        $('#editarModal').modal('hide');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Actualización exitosa',
-                            text: 'Los datos se han actualizado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
-                        });
+                // Realiza una solicitud FETCH para actualizar los datos del objeto
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=UpdateObjeto', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "ID_OBJETO": id_objeto,
+                            "OBJETO": objeto,
+                            "DESCRIPCION": descripcion,
+                            "TIPO_OBJETO": tipo_objeto
+                        }) // Convierte los datos en formato JSON
+                    })
+                    .then(function(response) {
+                        if (response.ok) {
+                            // Cerrar la modal después de guardar
+                            $('#editarModal').modal('hide');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Actualización exitosa',
+                                text: 'Los datos se han actualizado correctamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                            });
 
-                    } else {
-                        throw new Error('Error en la solicitud de actualización');
-                    }
-                })
-                .catch(function(error) {
-                    // Manejar el error aquí
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error al actualizar los datos del permiso: ' + error.message
+                        } else {
+                            throw new Error('Error en la solicitud de actualización');
+                        }
+                    })
+                    .catch(function(error) {
+                        // Manejar el error aquí
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al actualizar los datos del permiso: ' + error.message
+                        });
                     });
-                });
-            }    
+            }
         }
 
         //FUNCION CON EL SWEETALERT
@@ -546,7 +541,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar' 
+                cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=EliminarObjeto', {
@@ -717,7 +712,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
         descripcionInput.addEventListener('input', checkForm);
         tipoObjetoInput.addEventListener('input', checkForm);
     </script>
-    
+
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
         const descripcionInput1 = document.getElementById('editar-descripcion');
@@ -741,7 +736,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
-            
+
             if (trimmedValue === '') {
                 Swal.fire({
                     title: 'Advertencia',
@@ -770,6 +765,8 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
+
+    
 </body>
 
 </html>

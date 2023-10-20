@@ -70,11 +70,12 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantenimiento Usuario</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <style>
         /* Estilo para la tabla */
         #Lista-Usuarios {
@@ -113,6 +114,7 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             /* Borde más oscuro, en este caso, negro (#000) */
 
         }
+
         /* BOTON DE CREAR NUEVO */
         .custom-button {
             background-color: #4CAF50;
@@ -187,6 +189,23 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                             echo '</nav>';
                             echo '</div>';
                         }
+                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
+                                    Modulo Empleado
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                            }
+
+                        
+                            echo '</nav>';
+                            echo '</div>';
+                        }
                         ?>
                     </div>
                 </div>
@@ -212,52 +231,31 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<button class="btn btn-success" data-toggle="modal" data-target="#crearModal">Crear Nuevo</button>';
+                                echo '<button class="btn btn-success" data-toggle="modal" data-target="#crearModal"> Nuevo</button>';
                             }
                             ?>
-                            <div class="d-flex align-items-center w-50">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-search"></i> <!-- Puedes usar una fuente de iconos como Font Awesome -->
-                                        </span>
-                                    </div>
-                                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
-                                </div>
-                            </div>
                         </div>
 
                         <!-- Tabla para mostrar los datos -->
                         <table class="table table-bordered mx-auto" id="Lista-Usuarios" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-                                    <th style="display: none;">Id</th>
+                                    <th style="display: none;">Id Usuario</th>
                                     <th>Usuario</th>
                                     <th>Nombre</th>
+                                    <th style="display: none;">Id Estado Usuario</th>
                                     <th>Estado</th>
                                     <th>Correo Electrónico</th>
+                                    <th style="display: none;">Id Rol</th>
                                     <th>Rol</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
+
                             </tbody>
                         </table>
-                        <nav aria-label="Pagination" class="pagination-container">
-                            <ul class="pagination">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Atrás</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link">2</span>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Siguiente</a>
-                                </li>
-                            </ul>
-                        </nav>
+
                     </div>
 
                 </div>
@@ -277,42 +275,50 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Usuario</label>
-                                        <input type="text" class="form-control" id="agregar-usuario">
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-usuario" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje1"></div>
 
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" class="form-control" id="agregar-nombre">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje2"></div>
 
                                         <label for="id-estado">Estado</label>
-                                        <select class="form-control" id="agregar-estado" name="IdEstado">
-                                            <option value="">Selecciona una opción</option>
+                                        <select class="form-control" id="agregar-estado" name="IdEstado" required>
+                                            <option value=""disabled selected>Selecciona una opción</option>
                                             <?php foreach ($Estados as $Estado) : ?>
                                                 <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
                                             <?php endforeach; ?>
+                                            <div id="mensaje3"></div>
                                         </select>
 
-                                        <label for="estado">Correo Electronico</label>
-                                        <input type="text" class="form-control" id="agregar-correo">
+                                        <label for="agregar-correo">Correo Electrónico</label>
+                                        <input type="email" maxlength="50" class="form-control" id="agregar-correo" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida" />
+                                        <div id="mensaje4"></div>
 
-                                        <!------- SELECT DE ROLES -------------->
                                         <label for="id-rol">Rol</label>
-                                        <select class="form-control" id="agregar-rol" name="IdRol">
-                                            <option value="">Selecciona una opción</option>
+                                        <select class="form-control" id="agregar-rol" name="IdRol" required>
+                                            <option value=""disabled selected>Selecciona una opción</option>
                                             <?php foreach ($roles as $rol) : ?>
                                                 <option value="<?php echo $rol['id_rol']; ?>"><?php echo $rol['rol']; ?></option>
                                             <?php endforeach; ?>
+                                            <div id="mensaje5"></div>
                                         </select>
 
+
+
                                         <label for="estado">Contraseña</label>
-                                        <input type="password" class="form-control" id="agregar-contrasena">
+                                        <input type="password" maxlength="100" class="form-control" id="agregar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" />
+                                        <div id="mensaje6"></div>
 
                                         <label for="estado">Confirmar Contraseña</label>
-                                        <input type="password" class="form-control" id="confirmar-contrasena">
+                                        <input type="password" maxlength="100" class="form-control" id="confirmar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" />
+                                        <div id="mensaje7"></div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -335,18 +341,25 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                         <label for="nombre">Id Usuario</label>
                                         <input type="text" class="form-control" id="editar-id-usuario" disabled>
                                         <label for="nombre">Usuario</label>
-                                        <input type="text" class="form-control" id="editar-usuario">
+
+                                        <input type="text" maxlength="15" class="form-control" id="editar-usuario" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje8"></div>
+
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" class="form-control" id="editar-nombre">
+                                        <input type="text" maxlength="100" class="form-control" id="editar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje9"></div>
+
                                         <label for="estado">Estado</label>
-                                        <select class="form-control" id="editar-estado" name="IdEstado">
+                                        <select class="form-control" id="editar-estado" name="IdEstado" required>
                                             <option value="">Selecciona una opción</option>
                                             <?php foreach ($Estados as $Estado) : ?>
                                                 <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
                                             <?php endforeach; ?>
+                                            <div id="mensaje10"></div>
                                         </select>
                                         <label for="estado">Correo Electronico</label>
-                                        <input type="text" class="form-control" id="editar-correo">
+                                        <input type="text" maxlength="50" class="form-control" id="editar-correo" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida" />
+                                        <div id="mensaje11"></div>
                                         <?php
                                         //---------TRAER ROLES Y ESTADOS --------
                                         // Crear una instancia de la clase Conectar
@@ -364,11 +377,12 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
                                         <!------- SELECT DE ROLES -------------->
                                         <label for="id-rol">Rol</label>
-                                        <select class="form-control" id="editar-rol" name="IdRol">
+                                        <select class="form-control" id="editar-rol" name="IdRol" required>
                                             <option value="">Selecciona una opción</option>
                                             <?php foreach ($roles as $rol) : ?>
                                                 <option value="<?php echo $rol['id_rol']; ?>"><?php echo $rol['rol']; ?></option>
                                             <?php endforeach; ?>
+                                            <div id="mensaje12"></div>
                                         </select>
 
 
@@ -378,7 +392,7 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" onclick="updateUsuario()">Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-editar"onclick="updateUsuario()" disabled>Guardar </button>
                             </div>
                         </div>
                     </div>
@@ -388,13 +402,8 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2019</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
+                    <div class="d-flex align-items-start justify-content-center small">
+                        <div class="text-muted">Copyright &copy; IA-UNAH 2023</div>
                     </div>
                 </div>
             </footer>
@@ -425,7 +434,7 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-Usuarios tbody');
-
+                    tbody.innerHTML = ''; // Limpia el contenido anterior
 
                     data.forEach(function(usuario) {
                         var row = '<tr>' +
@@ -454,7 +463,7 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                             '</tr>';
                         tbody.innerHTML += row;
                     });
-
+                    habilitarPaginacion();
 
                 })
 
@@ -465,6 +474,16 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
         }
 
+        function habilitarPaginacion() {
+            $('#Lista-Usuarios').DataTable({
+                "paging": true,
+                "pageLength": 10,
+                "lengthMenu": [10, 20, 30, 50, 100],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                },
+            });
+        }
 
         function Insertar_Usuario() {
             $("#btn-agregar").click(function() {
@@ -477,6 +496,13 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                 var contrasena = $("#agregar-contrasena").val();
                 var confirmarContrasena = $("#confirmar-contrasena").val();
 
+                if (usuario == "" || nombre == "" || correo == "" || contrasena == "" || confirmarContrasena == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'No se pueden enviar Campos Vacios.'
+                    })
+                }
                 // Verificar que las contraseñas coincidan
                 if (contrasena !== confirmarContrasena) {
                     Swal.fire({
@@ -485,16 +511,16 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                         text: 'Las contraseñas no coinciden.'
                     });
                     return;
-                }
-
-                // Crear un objeto con los datos a enviar al servidor
-                var datos = {
-                    USUARIO: usuario,
-                    NOMBRE_USUARIO: nombre,
-                    ID_ESTADO_USUARIO: estado,
-                    CORREO_ELECTRONICO: correo,
-                    ID_ROL: rol,
-                    CONTRASENA: contrasena
+                } else {
+                    // Crear un objeto con los datos a enviar al servidor
+                    var datos = {
+                        USUARIO: usuario,
+                        NOMBRE_USUARIO: nombre,
+                        ID_ESTADO_USUARIO: estado,
+                        CORREO_ELECTRONICO: correo,
+                        ID_ROL: rol,
+                        CONTRASENA: contrasena
+                    }
                 };
 
                 fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=InsertUsuarios', {
@@ -649,11 +675,11 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'eliminar',
-                cancelButtonText: 'Cancelar' 
+                cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=eliminarUsuario', {
-                            method: 'POST',
+                            method: 'DELETE',
                             headers: {
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json'
@@ -664,16 +690,31 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                         })
                         .then(function(response) {
                             if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error('Error en la solicitud de verificación');
+                            }
+                        })
+                        .then(function(data) {
+                            if (data == "23000") {
+                                Swal.fire('El usuario no puede ser eliminado', '', 'info')
+                                    .then(() => {
+                                        // Recargar la página para mostrar los nuevos datos
+                                        location.reload();
+                                        // Recargar la lista de usuarios después de eliminar
+                                        
+                                        // Si no se puede eliminar el estado se debe estado a  "Inactivo"
+
+                                    });
+                            } else {
                                 // Eliminación exitosa, puedes hacer algo aquí si es necesario
                                 Swal.fire('Usuario eliminado', '', 'success')
                                     .then(() => {
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
                                         // Recargar la lista de usuarios después de eliminar
-                                        Lista_Usuarios();
+                                        //Lista_Usuarios();
                                     });
-                            } else {
-                                throw new Error('Error en la solicitud de eliminación');
                             }
                         })
                         .catch(function(error) {
@@ -684,30 +725,366 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             });
         }
 
+        function validarNombre() {
+            // console.log("entra a ValidarNombre");
+            usuario = document.getElementById("agregar-usuario");
+            nombre = document.getElementById("agregar-nombre");
+            estado = document.getElementById("agregar-estado");
+            correo = document.getElementById("agregar-correo");
+            rol = document.getElementById("agregar-rol");
+            contrasena = document.getElementById("agregar-contrasena");
+            confirmarContrasena = document.getElementById("confirmar-contrasena");
+
+            usuarioEditar = document.getElementById('editar-usuario');
+            nombreEditar = document.getElementById('editar-nombre');
+            estadoEditar = document.getElementById('editar-estado');
+            correoEditar = document.getElementById('editar-correo');
+            rolEditar = document.getElementById('editar-rol');
+
+
+
+            usuario.addEventListener("keypress", function(e) {
+                expresionValidadora1 = /^[A-Z]+$/;
+
+                if (!expresionValidadora1.test(e.key)) {
+                    usuario.style.borderColor = "red";
+                    usuario.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                    document.getElementById("mensaje1").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    usuario.style.borderColor = "green";
+                    usuario.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                    document.getElementById("mensaje1").style.color = "green";
+                }
+            });
+
+            nombre.addEventListener("keypress", function(e) {
+                expresionValidadora2 = /^[A-Z\s]+$/;
+                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
+                    nombre.style.borderColor = "red";
+                    nombre.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
+                    document.getElementById("mensaje2").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    if (!expresionValidadora2.test(e.key)) {
+                        nombre.style.borderColor = "red";
+                        nombre.style.boxShadow = "0 0 10px red";
+                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                        document.getElementById("mensaje2").style.color = "red";
+                        e.preventDefault();
+                    } else {
+                        localStorage.setItem("letraAnterior", e.keyCode);
+                        nombre.style.borderColor = "green";
+                        nombre.style.boxShadow = "0 0 10px green";
+                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                        document.getElementById("mensaje2").style.color = "green";
+                    }
+                }
+            });
+
+            estado.addEventListener("change", function() {
+                if (estado.value === "") {
+                    // Si no se ha seleccionado una opción (el valor es una cadena vacía), muestra un mensaje de error.
+                    estado.style.borderColor = "red";
+                    estado.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-times-circle'></i> Debes seleccionar un estado.";
+                    document.getElementById("mensaje3").style.color = "red";
+                } else {
+                    // Si se ha seleccionado una opción, marca el campo como válido.
+                    estado.style.borderColor = "green";
+                    estado.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-check-circle'></i> Estado seleccionado.";
+                    document.getElementById("mensaje3").style.color = "green";
+                }
+            });
+
+            correo.addEventListener("keypress", function(e) {
+                expresionValidadora2 = /^[A-Za-z0-9.!@#$%^&*]+$/;
+
+
+                if (!expresionValidadora2.test(e.key)) {
+                    correo.style.borderColor = "red";
+                    correo.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permite email valido";
+                    document.getElementById("mensaje4").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    correo.style.borderColor = "green";
+                    correo.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                    document.getElementById("mensaje4").style.color = "green";
+                }
+            });
+
+
+
+            rol.addEventListener("change", function() {
+                if (rol.value === "") {
+                    // Si no se ha seleccionado una opción (el valor es una cadena vacía), muestra un mensaje de error.
+                    rol.style.borderColor = "red";
+                    rol.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-times-circle'></i> Debes seleccionar un rol.";
+                    document.getElementById("mensaje5").style.color = "red";
+                } else {
+                    // Si se ha seleccionado una opción, marca el campo como válido.
+                    rol.style.borderColor = "green";
+                    rol.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-check-circle'></i> Rol seleccionado.";
+                    document.getElementById("mensaje5").style.color = "green";
+                }
+            });
+
+            contrasena.addEventListener("keypress", function(e) {
+                expresionValidadora3 = /^[A-Za-z0-9!@#$%^&*]+$/;
+
+
+                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
+                    contrasena.style.borderColor = "red";
+                    contrasena.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje6").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
+                    document.getElementById("mensaje6").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    if (!expresionValidadora3.test(e.key)) {
+                        contrasena.style.borderColor = "red";
+                        contrasena.style.boxShadow = "0 0 10px red";
+                        document.getElementById("mensaje6").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                        document.getElementById("mensaje6").style.color = "red";
+                        e.preventDefault();
+                    } else {
+                        localStorage.setItem("letraAnterior", e.keyCode);
+                        descripcion.style.borderColor = "green";
+                        descripcion.style.boxShadow = "0 0 10px green";
+                        document.getElementById("mensaje6").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                        document.getElementById("mensaje6").style.color = "green";
+                    }
+                }
+            });
+
+            confirmarContrasena.addEventListener("keypress", function(e) {
+                expresionValidadora3 = /^[A-Za-z0-9!@#$%^&*]+$/;
+
+                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
+                    confirmarContrasena.style.borderColor = "red";
+                    confirmarContrasena.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje7").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
+                    document.getElementById("mensaje7").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    if (!expresionValidadora3.test(e.key)) {
+                        confirmarContrasena.style.borderColor = "red";
+                        confirmarContrasena.style.boxShadow = "0 0 10px red";
+                        document.getElementById("mensaje7").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayúsculas, números y ciertos caracteres especiales.";
+                        document.getElementById("mensaje7").style.color = "red";
+                        e.preventDefault();
+                    } else {
+                        localStorage.setItem("letraAnterior", e.keyCode);
+                        confirmarContrasena.style.borderColor = "green";
+                        confirmarContrasena.style.boxShadow = "0 0 10px green";
+                        document.getElementById("mensaje7").innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
+                        document.getElementById("mensaje7").style.color = "green";
+                    }
+                }
+            });
+
+            //-------------------------MODAL DE EDITAR---------------------------------------
+
+            usuarioEditar.addEventListener("keypress", function(e) {
+                expresionValidadora1 = /^[A-Z]+$/;
+
+                if (!expresionValidadora1.test(e.key)) {
+                    usuarioEditar.style.borderColor = "red";
+                    usuarioEditar.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje8").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                    document.getElementById("mensaje8").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    usuarioEditar.style.borderColor = "green";
+                    usuarioEditar.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje8").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                    document.getElementById("mensaje8").style.color = "green";
+                }
+            });
+
+            nombreEditar.addEventListener("keypress", function(e) {
+                expresionValidadora2 = /^[A-Z\s]+$/;
+                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
+                    nombreEditar.style.borderColor = "red";
+                    nombreEditar.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje9").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
+                    document.getElementById("mensaje9").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    if (!expresionValidadora2.test(e.key)) {
+                        nombreEditar.style.borderColor = "red";
+                        nombreEditar.style.boxShadow = "0 0 10px red";
+                        document.getElementById("mensaje9").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                        document.getElementById("mensaje9").style.color = "red";
+                        e.preventDefault();
+                    } else {
+                        localStorage.setItem("letraAnterior", e.keyCode);
+                        nombreEditar.style.borderColor = "green";
+                        nombreEditar.style.boxShadow = "0 0 10px green";
+                        document.getElementById("mensaje9").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                        document.getElementById("mensaje9").style.color = "green";
+                    }
+                }
+            });
+
+            estadoEditar.addEventListener("change", function() {
+                if (estadoEditar.value === "") {
+                    // Si no se ha seleccionado una opción (el valor es una cadena vacía), muestra un mensaje de error.
+                    estadoEditar.style.borderColor = "red";
+                    estadoEditar.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje10").innerHTML = "<i class='fas fa-times-circle'></i> Debes seleccionar un estado.";
+                    document.getElementById("mensaje10").style.color = "red";
+                } else {
+                    // Si se ha seleccionado una opción, marca el campo como válido.
+                    estadoEditar.style.borderColor = "green";
+                    estadoEditar.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje10").innerHTML = "<i class='fas fa-check-circle'></i> Estado seleccionado.";
+                    document.getElementById("mensaje10").style.color = "green";
+                }
+            });
+
+            correoEditar.addEventListener("keypress", function(e) {
+                expresionValidadora2 = /^[A-Za-z0-9.!@#$%^&*]+$/;
+
+
+                if (!expresionValidadora2.test(e.key)) {
+                    correoEditar.style.borderColor = "red";
+                    correoEditar.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje11").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permite email valido";
+                    document.getElementById("mensaje11").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    correoEditar.style.borderColor = "green";
+                    correoEditar.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje11").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                    document.getElementById("mensaje11").style.color = "green";
+                }
+            });
+
+
+
+            rolEditar.addEventListener("change", function() {
+                if (rolEditar.value === "") {
+                    // Si no se ha seleccionado una opción (el valor es una cadena vacía), muestra un mensaje de error.
+                    rolEditar.style.borderColor = "red";
+                    rolEditar.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje12").innerHTML = "<i class='fas fa-times-circle'></i> Debes seleccionar un rol.";
+                    document.getElementById("mensaje12").style.color = "red";
+                } else {
+                    // Si se ha seleccionado una opción, marca el campo como válido.
+                    rolEditar.style.borderColor = "green";
+                    rolEditar.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje12").innerHTML = "<i class='fas fa-check-circle'></i> Rol seleccionado.";
+                    document.getElementById("mensaje12").style.color = "green";
+                }
+            });
+
+        }
+
         $(document).ready(function() {
             Lista_Usuarios();
             Insertar_Usuario();
+            validarNombre();
         });
+    </script>
+    <!-- VALIDACIONES SCRIPT -->
+    <script>
+        // Obtén los campos de entrada y el botón "Guardar para insertar"
+        const usuarioInput = document.getElementById("agregar-usuario");
+        const nombreInput = document.getElementById("agregar-nombre");
+        const estadoInput = document.getElementById("agregar-estado");
+        const correoInput = document.getElementById("agregar-correo");
+        const rolInput = document.getElementById("agregar-rol");
+        const contrasenaInput = document.getElementById("agregar-contrasena");
+        const confirmarContrasenaInput = document.getElementById("confirmar-contrasena");
+        const guardarButton = document.getElementById('btn-agregar');
+
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isFormValid = usuarioInput.value.trim() !== '' && nombreInput.value.trim() !== '' && estadoInput.value !== '' &&
+                estadoInput.value.trim() !== '' && correoInput.value.trim() !== '' && rolInput.value !== '' &&
+                contrasenaInput.value.trim() !== '' && confirmarContrasenaInput.value.trim() !== '';
+
+            guardarButton.disabled = !isFormValid;
+        }
+
+        // Agrega un evento input a cada campo de entrada
+        usuarioInput.addEventListener('input', checkForm);
+        nombreInput.addEventListener('input', checkForm);
+        estadoInput.addEventListener('input', checkForm);
+        correoInput.addEventListener('input', checkForm);
+        rolInput.addEventListener('input', checkForm);
+        contrasenaInput.addEventListener('input', checkForm);
+        confirmarContrasenaInput.addEventListener('input', checkForm);
     </script>
 
     <script>
-        $(document).ready(function() {
-            $("#myInput").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#Lista-Usuarios tbody tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
-    </script>
+        // Obtén los campos de entrada y el botón "Guardar de Editar"
+        const usuarioInput1 = document.getElementById("editar-usuario");
+        const nombreInput1 = document.getElementById("editar-nombre");
+        const estadoInput1 = document.getElementById("editar-estado");
+        const correoInput1 = document.getElementById("editar-correo");
+        const rolInput1 = document.getElementById("editar-rol");
+        const guardarButton1 = document.getElementById('btn-editar');
 
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isFormValid = usuarioInput1.value.trim() !== '' && nombreInput1.value.trim() !== '' && estadoInput1.value !== '' &&
+                estadoInput1.value.trim() !== '' && correoInput1.value.trim() !== '' && rolInput1.value !== '';
+
+            guardarButton1.disabled = !isFormValid;
+        }
+
+        // Agrega un evento input a cada campo de entrada
+        usuarioInput1.addEventListener('input', checkForm);
+        nombreInput1.addEventListener('input', checkForm);
+        estadoInput1.addEventListener('input', checkForm);
+        correoInput1.addEventListener('input', checkForm);
+        rolInput1.addEventListener('input', checkForm);
+    </script>
+    <script>
+        // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
+        $('#agregar-usuario, #agregar-correo, #agregar-contrasena,#agregar-contrasena').on('input', function() {
+            var input = $(this);
+            var trimmedValue = input.val().trim();
+            input.val(trimmedValue);
+
+            if (trimmedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'El campo no puede estar vacío',
+                    icon: 'warning',
+                });
+            }
+        });
+
+        // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
+        $('#editar-usuario, #editar-correo').on('input', function() {
+            var input = $(this);
+            var trimmedValue = input.val().trim();
+            input.val(trimmedValue);
+
+            if (trimmedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'El campo no puede estar vacío',
+                    icon: 'warning',
+                });
+            }
+        });
+
+    </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-    <script src="../../assets/demo/datatables-demo.js"></script>
+
 </body>
 
 </html>

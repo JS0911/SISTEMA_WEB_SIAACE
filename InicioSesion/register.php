@@ -12,6 +12,7 @@ if (isset($_POST['submit'])) {
     $nombre_usuario = $_POST['nombre_usuario'];
     $id_estado_usuario = 3;
     $preguntas_contestadas = 0;
+    $rol = 1;
     $correo_electronico = $_POST['correo_electronico'];
     $contrasena = $_POST['contrasena'];
     $confirmar_contrasena = $_POST['confirmar_contrasena'];
@@ -37,21 +38,17 @@ if (isset($_POST['submit'])) {
                 $stmtCorreo->execute([$correo_electronico]);
 
                 // Validación de usuario
+                // Validación de correo electrónico
                 if ($stmtUsuario->rowCount() > 0) {
                     $mensajeUsuarioExistente = "El usuario ya existe en la base de datos. Por favor, elija otro nombre de usuario.";
-                }
-
-                // Validación de correo electrónico
-                if ($stmtCorreo->rowCount() > 0) {
+                } elseif ($stmtCorreo->rowCount() > 0) {
                     $mensajeCorreoExistente = "El correo ya existe en la base de datos. Por favor, elija un correo electrónico disponible.";
-                }
-
-                // Si ni el usuario ni el correo existen en la base de datos, proceder con la inserción
-                if ($stmtUsuario->rowCount() == 0 && $stmtCorreo->rowCount() == 0) {
-                    $sqlInsertarUsuario = "INSERT INTO tbl_ms_usuario (usuario, nombre_usuario, correo_electronico, contrasena, id_estado_usuario, preguntas_contestadas) VALUES (?, ?, ?, ?, ?, ?)";
+                } else {
+                    // Si ni el usuario ni el correo existen en la base de datos, proceder con la inserción
+                    $sqlInsertarUsuario = "INSERT INTO tbl_ms_usuario (usuario, nombre_usuario, correo_electronico, contrasena, id_estado_usuario, preguntas_contestadas,id_rol) VALUES (?, ?, ?, ?, ?, ?, ?)";
                     $stmtInsertarUsuario = $conn->prepare($sqlInsertarUsuario);
 
-                    if ($stmtInsertarUsuario->execute([$usuario, $nombre_usuario, $correo_electronico, $hashed_password, $id_estado_usuario, $preguntas_contestadas])) {
+                    if ($stmtInsertarUsuario->execute([$usuario, $nombre_usuario, $correo_electronico, $hashed_password, $id_estado_usuario, $preguntas_contestadas,$rol])) {
                         // La inserción fue exitosa
                         $_SESSION['registro_exitoso'] = true;
                         header("refresh:2;url=login.php");
@@ -106,14 +103,16 @@ if (isset($_POST['submit'])) {
                                     <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 
                                         <div class="form-group"><label class="small mb-1" for="inputUser">Usuario</label><input class="form-control py-4" id="inputUser" name="usuario" type="text" maxlength="15" placeholder="Ingrese su usuario:" 
-                                        required pattern="^(?=\S)[A-Za-z]+$" title="Ingrese solo letras (sin números ni caracteres especiales o espacios)" oninput="this.value = this.value.toUpperCase()" /></div>
+                                        required pattern="^(?=\S)[A-Za-z]+$" title="Ingrese solo letras (sin números ni caracteres especiales o espacios)" oninput="this.value = this.value.toUpperCase()" 
+                                        value="<?php echo isset($_POST['usuario']) ? $_POST['usuario'] : ''; ?>"/></div>
 
                                         <div class="form-group"><label class="small mb-1" for="inputLastNameUser">Nombre Usuario</label><input class="form-control py-4" id="inputLastNameUser" name="nombre_usuario" type="text" maxlength="100" placeholder="Ingrese su nombre de usuario:" 
                                         required pattern="^^(?=\S)[A-Za-z]+$" title="Ingrese solo letras (sin números ni caracteres especiales o espacios)" oninput="this.value = this.value.toUpperCase()" 
                                         value="<?php echo isset($_POST['nombre_usuario']) ? $_POST['nombre_usuario'] : ''; ?>"/></div>
 
                                         <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" id="inputEmailAddress" name="correo_electronico" type="email" maxlength="50" aria-describedby="emailHelp" placeholder="Ingrese su correo electrónico:" 
-                                        required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida" /></div>
+                                        required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida" 
+                                        value="<?php echo isset($_POST['correo_electronico']) ? $_POST['correo_electronico'] : ''; ?>"/></div>
 
                                         <div class="form-row">
                                             <div class="col-md-6">
@@ -195,4 +194,4 @@ if (isset($_POST['submit'])) {
     <script src="../js/scripts.js"></script>
 </body>
 
-</html>div>
+</html>

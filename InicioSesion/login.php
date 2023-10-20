@@ -1,11 +1,8 @@
 <?php 
-
 session_start();
 
-//CREAR CONEXION
 require "../Config/conexion.php";
 
-//Crear una instancia de la clase Conectar
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
@@ -15,101 +12,77 @@ if ($_POST) {
     //$id_usuario = $_POST['id_usuario'];
     //$id_estado_usuario = $_POST['id_estado_usuario'];
     //$id_rol = $_POST['id_rol'];
-
     //$ID_ROL = $_SESSION ['ID_ROL'];
 
-    if ($conn) { // Verificar si la conexión se estableció correctamente
-        $sql = "SELECT id_usuario, usuario, contrasena, id_estado_usuario ,id_rol, preguntas_contestadas,id_rol FROM tbl_ms_usuario WHERE usuario='$usuario'";
-        $sql1 = "SELECT * FROM tbl_ms_parametros WHERE PARAMETRO = 'BLOQUEO'";
-        //echo $sql;
-        $stmt = $conn->query($sql);
-        $filaintentos = $conn->query($sql1);
+    if ($conn) {
+        $sql = "SELECT id_usuario, usuario, contrasena, id_estado_usuario, id_rol, preguntas_contestadas FROM tbl_ms_usuario WHERE usuario = :usuario";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':usuario', $usuario);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        //BLOQUEO SI SUPERA LOS INTENTOS FALLIDOS: OBTENCION DE VALOR DE INTENTOS
-        $row1 = $filaintentos->fetch(PDO::FETCH_ASSOC);
-        $cantMaximaIntentos = $row1['VALOR'];
-        
-        if ($stmt) {
-            $num = $stmt->rowCount();
+        if ($row) {
+            $password_bd = $row['contrasena'];
 
-            if ($num > 0) {
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                $password_bd = $row['contrasena'];
-                //PARA ENCRIPTAR LA CONTRASEÑA
-                $pass_c = password_hash($contrasena, PASSWORD_DEFAULT);
-                //echo $pass_c;
-                // PARA VERIFICAR QUE LA CONTRASEÑA ENCRIPTADA COINCIDA CON LA QUE ESTÁ EN LA BASE DE DATOS
-                if (password_verify($contrasena, $password_bd)) {
-                    $_SESSION['id_usuario'] = $row['id_usuario'];
-                    $_SESSION['usuario'] = $row['usuario'];
-                    $_SESSION['id_estado_usuario'] = $row['id_estado_usuario'];
-                    $_SESSION['id_rol'] = $row['id_rol'];
+            if (password_verify($contrasena, $password_bd)) {
+                $_SESSION['id_usuario'] = $row['id_usuario'];
+                $_SESSION['usuario'] = $row['usuario'];
+                $_SESSION['id_estado_usuario'] = $row['id_estado_usuario'];
+                $_SESSION['id_rol'] = $row['id_rol'];
 
-                    //ESTADO DEL USUARIO
-                    if($row['id_estado_usuario'] == 2)
-                    {
-                        $mensajeEstado = 'Su usuario se encuentra inactivo';
-                    }
-                    else if($row['id_estado_usuario'] == 3)
-                    {
-                        //Cambiar la ruta a login por primera vez
-                        header("Location: ../Vistas/MantenimientoUsuario/Contestar_preguntas.php");
-                    }
-                    else if($row['id_estado_usuario'] == 4)
-                    {
-                        $mensajeEstado = 'Su usuario se encuentra bloqueado.';
-                    }
-                    else
-                    {
-                        header("Location: index.php");
-                        echo $id_rol;
-                    }
-
+                if ($row['id_estado_usuario'] == 2) {
+                    $mensajeEstado = 'Su usuario se encuentra inactivo';
+                } elseif ($row['id_estado_usuario'] == 3) {
+                    header("Location: ../Vistas/MantenimientoUsuario/Contestar_preguntas.php");
+                } elseif ($row['id_estado_usuario'] == 4) {
+                    $mensajeEstado = 'Su usuario se encuentra bloqueado.';
                 } else {
-                    
-                    $contrasenaNoCoincide = "La contraseña no coincide";
-                    // echo "La contraseña no coincide";
-
-                    if(!isset($_COOKIE['intentosFallidos']))
-                    {
-                        setcookie('intentosFallidos', 1, time() + (86400));
-                        setcookie('usuarioIntento', $usuario, time() + (86400));
-                    }
-                    else
-                    {
-                        $cont = $_COOKIE['intentosFallidos'];
-                        $usuarioAnterior = $_COOKIE['usuarioIntento'];
-
-                        if($usuarioAnterior != $usuario)
-                        {
-                            setcookie('intentosFallidos', 1, time() + (86400));
-                            setcookie('usuarioIntento', $usuario, time() + (86400));
-                        }
-                        else
-                        {
-                            $cont++;
-                            setcookie('intentosFallidos', $cont, time() + (86400));
-                    
-                            if($cantMaximaIntentos <= $_COOKIE['intentosFallidos'])
-                            {
-                                $contrasenaNoCoincide = "Su usuario ha sido bloqueado debido a que excedio la cantidad de intentos.";
-                                $sql2 = "UPDATE tbl_ms_usuario SET ID_ESTADO_USUARIO = 4 WHERE USUARIO = '$usuario'";
-                                $conn->query($sql2);
-                                setcookie('intentosFallidos', "", time() - 3600);
-                                setcookie('usuarioIntento', "", time() - 3600);
-                            }
-                        }
-                        
-                    }
+                    header("Location: index.php");
+                    //echo $id_rol;
                 }
             } else {
-                $NoExisteUsuario = "No existe usuario"; 
-                //echo"No existe usuario";
+
+                $contrasenaNoCoincide = "La contraseña no coincide";
+                
+                if (!isset($_COOKIE['intentosFallidos'])) {
+                    setcookie('intentosFallidos', 1, time() + 86400);
+                    setcookie('usuarioIntento', $usuario, time() + 86400);
+                } else {
+                    $cont = $_COOKIE['intentosFallidos'];
+                    $usuarioAnterior = $_COOKIE['usuarioIntento'];
+
+                    if ($usuarioAnterior != $usuario) {
+                        setcookie('intentosFallidos', 1, time() + 86400);
+                        setcookie('usuarioIntento', $usuario, time() + 86400);
+                    } else {
+                        $cont++;
+                        setcookie('intentosFallidos', $cont, time() + 86400);
+                    
+                        // Obtener el valor máximo de intentos permitidos desde la base de datos
+                        $sqlParametro = "SELECT VALOR FROM tbl_ms_parametros WHERE PARAMETRO = 'BLOQUEO'";
+                        $stmtParametro = $conn->query($sqlParametro);
+                        $rowParametro = $stmtParametro->fetch(PDO::FETCH_ASSOC);
+                        $cantMaximaIntentos = $rowParametro['VALOR'];
+                        
+                        if ($cantMaximaIntentos <= $_COOKIE['intentosFallidos']) {
+                            $contrasenaNoCoincide = "Su usuario ha sido bloqueado debido a que excedió la cantidad de intentos.";
+                            
+                            // Actualizar el estado del usuario en la base de datos
+                            $sqlBloquearUsuario = "UPDATE tbl_ms_usuario SET id_estado_usuario = 4 WHERE usuario = :usuario";
+                            $stmtBloquearUsuario = $conn->prepare($sqlBloquearUsuario);
+                            $stmtBloquearUsuario->bindParam(':usuario', $usuario);
+                            $stmtBloquearUsuario->execute();
+                            
+                            // Eliminar las cookies de intentosFallidos y usuarioIntento
+                            setcookie('intentosFallidos', "", time() - 3600);
+                            setcookie('usuarioIntento', "", time() - 3600);
+                        }
+                    }
+                }
             }
         } else {
-            echo "Error en la consulta: " . $conn->errorInfo()[2]; // Mostrar el mensaje de error de PDO
+            $NoExisteUsuario = "No existe usuario";
         }
-       
     } else {
         echo "Error al conectar a la base de datos.";
     }

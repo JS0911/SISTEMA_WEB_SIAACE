@@ -12,7 +12,7 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 require_once("../config/conexion.php");
-require_once("../modelos/estadousuario.php"); 
+require_once("../Modelos/estadousuario.php"); 
 
 $com = new Estados(); 
 

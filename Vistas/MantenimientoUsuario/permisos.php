@@ -36,12 +36,13 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Permisos</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
-    <link href="../../css/styles.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
 
     <style>
         /* Estilo para la tabla */
@@ -155,6 +156,24 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                             echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
                             echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                             echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                            echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                            echo '</nav>';
+                            echo '</div>';
+                        }
+
+                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
+                                    Modulo Empleado
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                            }
+
 
                             echo '</nav>';
                             echo '</div>';
@@ -183,19 +202,10 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<button class="btn btn-success mb-1 custom-button" data-toggle="modal" data-target="#crearModalPermisos">Crear Nuevo</button>';
+                                echo '<button class="btn btn-success mb-1 custom-button" data-toggle="modal" data-target="#crearModalPermisos">Nuevo</button>';
                             }
                             ?>
-                            <div class="d-flex align-items-center w-50">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-search"></i> <!-- Puedes usar una fuente de iconos como Font Awesome -->
-                                        </span>
-                                    </div>
-                                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
-                                </div>
-                            </div>
+
                         </div>
 
                         <!-- Tabla para mostrar los datos -->
@@ -217,21 +227,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
 
                             </tbody>
                         </table>
-                        <nav aria-label="Pagination" class="pagination-container">
-                            <ul class="pagination">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Atrás</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link">2</span>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Siguiente</a>
-                                </li>
-                            </ul>
-                        </nav>
+
                     </div>
 
                 </div>
@@ -330,7 +326,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
                             </div>
                         </div>
@@ -434,7 +430,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" onclick="updatePermiso()">Guardar
                                 </button>
                             </div>
@@ -446,13 +442,8 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
 
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2019</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
+                    <div class="d-flex align-items-start justify-content-center small">
+                        <div class="text-muted">Copyright &copy; IA-UNAH 2023</div>
                     </div>
                 </div>
             </footer>
@@ -482,7 +473,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-Permiso tbody');
-
+                    tbody.innerHTML = ''; // Limpia el contenido anterior
 
                     data.forEach(function(permiso) {
                         var row = '<tr>' +
@@ -510,7 +501,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                             '</tr>';
                         tbody.innerHTML += row;
                     });
-
+                    habilitarPaginacion();
 
                 })
 
@@ -521,75 +512,124 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
 
         }
 
+        function habilitarPaginacion() {
+            $('#Lista-Permiso').DataTable({
+                "paging": true,
+                "pageLength": 10,
+                "lengthMenu": [10, 20, 30, 50, 100],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                },
+            });
+        }
 
         function Insertar_Permiso() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
                 var idRol = $("#agregar-IdRol").val();
-                var idObjeto = $("#agregar-IdObjeto").val();
-                var pInsercion = $("#agregar-pInsercion").prop("checked") ? "1" : "0";
-                var pEliminacion = $("#agregar-pEliminacion").prop("checked") ? "1" : "0";
-                var pActualizacion = $("#agregar-pActualizacion").prop("checked") ? "1" : "0";
-                var pConsultar = $("#agregar-pConsultar").prop("checked") ? "1" : "0";
-                console.log(pEliminacion);
+                var idObjeto = $("#agregar-IdObjeto").val()
                 // Crear un objeto con los datos a enviar al servidor
-                var datos = {
+                var datos1 = {
                     ID_ROL: idRol,
-                    ID_OBJETO: idObjeto,
-                    PERMISOS_INSERCION: pInsercion,
-                    PERMISOS_ELIMINACION: pEliminacion,
-                    PERMISOS_ACTUALIZACION: pActualizacion,
-                    PERMISOS_CONSULTAR: pConsultar
+                    ID_OBJETO: idObjeto
                 };
 
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=InsertPermiso', {
+                // Hacer una solicitud para verificar si el permiso ya existe
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=verificarPermisoExistente', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(datos)
+                        body: JSON.stringify(datos1)
                     })
                     .then(function(response) {
                         if (response.ok) {
-                            // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
                             return response.json();
                         } else {
-                            // Si hubo un error en la solicitud, maneja el error aquí
-                            throw new Error('Error en la solicitud');
+                            throw new Error('Error en la solicitud de verificación');
                         }
                     })
                     .then(function(data) {
-                        console.log(data);
-                        // Cerrar la modal después de guardar
-                        $('#crearModalPermisos').modal('hide');
+                        if (data == 'SI EXISTE EL PERMISO') {
 
+                            // Mostrar un mensaje de error ya que el permiso ya existe
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'El permiso para este rol y objeto ya existe.'
+                            });
+                        } else {
+                            // Si el permiso no existe, procede a insertarlo
+                            var pInsercion = $("#agregar-pInsercion").prop("checked") ? "1" : "0";
+                            var pEliminacion = $("#agregar-pEliminacion").prop("checked") ? "1" : "0";
+                            var pActualizacion = $("#agregar-pActualizacion").prop("checked") ? "1" : "0";
+                            var pConsultar = $("#agregar-pConsultar").prop("checked") ? "1" : "0";
 
+                            // Crear un objeto con los datos a enviar al servidor
+                            var datos = {
+                                ID_ROL: idRol,
+                                ID_OBJETO: idObjeto,
+                                PERMISOS_INSERCION: pInsercion,
+                                PERMISOS_ELIMINACION: pEliminacion,
+                                PERMISOS_ACTUALIZACION: pActualizacion,
+                                PERMISOS_CONSULTAR: pConsultar
+                            };
 
-                        // Mostrar SweetAlert de éxito
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Guardado exitoso',
-                            text: 'Los datos se han guardado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
-                        });
+                            // Realizar la solicitud de inserción después de verificar
+                            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=InsertPermiso', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(datos)
+                                })
+                                .then(function(response) {
+                                    if (response.ok) {
+                                        // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+                                        return response.json();
+                                    } else {
+                                        // Si hubo un error en la solicitud, maneja el error aquí
+                                        throw new Error('Error en la solicitud de inserción');
+                                    }
+                                })
+                                .then(function(data) {
+                                    console.log(data);
+                                    // Cerrar la modal después de guardar
+                                    $('#crearModalPermisos').modal('hide');
 
+                                    // Mostrar SweetAlert de éxito
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Guardado exitoso',
+                                        text: 'Los datos se han guardado correctamente.'
+                                    }).then(function() {
+                                        // Recargar la página para mostrar los nuevos datos
+                                        location.reload();
+                                    });
+                                })
+                                .catch(function(error) {
+                                    // Manejar el error aquí
+                                    console.log(error.message);
+
+                                    // Mostrar SweetAlert de error
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'Error al guardar los datos: ' + error.message
+                                    });
+                                });
+                        }
                     })
                     .catch(function(error) {
-                        // Manejar el error aquí
+                        // Manejar el error de verificación aquí
                         console.log(error.message);
-
                         // Mostrar SweetAlert de error
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'Error al guardar los datos: ' + error.message
+                            text: 'Error al verificar el permiso: ' + error.message
                         });
                     });
-
-
-
             });
         }
 
@@ -622,10 +662,17 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                     if (permiso) {
                         document.getElementById('editar-IdRol').value = id_rol;
                         document.getElementById('editar-IdObjeto').value = id_objeto;
-                        document.getElementById('editar-pInsercion').value = permiso[0].PERMISOS_INSERCION;
-                        document.getElementById('editar-pEliminacion').value = permiso[0].PERMISOS_ELIMINACION;
-                        document.getElementById('editar-pActualizacion').value = permiso[0].PERMISOS_ACTUALIZACION;
-                        document.getElementById('editar-pConsultar').value = permiso[0].PERMISOS_CONSULTAR;
+                        var pInsercion = document.getElementById('editar-pInsercion').checked;
+                        var pEliminacion = document.getElementById('editar-pEliminacion').checked;
+                        var pActualizacion = document.getElementById('editar-pActualizacion').checked;
+                        var pConsultar = document.getElementById('editar-pConsultar').checked;
+
+                        console.log("Permiso de Inserción: " + pInsercion);
+                        console.log("Permiso de Eliminación: " + pEliminacion);
+                        console.log("Permiso de Actualización: " + pActualizacion);
+                        console.log("Permiso de Consulta: " + pConsultar);
+
+
                     } else {
                         console.log('La respuesta JSON está vacía o no válida.');
                     }
@@ -703,7 +750,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Eliminar',
                 confirmButtonColor: '#3085d6'
-               
+
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=deletePermiso', {
@@ -744,24 +791,35 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
             Insertar_Permiso();
         });
     </script>
+
     <script>
-        $(document).ready(function() {
-            $("#myInput").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#Lista-Permiso tbody tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
+        document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
+        document.getElementById('agregar-IdRol').value = "";
+        document.getElementById('agregar-IdObjeto').value = "";
+
+        // Limpia los checkboxes
+        document.getElementById('agregar-pInsercion').checked = false;
+        document.getElementById('agregar-pEliminacion').checked = false;
+        document.getElementById('agregar-pActualizacion').checked = false;
+        document.getElementById('agregar-pConsultar').checked = false;
+        });
+
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
+        document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
+       
+
+        // Limpia los checkboxes
+        document.getElementById('editar-pInsercion').checked = false;
+        document.getElementById('editar-pEliminacion').checked = false;
+        document.getElementById('editar-pActualizacion').checked = false;
+        document.getElementById('editar-pConsultar').checked = false;
         });
     </script>
 
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-    <script src="../../assets/demo/datatables-demo.js"></script>
 </body>
 
 </html>

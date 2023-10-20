@@ -106,6 +106,24 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                                 echo '</nav>';
                                 echo '</div>';
                             }
+
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
+                                        Modulo Empleado
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>';
+                                echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
+                                echo '<nav class="sb-sidenav-menu-nested nav">';
+    
+                                if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../Vistas/MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                }
+    
+                            
+                                echo '</nav>';
+                                echo '</div>';
+                            }
                         ?>
 
                     </div>

@@ -25,7 +25,6 @@ switch ($_GET["op"]) {
         $datos = $com->get_Permisos_Usuarios($body["id_rol"], $body["id_objeto"]);
         echo json_encode($datos);
 
-
         break;
 
         case "InsertPermiso":
@@ -57,5 +56,12 @@ switch ($_GET["op"]) {
             $datos = $com->eliminar_permiso($ID_ROL,$ID_OBJETO);
             echo json_encode($datos); // Donde $datos contiene el mensaje de resultado ("Permiso eliminado" o cualquier otro mensaje).
             //echo json_encode("Permiso eliminado");
+            break;
+
+        case "verificarPermisoExistente":
+            $ID_ROL = $body["ID_ROL"];
+            $ID_OBJETO = $body["ID_OBJETO"];
+            $datos = $com->verificarPermisoExistente($ID_ROL,$ID_OBJETO);
+            echo json_encode($datos);
             break;
 }

@@ -50,7 +50,7 @@ switch ($_GET["op"]) {
     case "eliminarUsuario":
         $ID_USUARIO = $body["ID_USUARIO"];
         $datos = $com->eliminar_usuario($ID_USUARIO);
-        echo json_encode("Usuario eliminado");
+        echo json_encode($datos);
         break;
 }
 ?>

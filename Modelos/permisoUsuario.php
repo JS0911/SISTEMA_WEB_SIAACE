@@ -56,14 +56,9 @@ class PermisosUsuarios extends Conectar
         }
     }
 
-
-
-
-    //INSERTA UN PERMISO
     public function insert_permiso($ID_ROL, $ID_OBJETO, $PERMISOS_INSERCION, $PERMISOS_ELIMINACION, $PERMISOS_ACTUALIZACION, $PERMISOS_CONSULTAR)
     {
         try {
-
             $conectar = parent::conexion();
             parent::set_names();
             $sql = "INSERT INTO `siaace`.`tbl_ms_permisos` (`ID_ROL`, `ID_OBJETO`, `PERMISOS_INSERCION`, `PERMISOS_ELIMINACION`, `PERMISOS_ACTUALIZACION`, `PERMISOS_CONSULTAR`) VALUES ( :ID_ROL, :ID_OBJETO, :PERMISOS_INSERCION, :PERMISOS_ELIMINACION, :PERMISOS_ACTUALIZACION, :PERMISOS_CONSULTAR)";
@@ -83,10 +78,12 @@ class PermisosUsuarios extends Conectar
                 return "Error al insertar el permiso";
             }
         } catch (PDOException $e) {
-
-            return "Error al insertar el permiso: " . $e->getMessage();
+            // Captura el código de error de la excepción
+            return $e->getCode();
         }
+        
     }
+
 
     // //EDITA UN PERMISO
     public function update_permiso($ID_ROL, $ID_OBJETO, $PERMISOS_INSERCION, $PERMISOS_ELIMINACION, $PERMISOS_ACTUALIZACION, $PERMISOS_CONSULTAR)
@@ -158,6 +155,43 @@ class PermisosUsuarios extends Conectar
             }
         } catch (PDOException $e) {
             return "Error al eliminar el objeto: " . $e->getMessage();
+        }
+    }
+
+    function verificarPermisoExistente($ID_ROL, $ID_OBJETO)
+    {
+
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+
+            // Consulta SELECT para verificar si el permiso existe
+            $select_sql = "SELECT * FROM `tbl_ms_permisos` WHERE `ID_ROL` = :ID_ROL AND `ID_OBJETO` = :ID_OBJETO";
+            $stmt_select = $conectar->prepare($select_sql);
+            $stmt_select->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
+            $stmt_select->bindParam(':ID_OBJETO', $ID_OBJETO, PDO::PARAM_INT);
+            $stmt_select->execute();
+
+            // Verificar si se encontró el permiso
+            if ($stmt_select->rowCount() > 0) {
+                // Realizar una consulta SQL para verificar si existe un permiso con el mismo ID_ROL e ID_OBJETO
+                $sql = "SELECT COUNT(*) as count FROM `tbl_ms_permisos` WHERE `ID_ROL` = :ID_ROL AND `ID_OBJETO` = :ID_OBJETO";
+                // Preparar la consulta
+                $stmt = $conectar->prepare($sql);
+
+                // Vincular los parámetros
+                $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
+                $stmt->bindParam(':ID_OBJETO', $ID_OBJETO, PDO::PARAM_INT);
+                $stmt->execute();
+
+                if ($stmt->rowCount() > 0) {
+                    return "SI EXISTE EL PERMISO";
+                }
+            } else {
+                return "NO EXISTE EL PERMISO";
+            }
+        } catch (PDOException $e) {
+            return "Error al Consultar el permiso: " . $e->getMessage();
         }
     }
 }
