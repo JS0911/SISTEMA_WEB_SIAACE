@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
 
-$permisosRoles = new PermisosUsuarios();
+$permisosCargos = new PermisosUsuarios();
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
@@ -13,9 +13,9 @@ if (!isset($_SESSION['usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Roles = "1";
+$id_objeto_Cargos = "26";
 
-$permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
+$permisos = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
 
 // Verificar si se obtuvieron resultados
 // if (!empty($permisos)) {
@@ -51,7 +51,7 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento Roles</title>
+    <title>Mantenimiento Cargos</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
@@ -60,14 +60,14 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <style>
         /* Estilo para la tabla */
-        #Lista-rol {
+        #Lista-cargo {
             border-collapse: collapse;
             /* Combina los bordes de las celdas */
             width: 100%;
         }
 
         /* Estilo para las celdas del encabezado (th) */
-        #Lista-rol th {
+        #Lista-cargo th {
             border: 2px solid white;
             /* Bordes negros para las celdas del encabezado */
             background-color: #333;
@@ -81,7 +81,7 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
         }
 
         /* Estilo para las celdas de datos (td) */
-        #Lista-rol td {
+        #Lista-cargo td {
             border: 1px solid grey;
             /* Bordes negros para las celdas de datos */
             padding: 8px;
@@ -145,12 +145,11 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
                         <a class="nav-link" href="../../InicioSesion/index.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div> Inicio
                         </a>
-
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
                         <a class="nav-link" href="../charts.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>Dashboard
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            Charts
                         </a>
-
                         <?php
                         if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
@@ -162,21 +161,39 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
                             }
 
-                            echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                            echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                            echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
-                            echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                            echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
-                            echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i></i><span style="margin-left: 5px;"> Bitacora </a>';
+                            echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                            echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                            echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                            echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                            echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                            echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+
+                            echo '</nav>';
+                            echo '</div>';
+                        }
+                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
+                                    Modulo Empleado
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                echo '<a class="nav-link" href="cargo.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Cargo</a>';
+
+                            }
+
 
                             echo '</nav>';
                             echo '</div>';
                         }
                         ?>
-
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -187,13 +204,13 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
         </div>
         <div id="layoutSidenav_content">
 
-            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE ROLES -->
+            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE CARGOS -->
             <main>
                 <div class="container-fluid">
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
-                            <h1 class="mt-4 mb-4">Mantenimiento Roles</h1>
+                            <h1 class="mt-4 mb-4">Mantenimiento Cargos</h1>
                         </center>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -201,15 +218,16 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
                                 echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
                             }
-                            ?> 
+                            ?>
                         </div>
                         <!-- Tabla para mostrar los datos -->
-                        <table class="table table-bordered mx-auto" id="Lista-rol" style="margin-top: 20px; margin-bottom: 20px">
+                        <table class="table table-bordered mx-auto" id="Lista-cargo" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
                                     <th style="display: none;">Id</th>
-                                    <th>Rol</th>
+                                    <th>Cargo</th>
                                     <th>Descripcion</th>
+                                    <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -234,16 +252,16 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
                                 <!-- Formulario de creación -->
                                 <form>
                                     <div class="form-group">
+                                        <label for="nombre">Cargo</label>
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-cargo" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje1"></div>
 
-
-                                        <label for="nombre">Rol</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-rol" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <label for="nombre">Descripcion</label>
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
-                                        <label for="estado">Descripcion</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-descripcion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <label for="estado">Estado</label>
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-estado" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje3"></div>
                                     </div>
                                 </form>
@@ -271,29 +289,29 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Id</label>
-                                        <input type="text" class="form-control" id="editar-id-rol" disabled>
-                            
-                                        <label for="nombre">Rol</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-rol" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" class="form-control" id="editar-id-cargo" disabled>
+                                        <label for="nombre">Cargo</label>
+                                        <input type="text" class="form-control" id="editar-cargo" >
+
+                                        <label for="nombre">Descripcion</label>
+                                        <input type="text" maxlength="45" class="form-control" id="editar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje4"></div>
-                                        
-                                        <label for="estado">Desripcion</label>
-                                        <input type="text" maxlength="15" class="form-control" id="editar-descripcion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+
+                                        <label for="estado">Estado</label>
+                                        <input type="text" maxlength="15" class="form-control" id="editar-estado" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje5"></div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateRol()" disabled>Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateCargo()" disabled>Guardar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
-            <!-- AQUI FINALIZA EL MANTENIMIENTO DE ROLES -->
+            <!-- AQUI FINALIZA EL MANTENIMIENTO DE CARGOS -->
 
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid">
@@ -308,11 +326,11 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
     <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-                                
-        function Lista_Roles() {
+
+        function Lista_Cargos() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             // Actualizar el valor predeterminado
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=GetRoles', {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cargo.php?op=GetCargos', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
@@ -329,25 +347,26 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
                 })
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
-                    var tbody = document.querySelector('#Lista-rol tbody');
+                    var tbody = document.querySelector('#Lista-cargo tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
-                    data.forEach(function(rol) {
+                    data.forEach(function(cargo) {
                         var row = '<tr>' +
-                            '<td style="display:none;">' + rol.ID_ROL + '</td>' +
-                            '<td>' + rol.ROL + '</td>' +
-                            '<td>' + rol.DESCRIPCION + '</td>' +
+                            '<td style="display:none;">' + cargo.ID_CARGO + '</td>' +
+                            '<td>' + cargo.CARGO + '</td>' +
+                            '<td>' + cargo.DESCRIPCION + '</td>' +
+                            '<td>' + cargo.ESTADO + '</td>' +
 
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarRol(' + rol.ID_ROL+ ')">Editar</button>';
+                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarCargo(' + cargo.ID_CARGO  + ')">Editar</button>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-rol" data-id="' + rol.ID_ROL + '" onclick="eliminarRol(' + rol.ID_ROL + ')">Eliminar</button>';
+                            row += '<button class="btn btn-danger eliminar-cargo" data-id="' + cargo.ID_CARGO  + '" onclick="eliminarCargo(' + cargo.ID_CARGO  + ')">Eliminar</button>';
                         }
 
 
@@ -363,97 +382,99 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
                     alert('Error al cargar los datos: ' + error.message);
                 });
 
-        } 
+        }
 
         function habilitarPaginacion() {
-            $('#Lista-rol').DataTable({
-                "paging": true, 
+            $('#Lista-cargo').DataTable({
+                "paging": true,
                 "pageLength": 10,
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
             });
         }
 
-        function Insertar_Rol() {
+        function Insertar_Cargo() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
-                var rol = $("#agregar-rol").val();
+                var cargo = $("#agregar-cargo").val();
                 var descripcion = $("#agregar-descripcion").val();
+                var estado = $("#agregar-estado").val();
 
-                if (rol == "" || descripcion == "") {
+                if (cargo == "" || descripcion == "" || estado == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
                         text: 'No se pueden enviar Campos Vacios.'
                     })
                 } else {
-                    // Crear un rol con los datos a enviar al servidor
+                    // Crear un cargo con los datos a enviar al servidor
                     var datos = {
-                        ROL: rol,
-                    DESCRIPCION: descripcion,                                       
+                        CARGO: cargo,
+                        DESCRIPCION: descripcion,
+                        ESTADO: estado,
 
                     };
 
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=InsertRol', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(datos)
-                    })
-                    .then(function(response) {
-                        if (response.ok) {
-                            // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
-                            return response.json();
-                        } else {
-                            // Si hubo un error en la solicitud, maneja el error aquí
-                            throw new Error('Error en la solicitud');
-                        }
-                    })
-                    .then(function(data) {
-                        console.log(data);
-                        // Cerrar la modal después de guardar
-                        $('#crearModal').modal('hide');
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cargo.php?op=InsertCargo', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(datos)
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+                                return response.json();
+                            } else {
+                                // Si hubo un error en la solicitud, maneja el error aquí
+                                throw new Error('Error en la solicitud');
+                            }
+                        })
+                        .then(function(data) {
+                            console.log(data);
+                            // Cerrar la modal después de guardar
+                            $('#crearModal').modal('hide');
 
-                        // Mostrar SweetAlert de éxito
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Guardado exitoso',
-                            text: 'Los datos se han guardado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
+                            // Mostrar SweetAlert de éxito
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Guardado exitoso',
+                                text: 'Los datos se han guardado correctamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                            });
+                        })
+                        .catch(function(error) {
+                            // Mostrar SweetAlert de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al guardar los datos: ' + error.message
+                            });
+                            console.log(error.message);
                         });
-                    })
-                    .catch(function(error) {
-                        // Mostrar SweetAlert de error
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error al guardar los datos: ' + error.message
-                        });
-                        console.log(error.message);
-                    });
-                }                
+                }
             });
         }
 
-        function cargarRol(id) {
-            // Crear un rol con el ID del rol
+        function cargarCargo(id) {
+            // Crear un cargo con el ID del cargo
             var data = {
-                "ID_ROL": id
+                "ID_CARGO": id
             };
 
-            // Realiza una solicitud FETCH para obtener los detalles del rol por su ID
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=GetRol', {
+            // Realiza una solicitud FETCH para obtener los detalles del cargo por su ID
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cargo.php?op=GetCargo', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data) // Convierte el rol en formato JSON
+                    body: JSON.stringify(data) // Convierte el cargo en formato JSON
                 })
                 .then(function(response) {
                     if (response.ok) {
@@ -462,73 +483,76 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
                         throw new Error('Error en la solicitud');
                     }
                 })
-                .then(function(rol) {
-                    // Llena los campos del modal con los datos del rol
-                    document.getElementById('editar-id-rol').value = rol.ID_ROL;
-                    document.getElementById('editar-rol').value = rol.ROL;
-                    document.getElementById('editar-descripcion').value = rol.DESCRIPCION;
-               })
+                .then(function(cargo) {
+                    // Llena los campos del modal con los datos del cargo
+                    document.getElementById('editar-id-cargo').value = cargo.ID_CARGO;
+                    document.getElementById('editar-cargo').value = cargo.CARGO;
+                    document.getElementById('editar-descripcion').value = cargo.DESCRIPCION;
+                    document.getElementById('editar-estado').value = cargo.ESTADO;
+                })
                 .catch(function(error) {
                     // Manejar el error aquí
-                    alert('Error al cargar los datos del Rol : ' + error.message);
+                    alert('Error al cargar los datos del Cargo : ' + error.message);
                 });
         }
 
-        function updateRol() {
-            var id_rol = document.getElementById('editar-id-rol').value;
-            var rol = document.getElementById('editar-rol').value;
+        function updateCargo() {
+            var id_cargo = document.getElementById('editar-id-cargo').value;
+            var cargo = document.getElementById('editar-cargo').value;
             var descripcion = document.getElementById('editar-descripcion').value;
+            var estado = document.getElementById('editar-estado').value;
 
-            if (rol == "" || descripcion == "") {
+            if (cargo == "" || descripcion == "" || estado == "") {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
                     text: 'No se pueden enviar Campos Vacios.'
                 })
             } else {
-            // Realiza una solicitud FETCH para actualizar los datos del rol
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=UpdateRol', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "ID_ROL": id_rol,
-                        "ROL": rol,
-                        "DESCRIPCION": descripcion
-                    }) // Convierte los datos en formato JSON
-                })
-                .then(function(response) {
-                    if (response.ok) {
-                        // Cerrar la modal después de guardar
-                        $('#editarModal').modal('hide');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Actualización exitosa',
-                            text: 'Los datos se han actualizado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
-                        });
+                // Realiza una solicitud FETCH para actualizar los datos del cargo
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cargo.php?op=UpdateCargo', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "ID_CARGO": id_cargo,
+                            "CARGO": cargo,
+                            "DESCRIPCION": descripcion,
+                            "ESTADO": estado
+                        }) // Convierte los datos en formato JSON
+                    })
+                    .then(function(response) {
+                        if (response.ok) {
+                            // Cerrar la modal después de guardar
+                            $('#editarModal').modal('hide');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Actualización exitosa',
+                                text: 'Los datos se han actualizado correctamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                            });
 
-                    } else {
-                        throw new Error('Error en la solicitud de actualización');
-                    }
-                })
-                .catch(function(error) {
-                    // Manejar el error aquí
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error al actualizar los datos del permiso: ' + error.message
+                        } else {
+                            throw new Error('Error en la solicitud de actualización');
+                        }
+                    })
+                    .catch(function(error) {
+                        // Manejar el error aquí
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al actualizar los datos del permiso: ' + error.message
+                        });
                     });
-                });
-            }    
+            }
         }
 
         //FUNCION CON EL SWEETALERT
-        function eliminarRol(id_rol) {
+        function eliminarCargo(id_cargo) {
             Swal.fire({
                 title: '¿Estás seguro?',
                 text: 'No podrás revertir esto.',
@@ -536,29 +560,29 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'eliminar',
-                cancelButtonText: 'Cancelar' 
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=EliminarRol', {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cargo.php?op=EliminarCargo', {
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
-                                "ID_ROL": id_rol
+                                "ID_CARGO": id_cargo
                             })
                         })
                         .then(function(response) {
                             if (response.ok) {
                                 // Eliminación exitosa, puedes hacer algo aquí si es necesario
-                                Swal.fire('Rol eliminado', '', 'success')
+                                Swal.fire('Cargo eliminado', '', 'success')
                                     .then(() => {
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
-                                        // Recargar la lista de objetos después de eliminar
-                                        Lista_Roles();
+                                        // Recargar la lista de cargos después de eliminar
+                                        Lista_Cargos();
                                     });
                             } else {
                                 throw new Error('Error en la solicitud de eliminación');
@@ -566,7 +590,7 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
                         })
                         .catch(function(error) {
                             // Manejar el error aquí
-                            Swal.fire('Error', 'Error al eliminar el rol: ' + error.message, 'error');
+                            Swal.fire('Error', 'Error al eliminar el Cargo: ' + error.message, 'error');
                         });
                 }
             });
@@ -574,91 +598,108 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
 
         // VALIDACIONES FUNCIONES    
         function validarNombre() {
-            rol = document.getElementById("agregar-rol");
+            nombreCargo = document.getElementById("agregar-cargo");
             descripcion = document.getElementById("agregar-descripcion");
-            rolEditar = document.getElementById("editar-rol");
+        estado = document.getElementById("agregar-estado");
             descripcionEditar = document.getElementById("editar-descripcion");
+            estadoEditar = document.getElementById("editar-estado");
 
-           
-            rol.addEventListener("keypress", function(e) {
+            nombreCargo.addEventListener("keypress", function(e) {
+                expresionValidadora1 = /^[A-Z]+$/;
+
+                if (!expresionValidadora1.test(e.key)) {
+                    nombreCargo.style.borderColor = "red";
+                    nombreCargo.style.boxShadow = "0 0 10px red";
+                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
+                    document.getElementById("mensaje1").style.color = "red";
+                    e.preventDefault();
+                } else {
+                    nombreCargo.style.borderColor = "green";
+                    nombreCargo.style.boxShadow = "0 0 10px green";
+                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
+                    document.getElementById("mensaje1").style.color = "green";
+                }
+            });
+
+            descripcion.addEventListener("keypress", function(e) {
                 expresionValidadora2 = /^[A-Z0-9\s]+$/;
                 if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    rol.style.borderColor = "red";
-                    rol.style.boxShadow = "0 0 10px red";
+                    descripcion.style.borderColor = "red";
+                    descripcion.style.boxShadow = "0 0 10px red";
                     document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
                     document.getElementById("mensaje2").style.color = "red";
                     e.preventDefault();
                 } else {
                     if (!expresionValidadora2.test(e.key)) {
-                        rol.style.borderColor = "red";
-                        rol.style.boxShadow = "0 0 10px red";
+                        descripcion.style.borderColor = "red";
+                        descripcion.style.boxShadow = "0 0 10px red";
                         document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
                         document.getElementById("mensaje2").style.color = "red";
                         e.preventDefault();
                     } else {
                         localStorage.setItem("letraAnterior", e.keyCode);
-                        rol.style.borderColor = "green";
-                        rol.style.boxShadow = "0 0 10px green";
+                        descripcion.style.borderColor = "green";
+                        descripcion.style.boxShadow = "0 0 10px green";
                         document.getElementById("mensaje2").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
                         document.getElementById("mensaje2").style.color = "green";
                     }
                 }
             });
 
-            descripcion.addEventListener("keypress", function(e) {
+        estado.addEventListener("keypress", function(e) {
                 expresionValidadora1 = /^[A-Z]+$/;
 
                 if (!expresionValidadora1.test(e.key)) {
-                    descripcion.style.borderColor = "red";
-                    descripcion.style.boxShadow = "0 0 10px red";
+                estado.style.borderColor = "red";
+                estado.style.boxShadow = "0 0 10px red";
                     document.getElementById("mensaje3").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
                     document.getElementById("mensaje3").style.color = "red";
                     e.preventDefault();
                 } else {
-                    descripcion.style.borderColor = "green";
-                    descripcion.style.boxShadow = "0 0 10px green";
+                estado.style.borderColor = "green";
+                estado.style.boxShadow = "0 0 10px green";
                     document.getElementById("mensaje3").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
                     document.getElementById("mensaje3").style.color = "green";
                 }
             });
 
-            rolEditar.addEventListener("keypress", function(e) {
+            descripcionEditar.addEventListener("keypress", function(e) {
                 expresionValidadora2 = /^[A-Z0-9\s]+$/;
                 if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    rolEditar.style.borderColor = "red";
-                    rolEditar.style.boxShadow = "0 0 10px red";
+                    descripcionEditar.style.borderColor = "red";
+                    descripcionEditar.style.boxShadow = "0 0 10px red";
                     document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
                     document.getElementById("mensaje4").style.color = "red";
                     e.preventDefault();
                 } else {
                     if (!expresionValidadora2.test(e.key)) {
-                        rolEditar.style.borderColor = "red";
-                        rolEditar.style.boxShadow = "0 0 10px red";
+                        descripcionEditar.style.borderColor = "red";
+                        descripcionEditar.style.boxShadow = "0 0 10px red";
                         document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
                         document.getElementById("mensaje4").style.color = "red";
                         e.preventDefault();
                     } else {
                         localStorage.setItem("letraAnterior", e.keyCode);
-                        rolEditar.style.borderColor = "green";
-                        rolEditar.style.boxShadow = "0 0 10px green";
+                        descripcionEditar.style.borderColor = "green";
+                        descripcionEditar.style.boxShadow = "0 0 10px green";
                         document.getElementById("mensaje4").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
                         document.getElementById("mensaje4").style.color = "green";
                     }
                 }
             });
 
-            descripcionEditar.addEventListener("keypress", function(e) {
+            estadoEditar.addEventListener("keypress", function(e) {
                 expresionValidadora1 = /^[A-Z]+$/;
 
                 if (!expresionValidadora1.test(e.key)) {
-                    descripcionEditar.style.borderColor = "red";
-                    descripcionEditar.style.boxShadow = "0 0 10px red";
+                    estadoEditar.style.borderColor = "red";
+                    estadoEditar.style.boxShadow = "0 0 10px red";
                     document.getElementById("mensaje5").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
                     document.getElementById("mensaje5").style.color = "red";
                     e.preventDefault();
                 } else {
-                    descripcionEditar.style.borderColor = "green";
-                    descripcionEditar.style.boxShadow = "0 0 10px green";
+                    estadoEditar.style.borderColor = "green";
+                    estadoEditar.style.boxShadow = "0 0 10px green";
                     document.getElementById("mensaje5").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
                     document.getElementById("mensaje5").style.color = "green";
                 }
@@ -666,8 +707,8 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
         }
 
         $(document).ready(function() {
-            Lista_Roles();
-            Insertar_Rol();
+            Lista_Cargos();
+            Insertar_Cargo();
             validarNombre();
         });
     </script>
@@ -675,46 +716,47 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
     <!-- VALIDACIONES SCRIPT -->
     <script>
         // Obtén los campos de entrada y el botón "Guardar para insertar"
-       
-        const rolInput = document.getElementById('agregar-rol');
+        const cargoInput = document.getElementById('agregar-cargo');
         const descripcionInput = document.getElementById('agregar-descripcion');
+        const estadoInput = document.getElementById('agregar-estado');
         const guardarButton = document.getElementById('btn-agregar');
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid =  rolInput.value.trim() !== '' && descripcionInput.value.trim() !== '';
+            const isFormValid = cargoInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && estadoInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
-        rolInput.addEventListener('input', checkForm);
+        cargoInput.addEventListener('input', checkForm);
         descripcionInput.addEventListener('input', checkForm);
+        estadoInput.addEventListener('input', checkForm);
     </script>
-    
+
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
-        const rolInput1 = document.getElementById('editar-rol');
         const descripcionInput1 = document.getElementById('editar-descripcion');
+        const estadoInput1 = document.getElementById('editar-estado');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = rolInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '';
+            const isFormValid = descripcionInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
             guardarButton1.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
-        rolInput1.addEventListener('input', checkForm);
         descripcionInput1.addEventListener('input', checkForm);
+        estadoInput1.addEventListener('input', checkForm);
     </script>
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-rol, #agregar-descripcion').on('input', function() {
+        $('#agregar-cargo, #agregar-estado').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
-            
+
             if (trimmedValue === '') {
                 Swal.fire({
                     title: 'Advertencia',
@@ -725,7 +767,7 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
         });
 
         // Escuchar eventos de cambio en los campos de entrada deshabilitados para eliminar espacios en blanco al principio y al final
-        $('#editar-rol, #editar-descripcion').on('input', function() {
+        $('#editar-cargo, #editar-estado').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -743,6 +785,8 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
+
+    
 </body>
 
 </html>
