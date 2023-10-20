@@ -4,7 +4,7 @@ session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
 
-$permisosEstados = new PermisosUsuarios();
+$permisosRegion = new PermisosUsuarios();
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
@@ -13,9 +13,9 @@ if (!isset($_SESSION['usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Estados = "6";
+$id_region_Region = "8";
 
-$permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
+$permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
 
 // Verificar si se obtuvieron resultados
 // if (!empty($permisos)) {
@@ -27,7 +27,7 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
 //         echo "PERMISOS_CONSULTAR: " . $permiso['PERMISOS_CONSULTAR'] . "<br>";
 //     }
 // } else {
-//     echo "No se encontraron permisos para el rol y objeto especificados.";
+//     echo "No se encontraron permisos para el rol y region especificados.";
 // }
 ?>
 
@@ -51,7 +51,7 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento Estado Usuario</title>
+    <title>Mantenimiento Region</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
@@ -60,14 +60,14 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <style>
         /* Estilo para la tabla */
-        #Lista-estados {
+        #Lista-region {
             border-collapse: collapse;
             /* Combina los bordes de las celdas */
             width: 100%;
         }
 
         /* Estilo para las celdas del encabezado (th) */
-        #Lista-estados th {
+        #Lista-region th {
             border: 2px solid white;
             /* Bordes negros para las celdas del encabezado */
             background-color: #333;
@@ -81,7 +81,7 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
         }
 
         /* Estilo para las celdas de datos (td) */
-        #Lista-estados td {
+        #Lista-region td {
             border: 1px solid grey;
             /* Bordes negros para las celdas de datos */
             padding: 8px;
@@ -167,10 +167,27 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
 
                             echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
                             echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                            echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                            echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;"> Objetos</a>';
                             echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                            echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                            echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                            echo '</nav>';
+                            echo '</div>';
+                        }
 
+                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                                    Modulo Empleado
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                echo '<a class="nav-link" href="cargo.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="region.php"><i class="fas fa-map"></i><span style="margin-left: 5px;"> Region</a>';
+                            }
                             echo '</nav>';
                             echo '</div>';
                         }
@@ -186,13 +203,13 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
         </div>
         <div id="layoutSidenav_content">
 
-            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE ESTADOS -->
+            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE REGIONID_REGIONS -->
             <main>
                 <div class="container-fluid">
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
-                            <h1 class="mt-4 mb-4">Mantenimiento Estados de Usuario</h1>
+                            <h1 class="mt-4 mb-4">Mantenimiento Regiones</h1>
                         </center>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -200,26 +217,19 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
                                 echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
                             }
-                            ?>
-                            <!--<div class="d-flex align-items-center w-50">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-search"></i>--> <!-- Puedes usar una fuente de iconos como Font Awesome -->
-                                        <!--</span>
-                                    </div>
-                                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
-                                </div>
-                            </div>-->
+                            ?> 
                         </div>
-
                         <!-- Tabla para mostrar los datos -->
-                        <table class="table table-bordered mx-auto" id="Lista-estados" style="margin-top: 20px; margin-bottom: 20px">
+                        <table class="table table-bordered mx-auto" id="Lista-region" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-                                    <th style="display: none;">Id</th> <!-- Ocultar el ID -->
-                                    <th>Nombre</th>
+                                    <th style="display: none;">Id</th>
+                                    <th>Region</th>
                                     <th>Descripcion</th>
+                                    <th>Fecha Creación</th>
+                                    <th>Modificado por</th>
+                                    <th>Fecha Modificación</th>
+                                    <th>Creado por</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -227,32 +237,15 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
 
                             </tbody>
                         </table>
-
-                        <!--<nav aria-label="Pagination" class="pagination-container">
-                            <ul class="pagination">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Atrás</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link">2</span>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Siguiente</a>
-                                </li>
-                            </ul>
-                        </nav>-->
                     </div>
-
                 </div>
 
-                <!-- Modal para crear un nuevo estado -->
+                <!-- Modal para crear un nuevo registro -->
                 <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="crearModalLabel">Nuevo Estado</h5>
+                                <h5 class="modal-title" id="crearModalLabel">Crear Nuevo Registro</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -261,13 +254,16 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                                 <!-- Formulario de creación -->
                                 <form>
                                     <div class="form-group">
-                                        <label for="nombre">Nombre</label>
-                                        <input type="text" class="form-control" id="agregar-nombre" maxlength="15">
+                                        <label for="nombre">Region</label>
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-region" 
+                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" class="form-control" id="agregar-descripcion" maxlength="15">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" 
+                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
+
                                     </div>
                                 </form>
                             </div>
@@ -279,12 +275,12 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                     </div>
                 </div>
 
-                <!-- Modal para editar un estado -->
+                <!-- Modal para editar un registro -->
                 <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="editarModalLabel">Editar Estado</h5>
+                                <h5 class="modal-title" id="editarModalLabel">Editar Registro</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -294,25 +290,26 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Id</label>
-                                        <input type="text" class="form-control" id="editar-id-estado" disabled>
-                                        <label for="nombre">Nombre</label>
-                                        <input type="text" class="form-control" id="editar-nombre" maxlength="15">
-                                        <div id="mensaje3"></div>
+                                        <input type="text" class="form-control" id="editar-id-region" disabled>
+                                        <label for="nombre">Region</label>
+                                        <input type="text" class="form-control" id="editar-region" disabled>
+                                        
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" class="form-control" id="editar-descripcion" maxlength="15">
-                                        <div id="mensaje4"></div>
+                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" 
+                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje3"></div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateEstado()" disabled>Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateRegion()" disabled>Guardar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
-            <!-- AQUI FINALIZA EL MANTENIMIENTO DE ESTADOS -->
+            <!-- AQUI FINALIZA EL MANTENIMIENTO DE REGIONID_REGIONS -->
 
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid">
@@ -327,10 +324,11 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
     <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-
-        function Lista_Estados() {
+                                
+        function Lista_Regiones() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/estadousuario.php?op=GetEstados', {
+            // Actualizar el valor predeterminado
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/region.php?op=GetRegiones', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
@@ -347,24 +345,28 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                 })
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
-                    var tbody = document.querySelector('#Lista-estados tbody');
-                    tbody.innerHTML = ''; // Limpiar el contenido anterior////////////////////////////
+                    var tbody = document.querySelector('#Lista-region tbody');
+                    tbody.innerHTML = ''; // Limpia el contenido anterior
 
-                    data.forEach(function(estado) {
+                    data.forEach(function(region) {
                         var row = '<tr>' +
-                            '<td style="display:none;">' + estado.ID_ESTADO_USUARIO + '</td>' + // Ocultar el ID
-                            '<td>' + estado.NOMBRE + '</td>' +
-                            '<td>' + estado.DESCRIPCION + '</td>' +
+                            '<td style="display:none;">' + region.ID_REGION + '</td>' +
+                            '<td>' + region.REGION + '</td>' +
+                            '<td>' + region.DESCRIPCION + '</td>' +
+                            '<td>' + region.FECHA_CREACION + '</td>' +
+                            '<td>' + region.MODIFICADO_POR + '</td>' +
+                            '<td>' + region.FECHA_MODIFICACION + '</td>' +
+                            '<td>' + region.CREADO_POR + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarEstado(' + estado.ID_ESTADO_USUARIO + ')">Editar</button>';
+                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarRegion(' + region.ID_REGION + ')">Editar</button>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-estado" data-id="' + estado.ID_ESTADO_USUARIO + '" onclick="eliminarEstado(' + estado.ID_ESTADO_USUARIO + ')">Eliminar</button>';
+                            row += '<button class="btn btn-danger eliminar-region" data-id="' + region.ID_REGION + '" onclick="eliminarRegion(' + region.ID_REGION + ')">Eliminar</button>';
                         }
 
 
@@ -372,7 +374,6 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                             '</tr>';
                         tbody.innerHTML += row;
                     });
-
                     habilitarPaginacion();
                 })
 
@@ -381,97 +382,107 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                     alert('Error al cargar los datos: ' + error.message);
                 });
 
-        }
+        } 
 
         function habilitarPaginacion() {
-            $('#Lista-estados').DataTable({
+            $('#Lista-region').DataTable({
                 "paging": true, 
                 "pageLength": 10,
-                "lengthMenu": [10, 25, 50, 100],
+                "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
             });
         }
 
-        function Insertar_Estado() {
+        function Insertar_Region() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
-                var nombre = $("#agregar-nombre").val();
+                var region = $("#agregar-region").val();
                 var descripcion = $("#agregar-descripcion").val();
 
-                if (nombre == "" || descripcion == "") {
+                if (region == "" || descripcion == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
                         text: 'No se pueden enviar Campos Vacios.'
-                    })
+                    });
                 } else {
-                    // Crear un objeto con los datos a enviar al servidor
+                    // Crear un region con los datos a enviar al servidor
                     var datos = {
-                        NOMBRE: nombre,
-                        DESCRIPCION: descripcion,
-
+                        REGION: region,
+                        DESCRIPCION: descripcion
                     };
 
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/estadousuario.php?op=InsertEstado', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(datos)
-                        })
-                        .then(function(response) {
-                            if (response.ok) {
-                                // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
-                                return response.json();
-                            } else {
-                                // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('Error en la solicitud');
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/region.php?op=InsertRegion', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(datos)
+                    })
+                    .then(function(response) {
+                        if (response.ok) {
+                            if (response.status === 200) {
+                                // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
+                                return response.json().then(function(data) {
+                                    console.log(data);
+                                    // Cerrar la modal después de guardar
+                                    $('#crearModal').modal('hide');
+                                    // Mostrar SweetAlert de éxito
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Guardado exitoso',
+                                        text: data.message
+                                    }).then(function() {
+                                        // Recargar la página para mostrar los nuevos datos
+                                        location.reload();
+                                    });
+                                });
+                            } else if (response.status === 409) {
+                                // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
+                                return response.json().then(function(data) {
+                                    console.log(data);
+                                    // Mostrar SweetAlert de error
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: data.error // Acceder al mensaje de error
+                                    });
+                                });
                             }
-                        })
-                        .then(function(data) {
-                            console.log(data);
-                            // Cerrar la modal después de guardar
-                            $('#crearModal').modal('hide');
-
-                            // Mostrar SweetAlert de éxito
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Guardado exitoso',
-                                text: 'Los datos se han guardado correctamente.'
-                            }).then(function() {
-                                // Recargar la página para mostrar los nuevos datos
-                                location.reload();
-                            });
-                        })
-                        .catch(function(error) {
-                            // Mostrar SweetAlert de error
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Error al guardar los datos: ' + error.message
-                            });
-                            console.log(error.message);
+                        } else {
+                            // Si hubo un error en la solicitud, maneja el error aquí
+                            throw new Error('Error en la solicitud');
+                        }
+                    })
+                    .catch(function(error) {
+                        // Mostrar SweetAlert de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al guardar los datos: ' + error.message
                         });
+                        console.log(error.message);
+                    });
                 }
             });
         }
 
-        function cargarEstado(id) {
-            // Crear un objeto con el ID del estado
+        function cargarRegion(id) {
+            // Crear un region con el ID del region
             var data = {
-                "ID_ESTADO_USUARIO": id
+                "ID_REGION": id
             };
 
-            // Realiza una solicitud FETCH para obtener los detalles del estado por su ID
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/estadousuario.php?op=GetEstado', {
+            // Realiza una solicitud FETCH para obtener los detalles del region por su ID
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/region.php?op=GetRegion', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data) // Convierte el estado en formato JSON
+                    body: JSON.stringify(data) // Convierte el region en formato JSON
                 })
                 .then(function(response) {
                     if (response.ok) {
@@ -480,74 +491,73 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                         throw new Error('Error en la solicitud');
                     }
                 })
-                .then(function(estado) {
-                    // Llena los campos del modal con los datos del estado
-                    document.getElementById('editar-id-estado').value = estado.ID_ESTADO_USUARIO;
-                    document.getElementById('editar-nombre').value = estado.NOMBRE;
-                    document.getElementById('editar-descripcion').value = estado.DESCRIPCION;
+                .then(function(region) {
+                    // Llena los campos del modal con los datos del region
+                    document.getElementById('editar-id-region').value = region.ID_REGION;
+                    document.getElementById('editar-region').value = region.REGION;
+                    document.getElementById('editar-descripcion').value = region.DESCRIPCION;
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
-                    alert('Error al cargar los datos del estado : ' + error.message);
+                    alert('Error al cargar los datos de la Region: ' + error.message);
                 });
         }
 
-        function updateEstado() {
-            var id_estado = document.getElementById('editar-id-estado').value;
-            var nombre = document.getElementById('editar-nombre').value;
+        function updateRegion() {
+            var id_region = document.getElementById('editar-id-region').value;
+            var region = document.getElementById('editar-region').value;
             var descripcion = document.getElementById('editar-descripcion').value;
 
-
-            if (nombre == "" || descripcion == "") {
+            if (region == "" || descripcion == "") {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
                     text: 'No se pueden enviar Campos Vacios.'
                 })
             } else {
-                // Realiza una solicitud FETCH para actualizar los datos del estado
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/estadousuario.php?op=UpdateEstado', {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            "ID_ESTADO_USUARIO": id_estado,
-                            "NOMBRE": nombre,
-                            "DESCRIPCION": descripcion
-                        }) // Convierte los datos en formato JSON
-                    })
-                    .then(function(response) {
-                        if (response.ok) {
-                            // Cerrar la modal después de guardar
-                            $('#editarModal').modal('hide');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Actualización exitosa',
-                                text: 'Los datos se han actualizado correctamente.'
-                            }).then(function() {
-                                // Recargar la página para mostrar los nuevos datos
-                                location.reload();
-                            });
-
-                        } else {
-                            throw new Error('Error en la solicitud de actualización');
-                        }
-                    })
-                    .catch(function(error) {
-                        // Manejar el error aquí
+            // Realiza una solicitud FETCH para actualizar los datos del region
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/region.php?op=UpdateRegion', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_REGION": id_region,
+                        "REGION": region,
+                        "DESCRIPCION": descripcion
+                    }) // Convierte los datos en formato JSON
+                })
+                .then(function(response) {
+                    if (response.ok) {
+                        // Cerrar la modal después de guardar
+                        $('#editarModal').modal('hide');
                         Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error al actualizar los datos del estado: ' + error.message
+                            icon: 'success',
+                            title: 'Actualización exitosa',
+                            text: 'Los datos se han actualizado correctamente.'
+                        }).then(function() {
+                            // Recargar la página para mostrar los nuevos datos
+                            location.reload();
                         });
+
+                    } else {
+                        throw new Error('Error en la solicitud de actualización');
+                    }
+                })
+                .catch(function(error) {
+                    // Manejar el error aquí
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al actualizar los datos de la Region: ' + error.message
                     });
-            }
+                });
+            }    
         }
 
         //FUNCION CON EL SWEETALERT
-        function eliminarEstado(id_estado) {
+        function eliminarRegion(id_region) {
             Swal.fire({
                 title: '¿Estás seguro?',
                 text: 'No podrás revertir esto.',
@@ -556,28 +566,28 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar'
+                cancelButtonText: 'Cancelar' 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/estadousuario.php?op=EliminarEstado', {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/region.php?op=EliminarRegion', {
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
-                                "ID_ESTADO_USUARIO": id_estado
+                                "ID_REGION": id_region
                             })
                         })
                         .then(function(response) {
                             if (response.ok) {
                                 // Eliminación exitosa, puedes hacer algo aquí si es necesario
-                                Swal.fire('Estado eliminado', '', 'success')
+                                Swal.fire('Region eliminada', '', 'success')
                                     .then(() => {
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
-                                        // Recargar la lista de estados después de eliminar
-                                        Lista_estados();
+                                        // Recargar la lista de REGIONID_REGIONs después de eliminar
+                                        Lista_Regiones();
                                     });
                             } else {
                                 throw new Error('Error en la solicitud de eliminación');
@@ -585,107 +595,75 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                         })
                         .catch(function(error) {
                             // Manejar el error aquí
-                            Swal.fire('Error', 'Error al eliminar el estado: ' + error.message, 'error');
+                            Swal.fire('Error', 'Error al eliminar la Region: ' + error.message, 'error');
                         });
                 }
             });
         }
 
-        // VALIDACIONES FUNCIONES  
+        // VALIDACIONES FUNCIONES    
         function validarNombre() {
-            nombreUsuario = document.getElementById("agregar-nombre");
-            descripcion = document.getElementById("agregar-descripcion");
-            nombreUsuarioEditar = document.getElementById("editar-nombre");
-            descripcionEditar = document.getElementById("editar-descripcion");
+            var nombreRegion = document.getElementById("agregar-region");
+            var descripcion = document.getElementById("agregar-descripcion");
+            var descripcionEditar = document.getElementById("editar-descripcion");
 
-            nombreUsuario.addEventListener("keypress", function(e) {
-                expresionValidadora1 = /^[A-Z]+$/;
+            function clearMessage(messageElement, inputElement) {
+                messageElement.innerHTML = ""; // Elimina el contenido del mensaje
+                inputElement.style.borderColor = ""; // Restablece el borde
+                inputElement.style.boxShadow = ""; // Restablece la sombra
+            }
 
-                if (!expresionValidadora1.test(e.key)) {
-                    nombreUsuario.style.borderColor = "red";
-                    nombreUsuario.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                    document.getElementById("mensaje1").style.color = "red";
-                    e.preventDefault();
+            function validateInput(inputElement, expression, messageElement, message) {
+                if (inputElement.value === "") {
+                    clearMessage(messageElement, inputElement);
+                } else if (!expression.test(inputElement.value)) {
+                    inputElement.style.borderColor = "red";
+                    inputElement.style.boxShadow = "0 0 10px red";
+                    messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
+                    messageElement.style.color = "red";
                 } else {
-                    nombreUsuario.style.borderColor = "green";
-                    nombreUsuario.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje1").style.color = "green";
+                    clearMessage(messageElement, inputElement); // Restablece los estilos
+                    messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
+                    messageElement.style.color = "green";
                 }
-            });
+            }
 
-            descripcion.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z0-9\s]+$/;
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    descripcion.style.borderColor = "red";
-                    descripcion.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje2").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora2.test(e.key)) {
-                        descripcion.style.borderColor = "red";
-                        descripcion.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                        document.getElementById("mensaje2").style.color = "red";
+            function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
+                inputElement.addEventListener("input", function () {
+                    validateInput(inputElement, expression, messageElement, message);
+                });
+
+                inputElement.addEventListener("blur", function () {
+                    clearMessage(messageElement, inputElement);
+                });
+            }
+
+            function handleDescriptionKeypressEvent(inputElement) {
+                inputElement.addEventListener("keypress", function(e) {
+                    var currentDescription = inputElement.value;
+                    if (e.key === " " && currentDescription.endsWith(" ")) {
                         e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        descripcion.style.borderColor = "green";
-                        descripcion.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                        document.getElementById("mensaje2").style.color = "green";
                     }
-                }
-            })
+                });
+            }
 
-            nombreUsuarioEditar.addEventListener("keypress", function(e) {
-                expresionValidadora1 = /^[A-Z]+$/;
+            var expresionValidadora1 = /^[A-Z]+$/;
+            var mensaje1 = document.getElementById("mensaje1");
+            handleInputAndBlurEvents(nombreRegion, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
 
-                if (!expresionValidadora1.test(e.key)) {
-                    nombreUsuarioEditar.style.borderColor = "red";
-                    nombreUsuarioEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                    document.getElementById("mensaje3").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    nombreUsuarioEditar.style.borderColor = "green";
-                    nombreUsuarioEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje3").style.color = "green";
-                }
-            });
+            var expresionValidadora2 = /^[A-Z0-9\s]+$/;
+            var mensaje2 = document.getElementById("mensaje2");
+            handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(descripcion);
 
-            descripcionEditar.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z0-9\s]+$/;
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    descripcionEditar.style.borderColor = "red";
-                    descripcionEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje4").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora2.test(e.key)) {
-                        descripcionEditar.style.borderColor = "red";
-                        descripcionEditar.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                        document.getElementById("mensaje4").style.color = "red";
-                        e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        descripcionEditar.style.borderColor = "green";
-                        descripcionEditar.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje4").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                        document.getElementById("mensaje4").style.color = "green";
-                    }
-                }
-            })
+            var mensaje3 = document.getElementById("mensaje3");
+            handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje3, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(descripcionEditar);
         }
 
         $(document).ready(function() {
-            Lista_Estados();
-            Insertar_Estado();
+            Lista_Regiones();
+            Insertar_Region();
             validarNombre();
         });
     </script>
@@ -693,41 +671,39 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
     <!-- VALIDACIONES SCRIPT -->
     <script>
         // Obtén los campos de entrada y el botón "Guardar para insertar"
-        const nombreInput = document.getElementById('agregar-nombre');
+        const regionInput = document.getElementById('agregar-region');
         const descripcionInput = document.getElementById('agregar-descripcion');
         const guardarButton = document.getElementById('btn-agregar');
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = nombreInput.value.trim() !== '' && descripcionInput.value.trim() !== '';
+            const isFormValid = regionInput.value.trim() !== '' && descripcionInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
-        nombreInput.addEventListener('input', checkForm);
+        regionInput.addEventListener('input', checkForm);
         descripcionInput.addEventListener('input', checkForm);
     </script>
     
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
-        const nombreInput1 = document.getElementById('editar-nombre');
         const descripcionInput1 = document.getElementById('editar-descripcion');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = nombreInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '';
+            const isFormValid = descripcionInput1.value.trim() !== '';
             guardarButton1.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
-        nombreInput1.addEventListener('input', checkForm);
         descripcionInput1.addEventListener('input', checkForm);
     </script>
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-nombre').on('input', function() {
+        $('#agregar-region').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -742,9 +718,9 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
         });
 
         // Escuchar eventos de cambio en los campos de entrada deshabilitados para eliminar espacios en blanco al principio y al final
-        $('#editar-nombre').on('input', function() {
+        $('#editar-descripcion').on('input', function() {
             var input = $(this);
-            var trimmedValue = input.val().trim();
+            var trimmedValue = input.val();
             input.val(trimmedValue);
 
             if (trimmedValue === '') {
@@ -760,11 +736,12 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
     <script>
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
         document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
-        document.getElementById('agregar-nombre').value = "";
+        document.getElementById('agregar-region').value = "";
         document.getElementById('agregar-descripcion').value = "";
 
+
         // Limpia los checkboxes
-        document.getElementById('agregar-nombre').checked = false;
+        document.getElementById('agregar-region').checked = false;
         document.getElementById('agregar-descripcion').checked = false;
         });
 
@@ -772,15 +749,13 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
         document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
        
         // Limpia los checkboxes
-        document.getElementById('editar-nombre').checked = false;
         document.getElementById('editar-descripcion').checked = false;
         });
     </script>
-
+    
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
-
 </body>
 
 </html>

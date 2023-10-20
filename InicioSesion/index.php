@@ -119,10 +119,8 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario
                                 if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../Vistas/MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
                                     echo '<a class="nav-link" href="../Vistas/MantenimientoEmpleado/cargo.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Cargo</a>';
-
-                                }
-    
-                            
+                                    echo '<a class="nav-link" href="../Vistas/MantenimientoEmpleado/region.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Region</a>';
+                                }                            
                                 echo '</nav>';
                                 echo '</div>';
                             }

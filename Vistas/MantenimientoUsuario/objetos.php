@@ -211,6 +211,10 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                                     <th>Objeto</th>
                                     <th>Descripcion</th>
                                     <th>Tipo Objeto</th>
+                                    <th>Creado por</th>
+                                    <th>Modificado por</th>
+                                    <th>Fecha Creación</th>
+                                    <th>Fecha modicación</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -250,7 +254,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                             </div>
                         </div>
@@ -287,7 +291,7 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateObjeto()" disabled>Guardar</button>
                             </div>
                         </div>
@@ -339,6 +343,10 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                             '<td>' + objeto.OBJETO + '</td>' +
                             '<td>' + objeto.DESCRIPCION + '</td>' +
                             '<td>' + objeto.TIPO_OBJETO + '</td>' +
+                            '<td>' + objeto.CREADO_POR + '</td>' +
+                            '<td>' + objeto.MODIFICADO_POR + '</td>' +
+                            '<td>' + objeto.FECHA_CREACION + '</td>' +
+                            '<td>' + objeto.FECHA_MODIFICACION + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -377,8 +385,9 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
             });
         }
 
+        
         function Insertar_Objeto() {
-            $("#btn-agregar").click(function() {
+            $("#btn-agregar").click(function () {
                 // Obtener los valores de los campos del formulario
                 var objeto = $("#agregar-objeto").val();
                 var descripcion = $("#agregar-descripcion").val();
@@ -389,56 +398,55 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                         icon: 'error',
                         title: 'Error!',
                         text: 'No se pueden enviar Campos Vacios.'
-                    })
+                    });
                 } else {
                     // Crear un objeto con los datos a enviar al servidor
                     var datos = {
                         OBJETO: objeto,
                         DESCRIPCION: descripcion,
                         TIPO_OBJETO: tipo_objeto,
-
                     };
 
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=InsertObjeto', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(datos)
-                        })
-                        .then(function(response) {
-                            if (response.ok) {
-                                // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(datos)
+                    })
+                    .then(function (response) {
+                        if (response.ok) {
+                            if (response.status === 200) {
                                 return response.json();
-                            } else {
-                                // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('Error en la solicitud');
+                            } else if (response.status === 409) {
+                                return response.json().then(function (data) {
+                                    throw new Error(data.error);
+                                });
                             }
+                        } else {
+                            throw new Error('Error en la solicitud');
+                        }
+                    })
+                    .then(function (data) {
+                        console.log(data);
+                        $('#crearModal').modal('hide');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Guardado exitoso',
+                            text: data.message
                         })
-                        .then(function(data) {
-                            console.log(data);
-                            // Cerrar la modal después de guardar
-                            $('#crearModal').modal('hide');
-
-                            // Mostrar SweetAlert de éxito
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Guardado exitoso',
-                                text: 'Los datos se han guardado correctamente.'
-                            }).then(function() {
-                                // Recargar la página para mostrar los nuevos datos
-                                location.reload();
-                            });
-                        })
-                        .catch(function(error) {
-                            // Mostrar SweetAlert de error
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Error al guardar los datos: ' + error.message
-                            });
-                            console.log(error.message);
+                        .then(function () {
+                            location.reload();
                         });
+                    })
+                    .catch(function (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al guardar los datos: ' + error.message
+                        });
+                        console.log(error.message);
+                    });
                 }
             });
         }
@@ -763,6 +771,30 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
             }
         });
     </script>
+
+    <script>
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
+        document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
+        document.getElementById('agregar-objeto').value = "";
+        document.getElementById('agregar-descripcion').value = "";
+        document.getElementById('agregar-tipoObjeto').value = "";
+
+        // Limpia los checkboxes
+        document.getElementById('agregar-objeto').checked = false;
+        document.getElementById('agregar-descripcion').checked = false;
+        document.getElementById('agregar-tipoObjeto').checked = false;
+        });
+
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
+        document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
+       
+        // Limpia los checkboxes
+        document.getElementById('editar-objeto').checked = false;
+        document.getElementById('editar-descripcion').checked = false;
+        document.getElementById('editar-tipoObjeto').checked = false;
+        });
+    </script>
+
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
