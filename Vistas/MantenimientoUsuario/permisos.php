@@ -84,6 +84,17 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
         }
 
 
+        .check {
+            color: green;
+            font-size: 20px;
+        }
+
+        .x {
+            color: red;
+            font-size: 25px;
+        }
+
+
         /*BOTON DE CREAR NUEVO */
         .custom-button {
             background-color: #4CAF50;
@@ -157,8 +168,6 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                             echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                             echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
                             echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
-                            echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
-
                             echo '</nav>';
                             echo '</div>';
                         }
@@ -174,6 +183,8 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Region</a>';
                             }
 
 
@@ -329,7 +340,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-guardarAgregar" disabled>Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -433,7 +444,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" onclick="updatePermiso()">Guardar
+                                <button type="button" class="btn btn-primary" id="btn-guardarEditar" onclick="updatePermiso()">Guardar
                                 </button>
                             </div>
                         </div>
@@ -456,6 +467,8 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
         var permisos = <?php echo json_encode($permisos); ?>;
 
         function Lista_Permisos() {
+
+
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=Get_Permisos', {
                     method: 'GET',
@@ -478,17 +491,23 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
                     data.forEach(function(permiso) {
+
+
                         var row = '<tr>' +
                             '<td style="display:none;">' + permiso.ID_ROL + '</td>' + /* OCULTAR LAS COLUMNAS */
                             '<td>' + permiso.ROL + '</td>' +
                             '<td style="display:none;">' + permiso.ID_OBJETO + '</td>' +
                             '<td>' + permiso.OBJETO + '</td>' +
-                            '<td>' + permiso.PERMISOS_INSERCION + '</td>' +
-                            '<td>' + permiso.PERMISOS_ELIMINACION + '</td>' +
-                            '<td>' + permiso.PERMISOS_ACTUALIZACION + '</td>' +
-                            '<td>' + permiso.PERMISOS_CONSULTAR + '</td>' +
+                            '<td>' + (permiso.PERMISOS_INSERCION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
+                            '<td>' + (permiso.PERMISOS_ELIMINACION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
+                            '<td>' + (permiso.PERMISOS_ACTUALIZACION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
+                            '<td>' + (permiso.PERMISOS_CONSULTAR === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
                             '<td>';
 
+
+
+
+                        console.log(permiso);
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarPermiso(' + permiso.ID_ROL + ',' + permiso.ID_OBJETO + ')">Editar</button>';
@@ -526,7 +545,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
         }
 
         function Insertar_Permiso() {
-            $("#btn-agregar").click(function() {
+            $("#btn-guardarAgregar").click(function() {
                 // Obtener los valores de los campos del formulario
                 var idRol = $("#agregar-IdRol").val();
                 var idObjeto = $("#agregar-IdObjeto").val()
@@ -537,7 +556,7 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                 };
 
                 // Hacer una solicitud para verificar si el permiso ya existe
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=verificarPermisoExistente', {
+                fetch('http://localhost:90/SISTEMA1/Controladores/permisosUsuario.php?op=verificarPermisoExistente', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -664,15 +683,17 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
                     if (permiso) {
                         document.getElementById('editar-IdRol').value = id_rol;
                         document.getElementById('editar-IdObjeto').value = id_objeto;
-                        var pInsercion = document.getElementById('editar-pInsercion').checked;
-                        var pEliminacion = document.getElementById('editar-pEliminacion').checked;
-                        var pActualizacion = document.getElementById('editar-pActualizacion').checked;
-                        var pConsultar = document.getElementById('editar-pConsultar').checked;
+                        
+                        var pInsercion = document.getElementById('editar-pInsercion').checked ? 'Sí' : 'No';
+                        var pEliminacion = document.getElementById('editar-pEliminacion').checked ? 'Sí' : 'No';
+                        var pActualizacion = document.getElementById('editar-pActualizacion').checked ? 'Sí' : 'No';
+                        var pConsultar = document.getElementById('editar-pConsultar').checked ? 'Sí' : 'No';
 
                         console.log("Permiso de Inserción: " + pInsercion);
                         console.log("Permiso de Eliminación: " + pEliminacion);
                         console.log("Permiso de Actualización: " + pActualizacion);
                         console.log("Permiso de Consulta: " + pConsultar);
+
 
 
                     } else {
@@ -794,28 +815,89 @@ $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos)
         });
     </script>
 
+    <!-- VALIDACIONES SCRIPT -->
+    <script>
+        // Obtén los elementos select y el botón de guardar
+        var selectRol = document.getElementById("agregar-IdRol");
+        var selectObjeto = document.getElementById("agregar-IdObjeto");
+        var btnGuardar = document.getElementById("btn-guardarAgregar");
+
+        // Función para verificar y habilitar o deshabilitar el botón
+        function verificarSeleccion() {
+            if (selectRol.value && selectObjeto.value) {
+                // Ambos selects tienen valores seleccionados, habilitar el botón
+                btnGuardar.disabled = false;
+            } else {
+                // Al menos uno de los selects no tiene un valor seleccionado, deshabilitar el botón
+                btnGuardar.disabled = true;
+            }
+        }
+
+        // Agregar escuchadores de eventos para detectar cambios en los selects
+        selectRol.addEventListener("change", verificarSeleccion);
+        selectObjeto.addEventListener("change", verificarSeleccion);
+
+        // Llamar a verificarSeleccion una vez al inicio para verificar el estado inicial
+        verificarSeleccion();
+    </script>
+
+    <script>
+        // Escuchar eventos de cambio en los elementos <select>
+        $('#agregar-IdRol, #agregar-IdObjeto').on('change', function() {
+            var select = $(this);
+            var selectedValue = select.val();
+
+            if (selectedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'Debes seleccionar una opción',
+                    icon: 'warning',
+                });
+            }
+        });
+
+        // Escuchar eventos de cambio en los elementos <select> deshabilitados
+        $('#editar-IdRol, #editar-IdObjeto').on('change', function() {
+            var select = $(this);
+            var selectedValue = select.val();
+
+            if (selectedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'Debes seleccionar una opción',
+                    icon: 'warning',
+                });
+            }
+        });
+    </script>
+
     <script>
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
         document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
-        document.getElementById('agregar-IdRol').value = "";
-        document.getElementById('agregar-IdObjeto').value = "";
+            document.getElementById('agregar-IdRol').value = "";
+            document.getElementById('agregar-IdObjeto').value = "";
 
-        // Limpia los checkboxes
-        document.getElementById('agregar-pInsercion').checked = false;
-        document.getElementById('agregar-pEliminacion').checked = false;
-        document.getElementById('agregar-pActualizacion').checked = false;
-        document.getElementById('agregar-pConsultar').checked = false;
+            // Limpia los checkboxes
+            document.getElementById('agregar-pInsercion').checked = false;
+            document.getElementById('agregar-pEliminacion').checked = false;
+            document.getElementById('agregar-pActualizacion').checked = false;
+            document.getElementById('agregar-pConsultar').checked = false;
+
+            // Desactivar el botón "Guardar" en el modal Agregar
+            document.getElementById('btn-guardarAgregar').disabled = true;
         });
 
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
         document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
-       
 
-        // Limpia los checkboxes
-        document.getElementById('editar-pInsercion').checked = false;
-        document.getElementById('editar-pEliminacion').checked = false;
-        document.getElementById('editar-pActualizacion').checked = false;
-        document.getElementById('editar-pConsultar').checked = false;
+
+            // Limpia los checkboxes
+            document.getElementById('editar-pInsercion').checked = false;
+            document.getElementById('editar-pEliminacion').checked = false;
+            document.getElementById('editar-pActualizacion').checked = false;
+            document.getElementById('editar-pConsultar').checked = false;
+            // Desactivar el botón "Guardar" en el modal Editar
+            //document.getElementById('btn-guardarEditar').disabled = true;
         });
     </script>
 

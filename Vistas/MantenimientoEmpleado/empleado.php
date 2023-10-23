@@ -14,9 +14,10 @@ $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_Empleado = "7";
+//$id_Objeto_Seguridad1 ="25";
 
 $permisos = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
-
+//$permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_Objeto_Seguridad1);
 ?>
 
 <style>
@@ -172,6 +173,8 @@ $permisos = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Emplead
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                echo '<a class="nav-link" href="cargo.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="region.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Region</a>';
                             }
 
 
@@ -251,24 +254,24 @@ $permisos = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Emplead
                                 <form>
                                     <div class="form-group">
                                         <label for="dni">DNI </label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-dni" <!-- required oninput="this.value = this.value.replace(/\s/g, '').replace(/[^0-9]/g, '')" -->
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-dni" required oninput="this.value = this.value.replace(/\s/g, '').replace(/[^0-9]/g, '')">
                                         <div id="mensaje1"></div>
 
 
                                         <label for="Pnombre">Primer Nombre</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-Pnombre" <!-- required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" -->
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-Pnombre"  required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" >
                                         <div id="mensaje2"></div>
 
                                         <label for="Snombre">Segundo Nombre</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-Snombre" <!-- required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" -->
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-Snombre" <!-- required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" >
                                         <div id="mensaje3"></div>
 
                                         <label for="Papellido">Primer Apellido</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-Papellido" <!-- required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" -->
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-Papellido" <!-- required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" >
                                         <div id="mensaje4"></div>
 
                                         <label for="Sapellido">Segundo Apellido</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-Sapellido" <!-- required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" -->
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-Sapellido" <!-- required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" >
                                         <div id="mensaje5"></div>
 
 

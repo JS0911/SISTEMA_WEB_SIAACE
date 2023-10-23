@@ -93,6 +93,7 @@ echo $PregunContes;
         
     </div>
     <!-- Agrega los enlaces a los archivos JavaScript de Bootstrap (jQuery y Popper.js) y Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -107,9 +108,9 @@ echo $PregunContes;
              if ($PregunContes==$valorParametro) 
              {
                $stmt1->execute();
-
-               header("Location: ../../InicioSesion/login.php");
-
+               $_SESSION['Preguntas'] = true;
+               session_destroy();
+               header("refresh:2; url=../../InicioSesion/login.php");
              }       
            ?>
 
@@ -190,6 +191,20 @@ echo $PregunContes;
         // Llama a la función cargarPreguntas para cargar las preguntas al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
             cargarPreguntas();
+
+            <?php
+                if (isset($_SESSION['Preguntas'])) {
+                    echo "
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: 'Preguntas De Seguridad Contestadas Con Exito',
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });";
+                    unset($_SESSION['Preguntas']);
+                }
+            ?>
         });
     </script>
 

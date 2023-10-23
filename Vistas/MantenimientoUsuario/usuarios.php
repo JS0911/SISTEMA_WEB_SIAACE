@@ -185,7 +185,6 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                             echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
                             echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                             echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                            echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
 
                             echo '</nav>';
                             echo '</div>';
@@ -201,9 +200,11 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Region</a>';
                             }
 
-                        
+
                             echo '</nav>';
                             echo '</div>';
                         }
@@ -285,7 +286,7 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
                                         <label for="id-estado">Estado</label>
                                         <select class="form-control" id="agregar-estado" name="IdEstado" required>
-                                            <option value=""disabled selected>Selecciona una opción</option>
+                                            <option value="" disabled selected>Selecciona una opción</option>
                                             <?php foreach ($Estados as $Estado) : ?>
                                                 <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
                                             <?php endforeach; ?>
@@ -298,7 +299,7 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
                                         <label for="id-rol">Rol</label>
                                         <select class="form-control" id="agregar-rol" name="IdRol" required>
-                                            <option value=""disabled selected>Selecciona una opción</option>
+                                            <option value="" disabled selected>Selecciona una opción</option>
                                             <?php foreach ($roles as $rol) : ?>
                                                 <option value="<?php echo $rol['id_rol']; ?>"><?php echo $rol['rol']; ?></option>
                                             <?php endforeach; ?>
@@ -318,7 +319,7 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                             </div>
                         </div>
@@ -392,8 +393,8 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar"onclick="updateUsuario()" disabled>Guardar </button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateUsuario()" disabled>Guardar </button>
                             </div>
                         </div>
                     </div>
@@ -679,7 +680,7 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=eliminarUsuario', {
+                    fetch('http://localhost:90/SISTEMA1/Controladores/usuarios.php?op=eliminarUsuario', {
                             method: 'DELETE',
                             headers: {
                                 'Accept': 'application/json',
@@ -703,7 +704,7 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
                                         // Recargar la lista de usuarios después de eliminar
-                                        
+
                                         // Si no se puede eliminar el estado se debe estado a  "Inactivo"
 
                                     });
@@ -1080,8 +1081,38 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                 });
             }
         });
-
     </script>
+
+    <script>
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
+        document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
+            document.getElementById("agregar-usuario").value = "";
+            document.getElementById("agregar-nombre").value = "";
+            document.getElementById("agregar-estado").value = "";
+            document.getElementById("agregar-correo").value = "";
+            document.getElementById("agregar-rol").value = "";
+            document.getElementById("agregar-contrasena").value = "";
+            document.getElementById("confirmar-contrasena").value = "";
+
+           // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
+           location.reload();
+
+
+        });
+
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
+        document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
+
+
+            document.getElementById("editar-usuario").value = "";
+            document.getElementById("editar-nombre").value = "";
+            document.getElementById("editar-estado").value = "";
+            document.getElementById("editar-correo").value = "";
+            document.getElementById("editar-rol").value = "";
+            
+        });
+    </script>
+    
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
