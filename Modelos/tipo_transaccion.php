@@ -1,4 +1,4 @@
-<?php
+<?php 
 class tipoTransaccion extends Conectar
 {
     // TRAE TODAS LAS TRANSACCION

@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 session_start();
 require "../../Config/conexion.php";
@@ -206,7 +206,7 @@ $permisos = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Tran
                                     echo '<nav class="sb-sidenav-menu-nested nav">';
         
                                     if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                        echo '<a class="nav-link" href="../Vistas/MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
+                                        echo '<a class="nav-link" href="tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                     }                            
                                     echo '</nav>';
                                     echo '</div>';
@@ -384,7 +384,7 @@ $permisos = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Tran
                             '<td>' + transaccion.CREADO_POR + '</td>' +
                             '<td>' + transaccion.FECHA_CREACION + '</td>' +
                             '<td>' + transaccion.MODIFICADO_POR + '</td>' +
-                            '<td>' + transaccion.FECHA.MODIFICACION + '</td>' +
+                            '<td>' + transaccion.FECHA_MODIFICACION + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
