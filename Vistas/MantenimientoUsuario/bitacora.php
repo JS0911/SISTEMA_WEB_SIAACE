@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 session_start();
 require "../../Config/conexion.php";
@@ -15,7 +15,9 @@ $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_Bitacora = "6";
+$id_objeto_Seguridad = "25";
 
+$permisos1 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacora);
 ?>
 
@@ -83,7 +85,6 @@ $permisos = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacor
             border: 1px solid #000;
             /* Borde más oscuro, en este caso, negro (#000) */
         }
-
     </style>
 
     </style>
@@ -124,12 +125,9 @@ $permisos = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacor
                         </a>
 
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
-                        <a class="nav-link" href="../charts.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>Dashboard
-                        </a>
-
+                        
                         <?php
-                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
                                     Modulo seguridad
@@ -138,20 +136,42 @@ $permisos = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacor
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                                echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                                echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                                echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                                echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                                echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;">Bitacora</a>';
                             }
 
-                            echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                            echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                            echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
-                            echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                            echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
-                            echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;">Bitacora</a>';
+
 
                             echo '</nav>';
                             echo '</div>';
                         }
+                         //-------------------------MODULO DE EMPLEADO---------------------------------------------
+                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                                    Modulo Empleado
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+
+                                }
+                            echo '</nav>';
+                            echo '</div>';
+                        }
+
                         ?>
 
                     </div>
@@ -177,7 +197,7 @@ $permisos = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacor
                         <table class="table table-bordered mx-auto" id="Lista-bitacora" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-                                <th style="display: none;">Id Bitacora</th>
+                                    <th style="display: none;">Id Bitacora</th>
                                     <th>Fecha</th>
                                     <th>Accion</th>
                                     <th>Descripcion</th>
@@ -192,10 +212,10 @@ $permisos = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacor
                     </div>
                 </div>
 
-                
-                
 
-                
+
+
+
             </main>
             <!-- AQUI FINALIZA EL MANTENIMIENTO DE OBJETOS -->
 
@@ -239,7 +259,7 @@ $permisos = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacor
 
                     data.forEach(function(bitacora) {
                         var row = '<tr>' +
-                            '<td style="display:none;">' + bitacora.ID_BITACORA+ '</td>' +
+                            '<td style="display:none;">' + bitacora.ID_BITACORA + '</td>' +
                             '<td>' + bitacora.FECHA + '</td>' +
                             '<td>' + bitacora.ACCION + '</td>' +
                             '<td>' + bitacora.DESCRIPCION + '</td>' +
@@ -259,25 +279,25 @@ $permisos = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacor
                 });
 
         }
-                
-        
+
+
         function habilitarPaginacion() {
             $('#Lista-bitacora').DataTable({
-                "paging": true, 
+                "paging": true,
                 "pageLength": 10,
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
             });
         }
 
-        
+
 
         $(document).ready(function() {
-         
+
             Lista_Bitacora();
-           
+
         });
     </script>
 

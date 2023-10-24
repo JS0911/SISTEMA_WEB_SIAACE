@@ -14,7 +14,9 @@ $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_Cargos = "26";
+$id_objeto_Seguridad = "25";
 
+$permisos1 = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
 
 // Verificar si se obtuvieron resultados
@@ -146,12 +148,9 @@ $permisos = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div> Inicio
                         </a>
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
-                        <a class="nav-link" href="../charts.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            Charts
-                        </a>
+                        
                         <?php
-                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
                                     Modulo seguridad
@@ -160,23 +159,25 @@ $permisos = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                                 echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
                             }
 
-                            echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                            echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                            echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
-                            echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                            echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
-                            echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+
 
                             echo '</nav>';
                             echo '</div>';
                         }
+                        //---------------------------MODULO DE EMPLEADO---------------------------------------------------------
                         if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
+                                    <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     Modulo Empleado
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
@@ -185,8 +186,9 @@ $permisos = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
-                                echo '<a class="nav-link" href="cargo.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Cargo</a>';
-
+                                echo '<a class="nav-link" href="cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                echo '<a class="nav-link" href="sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
                             }
 
 
@@ -291,7 +293,7 @@ $permisos = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
                                         <label for="nombre">Id</label>
                                         <input type="text" class="form-control" id="editar-id-cargo" disabled>
                                         <label for="nombre">Cargo</label>
-                                        <input type="text" class="form-control" id="editar-cargo" >
+                                        <input type="text" class="form-control" id="editar-cargo">
 
                                         <label for="nombre">Descripcion</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
@@ -362,11 +364,11 @@ $permisos = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarCargo(' + cargo.ID_CARGO  + ')">Editar</button>';
+                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarCargo(' + cargo.ID_CARGO + ')">Editar</button>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-cargo" data-id="' + cargo.ID_CARGO  + '" onclick="eliminarCargo(' + cargo.ID_CARGO  + ')">Eliminar</button>';
+                            row += '<button class="btn btn-danger eliminar-cargo" data-id="' + cargo.ID_CARGO + '" onclick="eliminarCargo(' + cargo.ID_CARGO + ')">Eliminar</button>';
                         }
 
 
@@ -600,7 +602,7 @@ $permisos = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
         function validarNombre() {
             nombreCargo = document.getElementById("agregar-cargo");
             descripcion = document.getElementById("agregar-descripcion");
-        estado = document.getElementById("agregar-estado");
+            estado = document.getElementById("agregar-estado");
             descripcionEditar = document.getElementById("editar-descripcion");
             estadoEditar = document.getElementById("editar-estado");
 
@@ -646,18 +648,18 @@ $permisos = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
                 }
             });
 
-        estado.addEventListener("keypress", function(e) {
+            estado.addEventListener("keypress", function(e) {
                 expresionValidadora1 = /^[A-Z]+$/;
 
                 if (!expresionValidadora1.test(e.key)) {
-                estado.style.borderColor = "red";
-                estado.style.boxShadow = "0 0 10px red";
+                    estado.style.borderColor = "red";
+                    estado.style.boxShadow = "0 0 10px red";
                     document.getElementById("mensaje3").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
                     document.getElementById("mensaje3").style.color = "red";
                     e.preventDefault();
                 } else {
-                estado.style.borderColor = "green";
-                estado.style.boxShadow = "0 0 10px green";
+                    estado.style.borderColor = "green";
+                    estado.style.boxShadow = "0 0 10px green";
                     document.getElementById("mensaje3").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
                     document.getElementById("mensaje3").style.color = "green";
                 }
@@ -786,7 +788,7 @@ $permisos = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
 
-    
+
 </body>
 
 </html>

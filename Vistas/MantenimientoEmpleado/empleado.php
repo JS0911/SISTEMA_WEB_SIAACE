@@ -14,10 +14,12 @@ $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_Empleado = "7";
-//$id_Objeto_Seguridad1 ="25";
 
+$id_objeto_Seguridad = "25";
+
+$permisos1 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
-//$permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_Objeto_Seguridad1);
+
 ?>
 
 <style>
@@ -134,12 +136,8 @@ $permisos = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Emplead
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div> Inicio
                         </a>
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
-                        <a class="nav-link" href="../charts.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            Charts
-                        </a>
                         <?php
-                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
                                     Modulo seguridad
@@ -148,23 +146,25 @@ $permisos = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Emplead
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                               echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+    
                             }
 
-                            echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                            echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                            echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
-                            echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                            echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
-                            echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
-
+                           
                             echo '</nav>';
                             echo '</div>';
                         }
+                        //------------------------MODULO DE EMPLEADO--------------------------------
                         if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
+                                    <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     Modulo Empleado
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
@@ -172,12 +172,12 @@ $permisos = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Emplead
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
-                                echo '<a class="nav-link" href="cargo.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Cargo</a>';
-                                echo '<a class="nav-link" href="region.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Region</a>';
-                            }
+                                    echo '<a class="nav-link" href="empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                    echo '<a class="nav-link" href="cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                    echo '<a class="nav-link" href="region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                    echo '<a class="nav-link" href="sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
 
-
+                                }
                             echo '</nav>';
                             echo '</div>';
                         }

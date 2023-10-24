@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 session_start();
 require "../../Config/conexion.php";
@@ -14,7 +14,9 @@ $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_region_Region = "8";
+$id_objeto_Seguridad = "25";
 
+$permisos1 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
 
 // Verificar si se obtuvieron resultados
@@ -147,12 +149,9 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
                         </a>
 
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
-                        <a class="nav-link" href="../charts.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>Dashboard
-                        </a>
 
                         <?php
-                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
                                     Modulo seguridad
@@ -161,19 +160,21 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                            if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                               echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+    
                             }
 
-                            echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                            echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                            echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;"> Objetos</a>';
-                            echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                            echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
                             echo '</nav>';
                             echo '</div>';
                         }
-
+                        //----------------------------MODULO DE EMPLEADO------------------------------------
                         if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
@@ -185,8 +186,9 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
-                                echo '<a class="nav-link" href="cargo.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Cargo</a>';
-                                echo '<a class="nav-link" href="region.php"><i class="fas fa-map"></i><span style="margin-left: 5px;"> Region</a>';
+                                echo '<a class="nav-link" href="cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                echo '<a class="nav-link" href="sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -217,7 +219,7 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
                                 echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
                             }
-                            ?> 
+                            ?>
                         </div>
                         <!-- Tabla para mostrar los datos -->
                         <table class="table table-bordered mx-auto" id="Lista-region" style="margin-top: 20px; margin-bottom: 20px">
@@ -255,13 +257,11 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Region</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-region" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-region" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
                                     </div>
@@ -293,10 +293,9 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
                                         <input type="text" class="form-control" id="editar-id-region" disabled>
                                         <label for="nombre">Region</label>
                                         <input type="text" class="form-control" id="editar-region" disabled>
-                                        
+
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje3"></div>
                                     </div>
                                 </form>
@@ -324,7 +323,7 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
     <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-                                
+
         function Lista_Regiones() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             // Actualizar el valor predeterminado
@@ -382,15 +381,15 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
                     alert('Error al cargar los datos: ' + error.message);
                 });
 
-        } 
+        }
 
         function habilitarPaginacion() {
             $('#Lista-region').DataTable({
-                "paging": true, 
+                "paging": true,
                 "pageLength": 10,
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
             });
         }
@@ -415,56 +414,56 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
                     };
 
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/region.php?op=InsertRegion', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(datos)
-                    })
-                    .then(function(response) {
-                        if (response.ok) {
-                            if (response.status === 200) {
-                                // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
-                                return response.json().then(function(data) {
-                                    console.log(data);
-                                    // Cerrar la modal después de guardar
-                                    $('#crearModal').modal('hide');
-                                    // Mostrar SweetAlert de éxito
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Guardado exitoso',
-                                        text: data.message
-                                    }).then(function() {
-                                        // Recargar la página para mostrar los nuevos datos
-                                        location.reload();
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(datos)
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                if (response.status === 200) {
+                                    // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Cerrar la modal después de guardar
+                                        $('#crearModal').modal('hide');
+                                        // Mostrar SweetAlert de éxito
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Guardado exitoso',
+                                            text: data.message
+                                        }).then(function() {
+                                            // Recargar la página para mostrar los nuevos datos
+                                            location.reload();
+                                        });
                                     });
-                                });
-                            } else if (response.status === 409) {
-                                // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
-                                return response.json().then(function(data) {
-                                    console.log(data);
-                                    // Mostrar SweetAlert de error
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: data.error // Acceder al mensaje de error
+                                } else if (response.status === 409) {
+                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Mostrar SweetAlert de error
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: data.error // Acceder al mensaje de error
+                                        });
                                     });
-                                });
+                                }
+                            } else {
+                                // Si hubo un error en la solicitud, maneja el error aquí
+                                throw new Error('Error en la solicitud');
                             }
-                        } else {
-                            // Si hubo un error en la solicitud, maneja el error aquí
-                            throw new Error('Error en la solicitud');
-                        }
-                    })
-                    .catch(function(error) {
-                        // Mostrar SweetAlert de error
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error al guardar los datos: ' + error.message
+                        })
+                        .catch(function(error) {
+                            // Mostrar SweetAlert de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al guardar los datos: ' + error.message
+                            });
+                            console.log(error.message);
                         });
-                        console.log(error.message);
-                    });
                 }
             });
         }
@@ -515,45 +514,45 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
                     text: 'No se pueden enviar Campos Vacios.'
                 })
             } else {
-            // Realiza una solicitud FETCH para actualizar los datos del region
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/region.php?op=UpdateRegion', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "ID_REGION": id_region,
-                        "REGION": region,
-                        "DESCRIPCION": descripcion
-                    }) // Convierte los datos en formato JSON
-                })
-                .then(function(response) {
-                    if (response.ok) {
-                        // Cerrar la modal después de guardar
-                        $('#editarModal').modal('hide');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Actualización exitosa',
-                            text: 'Los datos se han actualizado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
-                        });
+                // Realiza una solicitud FETCH para actualizar los datos del region
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/region.php?op=UpdateRegion', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "ID_REGION": id_region,
+                            "REGION": region,
+                            "DESCRIPCION": descripcion
+                        }) // Convierte los datos en formato JSON
+                    })
+                    .then(function(response) {
+                        if (response.ok) {
+                            // Cerrar la modal después de guardar
+                            $('#editarModal').modal('hide');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Actualización exitosa',
+                                text: 'Los datos se han actualizado correctamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                            });
 
-                    } else {
-                        throw new Error('Error en la solicitud de actualización');
-                    }
-                })
-                .catch(function(error) {
-                    // Manejar el error aquí
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error al actualizar los datos de la Region: ' + error.message
+                        } else {
+                            throw new Error('Error en la solicitud de actualización');
+                        }
+                    })
+                    .catch(function(error) {
+                        // Manejar el error aquí
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al actualizar los datos de la Region: ' + error.message
+                        });
                     });
-                });
-            }    
+            }
         }
 
         //FUNCION CON EL SWEETALERT
@@ -566,7 +565,7 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar' 
+                cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/region.php?op=EliminarRegion', {
@@ -629,11 +628,11 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
             }
 
             function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
-                inputElement.addEventListener("input", function () {
+                inputElement.addEventListener("input", function() {
                     validateInput(inputElement, expression, messageElement, message);
                 });
 
-                inputElement.addEventListener("blur", function () {
+                inputElement.addEventListener("blur", function() {
                     clearMessage(messageElement, inputElement);
                 });
             }
@@ -685,7 +684,7 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
         regionInput.addEventListener('input', checkForm);
         descripcionInput.addEventListener('input', checkForm);
     </script>
-    
+
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
         const descripcionInput1 = document.getElementById('editar-descripcion');
@@ -707,7 +706,7 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
-            
+
             if (trimmedValue === '') {
                 Swal.fire({
                     title: 'Advertencia',
@@ -736,23 +735,23 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
     <script>
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
         document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
-        document.getElementById('agregar-region').value = "";
-        document.getElementById('agregar-descripcion').value = "";
+            document.getElementById('agregar-region').value = "";
+            document.getElementById('agregar-descripcion').value = "";
 
 
-        // Limpia los checkboxes
-        document.getElementById('agregar-region').checked = false;
-        document.getElementById('agregar-descripcion').checked = false;
+            // Limpia los checkboxes
+            document.getElementById('agregar-region').checked = false;
+            document.getElementById('agregar-descripcion').checked = false;
         });
 
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
         document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
-       
-        // Limpia los checkboxes
-        document.getElementById('editar-descripcion').checked = false;
+
+            // Limpia los checkboxes
+            document.getElementById('editar-descripcion').checked = false;
         });
     </script>
-    
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
