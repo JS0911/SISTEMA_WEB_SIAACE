@@ -140,6 +140,8 @@ $permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
     
                                 if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../Vistas/MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
+                                    echo '<a class="nav-link" href="../Vistas/MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
+
                                 }                            
                                 echo '</nav>';
                                 echo '</div>';

@@ -578,7 +578,7 @@ $permisos = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
                                         // Recargar la lista de objetos después de eliminar
-                                        Lista_Roles();
+                                        //Lista_Roles();
                                     });
                             } else {
                                 throw new Error('Error en la solicitud de eliminación');
