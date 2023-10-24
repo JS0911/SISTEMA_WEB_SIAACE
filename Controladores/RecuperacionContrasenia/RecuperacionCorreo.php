@@ -1,9 +1,9 @@
 <?php
-session_start();
 // Conectar a la base de datos
 require ("../../Config/conexion.php");
 require ("../../Modelos/Recuperacion.php");
 //require ("../../Modelos/EnviarCorreo.php");
+session_start();
 
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
@@ -20,54 +20,46 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
 
         if ($num > 0) {
             $token = new recuperar();
-            $tokeng = $token->generar_Token();
 
+            //cosulta de id_usuario
             $sql = "SELECT ID_USUARIO FROM tbl_ms_usuario WHERE CORREO_ELECTRONICO = '$email' and USUARIO = '$usuario'";
         	$idusuario = $conn->query($sql);
 
-            $_SESSION['token'] = $tokeng;
-            $_SESSION['user'] = $idusuario;
+            //genera token y guarda en la base de datos
+            $tokeng = $token->generar_Token();
+
+            
 
             $savetoken = new recuperar();
-            $savetokenn = $savetoken->setTokenUser($usuario,$tokeng);
+
+            $row = $idusuario->fetch(PDO::FETCH_ASSOC);
+            $id_usuario = $row['ID_USUARIO'];
+
+            //guardar datos en sesión
+            $_SESSION['token'] = $tokeng;
+            $_SESSION['user'] = $id_usuario;
+
+            $savetokenn = $savetoken->setTokenUser($usuario,$tokeng,$id_usuario);
 
             $insToken = $conn->query($savetokenn);
-
             //enviarCorreo($email, $tokeng);
-
+            
             //enviar mail-------------
-            $destinatario = '$email';
-            $asunto = "Prueba de correo desde PHP";
-            $mensaje = "Hola,\n\nEste es un correo de prueba enviado desde PHP.";
+            $asunto = "IDH - Recuperación de Correo";
+            $mensaje = "<div>Hola $usuario.</div><br><div>Recibimos una solicitud para restablecer tu password de IDH.</div>
+            <div>Ingresa el siguiente codigo para restablecer la password.</div><br>
+            <div>$tokeng</div><br>
+            <div><a href=http://localhost:90/sistema_web_siaace/Vistas/RecuperacionContrasenia/IngresoToken.php?token='$tokeng'&usuario='$id_usuario'>Recuperar</a></div>";
 
-            // Cabeceras del correo
-            $headers = "From: lester.padilla@unah.hn\r\n";
-            $headers .= "Reply-To: lester.padilla@unah.hn\r\n";
-            $headers .= "X-Mailer: PHP/" . phpversion();
-
-            // Enviar el correo
-            $mail_enviado = mail($destinatario, $asunto, $mensaje, $headers);
-
-            if ($mail_enviado) {
-                /*echo "<script type='text/javascript'>
-                alert('¡Se ha enviado un enlace de recuperación a tu correo electrónico.!');
+            $errors = $savetoken->enviarCorreo($email,$asunto,$mensaje);
+            echo "<script>
+                alert('$errors');
                 setTimeout(function() {
                     window.location.href = '../../Vistas/RecuperacionContrasenia/IngresoToken.php';
                 }, 0);
-                </script>";*/
-            exit();
-            } else {
-                /*echo "<script type='text/javascript'>
-                alert('¡Correo no se ha enviado.!');
-                setTimeout(function() {
-                    window.location.href = '../../Vistas/RecuperacionContrasenia/RecuperacionCorreo.php';
-                }, 0);
-                </script>";*/
-                exit();
-            }
-            //enviar mail-------------
-
+            </script>";
             
+            exit();
         } else {
             echo "<script>
                 alert('¡El Usuario o Correo electronico no son correctos.!');

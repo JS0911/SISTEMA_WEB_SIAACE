@@ -15,22 +15,12 @@ $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_Tipo_cuenta = "28";
 $id_objeto_Seguridad = "25";
-
+$id_objeto_Cuentas = "28";
 $permisos1 = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_cuenta);
+$permisos2 = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 
-// Verificar si se obtuvieron resultados
-// if (!empty($permisos)) {
-//     // Recorrer el array de permisos y mostrar los valores
-//     foreach ($permisos as $permiso) {
-//         echo "PERMISOS_INSERCION: " . $permiso['PERMISOS_INSERCION'] . "<br>";
-//         echo "PERMISOS_ELIMINACION: " . $permiso['PERMISOS_ELIMINACION'] . "<br>";
-//         echo "PERMISOS_ACTUALIZACION: " . $permiso['PERMISOS_ACTUALIZACION'] . "<br>";
-//         echo "PERMISOS_CONSULTAR: " . $permiso['PERMISOS_CONSULTAR'] . "<br>";
-//     }
-// } else {
-//     echo "No se encontraron permisos para el rol y region especificados.";
-// }
+
 ?>
 
 <style>
@@ -167,8 +157,7 @@ $permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                               echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
-    
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
                             }
 
                             echo '</nav>';
@@ -194,24 +183,23 @@ $permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_
                             echo '</div>';
                         }
 
-    //----------------------------MODULO DE cuentas------------------------------------
-    if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-        echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
-                <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
-                Modulo Cuenta
-                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-            </a>';
-        echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
-        echo '<nav class="sb-sidenav-menu-nested nav">';
+                        //----------------------------MODULO DE CUENTAS------------------------------------
+                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
+                            <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
+                            Modulo Cuenta
+                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                          </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
 
-        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-            echo '<a class="nav-link" href="tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
-            echo '<a class="nav-link" href="tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
-
-        }                            
-        echo '</nav>';
-        echo '</div>';
-    }
+                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
+                                echo '<a class="nav-link" href="tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
+                            }
+                            echo '</nav>';
+                            echo '</div>';
+                        }
                         ?>
 
                     </div>
@@ -282,8 +270,7 @@ $permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_
                                         <div id="mensaje2"></div>
 
                                         <label for="nombre">Tasa</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-tasa" required pattern="^[\d.]+%?$"
-                                        title="Solo datos numericos" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-tasa" required pattern="^[\d.]+%?$" title="Solo datos numericos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje3"></div>
 
                                         <label for="Estado">Estado</label>
@@ -399,17 +386,17 @@ $permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_
                             '<td>' + cuenta.DESCRIPCION + '</td>' +
                             '<td>' + cuenta.TASA + '</td>' +
                             '<td>' + cuenta.ESTADO + '</td>' +
-        
+
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarTipoCuenta(' +  cuenta.ID_TIPOCUENTA  + ')">Editar</button>';
+                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarTipoCuenta(' + cuenta.ID_TIPOCUENTA + ')">Editar</button>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-tipo-cuenta" data-id="' +  cuenta.ID_TIPOCUENTA  + '" onclick="eliminarTipoCuenta(' +  cuenta.ID_TIPOCUENTA  + ')">Eliminar</button>';
+                            row += '<button class="btn btn-danger eliminar-tipo-cuenta" data-id="' + cuenta.ID_TIPOCUENTA + '" onclick="eliminarTipoCuenta(' + cuenta.ID_TIPOCUENTA + ')">Eliminar</button>';
                         }
 
 
@@ -559,7 +546,7 @@ $permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_
             var tasa = document.getElementById('editar-tasa').value;
             var estado = document.getElementById('editar-estado').value;
 
-            if (cuenta == "" || descripcion == ""|| tasa == ""|| estado == "") {
+            if (cuenta == "" || descripcion == "" || tasa == "" || estado == "") {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -717,16 +704,16 @@ $permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_
             var mensaje3 = document.getElementById("mensaje3");
             handleInputAndBlurEvents(tasa, expresionValidadora3, mensaje3, "Solo se permiten Datos Numericos");
             handleDescriptionKeypressEvent(tasa);
-            
+
             var mensaje4 = document.getElementById("mensaje4");
             handleInputAndBlurEvents(estado, expresionValidadora1, mensaje4, "Solo se permiten Letras Mayúsculas");
 
-           
+
             var mensaje5 = document.getElementById("mensaje5");
             handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje5, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(descripcionEditar);
 
-            
+
             var mensaje6 = document.getElementById("mensaje6");
             handleInputAndBlurEvents(tasaEditar, expresionValidadora3, mensaje6, "Solo se permiten Datos Numericos");
             handleDescriptionKeypressEvent(tasaEditar);
@@ -757,8 +744,8 @@ $permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = cuentaInput.value.trim() !== '' && descripcionInput.value.trim() !== ''
-            && tasaInput.value.trim() !== '' && estadoInput.value.trim() !== '';
+            const isFormValid = cuentaInput.value.trim() !== '' && descripcionInput.value.trim() !== '' &&
+                tasaInput.value.trim() !== '' && estadoInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid;
         }
 
@@ -770,7 +757,7 @@ $permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_
     </script>
 
     <script>
-       // Obtén los campos de entrada y el botón "Guardar para editar"
+        // Obtén los campos de entrada y el botón "Guardar para editar"
         const descripcionInput1 = document.getElementById('editar-descripcion');
         const tasaInput2 = document.getElementById('editar-tasa');
         const estadoInput3 = document.getElementById('editar-estado');
@@ -778,7 +765,7 @@ $permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = descripcionInput1.value.trim() !== ''|| tasaInput2.value.trim() !== ''||estadoInput3.value.trim() !== '';
+            const isFormValid = descripcionInput1.value.trim() !== '' || tasaInput2.value.trim() !== '' || estadoInput3.value.trim() !== '';
             guardarButton1.disabled = !isFormValid;
         }
 
@@ -790,7 +777,7 @@ $permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-      $('#agregar-cuenta, #editar-descripcion').on('input', function() {
+        $('#agregar-cuenta, #editar-descripcion').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -832,8 +819,8 @@ $permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_
             // Limpia los checkboxes
             document.getElementById('agregar-cuenta').checked = false;
             document.getElementById('agregar-descripcion').checked = false;
-        
-            location.reload();  
+
+            location.reload();
         });
 
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------

@@ -15,22 +15,13 @@ $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_Objetos = "5";
 $id_objeto_Seguridad = "25";
+$id_objeto_Cuentas = "28";
 
 $permisos1 = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos);
+$permisos2 = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 
-// Verificar si se obtuvieron resultados
-// if (!empty($permisos)) {
-//     // Recorrer el array de permisos y mostrar los valores
-//     foreach ($permisos as $permiso) {
-//         echo "PERMISOS_INSERCION: " . $permiso['PERMISOS_INSERCION'] . "<br>";
-//         echo "PERMISOS_ELIMINACION: " . $permiso['PERMISOS_ELIMINACION'] . "<br>";
-//         echo "PERMISOS_ACTUALIZACION: " . $permiso['PERMISOS_ACTUALIZACION'] . "<br>";
-//         echo "PERMISOS_CONSULTAR: " . $permiso['PERMISOS_CONSULTAR'] . "<br>";
-//     }
-// } else {
-//     echo "No se encontraron permisos para el rol y objeto especificados.";
-// }
+
 ?>
 
 <style>
@@ -196,6 +187,23 @@ $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos)
                             echo '</div>';
                         }
 
+                        //----------------------------MODULO DE CUENTAS------------------------------------
+                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
+                            <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
+                            Modulo Cuenta
+                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                          </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
+                            }
+                            echo '</nav>';
+                            echo '</div>';
+                        }
                         ?>
 
                     </div>

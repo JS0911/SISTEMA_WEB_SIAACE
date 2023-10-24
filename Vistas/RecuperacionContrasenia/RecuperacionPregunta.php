@@ -38,7 +38,7 @@ require("../../Controladores/RecuperacionContrasenia/RecuperacionPregunta.php");
                                             </select></div>
                                             <div class="form-group"><label class="small mb-1" for="inputRespuesta">Respuesta</label>
                                             <input class="form-control py-4" name="inputRespuesta" id="inputRespuestas" aria-describedby="emailHelp" placeholder="Ingrese su respuesta:" required/></div>
-                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><a class="small" href="../../InicioSesion/login.php">Regresar al Inicio de Sesión</a><a class="small" href="RecuperacionCorreo.php">Recuperacion por Correo</a></div>
+                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><a class="small" href="../../InicioSesion/login.php">Regresar al Inicio de Sesión</a><a class="small" href="SeleccionarMetodo.php">Probar otro metodo</a></div>
                                             <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
                                             <button class="btn btn-primary" type="submit">Enviar Respuesta</button>
                                             </div>

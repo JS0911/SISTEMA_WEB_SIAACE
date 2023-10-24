@@ -1,4 +1,6 @@
-
+<?php
+    require ("../../Controladores/RecuperacionContrasenia/PrimerIngresoToken.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -25,10 +27,10 @@
                                         <div class="small mb-3 text-muted">Ingrese el token que se le ha enviado a su correo: </div>
                                         <form id="formchektoken" action= "../../Controladores/RecuperacionContrasenia/IngresoToken.php" name="formchektoken" method="POST">
                                             <div class="form-group"><label class="small mb-1" for="inputToken">Token</label>
-                                            <input class="form-control py-4" name="inputToken" id="inputToken" type= "password" aria-describedby="emailHelp" placeholder="Ingrese el Token" /></div>
+                                            <input class="form-control py-4" name="inputToken" id="inputToken" type= "password" aria-describedby="emailHelp" placeholder="Ingrese el Token" required/></div>
                                             <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
                                             <a class="small" href="../../InicioSesion/login.php">Regresar al Inicio de Sesión</a>
-                                            <a class="small" href="RecuperacionPregunta.php">Recuperacion por pregunta</a></div>
+                                            <a class="small" href="SeleccionarMetodo.php">Probar otro metodo</a></div>
                                             <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
                                             <button class="btn btn-primary" type="submit">Verificar</button>
                                             </div>

@@ -38,44 +38,6 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
                         echo "Error al cambiar la contraseña: " . $stmt->errorInfo()[2];
                     }
                 }
-            /*$savecontrasena = "UPDATE tbl_ms_usuario SET CONTRASENA = '$hash_contrasena', MODIFICADO_POR = 'Lester' WHERE USUARIO= '$idusuario'";;//$savepassword->setNuevaContrasena($hash_contrasena,$idusuario);
-            $inspass = $conn->query($savecontrasena);
-            echo "<script type='text/javascript'>
-                    alert('¡Contraseña Cambiada con exito.!');
-                    setTimeout(function() {
-                    window.location.href = '../../InicioSesion/login.php';
-                    }, 0);
-                    </script>";
-            exit;*/
-
-            /*if ($stmt = $conn->prepare($sql)) {
-
-                if ($stmt->execute()) {
-                    /*echo "<script type='text/javascript'>
-                    alert('¡Contraseña Cambiada con exito.!');
-                    setTimeout(function() {
-                    window.location.href = '../../InicioSesion/login.php';
-                    }, 0);
-                    </script>";
-                    exit;
-                } else {
-                    echo "<script type='text/javascript'>
-                    alert('¡Error al cambiar la contraseña.!');
-                    setTimeout(function() {
-                    window.location.href = '../../Vistas/RecuperacionContrasenia/CambioContrasenia.php';
-                    }, 0);
-                    </script>";
-                    exit;
-                }
-            } else {
-                echo "<script type='text/javascript'>
-                alert('¡Error en la preparación de la consulta.!');
-                setTimeout(function() {
-                window.location.href = '../../Vistas/RecuperacionContrasenia/CambioContrasenia.php';
-                }, 0);
-                </script>";
-                exit;
-            }*/
         } else {
             echo "<script type='text/javascript'>
                 alert('¡Las contraseñas no Coinsiden.!');
