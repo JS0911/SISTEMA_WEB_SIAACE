@@ -30,13 +30,13 @@ class tipoTransaccion extends Conectar
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_tipo_transaccion` ( `TIPO_TRANSACCION`, `DESCRIPCION`, `SIGNO_TRANSACCION`) VALUES (TIPO_TRANSACCION:, :DESCRIPCION, :SIGNO_TRANSACCION)";
+            $sql = "INSERT INTO `siaace`.`tbl_tipo_transaccion` ( `TIPO_TRANSACCION`, `DESCRIPCION`, `SIGNO_TRANSACCION`) VALUES ( :TIPO_TRANSACCION, :DESCRIPCION, :SIGNO_TRANSACCION)";
 
             $stmt = $conectar->prepare($sql);
 
             $stmt->bindParam(':TIPO_TRANSACCION', $TIPO_TRANSACCION, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
-            $stmt->bindParam(':SIGNO_TRANSACCION', $SIGNO_TRANSACCION, PDO::PARAM_STR);
+            $stmt->bindParam(':SIGNO_TRANSACCION', $SIGNO_TRANSACCION, PDO::PARAM_INT);
 
             $stmt->execute();
 
