@@ -283,11 +283,11 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" class="form-control" id="agregar-nombre" maxlength="15">
+                                        <input type="text" class="form-control" id="agregar-nombre" maxlength="15" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" class="form-control" id="agregar-descripcion" maxlength="15">
+                                        <input type="text" class="form-control" id="agregar-descripcion" maxlength="15" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
                                     </div>
                                 </form>
@@ -317,10 +317,10 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                                         <label for="nombre">Id</label>
                                         <input type="text" class="form-control" id="editar-id-estado" disabled>
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" class="form-control" id="editar-nombre" maxlength="15">
+                                        <input type="text" class="form-control" id="editar-nombre" maxlength="15" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje3"></div>
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" class="form-control" id="editar-descripcion" maxlength="15">
+                                        <input type="text" class="form-control" id="editar-descripcion" maxlength="15" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje4"></div>
                                     </div>
                                 </form>
@@ -598,7 +598,7 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
                                         // Recargar la lista de estados después de eliminar
-                                        Lista_estados();
+                                        //Lista_estados();
                                     });
                             } else {
                                 throw new Error('Error en la solicitud de eliminación');
@@ -614,94 +614,66 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
 
         // VALIDACIONES FUNCIONES  
         function validarNombre() {
-            nombreUsuario = document.getElementById("agregar-nombre");
-            descripcion = document.getElementById("agregar-descripcion");
-            nombreUsuarioEditar = document.getElementById("editar-nombre");
-            descripcionEditar = document.getElementById("editar-descripcion");
+            var nombreEstado = document.getElementById("agregar-nombre");
+            var descripcion = document.getElementById("agregar-descripcion");
+            var nombreEditar =document.getElementById("editar-nombre");
+            var descripcionEditar = document.getElementById("editar-descripcion");
 
-            nombreUsuario.addEventListener("keypress", function(e) {
-                expresionValidadora1 = /^[A-Z]+$/;
+            function clearMessage(messageElement, inputElement) {
+                messageElement.innerHTML = ""; // Elimina el contenido del mensaje
+                inputElement.style.borderColor = ""; // Restablece el borde
+                inputElement.style.boxShadow = ""; // Restablece la sombra
+            }
 
-                if (!expresionValidadora1.test(e.key)) {
-                    nombreUsuario.style.borderColor = "red";
-                    nombreUsuario.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                    document.getElementById("mensaje1").style.color = "red";
-                    e.preventDefault();
+            function validateInput(inputElement, expression, messageElement, message) {
+                if (inputElement.value === "") {
+                    clearMessage(messageElement, inputElement);
+                } else if (!expression.test(inputElement.value)) {
+                    inputElement.style.borderColor = "red";
+                    inputElement.style.boxShadow = "0 0 10px red";
+                    messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
+                    messageElement.style.color = "red";
                 } else {
-                    nombreUsuario.style.borderColor = "green";
-                    nombreUsuario.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje1").style.color = "green";
+                    clearMessage(messageElement, inputElement); // Restablece los estilos
+                    messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
+                    messageElement.style.color = "green";
                 }
-            });
+            }
 
-            descripcion.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z0-9\s]+$/;
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    descripcion.style.borderColor = "red";
-                    descripcion.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje2").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora2.test(e.key)) {
-                        descripcion.style.borderColor = "red";
-                        descripcion.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                        document.getElementById("mensaje2").style.color = "red";
+            function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
+                inputElement.addEventListener("input", function () {
+                    validateInput(inputElement, expression, messageElement, message);
+                });
+
+                inputElement.addEventListener("blur", function () {
+                    clearMessage(messageElement, inputElement);
+                });
+            }
+
+            function handleDescriptionKeypressEvent(inputElement) {
+                inputElement.addEventListener("keypress", function(e) {
+                    var currentDescription = inputElement.value;
+                    if (e.key === " " && currentDescription.endsWith(" ")) {
                         e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        descripcion.style.borderColor = "green";
-                        descripcion.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                        document.getElementById("mensaje2").style.color = "green";
                     }
-                }
-            })
+                });
+            }
 
-            nombreUsuarioEditar.addEventListener("keypress", function(e) {
-                expresionValidadora1 = /^[A-Z]+$/;
+            var expresionValidadora1 = /^[A-Z]+$/;
+            var mensaje1 = document.getElementById("mensaje1");
+            handleInputAndBlurEvents(nombreEstado, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
 
-                if (!expresionValidadora1.test(e.key)) {
-                    nombreUsuarioEditar.style.borderColor = "red";
-                    nombreUsuarioEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                    document.getElementById("mensaje3").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    nombreUsuarioEditar.style.borderColor = "green";
-                    nombreUsuarioEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje3").style.color = "green";
-                }
-            });
+            var expresionValidadora2 = /^[A-Z0-9\s]+$/;
+            var mensaje2 = document.getElementById("mensaje2");
+            handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(descripcion);
+            
+            var mensaje3 = document.getElementById("mensaje3");
+            handleInputAndBlurEvents(nombreEditar, expresionValidadora1, mensaje3, "Solo se permiten Letras Mayúsculas");
 
-            descripcionEditar.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z0-9\s]+$/;
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    descripcionEditar.style.borderColor = "red";
-                    descripcionEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje4").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora2.test(e.key)) {
-                        descripcionEditar.style.borderColor = "red";
-                        descripcionEditar.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                        document.getElementById("mensaje4").style.color = "red";
-                        e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        descripcionEditar.style.borderColor = "green";
-                        descripcionEditar.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje4").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                        document.getElementById("mensaje4").style.color = "green";
-                    }
-                }
-            })
+            var mensaje4 = document.getElementById("mensaje4");
+            handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje4, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(descripcionEditar);
         }
 
         $(document).ready(function() {
@@ -746,9 +718,10 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
         descripcionInput1.addEventListener('input', checkForm);
     </script>
 
+    
     <script>
-        // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-nombre').on('input', function() {
+        // Escuchar eventos de cambio en los campos de entrada deshabilitados para eliminar espacios en blanco al principio y al final
+        $('#agregar-nombre, #editar-nombre').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -762,12 +735,12 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
             }
         });
 
-        // Escuchar eventos de cambio en los campos de entrada deshabilitados para eliminar espacios en blanco al principio y al final
-        $('#editar-nombre').on('input', function() {
+        // Validar que no hayan campos vacios
+        $('#agregar-descripcion, #editar-descripcion').on('input', function() {
             var input = $(this);
-            var trimmedValue = input.val().trim();
+            var trimmedValue = input.val();
             input.val(trimmedValue);
-
+            
             if (trimmedValue === '') {
                 Swal.fire({
                     title: 'Advertencia',
@@ -787,6 +760,9 @@ $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados)
         // Limpia los checkboxes
         document.getElementById('agregar-nombre').checked = false;
         document.getElementById('agregar-descripcion').checked = false;
+
+            location.reload();  
+
         });
 
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------

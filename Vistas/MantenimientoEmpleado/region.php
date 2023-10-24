@@ -261,7 +261,7 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
                                     </div>
@@ -295,7 +295,7 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
                                         <input type="text" class="form-control" id="editar-region" disabled>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje3"></div>
                                     </div>
                                 </form>
@@ -585,8 +585,8 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
                                     .then(() => {
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
-                                        // Recargar la lista de REGIONID_REGIONs después de eliminar
-                                        Lista_Regiones();
+                                        // Recargar la lista de region después de eliminar
+                                        //Lista_Regiones();
                                     });
                             } else {
                                 throw new Error('Error en la solicitud de eliminación');
@@ -702,7 +702,7 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-region').on('input', function() {
+        $('#agregar-region, #editar-region').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -716,8 +716,8 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
             }
         });
 
-        // Escuchar eventos de cambio en los campos de entrada deshabilitados para eliminar espacios en blanco al principio y al final
-        $('#editar-descripcion').on('input', function() {
+        // Validar que no hayan campos vacios
+        $('#agregar-descripcion, #editar-descripcion').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val();
             input.val(trimmedValue);
@@ -742,6 +742,8 @@ $permisos = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_region_Region);
             // Limpia los checkboxes
             document.getElementById('agregar-region').checked = false;
             document.getElementById('agregar-descripcion').checked = false;
+        
+            location.reload();  
         });
 
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
