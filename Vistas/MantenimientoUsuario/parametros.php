@@ -271,8 +271,7 @@ $permisos2 = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Cuen
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">valor</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-valor" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-valor" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje2"></div>
                                     </div>
                                 </form>
@@ -308,8 +307,7 @@ $permisos2 = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Cuen
                                         <div id="mensaje3"></div>
                                         
                                         <label for="nombre"> Valor</label>
-                                        <input type="text" maxlength="15" class="form-control" id="editar-valor" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="15" class="form-control" id="editar-valor" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje4"></div>
                                     </div>
                                 </form>
@@ -670,16 +668,17 @@ $permisos2 = $permisosParametros->get_Permisos_Usuarios($id_rol, $id_objeto_Cuen
             var mensaje1 = document.getElementById("mensaje1");
             handleInputAndBlurEvents(parametro, expresionValidadora2, mensaje1, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(parametro);
-
+                        
+            var expresionValidadora1 = /^[0-9]+$/;
             var mensaje2 = document.getElementById("mensaje2");
-            handleInputAndBlurEvents(valor, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(valor);      
+            handleInputAndBlurEvents(valor, expresionValidadora1, mensaje2, "Solo se permiten números");
+            
             var mensaje3 = document.getElementById("mensaje3");
             handleInputAndBlurEvents(parametroEditar, expresionValidadora2, mensaje3, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(parametroEditar);   
+            handleDescriptionKeypressEvent(parametroEditar);  
+
             var mensaje4 = document.getElementById("mensaje4");
-            handleInputAndBlurEvents(valorEditar, expresionValidadora2, mensaje4, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(valorEditar);   
+            handleInputAndBlurEvents(valorEditar, expresionValidadora1, mensaje4, "Solo se permiten números");
         }
 
         $(document).ready(function() {

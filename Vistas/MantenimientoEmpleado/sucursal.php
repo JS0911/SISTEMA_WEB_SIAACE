@@ -292,8 +292,8 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         <div id="mensaje5"></div>
 
                                         <label for="nombre">Telefono</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-telefono" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-telefono" required pattern="[0-9]+" title="Solo se permiten números">
+
                                         <div id="mensaje6"></div>
 
                                     </div>
@@ -351,8 +351,7 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         <div id="mensaje11"></div>
                                        
                                         <label for="nombre">Telefono</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-telefono" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-telefono" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje12"></div>
 
                                     </div>
@@ -753,10 +752,11 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             var mensaje5 = document.getElementById("mensaje5");
             handleInputAndBlurEvents(estado, expresionValidadora2, mensaje5, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(estado);       
-
+ 
+            
+            var expresionValidadora1 = /^[0-9]+$/;
             var mensaje6 = document.getElementById("mensaje6");
-            handleInputAndBlurEvents(telefono, expresionValidadora2, mensaje6, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(telefono);     
+            handleInputAndBlurEvents(telefono, expresionValidadora1, mensaje6, "Solo se permiten números");
 
             var mensaje7 = document.getElementById("mensaje7");
             handleInputAndBlurEvents(sucursalEditar, expresionValidadora2, mensaje7, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
@@ -775,8 +775,7 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             handleDescriptionKeypressEvent(estadoEditar);  
 
             var mensaje12 = document.getElementById("mensaje12");
-            handleInputAndBlurEvents(telefonoEditar, expresionValidadora2, mensaje12, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(telefonoEditar);  
+            handleInputAndBlurEvents(telefonoEditar, expresionValidadora1, mensaje12, "Solo se permiten números");
 
 
 
