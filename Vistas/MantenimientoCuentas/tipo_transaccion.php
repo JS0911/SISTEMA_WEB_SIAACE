@@ -43,7 +43,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento Transacción</title>
+    <title>Mantenimiento Tipo Transacción</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
@@ -219,7 +219,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
-                            <h1 class="mt-4 mb-4">Mantenimiento Transacción</h1>
+                            <h1 class="mt-4 mb-4">Mantenimiento Tipo Transacción</h1>
                         </center>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">

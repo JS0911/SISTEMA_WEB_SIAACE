@@ -272,10 +272,8 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 <form>
                                     <div class="form-group">
                                         <label for="dni">DNI </label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-dni" required oninput="this.value = this.value.replace(/\s/g, '').replace(/[^0-9]/g, '')" title="Solo se aceptan números">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-dni" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje1"></div>
-
-
 
                                         <label for="Pnombre">Primer Nombre</label>
                                         <input type="text" maxlength="15" class="form-control" id="agregar-Pnombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
@@ -293,14 +291,12 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         <input type="text" maxlength="15" class="form-control" id="agregar-Sapellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje5"></div>
 
-
                                         <label for="agregar-email">Email</label>
                                         <input type="email" maxlength="45" class="form-control" id="agregar-email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida">
                                         <div id="mensaje6"></div>
 
                                         <label for="salario">Salario</label>
-                                        <input type="text" class="form-control" id="agregar-salario" pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
-
+                                        <input type="text" class="form-control" id="agregar-salario" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
                                         <div id="mensaje7"></div>
 
                                         <label for="Estado">Estado</label>
@@ -310,19 +306,17 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                             <option value="Inactivo">Inactivo</option>
                                             <option value="Nuevo">Nuevo</option>
                                         </select>
-                                        <div id="mensaje8"></div>
 
                                         <label for="telefono">Teléfono</label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-telefono" pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -)">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-telefono" required pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -)">
                                         <div id="mensaje9"></div>
 
-
                                         <label for="direccion1">Dirección 1</label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-direccion1" pattern="[A-Z\s.,-]+" title="Ingrese una dirección válida (mayúsculas y caracteres) ">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-direccion1" required pattern="^[A-Za-z0-9\s.,-]+$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje10"></div>
 
                                         <label for="direccion2">Dirección 2</label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-direccion2" pattern="[A-Z\s.,-]+" title="Ingrese una dirección válida (mayúsculas y caracteres) ">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-direccion2" required pattern="^[A-Za-z0-9\s.,-]*$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje11"></div>
                                     </div>
                                 </form>
@@ -353,33 +347,32 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         <input type="text" class="form-control" id="editar-id-empleado" disabled>
 
                                         <label for="dni">DNI </label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-dni" <!-- required oninput="this.value = this.value.replace(/\s/g, '').replace(/[^0-9]/g, '')" -->
+                                        <input type="text" maxlength="45" class="form-control" id="editar-dni" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje12"></div>
 
-
                                         <label for="Pnombre">Primer Nombre</label>
-                                        <input type="text" maxlength="15" class="form-control" id="editar-Pnombre" <!-- required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" -->
+                                        <input type="text" maxlength="15" class="form-control" id="editar-Pnombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje13"></div>
 
                                         <label for="Snombre">Segundo Nombre</label>
-                                        <input type="text" maxlength="15" class="form-control" id="editar-Snombre" <!-- required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" -->
+                                        <input type="text" maxlength="15" class="form-control" id="editar-Snombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje14"></div>
 
                                         <label for="Papellido">Primer Apellido</label>
-                                        <input type="text" maxlength="15" class="form-control" id="editar-Papellido" <!-- required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" -->
+                                        <input type="text" maxlength="15" class="form-control" id="editar-Papellido"  required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje15"></div>
 
                                         <label for="Sapellido">Segundo Apellido</label>
-                                        <input type="text" maxlength="15" class="form-control" id="editar-Sapellido" <!-- required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" -->
+                                        <input type="text" maxlength="15" class="form-control" id="editar-Sapellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje16"></div>
 
 
                                         <label for="agregar-email">Email</label>
-                                        <input type="email" maxlength="45" class="form-control" id="editar-email" <!-- required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida -->">
+                                        <input type="email" maxlength="45" class="form-control" id="editar-email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida">
                                         <div id="mensaje17"></div>
 
                                         <label for="salario">Salario</label>
-                                        <input type="text" class="form-control" id="editar-salario" <!-- pattern="[0-9]+(\.[0-9][0-9])?" title="Ingrese un salario válido (por ejemplo, 1000.00) -->"> <!-- oninput="formatSalary(this)"" -->
+                                        <input type="text" class="form-control" id="editar-salario" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (por ejemplo, 1000.00)">
                                         <div id="mensaje18"></div>
 
                                         <label for="Estado">Estado</label>
@@ -389,22 +382,18 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                             <option value="Inactivo">Inactivo</option>
                                             <option value="Nuevo">Nuevo</option>
                                         </select>
-                                        <div id="mensaje19"></div>
 
                                         <label for="telefono">Teléfono</label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-telefono" <!-- pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -) -->">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-telefono" required pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -)">
                                         <div id="mensaje20"></div>
 
-
                                         <label for="direccion1">Dirección 1</label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-direccion1" <!-- pattern="[A-Z\s.,-]+" title="Ingrese una dirección válida (mayúsculas y caracteres) -->">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-direccion1" required pattern="^[A-Za-z0-9\s.,-]*$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje21"></div>
 
                                         <label for="direccion2">Dirección 2</label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-direccion2" <!-- pattern="[A-Z\s.,-]+" title="Ingrese una dirección válida (mayúsculas y caracteres) -->">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-direccion2" required pattern="^[A-Za-z0-9\s.,-]*$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje22"></div>
-
-
                                     </div>
                                 </form>
                             </div>
@@ -416,6 +405,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     </div>
                 </div>
             </main>
+
             <!-- AQUI FINALIZA EL MANTENIMIENTO DE USUARIO -->
 
             <footer class="py-4 bg-light mt-auto">
@@ -716,7 +706,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'eliminar',
+                confirmButtonText: 'Eliminar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -768,478 +758,142 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         }
 
         function validarNombre() {
-            console.log("entra a ValidarNombre");
-            dni = document.getElementById("#agregar-dni");
-            Pnombre = document.getElementById("agregar-Pnombre");
-            Snombre = document.getElementById("agregar-Snombre");
-            Papellido = document.getElementById("agregar-Papellido");
-            Sapellido = document.getElementById("agregar-Sapellido");
-            email = document.getElementById("agregar-email");
-            salario = document.getElementById("agregar-salario");
-            estado = document.getElementById("agregar-estado");
-            telefono = document.getElementById("agregar-telefono");
-            direccion1 = document.getElementById("agregar-direccion1");
-            direccion2 = document.getElementById("agregar-direccion2");
+            // Crear
+            var dni = document.getElementById("agregar-dni");
+            var Pnombre = document.getElementById("agregar-Pnombre");
+            var Snombre = document.getElementById("agregar-Snombre");
+            var Papellido = document.getElementById("agregar-Papellido");
+            var Sapellido = document.getElementById("agregar-Sapellido");
+            var email = document.getElementById("agregar-email");
+            var salario = document.getElementById("agregar-salario");
+            var estado = document.getElementById("agregar-estado");
+            var telefono = document.getElementById("agregar-telefono");
+            var direccion1 = document.getElementById("agregar-direccion1");
+            var direccion2 = document.getElementById("agregar-direccion2");
+            // Editar
+            var dniEditar = document.getElementById("editar-dni");
+            var PnombreEditar = document.getElementById("editar-Pnombre");
+            var SnombreEditar = document.getElementById("editar-Snombre");
+            var PapellidoEditar = document.getElementById("editar-Papellido");
+            var SapellidoEditar = document.getElementById("editar-Sapellido");
+            var emailEditar = document.getElementById("editar-email");
+            var salarioEditar = document.getElementById("editar-salario");
+            var estadoEditar = document.getElementById("editar-estado");
+            var telefonoEditar = document.getElementById("editar-telefono");
+            var direccion1Editar = document.getElementById("editar-direccion1");
+            var direccion2Editar = document.getElementById("editar-direccion2");
 
-            dniEditar = document.getElementById("#editar-dni");
-            PnombreEditar = document.getElementById("editar-Pnombre");
-            SnombreEditar = document.getElementById("editar-Snombre");
-            PapellidoEditar = document.getElementById("editar-Papellido");
-            SapellidoEditar = document.getElementById("editar-Sapellido");
-            emailEditar = document.getElementById("editar-email");
-            salarioEditar = document.getElementById("editar-salario");
-            estadoEditar = document.getElementById("editar-estado");
-            telefonoEditar = document.getElementById("editar-telefono");
-            direccion1Editar = document.getElementById("editar-direccion1");
-            direccion2Editar = document.getElementById("editar-direccion2");
+            function clearMessage(messageElement, inputElement) {
+                messageElement.innerHTML = ""; // Elimina el contenido del mensaje
+                inputElement.style.borderColor = ""; // Restablece el borde
+                inputElement.style.boxShadow = ""; // Restablece la sombra
+            }
 
-
-
-            dni.addEventListener("keypress", function(e) {
-                var expresionValidadora = /^[0-9]+$/;
-
-                if (!expresionValidadora.test(e.key)) {
-                    dni.style.borderColor = "red";
-                    dni.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten números";
-                    document.getElementById("mensaje1").style.color = "red";
-                    e.preventDefault();
+            function validateInput(inputElement, expression, messageElement, message) {
+                if (inputElement.value === "") {
+                    clearMessage(messageElement, inputElement);
+                } else if (!expression.test(inputElement.value)) {
+                    inputElement.style.borderColor = "red";
+                    inputElement.style.boxShadow = "0 0 10px red";
+                    messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
+                    messageElement.style.color = "red";
                 } else {
-                    dni.style.borderColor = "green";
-                    dni.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje1").style.color = "green";
+                    clearMessage(messageElement, inputElement); // Restablece los estilos
+                    messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
+                    messageElement.style.color = "green";
                 }
-            });
+            }
 
+            function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
+                inputElement.addEventListener("input", function() {
+                    validateInput(inputElement, expression, messageElement, message);
+                });
 
-            Pnombre.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z]+$/;
+                inputElement.addEventListener("blur", function() {
+                    clearMessage(messageElement, inputElement);
+                });
+            }
 
-                if (!expresionValidadora2.test(e.key) || e.keyCode === 32) {
-                    Pnombre.style.borderColor = "red";
-                    Pnombre.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten letras mayúsculas sin espacios.";
-                    document.getElementById("mensaje2").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    Pnombre.style.borderColor = "green";
-                    Pnombre.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje2").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje2").style.color = "green";
-                }
-            });
-
-            Snombre.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z]+$/;
-
-                if (!expresionValidadora2.test(e.key) || e.keyCode === 32) {
-                    Snombre.style.borderColor = "red";
-                    Snombre.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten letras mayúsculas sin espacios.";
-                    document.getElementById("mensaje3").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    Snombre.style.borderColor = "green";
-                    Snombre.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje3").style.color = "green";
-                }
-            });
-
-
-            Papellido.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z]+$/;
-
-                if (!expresionValidadora2.test(e.key) || e.keyCode === 32) {
-                    Papellido.style.borderColor = "red";
-                    Papellido.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten letras mayúsculas sin espacios.";
-                    document.getElementById("mensaje4").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    Papellido.style.borderColor = "green";
-                    Papellido.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje4").style.color = "green";
-                }
-            });
-
-            Sapellido.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z]+$/;
-
-                if (!expresionValidadora2.test(e.key) || e.keyCode === 32) {
-                    Sapellido.style.borderColor = "red";
-                    Sapellido.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten letras mayúsculas sin espacios.";
-                    document.getElementById("mensaje5").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    Sapellido.style.borderColor = "green";
-                    Sapellido.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje5").style.color = "green";
-                }
-            });
-
-            email.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Za-z0-9.!@#$%^&*]+$/;
-
-
-                if (!expresionValidadora2.test(e.key)) {
-                    email.style.borderColor = "red";
-                    email.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje6").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permite email valido";
-                    document.getElementById("mensaje6").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    email.style.borderColor = "green";
-                    email.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje6").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje6").style.color = "green";
-                }
-            });
-
-
-            salario.addEventListener("keypress", function(e) {
-                var expresionValidadora = /^[0-9.]+$/;
-
-                if (!expresionValidadora.test(e.key)) {
-                    salario.style.borderColor = "red";
-                    salario.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje7").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten números y un punto (ejemplo: 1000.00)";
-                    document.getElementById("mensaje7").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    // Verifica que no haya más de un punto decimal
-                    if (e.key === "." && salario.value.includes(".")) {
-                        salario.style.borderColor = "red";
-                        salario.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje7").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permite un punto decimal";
-                        document.getElementById("mensaje7").style.color = "red";
+            function handleDescriptionKeypressEvent(inputElement) {
+                inputElement.addEventListener("keypress", function(e) {
+                    var currentDescription = inputElement.value;
+                    if (e.key === " " && currentDescription.endsWith(" ")) {
                         e.preventDefault();
-                    } else {
-                        salario.style.borderColor = "green";
-                        salario.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje7").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                        document.getElementById("mensaje7").style.color = "green";
                     }
-                }
-            });
+                });
+            }
 
+            // Crear
+            var expresionValidadora1 = /^[0-9]+$/;
+            var mensaje1 = document.getElementById("mensaje1");
+            handleInputAndBlurEvents(dni, expresionValidadora1, mensaje1, "Solo se permiten números");
 
-            estado.addEventListener("change", function() {
-                if (estado.value === "") {
-                    // Si no se ha seleccionado una opción (el valor es una cadena vacía), muestra un mensaje de error.
-                    estado.style.borderColor = "red";
-                    estado.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje8").innerHTML = "<i class='fas fa-times-circle'></i> Debes seleccionar un estado.";
-                    document.getElementById("mensaje8").style.color = "red";
-                } else {
-                    // Si se ha seleccionado una opción, marca el campo como válido.
-                    estado.style.borderColor = "green";
-                    estado.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje8").innerHTML = "<i class='fas fa-check-circle'></i> Estado seleccionado.";
-                    document.getElementById("mensaje8").style.color = "green";
-                }
-            });
+            var expresionValidadora2 =  /^[A-Z]+$/;
+            var mensaje2 = document.getElementById("mensaje2");
+            handleInputAndBlurEvents(Pnombre, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas");
 
+            var mensaje3 = document.getElementById("mensaje3");
+            handleInputAndBlurEvents(Snombre, expresionValidadora2, mensaje3, "Solo se permiten Letras Mayúsculas");
 
-            telefono.addEventListener("keypress", function(e) {
-                var expresionValidadora = /^[0-9]+$/;
+            var mensaje4 = document.getElementById("mensaje4");
+            handleInputAndBlurEvents(Papellido, expresionValidadora2, mensaje4, "Solo se permiten Letras Mayúsculas");
 
-                if (!expresionValidadora.test(e.key)) {
-                    telefono.style.borderColor = "red";
-                    telefono.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje9").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten números";
-                    document.getElementById("mensaje9").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    telefono.style.borderColor = "green";
-                    telefono.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje9").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje9").style.color = "green";
-                }
-            });
+            var mensaje5 = document.getElementById("mensaje5");
+            handleInputAndBlurEvents(Sapellido, expresionValidadora2, mensaje5, "Solo se permiten Letras Mayúsculas");
 
-            direccion1.addEventListener("keypress", function(e) {
-                var expresionValidadora3 = /^[A-Za-z0-9!@#$%^&* ]+$/;
+            var expresionValidadora3 = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            var mensaje6 = document.getElementById("mensaje6");
+            handleInputAndBlurEvents(email, expresionValidadora3, mensaje6, "Dirección de correo electrónico no válida");
 
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    direccion1.style.borderColor = "red";
-                    direccion1.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje10").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permite 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje10").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora3.test(e.key)) {
-                        direccion1.style.borderColor = "red";
-                        direccion1.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje10").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten letras mayúsculas, números y ciertos caracteres especiales.";
-                        document.getElementById("mensaje10").style.color = "red";
-                        e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        direccion1.style.borderColor = "green";
-                        direccion1.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje10").innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
-                        document.getElementById("mensaje10").style.color = "green";
-                    }
-                }
-            });
+            var expresionValidadora4 = /^\d+(\.\d{2})?$/;
+            var mensaje7 = document.getElementById("mensaje7");
+            handleInputAndBlurEvents(salario, expresionValidadora4, mensaje7, "Ingrese un salario válido (por ejemplo, 1000.00)");
+            
+            var expresionValidadora6 = /^[0-9-]+/;
+            var mensaje9 = document.getElementById("mensaje9");
+            handleInputAndBlurEvents(telefono, expresionValidadora6, mensaje9, "Ingrese un número de teléfono válido (solo números y -)");
+            
+            var expresionValidadora7 =/^[A-Za-z0-9\s.,-]*$/;
+            var mensaje10 = document.getElementById("mensaje10");
+            handleInputAndBlurEvents(direccion1, expresionValidadora7, mensaje10, "Ingrese una dirección válida (mayúsculas y caracteres)");
+            handleDescriptionKeypressEvent(direccion1);
 
-            direccion2.addEventListener("keypress", function(e) {
-                var expresionValidadora3 = /^[A-Za-z0-9!@#$%^&* ]+$/;
+            var mensaje11 = document.getElementById("mensaje11");
+            handleInputAndBlurEvents(direccion2, expresionValidadora7, mensaje11, "Ingrese una dirección válida (mayúsculas y caracteres)");
+            handleDescriptionKeypressEvent(direccion2);
 
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    direccion2.style.borderColor = "red";
-                    direccion2.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje10").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permite 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje10").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora3.test(e.key)) {
-                        direccion2.style.borderColor = "red";
-                        direccion2.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje10").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten letras mayúsculas, números y ciertos caracteres especiales.";
-                        document.getElementById("mensaje10").style.color = "red";
-                        e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        direccion2.style.borderColor = "green";
-                        direccion2.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje10").innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
-                        document.getElementById("mensaje10").style.color = "green";
-                    }
-                }
-            });
+            var mensaje12 = document.getElementById("mensaje12");
+            handleInputAndBlurEvents(dniEditar, expresionValidadora1, mensaje12, "Solo se permiten números");
 
+            //Editar
+            var mensaje13 = document.getElementById("mensaje13");
+            handleInputAndBlurEvents(PnombreEditar, expresionValidadora2, mensaje13, "Solo se permiten Letras Mayúsculas");
 
+            var mensaje14 = document.getElementById("mensaje14");
+            handleInputAndBlurEvents(SnombreEditar, expresionValidadora2, mensaje14, "Solo se permiten Letras Mayúsculas");
 
+            var mensaje15 = document.getElementById("mensaje15");
+            handleInputAndBlurEvents(PapellidoEditar, expresionValidadora2, mensaje15, "Solo se permiten Letras Mayúsculas");
 
+            var mensaje16 = document.getElementById("mensaje16");
+            handleInputAndBlurEvents(SapellidoEditar, expresionValidadora2, mensaje16, "Solo se permiten Letras Mayúsculas");
 
+            var mensaje17 = document.getElementById("mensaje17");
+            handleInputAndBlurEvents(emailEditar, expresionValidadora3, mensaje17, "Dirección de correo electrónico no válida");
 
-            //         //-------------------------MODAL DE EDITAR---------------------------------------
+            var mensaje18 = document.getElementById("mensaje18");
+            handleInputAndBlurEvents(salarioEditar, expresionValidadora4, mensaje18, "Ingrese un salario válido (por ejemplo, 1000.00)");
 
-            dniEditar.addEventListener("keypress", function(e) {
-                var expresionValidadora = /^[0-9]+$/;
+            var mensaje20 = document.getElementById("mensaje20");
+            handleInputAndBlurEvents(telefonoEditar, expresionValidadora6, mensaje20, "Ingrese un número de teléfono válido (solo números y -)");
+            
+            var mensaje21 = document.getElementById("mensaje21");
+            handleInputAndBlurEvents(direccion1Editar, expresionValidadora7, mensaje21, "Ingrese una dirección válida (mayúsculas y caracteres)");
+            handleDescriptionKeypressEvent(direccion1Editar);
 
-                if (!expresionValidadora.test(e.key)) {
-                    dniEditar.style.borderColor = "red";
-                    dniEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten números";
-                    document.getElementById("mensaje1").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    dniEditar.style.borderColor = "green";
-                    dniEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje1").style.color = "green";
-                }
-            });
-
-
-            PnombreEditar.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z]+$/;
-
-                if (!expresionValidadora2.test(e.key) || e.keyCode === 32) {
-                    PnombreEditar.style.borderColor = "red";
-                    PnombreEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten letras mayúsculas sin espacios.";
-                    document.getElementById("mensaje2").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    PnombreEditar.style.borderColor = "green";
-                    PnombreEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje2").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje2").style.color = "green";
-                }
-            });
-
-            SnombreEditar.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z]+$/;
-
-                if (!expresionValidadora2.test(e.key) || e.keyCode === 32) {
-                    SnombreEditar.style.borderColor = "red";
-                    SnombreEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten letras mayúsculas sin espacios.";
-                    document.getElementById("mensaje3").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    SnombreEditar.style.borderColor = "green";
-                    SnombreEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje3").style.color = "green";
-                }
-            });
-
-
-            PapellidoEditar.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z]+$/;
-
-                if (!expresionValidadora2.test(e.key) || e.keyCode === 32) {
-                    PapellidoEditar.style.borderColor = "red";
-                    PapellidoEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten letras mayúsculas sin espacios.";
-                    document.getElementById("mensaje4").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    PapellidoEditar.style.borderColor = "green";
-                    PapellidoEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje4").style.color = "green";
-                }
-            });
-
-            SapellidoEditar.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z]+$/;
-
-                if (!expresionValidadora2.test(e.key) || e.keyCode === 32) {
-                    SapellidoEditar.style.borderColor = "red";
-                    SapellidoEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten letras mayúsculas sin espacios.";
-                    document.getElementById("mensaje5").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    SapellidoEditar.style.borderColor = "green";
-                    SapellidoEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje5").style.color = "green";
-                }
-            });
-
-            emailEditar.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Za-z0-9.!@#$%^&*]+$/;
-
-
-                if (!expresionValidadora2.test(e.key)) {
-                    emailEditar.style.borderColor = "red";
-                    emailEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje6").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permite email valido";
-                    document.getElementById("mensaje6").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    emailEditar.style.borderColor = "green";
-                    emailEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje6").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje6").style.color = "green";
-                }
-            });
-
-
-            salarioEditar.addEventListener("keypress", function(e) {
-                var expresionValidadora = /^[0-9.]+$/;
-
-                if (!expresionValidadora.test(e.key)) {
-                    salarioEditar.style.borderColor = "red";
-                    salarioEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje7").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten números y un punto (ejemplo: 1000.00)";
-                    document.getElementById("mensaje7").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    // Verifica que no haya más de un punto decimal
-                    if (e.key === "." && salario.value.includes(".")) {
-                        salarioEditar.style.borderColor = "red";
-                        salarioEditar.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje7").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permite un punto decimal";
-                        document.getElementById("mensaje7").style.color = "red";
-                        e.preventDefault();
-                    } else {
-                        salarioEditar.style.borderColor = "green";
-                        salarioEditar.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje7").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                        document.getElementById("mensaje7").style.color = "green";
-                    }
-                }
-            });
-
-
-            estadoEditar.addEventListener("change", function() {
-                if (estado.value === "") {
-                    // Si no se ha seleccionado una opción (el valor es una cadena vacía), muestra un mensaje de error.
-                    estadoEditar.style.borderColor = "red";
-                    estadoEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje8").innerHTML = "<i class='fas fa-times-circle'></i> Debes seleccionar un estado.";
-                    document.getElementById("mensaje8").style.color = "red";
-                } else {
-                    // Si se ha seleccionado una opción, marca el campo como válido.
-                    estadoEditar.style.borderColor = "green";
-                    estadoEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje8").innerHTML = "<i class='fas fa-check-circle'></i> Estado seleccionado.";
-                    document.getElementById("mensaje8").style.color = "green";
-                }
-            });
-
-
-            telefonoEditar.addEventListener("keypress", function(e) {
-                var expresionValidadora = /^[0-9]+$/;
-
-                if (!expresionValidadora.test(e.key)) {
-                    telefonoEditar.style.borderColor = "red";
-                    telefonoEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje9").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten números";
-                    document.getElementById("mensaje9").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    telefonoEditar.style.borderColor = "green";
-                    telefonoEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje9").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje9").style.color = "green";
-                }
-            });
-
-            direccion1Editar.addEventListener("keypress", function(e) {
-                var expresionValidadora3 = /^[A-Za-z0-9!@#$%^&* ]+$/;
-
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    direccion1Editar.style.borderColor = "red";
-                    direccion1Editar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje10").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permite 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje10").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora3.test(e.key)) {
-                        direccion1Editar.style.borderColor = "red";
-                        direccion1Editar.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje10").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten letras mayúsculas, números y ciertos caracteres especiales.";
-                        document.getElementById("mensaje10").style.color = "red";
-                        e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        direccion1Editar.style.borderColor = "green";
-                        direccion1Editar.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje10").innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
-                        document.getElementById("mensaje10").style.color = "green";
-                    }
-                }
-            });
-
-            direccion2Editar.addEventListener("keypress", function(e) {
-                var expresionValidadora3 = /^[A-Za-z0-9!@#$%^&* ]+$/;
-
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    direccion2Editar.style.borderColor = "red";
-                    direccion2Editar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje10").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permite 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje10").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora3.test(e.key)) {
-                        direccion2Editar.style.borderColor = "red";
-                        direccion2Editar.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje10").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten letras mayúsculas, números y ciertos caracteres especiales.";
-                        document.getElementById("mensaje10").style.color = "red";
-                        e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        direccion2Editar.style.borderColor = "green";
-                        direccion2Editar.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje10").innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
-                        document.getElementById("mensaje10").style.color = "green";
-                    }
-                }
-            });
-
+            var mensaje22 = document.getElementById("mensaje22");
+            handleInputAndBlurEvents(direccion2Editar, expresionValidadora7, mensaje22, "Ingrese una dirección válida (mayúsculas y caracteres)");
+            handleDescriptionKeypressEvent(direccion2Editar);
 
         }
 
@@ -1249,6 +903,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             validarNombre();
         });
     </script>
+
     <script>
         // Obtén los campos de entrada y el botón "Guardar para insertar"
         const dniInput = document.getElementById("agregar-dni");
@@ -1286,80 +941,95 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         direccion1Input.addEventListener('input', checkForm);
         direccion2Input.addEventListener('input', checkForm);
     </script>
+    
+    <script>
+            // Obtén los campos de entrada y el botón "Guardar para Editar"
+            const dniInput1 = document.getElementById("editar-dni");
+            const PnombreInput1 = document.getElementById("editar-Pnombre");
+            const SnombreInput1 = document.getElementById("editar-Snombre");
+            const PapellidoInput1 = document.getElementById("editar-Papellido");
+            const SapellidoInput1 = document.getElementById("editar-Sapellido");
+            const emailInput1 = document.getElementById("editar-email");
+            const salarioInput1 = document.getElementById("editar-salario");
+            const estadoInput1 = document.getElementById("editar-estado");
+            const telefonoInput1 = document.getElementById("editar-telefono");
+            const direccion1Input1 = document.getElementById("editar-direccion1");
+            const direccion2Input1 = document.getElementById("editar-direccion2");
+            const guardarButton1 = document.getElementById('btn-editar');
 
-<script>
-        // Obtén los campos de entrada y el botón "Guardar para Editar"
-        const dniInput1 = document.getElementById("editar-dni");
-        const PnombreInput1 = document.getElementById("editar-Pnombre");
-        const SnombreInput1 = document.getElementById("editar-Snombre");
-        const PapellidoInput1 = document.getElementById("editar-Papellido");
-        const SapellidoInput1 = document.getElementById("editar-Sapellido");
-        const emailInput1 = document.getElementById("editar-email");
-        const salarioInput1 = document.getElementById("editar-salario");
-        const estadoInput1 = document.getElementById("editar-estado");
-        const telefonoInput1 = document.getElementById("editar-telefono");
-        const direccion1Input1 = document.getElementById("editar-direccion1");
-        const direccion2Input1 = document.getElementById("editar-direccion2");
-        const guardarButton1 = document.getElementById('btn-editar');
+            // Función para verificar si todos los campos están llenos
+            function checkForm() {
+                const isFormValid = dniInput1.value.trim() !== '' && PnombreInput1.value.trim() !== '' && SnombreInput1.value !== '' &&
+                    PapellidoInput1.value.trim() !== '' && SapellidoInput1.value.trim() !== '' && emailInput1.value !== '' &&
+                    salarioInput1.value.trim() !== '' && estadoInput1.value.trim() !== '' && telefonoInput1.value.trim() !== '' && direccion1Input1.value.trim() !== '' && direccion2Input1.value.trim() !== '';
 
-        // Función para verificar si todos los campos están llenos
-        function checkForm() {
-            const isFormValid = dniInput1.value.trim() !== '' && PnombreInput1.value.trim() !== '' && SnombreInput1.value !== '' &&
-                PapellidoInput1.value.trim() !== '' && SapellidoInput1.value.trim() !== '' && emailInput1.value !== '' &&
-                salarioInput1.value.trim() !== '' && estadoInput1.value.trim() !== '' && telefonoInput1.value.trim() !== '' && direccion1Input1.value.trim() !== '' && direccion2Input1.value.trim() !== '';
-
-            guardarButton1.disabled = !isFormValid;
-        }
-
-        // Agrega un evento input a cada campo de entrada
-        dniInput1.addEventListener('input', checkForm);
-        PnombreInput1.addEventListener('input', checkForm);
-        SnombreInput1.addEventListener('input', checkForm);
-        PapellidoInput1.addEventListener('input', checkForm);
-        SapellidoInput1.addEventListener('input', checkForm);
-        emailInput1.addEventListener('input', checkForm);
-        salarioInput1.addEventListener('input', checkForm);
-        estadoInput1.addEventListener('input', checkForm);
-        telefonoInput1.addEventListener('input', checkForm);
-        direccion1Input1.addEventListener('input', checkForm);
-        direccion2Input1.addEventListener('input', checkForm);
-    </script>
-<script>
-        // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-dni, #agregar-Pnombre, #agregar-Snombre,#agregar-Papellido,#agregar-Sapellido,#agregar-email,#agregar-salario,#agregar-estado,#agregar-telefono,#agregar-direccion1,#agregar-direccion2').on('input', function() {
-            var input = $(this);
-            var trimmedValue = input.val().trim();
-            input.val(trimmedValue);
-
-            if (trimmedValue === '') {
-                Swal.fire({
-                    title: 'Advertencia',
-                    text: 'El campo no puede estar vacío',
-                    icon: 'warning',
-                });
+                guardarButton1.disabled = !isFormValid;
             }
-        });
 
+            // Agrega un evento input a cada campo de entrada
+            dniInput1.addEventListener('input', checkForm);
+            PnombreInput1.addEventListener('input', checkForm);
+            SnombreInput1.addEventListener('input', checkForm);
+            PapellidoInput1.addEventListener('input', checkForm);
+            SapellidoInput1.addEventListener('input', checkForm);
+            emailInput1.addEventListener('input', checkForm);
+            salarioInput1.addEventListener('input', checkForm);
+            estadoInput1.addEventListener('input', checkForm);
+            telefonoInput1.addEventListener('input', checkForm);
+            direccion1Input1.addEventListener('input', checkForm);
+            direccion2Input1.addEventListener('input', checkForm);
+        </script>
 
-         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-         $('#editar-dni, #editar-Pnombre, #editar-Snombre,#editar-Papellido,#editar-Sapellido,#editar-email,#editar-salario,#editar-estado,#editar-telefono,#editar-direccion1,#editar-direccion2').on('input', function() {
-            var input = $(this);
-            var trimmedValue = input.val().trim();
-            input.val(trimmedValue);
+        <script>
+                // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
+                $('#agregar-dni, #agregar-Pnombre, #agregar-Snombre, #agregar-Papellido, #agregar-Sapellido, #agregar-email, #agregar-salario, #agregar-estado, #agregar-telefono').on('input', function() {
+                    var input = $(this);
+                    var trimmedValue = input.val().trim();
+                    input.val(trimmedValue);
 
-            if (trimmedValue === '') {
-                Swal.fire({
-                    title: 'Advertencia',
-                    text: 'El campo no puede estar vacío',
-                    icon: 'warning',
+                    if (trimmedValue === '') {
+                        Swal.fire({
+                            title: 'Advertencia',
+                            text: 'El campo no puede estar vacío',
+                            icon: 'warning',
+                        });
+                    }
                 });
-            }
-        });
-    </script>
+
+                // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
+                $('#editar-dni, #editar-Pnombre, #editar-Snombre, #editar-Papellido, #editar-Sapellido, #editar-email, #editar-salario, #editar-estado, #editar-telefono').on('input', function() {
+                    var input = $(this);
+                    var trimmedValue = input.val().trim();
+                    input.val(trimmedValue);
+
+                    if (trimmedValue === '') {
+                        Swal.fire({
+                            title: 'Advertencia',
+                            text: 'El campo no puede estar vacío',
+                            icon: 'warning',
+                        });
+                    }
+                });
+
+                $('#agregar-direccion1, #agregar-direccion2, #editar-direccion1, #editar-direccion2').on('input', function() {
+                    var input = $(this);
+                    var trimmedValue = input.val();
+                    input.val(trimmedValue);
+
+                    if (trimmedValue === '') {
+                        Swal.fire({
+                            title: 'Advertencia',
+                            text: 'El campo no puede estar vacío',
+                            icon: 'warning',
+                        });
+                    }
+                }); 
+
+        </script>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
 
 </body>
-
 </html>
