@@ -27,9 +27,20 @@ switch ($_GET["op"]) {
         break;
 
     case "InsertParametros":
-        $datos = $com->insert_parametros($body["PARAMETRO"], $body["VALOR"]/* , $body["ID_USUARIO"], $body["CREADO_POR"], $body["MODIFICADO_POR"] *//* , $body["FECHA_CREACION"], $body["FECHA_MODIFICACION "]*/);
-        echo json_encode("Parametro Insertado");
-        break;
+        // Obtén los datos de la region
+        $PARAMETRO = $body["PARAMETRO"];
+        $VALOR = $body["VALOR"];
+
+        if (verificarExistenciaParametro($PARAMETRO) > 0) {
+            // Envía una respuesta de conflicto (409) si la region ya existe
+            http_response_code(409);
+            echo json_encode(["error" => "El parametro ya existe en la base de datos."]);
+        } else {
+            // Inserta una region en la base de datos
+            $datos = $com->insert_parametros($PARAMETRO, $VALOR);
+            echo json_encode(["message" => "Parametro insertado exitosamente."]);
+        }
+       break;
 
     case "GetParametro":
         $datos = $com->get_parametro($body["ID_PARAMETRO"]);
@@ -55,5 +66,21 @@ switch ($_GET["op"]) {
         $datos = $com->eliminar_parametro($ID_PARAMETRO);
         echo json_encode("Parametro eliminado");
         break;
-}
+
+    }  
+        function verificarExistenciaParametro($PARAMETRO) {
+            // Realiza una consulta en la base de datos para verificar si el PARAMETRO ya existe
+            $sql = "SELECT COUNT(*) as count FROM tbl_ms_parametros WHERE parametro = :parametro";
+        
+            // Realiza la conexión a la base de datos y ejecuta la consulta
+            $conexion = new Conectar();
+            $conn = $conexion->Conexion();
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':parametro', $PARAMETRO);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+            // Devuelve el número de resultados encontrados
+            return $row['count'];
+        }
 ?>

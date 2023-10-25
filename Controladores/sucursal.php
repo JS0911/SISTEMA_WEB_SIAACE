@@ -27,8 +27,21 @@ switch ($_GET["op"]) {
         break;
 
     case "InsertSucursal":
-        $datos = $com->insert_sucursal($body["SUCURSAL"], $body["DESCRIPCION"], $body["DIRECCION"], $body["ESTADO"], $body["TELEFONO"]);
-        echo json_encode("Sucursal Insertada");
+         // Obtén los datos de la region
+         $SUCURSAL = $body["SUCURSAL"];
+         $DESCRIPCION = $body["DESCRIPCION"];
+         $DIRECCION = $body["DIRECCION"];
+         $ESTADO = $body["ESTADO"];
+         $TELEFONO = $body["TELEFONO"];
+         if (verificarExistenciaSucursal($SUCURSAL) > 0) {
+             // Envía una respuesta de conflicto (409) si la region ya existe
+             http_response_code(409);
+             echo json_encode(["error" => "La Sucursal ya existe en la base de datos."]);
+         } else {
+             // Inserta una region en la base de datos
+             $datos = $com->insert_sucursal($SUCURSAL, $DESCRIPCION, $DIRECCION, $ESTADO, $TELEFONO);
+             echo json_encode(["message" => "Sucursal insertada exitosamente."]);
+         }
         break;
 
     case "GetSucursal":
@@ -44,7 +57,7 @@ switch ($_GET["op"]) {
         $ESTADO = $body["ESTADO"];
         $TELEFONO = $body["TELEFONO"];
 
-        $datos = $com->update_sucursal($ID_SUCURSAL, $SUCURSAL, $DESCRIPCION , $DIRECCION,$ESTADO,$TELEFONO);
+        $datos = $com->update_sucursal($ID_SUCURSAL, $SUCURSAL, $DESCRIPCION , $DIRECCION, $ESTADO,$TELEFONO);
         echo json_encode($datos);
         break;
     case "eliminarSucursal":
@@ -52,5 +65,22 @@ switch ($_GET["op"]) {
         $datos = $com->eliminar_sucursal($ID_SUCURSAL);
         echo json_encode("Sucursal eliminada");
         break;
+}
+
+
+function verificarExistenciaSucursal($SUCURSAL) {
+    // Realiza una consulta en la base de datos para verificar si el REGION ya existe
+    $sql = "SELECT COUNT(*) as count FROM tbl_me_sucursal WHERE sucursal = :sucursal";
+
+    // Realiza la conexión a la base de datos y ejecuta la consulta
+    $conexion = new Conectar();
+    $conn = $conexion->Conexion();
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':sucursal', $SUCURSAL);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Devuelve el número de resultados encontrados
+    return $row['count'];
 }
 ?>
