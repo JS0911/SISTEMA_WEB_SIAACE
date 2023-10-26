@@ -25,17 +25,18 @@ class Region extends Conectar
     }
 
     // INSERTA UNA REGIÓN
-    public function insert_region($REGION, $DESCRIPCION)
+    public function insert_region($REGION, $DESCRIPCION, $ESTADO)
     {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_me_region` ( `REGION`, `DESCRIPCION`) VALUES ( :REGION, :DESCRIPCION)";
+            $sql = "INSERT INTO `siaace`.`tbl_me_region` ( `REGION`, `DESCRIPCION`, `ESTADO`) VALUES ( :REGION, :DESCRIPCION, :ESTADO)";
 
             $stmt = $conectar->prepare($sql);
 
             $stmt->bindParam(':REGION', $REGION, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
+            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
 
             $stmt->execute();
 
@@ -50,7 +51,7 @@ class Region extends Conectar
     }
 
     // EDITA UNA REGIÓN
-    public function update_region($ID_REGION, $REGION, $DESCRIPCION)
+    public function update_region($ID_REGION, $REGION, $DESCRIPCION, $ESTADO)
     {
         try {
             $conectar = parent::conexion();
@@ -59,7 +60,8 @@ class Region extends Conectar
             // Consulta SQL para actualizar los campos de la región
             $sql = "UPDATE `tbl_me_region` 
                     SET `REGION` = :REGION, 
-                        `DESCRIPCION` = :DESCRIPCION
+                        `DESCRIPCION` = :DESCRIPCION,
+                        `ESTADO` = :ESTADO
                     WHERE `ID_REGION` = :ID_REGION";
 
             $stmt = $conectar->prepare($sql);
@@ -67,6 +69,7 @@ class Region extends Conectar
             $stmt->bindParam(':ID_REGION', $ID_REGION, PDO::PARAM_INT);
             $stmt->bindParam(':REGION', $REGION, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
+            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
 
             $stmt->execute();
 

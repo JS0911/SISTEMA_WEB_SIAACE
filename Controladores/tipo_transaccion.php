@@ -29,6 +29,7 @@ switch ($_GET["op"]) {
         $TIPO_TRANSACCION = $body["TIPO_TRANSACCION"];
         $DESCRIPCION = $body["DESCRIPCION"];
         $SIGNO_TRANSACCION = $body["SIGNO_TRANSACCION"];
+        $ESTADO =  $body["ESTADO"];
 
         if (verificarExistenciaTransaccion($TIPO_TRANSACCION) > 0) {
             // Envía una respuesta de conflicto (409) si la transacción ya existe
@@ -36,7 +37,7 @@ switch ($_GET["op"]) {
             echo json_encode(["error" => "La transacción ya existe en la base de datos."]);
         } else {
             // Inserta una transacción en la base de datos
-            $datos = $com->insert_tipoTransaccion($TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION);
+            $datos = $com->insert_tipoTransaccion($TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION, $ESTADO);
             echo json_encode(["message" => "Transacción insertada exitosamente."]);
         }
 
@@ -52,12 +53,14 @@ switch ($_GET["op"]) {
         $TIPO_TRANSACCION = $body["TIPO_TRANSACCION"];
         $DESCRIPCION = $body["DESCRIPCION"];
         $SIGNO_TRANSACCION = $body["SIGNO_TRANSACCION"];
+        $ESTADO =  $body["ESTADO"];
 
         $datos = $com->update_tipoTransaccion(
             $ID_TIPO_TRANSACCION,
             $TIPO_TRANSACCION,
             $DESCRIPCION,
-            $SIGNO_TRANSACCION
+            $SIGNO_TRANSACCION,
+            $ESTADO
         );
         echo json_encode($datos);
     break;

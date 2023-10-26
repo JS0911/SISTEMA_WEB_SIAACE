@@ -241,6 +241,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                                     <th>Fecha Creacion</th>
                                     <th>Modificado por</th>
                                     <th>Fecha Modificacion</th>
+                                    <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -274,8 +275,16 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                                         <div id="mensaje2"></div>
 
                                         <label for="nombre">Signo Transaccion</label>
-                                        <input type="text" class="form-control" id="agregar-signo" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" class="form-control" id="agregar-signo" required pattern="^[0-9-]+$" title="Solo se permiten - y un numero" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje3"></div>
+
+                                        <label for="Estado">Estado</label>
+                                        <select class="form-control" id="agregar-estado" maxlength="15" name="IdTipoTransaccion" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <option value="ACTIVO">Activo</option>
+                                            <option value="INACTIVO">Inactivo</option>
+                                            <option value="NUEVO">Nuevo</option>
+                                        </select>
 
                                     </div>
                                 </form>
@@ -312,9 +321,16 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                                         <div id="mensaje4"></div>
 
                                         <label for="nombre">Signo Transaccion</label>
-                                        <input type="text" class="form-control" id="editar-signo" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" class="form-control" id="editar-signo" required pattern="^[0-9-]+$" title="Solo se permiten - y un numero" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje5"></div>
 
+                                        <label for="Estado">Estado</label>
+                                        <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <option value="ACTIVO">Activo</option>
+                                            <option value="INACTIVO">Inactivo</option>
+                                            <option value="NUEVO">Nuevo</option>
+                                        </select>
                                     </div>
                                 </form>
                             </div>
@@ -375,6 +391,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                             '<td>' + transaccion.FECHA_CREACION + '</td>' +
                             '<td>' + transaccion.MODIFICADO_POR + '</td>' +
                             '<td>' + transaccion.FECHA_MODIFICACION + '</td>' +
+                            '<td>' + transaccion.ESTADO + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -419,8 +436,9 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                 var transaccion = $("#agregar-transaccion").val();
                 var descripcion = $("#agregar-descripcion").val();
                 var signo = $("#agregar-signo").val();
+                var estado = document.getElementById("agregar-estado").value; // Obtener el valor del select
 
-                if (transaccion == "" || descripcion == "" || signo == "") {
+                if (transaccion == "" || descripcion == "" || signo == "" || estado == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
@@ -432,6 +450,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                         TIPO_TRANSACCION: transaccion,
                         DESCRIPCION: descripcion,
                         SIGNO_TRANSACCION: signo,
+                        ESTADO: estado
                     };
 
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipo_transaccion.php?op=InsertTipoTransaccion', {
@@ -517,6 +536,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                     document.getElementById('editar-transaccion').value = transaccion.TIPO_TRANSACCION;
                     document.getElementById('editar-descripcion').value = transaccion.DESCRIPCION;
                     document.getElementById('editar-signo').value = transaccion.SIGNO_TRANSACCION;
+                    document.getElementById('editar-estado').value = transaccion.ESTADO;
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
@@ -529,9 +549,9 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
             var transaccion = document.getElementById('editar-transaccion').value;
             var descripcion = document.getElementById('editar-descripcion').value;
             var signo = document.getElementById('editar-signo').value;
+            var estado = document.getElementById('editar-estado').value;
 
-
-            if (transaccion == "" || descripcion == "" || signo == "") {
+            if (transaccion == "" || descripcion == "" || signo == "" || estado == "" ) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -549,7 +569,8 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                             "ID_TIPO_TRANSACCION": id_transaccion,
                             "TIPO_TRANSACCION": transaccion,
                             "DESCRIPCION": descripcion,
-                            "SIGNO_TRANSACCION": signo
+                            "SIGNO_TRANSACCION": signo,
+                            "ESTADO": estado
                         }) // Convierte los datos en formato JSON
                     })
                     .then(function(response) {
@@ -682,15 +703,16 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
             handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(descripcion);
 
+            var expresionValidadora3 = /^[0-9-]+/;
             var mensaje3 = document.getElementById("mensaje3");
-            handleInputAndBlurEvents(signo, expresionValidadora1, mensaje3, "Solo se permiten Letras Mayúsculas");
+            handleInputAndBlurEvents(signo, expresionValidadora3, mensaje3, "Solo se permiten - y un numero");
 
             var mensaje4 = document.getElementById("mensaje4");
             handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje4, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(descripcionEditar);
 
             var mensaje5 = document.getElementById("mensaje5");
-            handleInputAndBlurEvents(signoEditar, expresionValidadora1, mensaje5, "Solo se permiten Letras Mayúsculas");
+            handleInputAndBlurEvents(signoEditar, expresionValidadora3, mensaje5, "Solo se permiten - y un numero");
 
         }
 
@@ -707,11 +729,12 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
         const transaccionInput = document.getElementById('agregar-transaccion');
         const descripcionInput = document.getElementById('agregar-descripcion');
         const signoInput = document.getElementById('agregar-signo');
+        const estadoInput = document.getElementById('agregar-estado');
         const guardarButton = document.getElementById('btn-agregar');
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = transaccionInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && signoInput.value.trim() !== '';
+            const isFormValid = transaccionInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && signoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid;
         }
 
@@ -719,28 +742,31 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
         transaccionInput.addEventListener('input', checkForm);
         descripcionInput.addEventListener('input', checkForm);
         signoInput.addEventListener('input', checkForm);
+        estadoInput.addEventListener('input', checkForm);
     </script>
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
         const descripcionInput1 = document.getElementById('editar-descripcion');
         const signoInput1 = document.getElementById('editar-signo');
+        const estadoInput1 = document.getElementById('editar-estado');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = descripcionInput1.value.trim() !== '' && signoInput1.value.trim() !== '';
+            const isFormValid = descripcionInput1.value.trim() !== '' && signoInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
             guardarButton1.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
         descripcionInput1.addEventListener('input', checkForm);
         signoInput1.addEventListener('input', checkForm);
+        estadoInput1.addEventListener('input', checkForm);
     </script>
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-signo, #editar-signo, #agregar-transaccion, #editar-transaccion').on('input', function() {
+        $('#agregar-transaccion, #editar-transaccion, #agregar-estado, #editar-estado').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -755,7 +781,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
         });
 
         // Validar que no hayan campos vacios
-        $('#agregar-descripcion, #editar-descripcion').on('input', function() {
+        $('#agregar-signo, #editar-signo, #agregar-descripcion, #editar-descripcion').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val();
             input.val(trimmedValue);
@@ -776,11 +802,13 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
             document.getElementById('agregar-transaccion').value = "";
             document.getElementById('agregar-descripcion').value = "";
             document.getElementById('agregar-signo').value = "";
+            document.getElementById('agregar-estado').value = "";
 
             // Limpia los checkboxes
             document.getElementById('agregar-transaccion').checked = false;
             document.getElementById('agregar-descripcion').checked = false;
             document.getElementById('agregar-signo').checked = false;
+            document.getElementById('agregar-estado').checked = false;
 
             location.reload();
         });
@@ -791,6 +819,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
             // Limpia los checkboxes
             document.getElementById('editar-descripcion').checked = false;
             document.getElementById('editar-signo').checked = false;
+            document.getElementById('editar-estado').checked = false;
         });
     </script>
 

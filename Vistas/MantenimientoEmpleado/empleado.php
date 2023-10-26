@@ -302,9 +302,9 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         <label for="Estado">Estado</label>
                                         <select class="form-control" id="agregar-estado" maxlength="15" name="IdEstado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="Activo">Activo</option>
-                                            <option value="Inactivo">Inactivo</option>
-                                            <option value="Nuevo">Nuevo</option>
+                                            <option value="Activo">ACTIVO</option>
+                                            <option value="Inactivo">INACTIVO</option>
+                                            <option value="Nuevo">NUEVO</option>
                                         </select>
 
                                         <label for="telefono">Teléfono</label>
@@ -378,9 +378,9 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         <label for="Estado">Estado</label>
                                         <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="Activo">Activo</option>
-                                            <option value="Inactivo">Inactivo</option>
-                                            <option value="Nuevo">Nuevo</option>
+                                            <option value="Activo">ACTIVO</option>
+                                            <option value="Inactivo">INACTIVO</option>
+                                            <option value="Nuevo">NUEVO</option>
                                         </select>
 
                                         <label for="telefono">Teléfono</label>

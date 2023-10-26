@@ -25,18 +25,19 @@ class tipoTransaccion extends Conectar
     }
 
     // INSERTA UNA TRANSACCION
-    public function insert_tipoTransaccion($TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION)
+    public function insert_tipoTransaccion($TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION, $ESTADO)
     {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_tipo_transaccion` ( `TIPO_TRANSACCION`, `DESCRIPCION`, `SIGNO_TRANSACCION`) VALUES ( :TIPO_TRANSACCION, :DESCRIPCION, :SIGNO_TRANSACCION)";
+            $sql = "INSERT INTO `siaace`.`tbl_tipo_transaccion` ( `TIPO_TRANSACCION`, `DESCRIPCION`, `SIGNO_TRANSACCION`, `ESTADO`) VALUES ( :TIPO_TRANSACCION, :DESCRIPCION, :SIGNO_TRANSACCION, :ESTADO)";
 
             $stmt = $conectar->prepare($sql);
 
             $stmt->bindParam(':TIPO_TRANSACCION', $TIPO_TRANSACCION, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
             $stmt->bindParam(':SIGNO_TRANSACCION', $SIGNO_TRANSACCION, PDO::PARAM_INT);
+            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
 
             $stmt->execute();
 
@@ -51,7 +52,7 @@ class tipoTransaccion extends Conectar
     }
 
     // EDITA UNA TRANSACCION
-    public function update_tipoTransaccion($ID_TIPO_TRANSACCION, $TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION )
+    public function update_tipoTransaccion($ID_TIPO_TRANSACCION, $TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION, $ESTADO )
     {
         try {
             $conectar = parent::conexion();
@@ -61,7 +62,8 @@ class tipoTransaccion extends Conectar
             $sql = "UPDATE `tbl_tipo_transaccion` 
                     SET `TIPO_TRANSACCION` = :TIPO_TRANSACCION, 
                         `DESCRIPCION` = :DESCRIPCION,
-                        `SIGNO_TRANSACCION` = :SIGNO_TRANSACCION
+                        `SIGNO_TRANSACCION` = :SIGNO_TRANSACCION,
+                        `ESTADO` = :ESTADO
                     WHERE `ID_TIPO_TRANSACCION` = :ID_TIPO_TRANSACCION";
 
             $stmt = $conectar->prepare($sql);
@@ -70,6 +72,7 @@ class tipoTransaccion extends Conectar
             $stmt->bindParam(':TIPO_TRANSACCION', $TIPO_TRANSACCION, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
             $stmt->bindParam(':SIGNO_TRANSACCION', $SIGNO_TRANSACCION, PDO::PARAM_INT);
+            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
 
             $stmt->execute();
 

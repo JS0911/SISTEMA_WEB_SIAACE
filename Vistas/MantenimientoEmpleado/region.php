@@ -212,7 +212,7 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
         </div>
         <div id="layoutSidenav_content">
 
-            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE REGIONID_REGIONS -->
+            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE REGIONES -->
             <main>
                 <div class="container-fluid">
                     <!-- Botón para abrir el formulario de creación -->
@@ -238,6 +238,7 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                                     <th>Fecha Creación</th>
                                     <th>Modificado por</th>
                                     <th>Fecha Modificación</th>
+                                    <th>Estado</th>
                                     <th>Creado por</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -270,7 +271,14 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                                         <label for="nombre">Descripcion</label>
                                         <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
-
+                                    
+                                        <label for="Estado">Estado</label>
+                                        <select class="form-control" id="agregar-estado" maxlength="15" name="IdRegion" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <option value="ACTIVO">Activo</option>
+                                            <option value="INACTIVO">Inactivo</option>
+                                            <option value="NUEVO">Nuevo</option>
+                                        </select>
                                     </div>
                                 </form>
                             </div>
@@ -304,6 +312,14 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                                         <label for="nombre">Descripcion</label>
                                         <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje3"></div>
+
+                                        <label for="Estado">Estado</label>
+                                        <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <option value="ACTIVO">Activo</option>
+                                            <option value="INACTIVO">Inactivo</option>
+                                            <option value="NUEVO">Nuevo</option>
+                                        </select>
                                     </div>
                                 </form>
                             </div>
@@ -362,6 +378,7 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                             '<td>' + region.FECHA_CREACION + '</td>' +
                             '<td>' + region.MODIFICADO_POR + '</td>' +
                             '<td>' + region.FECHA_MODIFICACION + '</td>' +
+                            '<td>' + region.ESTADO + '</td>' +
                             '<td>' + region.CREADO_POR + '</td>' +
                             '<td>';
 
@@ -406,8 +423,9 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                 // Obtener los valores de los campos del formulario
                 var region = $("#agregar-region").val();
                 var descripcion = $("#agregar-descripcion").val();
+                var estado = document.getElementById("agregar-estado").value; // Obtener el valor del select
 
-                if (region == "" || descripcion == "") {
+                if (region == "" || descripcion == "" || estado == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
@@ -417,7 +435,8 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                     // Crear un region con los datos a enviar al servidor
                     var datos = {
                         REGION: region,
-                        DESCRIPCION: descripcion
+                        DESCRIPCION: descripcion,
+                        ESTADO: estado
                     };
 
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/region.php?op=InsertRegion', {
@@ -502,6 +521,7 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                     document.getElementById('editar-id-region').value = region.ID_REGION;
                     document.getElementById('editar-region').value = region.REGION;
                     document.getElementById('editar-descripcion').value = region.DESCRIPCION;
+                    document.getElementById('editar-estado').value = region.ESTADO;
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
@@ -513,8 +533,9 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
             var id_region = document.getElementById('editar-id-region').value;
             var region = document.getElementById('editar-region').value;
             var descripcion = document.getElementById('editar-descripcion').value;
+            var estado = document.getElementById('editar-estado').value;
 
-            if (region == "" || descripcion == "") {
+            if (region == "" || descripcion == "" || estado == "") {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -531,7 +552,9 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                         body: JSON.stringify({
                             "ID_REGION": id_region,
                             "REGION": region,
-                            "DESCRIPCION": descripcion
+                            "DESCRIPCION": descripcion,
+                            "ESTADO": estado
+
                         }) // Convierte los datos en formato JSON
                     })
                     .then(function(response) {
@@ -679,37 +702,41 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
         // Obtén los campos de entrada y el botón "Guardar para insertar"
         const regionInput = document.getElementById('agregar-region');
         const descripcionInput = document.getElementById('agregar-descripcion');
+        const estadoInput = document.getElementById('agregar-estado');
         const guardarButton = document.getElementById('btn-agregar');
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = regionInput.value.trim() !== '' && descripcionInput.value.trim() !== '';
+            const isFormValid = regionInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && estadoInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
         regionInput.addEventListener('input', checkForm);
         descripcionInput.addEventListener('input', checkForm);
+        estadoInput.addEventListener('input', checkForm);
     </script>
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
         const descripcionInput1 = document.getElementById('editar-descripcion');
+        const estadoInput1 = document.getElementById('editar-estado');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
-
+        
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = descripcionInput1.value.trim() !== '';
+            const isFormValid = descripcionInput1.value.trim() !== ''  && estadoInput1.value.trim() !== '';
             guardarButton1.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
         descripcionInput1.addEventListener('input', checkForm);
+        estadoInput1.addEventListener('input', checkForm);
     </script>
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-region, #editar-region').on('input', function() {
+        $('#agregar-region, #editar-region, #agregar-estado, #editar-estado').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -744,11 +771,12 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
         document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
             document.getElementById('agregar-region').value = "";
             document.getElementById('agregar-descripcion').value = "";
-
+            document.getElementById('agregar-estado').value = "";
 
             // Limpia los checkboxes
             document.getElementById('agregar-region').checked = false;
             document.getElementById('agregar-descripcion').checked = false;
+            document.getElementById('agregar-estado').checked = false;
         
             location.reload();  
         });
@@ -758,6 +786,7 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
 
             // Limpia los checkboxes
             document.getElementById('editar-descripcion').checked = false;
+            document.getElementById('editar-estado').checked = false;
         });
     </script>
 

@@ -28,14 +28,15 @@ switch ($_GET["op"]) {
         // Obtén los datos de la region
         $REGION = $body["REGION"];
         $DESCRIPCION = $body["DESCRIPCION"];
-        
+        $ESTADO =  $body["ESTADO"];
+
         if (verificarExistenciaRegion($REGION) > 0) {
             // Envía una respuesta de conflicto (409) si la region ya existe
             http_response_code(409);
             echo json_encode(["error" => "La Region ya existe en la base de datos."]);
         } else {
             // Inserta una region en la base de datos
-            $datos = $com->insert_region($REGION, $DESCRIPCION);
+            $datos = $com->insert_region($REGION, $DESCRIPCION, $ESTADO);
             echo json_encode(["message" => "Region insertada exitosamente."]);
         }
 
@@ -50,11 +51,13 @@ switch ($_GET["op"]) {
         $ID_REGION = $body["ID_REGION"];
         $REGION = $body["REGION"];
         $DESCRIPCION = $body["DESCRIPCION"];
+        $ESTADO =  $body["ESTADO"];
 
         $datos = $com->update_region(
             $ID_REGION,
             $REGION,
             $DESCRIPCION,
+            $ESTADO
         );
         echo json_encode($datos);
     break;
