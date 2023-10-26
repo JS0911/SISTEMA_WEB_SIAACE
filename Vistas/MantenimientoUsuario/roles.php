@@ -267,17 +267,16 @@ $permisos2 = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
                                         <label for="nombre">Rol</label>
                                         <input type="text" maxlength="100" class="form-control" id="agregar-rol" 
                                         required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje2"></div>
+                                        <div id="mensaje1"></div>
 
                                         <label for="estado">Descripcion</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-descripcion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje3"></div>
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje2"></div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                             </div>
                         </div>
@@ -302,19 +301,17 @@ $permisos2 = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
                                         <input type="text" class="form-control" id="editar-id-rol" disabled>
                             
                                         <label for="nombre">Rol</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-rol" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje4"></div>
+                                        <input type="text" class="form-control" id="editar-rol" disabled>
+                        
                                         
                                         <label for="estado">Desripcion</label>
-                                        <input type="text" maxlength="15" class="form-control" id="editar-descripcion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje5"></div>
+                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje3"></div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateRol()" disabled>Guardar</button>
                             </div>
                         </div>
@@ -604,93 +601,64 @@ $permisos2 = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
         function validarNombre() {
             rol = document.getElementById("agregar-rol");
             descripcion = document.getElementById("agregar-descripcion");
-            rolEditar = document.getElementById("editar-rol");
             descripcionEditar = document.getElementById("editar-descripcion");
 
            
-            rol.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z0-9\s]+$/;
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    rol.style.borderColor = "red";
-                    rol.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje2").style.color = "red";
-                    e.preventDefault();
+            function clearMessage(messageElement, inputElement) {
+                messageElement.innerHTML = ""; // Elimina el contenido del mensaje
+                inputElement.style.borderColor = ""; // Restablece el borde
+                inputElement.style.boxShadow = ""; // Restablece la sombra
+            }
+
+            function validateInput(inputElement, expression, messageElement, message) {
+                if (inputElement.value === "") {
+                    clearMessage(messageElement, inputElement);
+                } else if (!expression.test(inputElement.value)) {
+                    inputElement.style.borderColor = "red";
+                    inputElement.style.boxShadow = "0 0 10px red";
+                    messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
+                    messageElement.style.color = "red";
                 } else {
-                    if (!expresionValidadora2.test(e.key)) {
-                        rol.style.borderColor = "red";
-                        rol.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                        document.getElementById("mensaje2").style.color = "red";
+                    clearMessage(messageElement, inputElement); // Restablece los estilos
+                    messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
+                    messageElement.style.color = "green";
+                }
+            }
+
+            function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
+                inputElement.addEventListener("input", function() {
+                    validateInput(inputElement, expression, messageElement, message);
+                });
+
+                inputElement.addEventListener("blur", function() {
+                    clearMessage(messageElement, inputElement);
+                });
+            }
+
+            function handleDescriptionKeypressEvent(inputElement) {
+                inputElement.addEventListener("keypress", function(e) {
+                    var currentDescription = inputElement.value;
+                    if (e.key === " " && currentDescription.endsWith(" ")) {
                         e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        rol.style.borderColor = "green";
-                        rol.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                        document.getElementById("mensaje2").style.color = "green";
                     }
-                }
-            });
+                });
+            }
 
-            descripcion.addEventListener("keypress", function(e) {
-                expresionValidadora1 = /^[A-Z]+$/;
+            var expresionValidadora1 = /^[A-Z]+$/;
+            var mensaje1 = document.getElementById("mensaje1");
+            handleInputAndBlurEvents(rol, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
 
-                if (!expresionValidadora1.test(e.key)) {
-                    descripcion.style.borderColor = "red";
-                    descripcion.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                    document.getElementById("mensaje3").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    descripcion.style.borderColor = "green";
-                    descripcion.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje3").style.color = "green";
-                }
-            });
+            var expresionValidadora2 = /^[A-Z0-9\s]+$/;
+            var mensaje2 = document.getElementById("mensaje2");
+            handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(descripcion);
 
-            rolEditar.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z0-9\s]+$/;
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    rolEditar.style.borderColor = "red";
-                    rolEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje4").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora2.test(e.key)) {
-                        rolEditar.style.borderColor = "red";
-                        rolEditar.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                        document.getElementById("mensaje4").style.color = "red";
-                        e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        rolEditar.style.borderColor = "green";
-                        rolEditar.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje4").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                        document.getElementById("mensaje4").style.color = "green";
-                    }
-                }
-            });
 
-            descripcionEditar.addEventListener("keypress", function(e) {
-                expresionValidadora1 = /^[A-Z]+$/;
+            var mensaje3 = document.getElementById("mensaje3");
+            handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje3, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(descripcionEditar);
 
-                if (!expresionValidadora1.test(e.key)) {
-                    descripcionEditar.style.borderColor = "red";
-                    descripcionEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                    document.getElementById("mensaje5").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    descripcionEditar.style.borderColor = "green";
-                    descripcionEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje5").style.color = "green";
-                }
-            });
+
         }
 
         $(document).ready(function() {
@@ -710,39 +678,40 @@ $permisos2 = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid =  rolInput.value.trim() !== '' && descripcionInput.value.trim() !== '';
+            const isFormValid = rolInput.value.trim() !== '' && descripcionInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
         rolInput.addEventListener('input', checkForm);
         descripcionInput.addEventListener('input', checkForm);
+        guardarButton.addEventListener('input', checkForm);
     </script>
-    
+
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
-        const rolInput1 = document.getElementById('editar-rol');
         const descripcionInput1 = document.getElementById('editar-descripcion');
+        
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = rolInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '';
+            const isFormValid = descripcionInput1.value.trim() !== '' ;
             guardarButton1.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
-        rolInput1.addEventListener('input', checkForm);
         descripcionInput1.addEventListener('input', checkForm);
+       
     </script>
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-rol, #agregar-descripcion').on('input', function() {
+        $('#agregar-rol, #editar-rol').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
-            
+
             if (trimmedValue === '') {
                 Swal.fire({
                     title: 'Advertencia',
@@ -752,10 +721,10 @@ $permisos2 = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
             }
         });
 
-        // Escuchar eventos de cambio en los campos de entrada deshabilitados para eliminar espacios en blanco al principio y al final
-        $('#editar-rol, #editar-descripcion').on('input', function() {
+        // Validar que no hayan campos vacios
+        $('#agregar-descripcion, #editar-descripcion').on('input', function() {
             var input = $(this);
-            var trimmedValue = input.val().trim();
+            var trimmedValue = input.val();
             input.val(trimmedValue);
 
             if (trimmedValue === '') {
@@ -765,6 +734,23 @@ $permisos2 = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
                     icon: 'warning',
                 });
             }
+        });
+    </script>
+
+    <script>
+       //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
+       document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
+            document.getElementById('agregar-rol').value = "";
+            document.getElementById('agregar-descripcion').value = "";
+          
+
+
+            location.reload();
+        });
+
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
+        document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
+
         });
     </script>
 

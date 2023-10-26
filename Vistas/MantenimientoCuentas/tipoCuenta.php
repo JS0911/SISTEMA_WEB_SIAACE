@@ -753,6 +753,7 @@ $permisos2 = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Cuen
         cuentaInput.addEventListener('input', checkForm);
         descripcionInput.addEventListener('input', checkForm);
         tasaInput.addEventListener('input', checkForm);
+        estadoInput.addEventListener('input', checkForm);
         guardarButton.addEventListener('input', checkForm);
     </script>
 
@@ -777,7 +778,7 @@ $permisos2 = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Cuen
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-cuenta, #editar-descripcion').on('input', function() {
+        $('#agregar-cuenta, #editar-cuenta').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
