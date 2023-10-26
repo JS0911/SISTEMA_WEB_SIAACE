@@ -31,15 +31,17 @@ switch ($_GET["op"]) {
          $SUCURSAL = $body["SUCURSAL"];
          $DESCRIPCION = $body["DESCRIPCION"];
          $DIRECCION = $body["DIRECCION"];
-         $ESTADO = $body["ESTADO"];
+         $ID_REGION = $body["ID_REGION"];
          $TELEFONO = $body["TELEFONO"];
+         $ESTADO = $body["ESTADO"];
+        
          if (verificarExistenciaSucursal($SUCURSAL) > 0) {
              // Envía una respuesta de conflicto (409) si la region ya existe
              http_response_code(409);
              echo json_encode(["error" => "La Sucursal ya existe en la base de datos."]);
          } else {
              // Inserta una region en la base de datos
-             $datos = $com->insert_sucursal($SUCURSAL, $DESCRIPCION, $DIRECCION, $ESTADO, $TELEFONO);
+             $datos = $com->insert_sucursal($SUCURSAL, $DESCRIPCION, $DIRECCION, $ID_REGION, $TELEFONO,$ESTADO );
              echo json_encode(["message" => "Sucursal insertada exitosamente."]);
          }
         break;
@@ -54,10 +56,10 @@ switch ($_GET["op"]) {
         $SUCURSAL = $body["SUCURSAL"];
         $DESCRIPCION = $body["DESCRIPCION"];
         $DIRECCION = $body["DIRECCION"];
-        $ESTADO = $body["ESTADO"];
+        $ID_REGION = $body["ID_REGION"];
         $TELEFONO = $body["TELEFONO"];
-
-        $datos = $com->update_sucursal($ID_SUCURSAL, $SUCURSAL, $DESCRIPCION , $DIRECCION, $ESTADO,$TELEFONO);
+        $ESTADO = $body["ESTADO"];
+        $datos = $com->update_sucursal($ID_SUCURSAL, $SUCURSAL, $DESCRIPCION , $DIRECCION,$ID_REGION,$TELEFONO, $ESTADO);
         echo json_encode($datos);
         break;
     case "eliminarSucursal":

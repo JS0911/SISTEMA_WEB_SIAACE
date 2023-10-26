@@ -6,7 +6,9 @@ class Sucursal extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_me_sucursal;";
+        $sql = "   SELECT S.*, R.REGION
+        FROM siaace.tbl_me_sucursal S
+        INNER JOIN siaace.tbl_me_region R ON S.ID_REGION = R.ID_REGION;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -25,19 +27,20 @@ class Sucursal extends Conectar
     }
     
     // INSERTA 
-    public function insert_sucursal( $SUCURSAL,$DESCRIPCION,$DIRECCION,$ESTADO,$TELEFONO ) {
+    public function insert_sucursal( $SUCURSAL,$DESCRIPCION,$DIRECCION,$ID_REGION,$TELEFONO,$ESTADO ) {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_me_sucursal` ( `SUCURSAL`, `DESCRIPCION`, `DIRECCION`, `ESTADO`, `TELEFONO` ) VALUES ( :SUCURSAL,:DESCRIPCION, :DIRECCION,  :ESTADO, :TELEFONO)";
+            $sql = "INSERT INTO `siaace`.`tbl_me_sucursal` ( `SUCURSAL`, `DESCRIPCION`, `DIRECCION`, `ID_REGION`, `TELEFONO`,`ESTADO` ) VALUES ( :SUCURSAL,:DESCRIPCION, :DIRECCION, :ID_REGION, :TELEFONO,:ESTADO )";
     
             $stmt = $conectar->prepare($sql);
           
             $stmt->bindParam(':SUCURSAL', $SUCURSAL, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
             $stmt->bindParam(':DIRECCION', $DIRECCION, PDO::PARAM_STR);
-            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
+            $stmt->bindParam(':ID_REGION', $ID_REGION, PDO::PARAM_INT);
             $stmt->bindParam(':TELEFONO', $TELEFONO, PDO::PARAM_STR);
+            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
             $stmt->execute();
     
             if ($stmt->rowCount() > 0) {
@@ -51,7 +54,7 @@ class Sucursal extends Conectar
     }
 
     // EDITA 
-    public function update_sucursal($ID_SUCURSAL, $SUCURSAL, $DESCRIPCION, $DIRECCION, $ESTADO, $TELEFONO) {
+    public function update_sucursal($ID_SUCURSAL, $SUCURSAL, $DESCRIPCION,$DIRECCION,$ID_REGION,$TELEFONO,$ESTADO ) {
         try {
             $conectar = parent::conexion();
             parent::set_names();
@@ -61,8 +64,9 @@ class Sucursal extends Conectar
                     SET `SUCURSAL` = :SUCURSAL, 
                         `DESCRIPCION` = :DESCRIPCION, 
                         `DIRECCION` = :DIRECCION,
-                        `ESTADO` = :ESTADO,
-                        `TELEFONO` = :TELEFONO
+                        `ID_REGION` = :ID_REGION,
+                        `TELEFONO` = :TELEFONO,
+                        `ESTADO` = :ESTADO
                     WHERE `ID_SUCURSAL` = :ID_SUCURSAL";
     
             $stmt = $conectar->prepare($sql);
@@ -71,8 +75,10 @@ class Sucursal extends Conectar
             $stmt->bindParam(':SUCURSAL', $SUCURSAL, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
             $stmt->bindParam(':DIRECCION', $DIRECCION, PDO::PARAM_STR);
-            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
+            $stmt->bindParam(':ID_REGION', $ID_REGION, PDO::PARAM_INT);
             $stmt->bindParam(':TELEFONO', $TELEFONO, PDO::PARAM_STR);
+            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
+            
     
             $stmt->execute();
     

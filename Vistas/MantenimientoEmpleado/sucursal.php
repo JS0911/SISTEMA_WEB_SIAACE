@@ -23,6 +23,22 @@ $permisos = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Sucursa
 $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 
 
+//---------CONEXION A LA TABLA REGION --------
+// Crear una instancia de la clase Conectar
+$conexion = new Conectar();
+$conn = $conexion->Conexion();
+// consultar 
+$sql = "SELECT id_region ,region FROM tbl_me_region";
+
+$stmt = $conn->prepare($sql);
+
+
+$stmt->execute();
+
+// Obtener los resultados en un array asociativo
+$regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 ?>
 
 <style>
@@ -241,6 +257,8 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     <th>Sucursal</th>
                                     <th>Descripcion</th>
                                     <th>Direccion</th>
+                                    <th style="display: none;">Id Region</th>
+                                    <th>Region</th>
                                     <th>Telefono</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
@@ -283,17 +301,26 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje3"></div>
                                         
-                                        <label for="nombre">Estado</label>
+                                        <label for="id-region">Region</label>
+                                        <select class="form-control" id="agregar-region" name="IdRegion" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <?php foreach ($regiones as $region) : ?>
+                                                <option value="<?php echo $region['id_region']; ?>"><?php echo $region['region']; ?></option>
+                                            <?php endforeach; ?>
+                                            <div id="mensaje4"></div>
+                                            </select>
+
+                                        <label for="nombre">Telefono</label>
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-telefono" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje5"></div>
+
+                                 
+                                            <label for="nombre">Estado</label>
                                         <select class="form-control" id="agregar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
                                             <option value="ACTIVO">ACTIVO</option>
                                             <option value="INACTIVO">INACTIVO</option>
                                         </select>
-                                        <div id="mensaje5"></div>
-
-                                        <label for="nombre">Telefono</label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-telefono" required pattern="[0-9]+" title="Solo se permiten números">
-
                                         <div id="mensaje6"></div>
 
                                     </div>
@@ -342,16 +369,45 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje9"></div>
 
+                                       <?php //---------CONEXION A LA TABLA REGION --------
+                                          // Crear una instancia de la clase Conectar
+                                          $conexion = new Conectar();
+                                          $conn = $conexion->Conexion();
+                                          // consultar 
+                                          $sql = "SELECT id_region ,region FROM tbl_me_region";
+
+                                          $stmt = $conn->prepare($sql);
+
+
+                                          $stmt->execute();
+
+                                          // Obtener los resultados en un array asociativo
+                                          $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+                                          ?>
+
+                                        <label for="id-region">Region</label>
+                                        <select class="form-control" id="editar-region" name="IdRegion" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <?php foreach ($regiones as $region) : ?>
+                                                <option value="<?php echo $region['id_region']; ?>"><?php echo $region['region']; ?></option>
+                                            <?php endforeach; ?>
+                                            <div id="mensaje10"></div>
+                                            </select>
+
+                                       
+                                        <label for="nombre">Telefono</label>
+                                        <input type="text" maxlength="45" class="form-control" id="editar-telefono" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje11"></div>
+
+                                        
                                         <label for="nombre">Estado</label>
                                         <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
                                             <option value="ACTIVO">ACTIVO</option>
                                             <option value="INACTIVO">INACTIVO</option>
                                         </select>
-                                        <div id="mensaje11"></div>
-                                       
-                                        <label for="nombre">Telefono</label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-telefono" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje12"></div>
 
                                     </div>
@@ -412,6 +468,8 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td>' + sucursal.SUCURSAL + '</td>' +
                             '<td>' + sucursal.DESCRIPCION + '</td>' +
                             '<td>' + sucursal.DIRECCION + '</td>' +
+                            '<td style="display:none;">' + sucursal.ID_REGION + '</td>' +
+                            '<td>' + sucursal.REGION + '</td>' +
                             '<td>' + sucursal.TELEFONO + '</td>' +
                             '<td>' + sucursal.ESTADO + '</td>' +
 
@@ -461,11 +519,12 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 var sucursal = $("#agregar-sucursal").val();
                 var descripcion = $("#agregar-descripcion").val();
                 var direccion = $("#agregar-direccion").val();
-                
-                var estado = $("#agregar-estado").val();
+                var region = $("#agregar-region").val();
                 var telefono = $("#agregar-telefono").val();
+                var estado = $("#agregar-estado").val();
+               
 
-                if (sucursal == "" || descripcion == "" || direccion == "" || estado == ""|| telefono == "" ) {
+                if (sucursal == "" || descripcion == "" || direccion == "" || region == ""|| estado == ""|| telefono == "" ) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
@@ -477,8 +536,9 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         SUCURSAL: sucursal,
                         DESCRIPCION: descripcion,
                         DIRECCION: direccion,
-                        ESTADO: estado,
                         TELEFONO: telefono,
+                        ID_REGION: region,
+                        ESTADO: estado,
                     };
 
                 fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/sucursal.php?op=InsertSucursal', {
@@ -564,6 +624,7 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     document.getElementById('editar-sucursal').value = sucursal.SUCURSAL;
                     document.getElementById('editar-descripcion').value = sucursal.DESCRIPCION;
                     document.getElementById('editar-direccion').value = sucursal.DIRECCION;
+                    document.getElementById('editar-region').value = sucursal.ID_REGION;
                     document.getElementById('editar-estado').value = sucursal.ESTADO;
                     document.getElementById('editar-telefono').value = sucursal.TELEFONO;
                 })
@@ -579,11 +640,12 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             var sucursal = document.getElementById('editar-sucursal').value;
             var descripcion = document.getElementById('editar-descripcion').value;
             var direccion = document.getElementById('editar-direccion').value;
-           
-            var estado = document.getElementById('editar-estado').value;
+            var region = document.getElementById('editar-region').value;
+          
             var telefono = document.getElementById('editar-telefono').value;
+            var estado = document.getElementById('editar-estado').value;
 
-            if (sucursal == "" || descripcion == "" || direccion == ""||  estado == ""|| telefono == "" ) {
+            if (sucursal == "" || descripcion == "" || direccion == ""||  estado == ""|| telefono == ""|| region == "" ) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -602,8 +664,9 @@ $permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         "SUCURSAL": sucursal,
                         "DESCRIPCION": descripcion,
                         "DIRECCION": direccion,
-                        "ESTADO": estado,
-                        "TELEFONO": telefono
+                        "ID_REGION": region,
+                        "TELEFONO": telefono,
+                        "ESTADO": estado
                     }) // Convierte los datos en formato JSON
                 })
                 .then(function(response) {
