@@ -15,9 +15,10 @@ $id_objeto_Cuentas = "28";
 
 $permisos1 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos);
+$permiso = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos);
 $permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 
-// Verificar si se obtuvieron resultados
+//Verificar si se obtuvieron resultados
 // if (!empty($permisos)) {
 //     // Recorrer el array de permisos y mostrar los valores
 //     foreach ($permisos as $permiso) {
@@ -58,6 +59,7 @@ $permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <link href="../../css/styles.css" rel="stylesheet" />
 
 
     <style>
@@ -68,30 +70,54 @@ $permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
             width: 100%;
         }
 
-        /* Estilo para las celdas del encabezado (th) */
+        /* Estilo para el encabezado (th) */
         #Lista-Permiso th {
+            background-color: #888;
+            /* Fondo gris claro para el encabezado */
+            color: #fff;
+            /* Texto en blanco para el encabezado */
             border: 2px solid white;
-            /* Bordes blancos para las celdas del encabezado */
-            background-color: #333;
-            color: white;
-            font-family: Arial, sans-serif;
-            /* Cambia el tipo de letra */
             padding: 8px;
-            /* Espaciado interno para las celdas */
             text-align: center;
-            /* Alineación del texto al centro */
         }
 
         /* Estilo para las celdas de datos (td) */
         #Lista-Permiso td {
+            background-color: #fff;
+            /* Fondo blanco (sin color) para las celdas de datos */
             border: 1px solid grey;
-            /* Bordes negros para las celdas de datos */
             padding: 8px;
-            /* Espaciado interno para las celdas */
             text-align: center;
-            /* Alineación del texto al centro */
         }
 
+
+        /* Estilo para el botón "Editar" con color azul suave */
+        .btn-primary {
+            background-color: #3498db;
+            /* Azul suave */
+            border-color: #3498db;
+            color: #fff;
+            /* Texto en blanco */
+        }
+
+        /* Estilo para el botón "Eliminar" con color rojo suave */
+        .btn-danger {
+            background-color: #e74c3c;
+            /* Rojo suave */
+            border-color: #e74c3c;
+            color: #fff;
+            /* Texto en blanco */
+        }
+
+
+         /* Estilo para el botón "Nuevo" con color verde más claro */
+         .btn-success.custom-button {
+            background-color: #4CAF50;
+            /* Verde claro */
+            border-color: #4CAF50;
+            color: #fff;
+            /* Texto en blanco */
+        }
         /* Estilo personalizado para el placeholder */
         #myInput {
             border: 2px solid #000;
@@ -179,14 +205,13 @@ $permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                                 echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
                                 echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
-        
                             }
 
                             echo '</nav>';
                             echo '</div>';
                         }
 
-                       //-------------------------MODULO DE EMPLEADO---------------------------------------------
+                        //-------------------------MODULO DE EMPLEADO---------------------------------------------
                         if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
@@ -197,12 +222,11 @@ $permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
-
-                                }
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+                            }
                             echo '</nav>';
                             echo '</div>';
                         }
@@ -497,7 +521,7 @@ $permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
     </div>
 
     <script>
-        var permisos = <?php echo json_encode($permisos); ?>;
+        var permisos = <?php echo json_encode($permiso); ?>;
 
         function Lista_Permisos() {
 
@@ -714,24 +738,34 @@ $permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                 })
                 .then(function(permiso) {
                     if (permiso) {
+
+                        console.log(permiso);
                         document.getElementById('editar-IdRol').value = id_rol;
                         document.getElementById('editar-IdObjeto').value = id_objeto;
-                        
-                        var pInsercion = document.getElementById('editar-pInsercion').checked ? 'Sí' : 'No';
-                        var pEliminacion = document.getElementById('editar-pEliminacion').checked ? 'Sí' : 'No';
-                        var pActualizacion = document.getElementById('editar-pActualizacion').checked ? 'Sí' : 'No';
-                        var pConsultar = document.getElementById('editar-pConsultar').checked ? 'Sí' : 'No';
 
-                        console.log("Permiso de Inserción: " + pInsercion);
-                        console.log("Permiso de Eliminación: " + pEliminacion);
-                        console.log("Permiso de Actualización: " + pActualizacion);
-                        console.log("Permiso de Consulta: " + pConsultar);
+                        if (permiso && permiso.PERMISOS_INSERCION) {
+                            console.log("SI SON IGUALES");
+                        } else {
+                            console.log("NO SON IGUALES");
+                        }
 
+                        // Establecer el estado de los checks en la modal de edición
+                        document.getElementById('editar-pInsercion').checked = (permiso.PERMISOS_INSERCION === '1');
+                        document.getElementById('editar-pEliminacion').checked = (permiso.PERMISOS_ELIMINACION === '1');
+                        document.getElementById('editar-pActualizacion').checked = (permiso.PERMISOS_ACTUALIZACION === '1');
+                        document.getElementById('editar-pConsultar').checked = (permiso.PERMISOS_CONSULTAR === '1');
+
+                        console.log("Permiso de Inserción: " + permiso.PERMISOS_INSERCION);
+                        console.log("Permiso de Eliminación: " + permiso.PERMISOS_ELIMINACION);
+                        console.log("Permiso de Actualización: " + permiso.PERMISOS_ACTUALIZACION);
+                        console.log("Permiso de Consulta: " + permiso.PERMISOS_CONSULTAR);
 
 
                     } else {
                         console.log('La respuesta JSON está vacía o no válida.');
                     }
+
+
                 })
 
                 .catch(function(error) {
@@ -930,7 +964,7 @@ $permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
             document.getElementById('editar-pActualizacion').checked = false;
             document.getElementById('editar-pConsultar').checked = false;
             // Desactivar el botón "Guardar" en el modal Editar
-            //document.getElementById('btn-guardarEditar').disabled = true;
+            document.getElementById('btn-guardarEditar').disabled = true;
         });
     </script>
 

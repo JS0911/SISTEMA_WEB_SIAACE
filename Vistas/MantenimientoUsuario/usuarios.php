@@ -1121,6 +1121,10 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById("editar-estado").value = "";
             document.getElementById("editar-correo").value = "";
             document.getElementById("editar-rol").value = "";
+             
+            // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
+           location.reload();
+
             
         });
     </script>

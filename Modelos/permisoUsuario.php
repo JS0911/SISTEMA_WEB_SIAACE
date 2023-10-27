@@ -19,8 +19,6 @@ class PermisosUsuarios extends Conectar
             // echo "Si se obtuvieron resultados";
             return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
         } else {
-            //echo "no se encontraron resultado, puedes manejarlo como desees";
-            // En este caso, no se encontraron resultados, puedes manejarlo como desees
             return array(); // Devuelve un array vacío o un valor que indique la ausencia de resultados
         }
     }
