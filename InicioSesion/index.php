@@ -146,6 +146,12 @@ $permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 echo '</nav>';
                                 echo '</div>';
                             }
+
+
+
+                            // PRESTAMOS PENDIENTE MODULO CON PERMISOS
+                            echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
+
                         ?>
 
                     </div>

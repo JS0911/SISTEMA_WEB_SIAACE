@@ -4,7 +4,7 @@ session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
 
-$permisosSucursal = new PermisosUsuarios();
+$permisosTipoprestamo = new PermisosUsuarios();
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
@@ -13,30 +13,14 @@ if (!isset($_SESSION['usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Sucursal = "9";
+$id_objeto_Tipoprestamo = "29";
 $id_objeto_Seguridad = "25";
 $id_objeto_Cuentas = "28";
 
 
-$permisos1 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
-$permisos = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Sucursal);
-$permisos2 = $permisosSucursal->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
-
-
-//---------CONEXION A LA TABLA REGION --------
-// Crear una instancia de la clase Conectar
-$conexion = new Conectar();
-$conn = $conexion->Conexion();
-// consultar 
-$sql = "SELECT id_region ,region FROM tbl_me_region";
-
-$stmt = $conn->prepare($sql);
-
-
-$stmt->execute();
-
-// Obtener los resultados en un array asociativo
-$regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$permisos1 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
+$permisos = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Tipoprestamo);
+$permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 
 
 ?>
@@ -70,14 +54,14 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <style>
         /* Estilo para la tabla */
-        #Lista-sucursal {
+        #Lista-tipoprestamo {
             border-collapse: collapse;
             /* Combina los bordes de las celdas */
             width: 100%;
         }
 
         /* Estilo para las celdas del encabezado (th) */
-        #Lista-sucursal th {
+        #Lista-tipoprestamo th {
             border: 2px solid white;
             /* Bordes negros para las celdas del encabezado */
             background-color: #333;
@@ -91,7 +75,7 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         /* Estilo para las celdas de datos (td) */
-        #Lista-sucursal td {
+        #Lista-tipoprestamo td {
             border: 1px solid grey;
             /* Bordes negros para las celdas de datos */
             padding: 8px;
@@ -198,6 +182,8 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 echo '<a class="nav-link" href="cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 echo '<a class="nav-link" href="region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
                                 echo '<a class="nav-link" href="sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+                                echo '<a class="nav-link" href="tipoPrestamo.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Tipo Prestamo</a>';
+
 
                             }
                             echo '</nav>';
@@ -239,7 +225,7 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
-                            <h1 class="mt-4 mb-4">Mantenimiento Sucursal</h1>
+                            <h1 class="mt-4 mb-4">Mantenimiento Tipo Prestamo</h1>
                         </center>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -250,17 +236,20 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             ?> 
                         </div>
                         <!-- Tabla para mostrar los datos -->
-                        <table class="table table-bordered mx-auto" id="Lista-sucursal" style="margin-top: 20px; margin-bottom: 20px">
+                        <table class="table table-bordered mx-auto" id="Lista-tipoprestamo" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-                                <th style="display: none;">Id Sucursal</th>
-                                    <th>Sucursal</th>
+                                <th style="display: none;">Id Tipo Prestamo</th>
+                                    <th>Tipo Prestamo</th>
                                     <th>Descripcion</th>
-                                    <th>Direccion</th>
-                                    <th style="display: none;">Id Region</th>
-                                    <th>Region</th>
-                                    <th>Telefono</th>
-                                    <th>Estado</th>
+                                    <th>Aplica Seguro</th>
+                                    <th>Monto Máximo</th>
+                                    <th>Monto Minimo</th>
+                                    <th>Tasa Máxima</th>
+                                    <th>Tasa Minima</th>
+                                    <th>Plazo Máximo</th>
+                                    <th>Plazo Minimo</th>
+                                    <th>Estado </th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -285,8 +274,8 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <!-- Formulario de creación -->
                                 <form>
                                     <div class="form-group">
-                                        <label for="nombre">Sucursal</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-sucursal" 
+                                        <label for="nombre">Tipo Prestamo</label>
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-tipoprestamo" 
                                         required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
@@ -296,32 +285,44 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <div id="mensaje2"></div>
 
                                         
-                                        <label for="nombre">Direccion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-direccion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <label for="nombre">Aplica seguro</label>
+                                        <input type="text" maxlength="1" class="form-control" id="agregar-aplicaseguro" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje3"></div>
-                                        
-                                        <label for="id-region">Region</label>
-                                        <select class="form-control" id="agregar-region" name="IdRegion" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <?php foreach ($regiones as $region) : ?>
-                                                <option value="<?php echo $region['id_region']; ?>"><?php echo $region['region']; ?></option>
-                                            <?php endforeach; ?>
-                                            <div id="mensaje4"></div>
-                                            </select>
 
-                                        <label for="nombre">Telefono</label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-telefono" required pattern="[0-9]+" title="Solo se permiten números">
+                                        
+                                        <label for="nombre"> Monto Maximo</label>
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-montomaximo" required pattern="[0-9]+" title="Solo se permiten números (1, 0)">
+                                        <div id="mensaje4"></div>
+                                        
+                                        <label for="nombre">Monto Minimo</label>
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-montominimo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje5"></div>
 
-                                 
-                                            <label for="nombre">Estado</label>
+                                        <label for="nombre"> Tasa Maxima</label>
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-tasamaxima" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje6"></div>
+                                        
+                                        <label for="nombre">Tasa Minima</label>
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-tasaminima" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje7"></div>
+
+                                        <label for="nombre"> Plazo Maximo</label>
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-plazomaximo" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje8"></div>
+                                        
+                                        <label for="nombre">Plazo Minimo</label>
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-plazominimo" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje9"></div>
+
+                                        
+                                        <label for="nombre">Estado</label>
                                         <select class="form-control" id="agregar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
                                             <option value="ACTIVO">ACTIVO</option>
                                             <option value="INACTIVO">INACTIVO</option>
                                         </select>
-                                        <div id="mensaje6"></div>
+                                        <div id="mensaje10"></div>
+
 
                                     </div>
                                 </form>
@@ -350,56 +351,48 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <!-- Formulario de edición -->
                                 <form>
                                     <div class="form-group">
-                                        <label for="nombre">Id Sucursal</label>
-                                        <input type="text" class="form-control" id="editar-id-sucursal" disabled>
+                                        <label for="nombre">Id Tipo Prestamo</label>
+                                        <input type="text" class="form-control" id="editar-id-tipoprestamo" disabled>
 
-
-                                        <label for="nombre">Sucursal</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-sucursal" 
+                                        <label for="nombre">Tipo Prestamo</label>
+                                        <input type="text" maxlength="100" class="form-control" id="editar-tipoprestamo" 
                                         required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje7"></div>
+                                        <div id="mensaje11"></div>
 
                                         <label for="nombre">Descripcion</label>
                                         <input type="text" maxlength="100" class="form-control" id="editar-descripcion" 
                                         required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje8"></div>
+                                        <div id="mensaje12"></div>
 
-                                        <label for="nombre">Direccion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-direccion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje9"></div>
+                                        
+                                        <label for="nombre">Aplica seguro</label>
+                                        <input type="text" maxlength="1" class="form-control" id="editar-aplicaseguro" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje13"></div>
 
-                                       <?php //---------CONEXION A LA TABLA REGION --------
-                                          // Crear una instancia de la clase Conectar
-                                          $conexion = new Conectar();
-                                          $conn = $conexion->Conexion();
-                                          // consultar 
-                                          $sql = "SELECT id_region ,region FROM tbl_me_region";
+                                        
+                                        <label for="nombre"> Monto Maximo</label>
+                                        <input type="text" maxlength="45" class="form-control" id="editar-montomaximo" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje14"></div>
+                                        
+                                        <label for="nombre">Monto Minimo</label>
+                                        <input type="text" maxlength="45" class="form-control" id="editar-montominimo" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje15"></div>
 
-                                          $stmt = $conn->prepare($sql);
+                                        <label for="nombre"> Tasa Maxima</label>
+                                        <input type="text" maxlength="45" class="form-control" id="editar-tasamaxima" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje16"></div>
+                                        
+                                        <label for="nombre">Tasa Minima</label>
+                                        <input type="text" maxlength="45" class="form-control" id="editar-tasaminima" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje17"></div>
 
-
-                                          $stmt->execute();
-
-                                          // Obtener los resultados en un array asociativo
-                                          $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-                                          ?>
-
-                                        <label for="id-region">Region</label>
-                                        <select class="form-control" id="editar-region" name="IdRegion" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <?php foreach ($regiones as $region) : ?>
-                                                <option value="<?php echo $region['id_region']; ?>"><?php echo $region['region']; ?></option>
-                                            <?php endforeach; ?>
-                                            <div id="mensaje10"></div>
-                                            </select>
-
-                                       
-                                        <label for="nombre">Telefono</label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-telefono" required pattern="[0-9]+" title="Solo se permiten números">
-                                        <div id="mensaje11"></div>
+                                        <label for="nombre"> Plazo Maximo</label>
+                                        <input type="text" maxlength="45" class="form-control" id="editar-plazomaximo" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje18"></div>
+                                        
+                                        <label for="nombre">Plazo Minimo</label>
+                                        <input type="text" maxlength="45" class="form-control" id="editar-plazominimo" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <div id="mensaje19"></div>
 
                                         
                                         <label for="nombre">Estado</label>
@@ -408,14 +401,15 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <option value="ACTIVO">ACTIVO</option>
                                             <option value="INACTIVO">INACTIVO</option>
                                         </select>
-                                        <div id="mensaje12"></div>
+                                        <div id="mensaje20"></div>
+
 
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                             <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateSucursal()" disabled>Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateTipoprestamo()" disabled>Guardar</button>
 
                             </div>
                         </div>
@@ -439,10 +433,10 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
         var permisos = <?php echo json_encode($permisos); ?>;
 
 
-        function Lista_Sucursal() {
+        function Lista_Tipoprestamo() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             // Actualizar el valor predeterminado
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/sucursal.php?op=GetSucursales', {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoPrestamo.php?op=GetTipoprestamos', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
@@ -459,30 +453,33 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 })
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
-                    var tbody = document.querySelector('#Lista-sucursal tbody');
+                    var tbody = document.querySelector('#Lista-tipoprestamo tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
-                    data.forEach(function(sucursal) {
+                    data.forEach(function(tipoprestamo) {
                         var row = '<tr>' +
-                            '<td style="display:none;">' + sucursal.ID_SUCURSAL + '</td>' +
-                            '<td>' + sucursal.SUCURSAL + '</td>' +
-                            '<td>' + sucursal.DESCRIPCION + '</td>' +
-                            '<td>' + sucursal.DIRECCION + '</td>' +
-                            '<td style="display:none;">' + sucursal.ID_REGION + '</td>' +
-                            '<td>' + sucursal.REGION + '</td>' +
-                            '<td>' + sucursal.TELEFONO + '</td>' +
-                            '<td>' + sucursal.ESTADO + '</td>' +
+                            '<td style="display:none;">' + tipoprestamo.ID_TIPO_PRESTAMO + '</td>' +
+                            '<td>' + tipoprestamo.TIPO_PRESTAMO + '</td>' +
+                            '<td>' + tipoprestamo.DESCRIPCION + '</td>' +
+                            '<td>' + tipoprestamo.APLICA_SEGUROS + '</td>' +
+                            '<td>' + tipoprestamo.MONTO_MAXIMO + '</td>' +
+                            '<td>' + tipoprestamo.MONTO_MINIMO + '</td>' +
+                            '<td>' + tipoprestamo.TASA_MAXIMA + '</td>' +
+                            '<td>' + tipoprestamo.TASA_MINIMA + '</td>' +
+                            '<td>' + tipoprestamo.PLAZO_MAXIMO + '</td>' +
+                            '<td>' + tipoprestamo.PLAZO_MINIMO + '</td>' +
+                            '<td>' + tipoprestamo.ESTADO + '</td>' +
 
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarSucursal(' + sucursal.ID_SUCURSAL + ')">Editar</button>';
+                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarTipoprestamo(' + tipoprestamo.ID_TIPO_PRESTAMO + ')">Editar</button>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-sucursal" data-id="' + sucursal.ID_SUCURSAL  + '" onclick="eliminarSucursal(' + sucursal.ID_SUCURSAL  + ')">Eliminar</button>';
+                            row += '<button class="btn btn-danger eliminar-tipoprestamo" data-id="' + tipoprestamo.ID_TIPO_PRESTAMO  + '" onclick="eliminarTipoprestamo(' + tipoprestamo.ID_TIPO_PRESTAMO  + ')">Eliminar</button>';
                         }
 
 
@@ -503,7 +500,7 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
 
         function habilitarPaginacion() {
-            $('#Lista-sucursal').DataTable({
+            $('#Lista-tipoprestamo').DataTable({
                 "paging": true, 
                 "pageLength": 10,
                 "lengthMenu": [10, 20, 30, 50, 100],
@@ -513,97 +510,113 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
             });
         }
 
-        function Insertar_Sucursal() {
-            $("#btn-agregar").click(function() {
-                // Obtener los valores de los campos del formulario
-                var sucursal = $("#agregar-sucursal").val();
-                var descripcion = $("#agregar-descripcion").val();
-                var direccion = $("#agregar-direccion").val();
-                var region = $("#agregar-region").val();
-                var telefono = $("#agregar-telefono").val();
-                var estado = $("#agregar-estado").val();
-               
 
-                if (sucursal == "" || descripcion == "" || direccion == "" || region == ""|| estado == ""|| telefono == "" ) {
+        function Insertar_Tipoprestamo() {
+           $("#btn-agregar").click(function() {
+               // Obtener los valores de los campos del formulario
+           
+            var tipoprestamo =$("#agregar-tipoprestamo").val();
+            var descripcion =$("#agregar-descripcion").val();
+            var aplicaseguro =$("#agregar-aplicaseguro").val();
+            var montomaximo =$("#agregar-montomaximo").val();
+            var montominimo =$("#agregar-montominimo").val();
+            var tasamaxima =$("#agregar-tasamaxima").val();
+            var tasaminima =$("#agregar-tasaminima").val();
+            var plazomaximo =$("#agregar-plazomaximo").val();
+            var plazominimo =$("#agregar-plazominimo").val();
+            var estado = $("#agregar-estado").val();
+
+            
+
+                if (tipoprestamo == "" || descripcion == "" || aplicaseguro == "" || montomaximo == ""|| montominimo == ""|| 
+                 tasamaxima == "" || tasaminima == "" || plazomaximo == "" || plazominimo == ""|| estado == "" ) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
                         text: 'No se pueden enviar Campos Vacios.'
-                    })
-                } else {
-                    // Crear un objeto con los datos a enviar al servidor
-                    var datos = {
-                        SUCURSAL: sucursal,
-                        DESCRIPCION: descripcion,
-                        DIRECCION: direccion,
-                        TELEFONO: telefono,
-                        ID_REGION: region,
-                        ESTADO: estado,
-                    };
-
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/sucursal.php?op=InsertSucursal', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(datos)
-                    })
-                    .then(function(response) {
-                        if (response.ok) {
-                            if (response.status === 200) {
-                                // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
-                                return response.json().then(function(data) {
-                                    console.log(data);
-                                    // Cerrar la modal después de guardar
-                                    $('#crearModal').modal('hide');
-                                    // Mostrar SweetAlert de éxito
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Guardado exitoso',
-                                        text: data.message
-                                    }).then(function() {
-                                        // Recargar la página para mostrar los nuevos datos
-                                        location.reload();
-                                    });
-                                });
-                            } else if (response.status === 409) {
-                                // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
-                                return response.json().then(function(data) {
-                                    console.log(data);
-                                    // Mostrar SweetAlert de error
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: data.error // Acceder al mensaje de error
-                                    });
-                                });
-                            }
-                        } else {
-                            // Si hubo un error en la solicitud, maneja el error aquí
-                            throw new Error('Error en la solicitud');
-                        }
-                    })
-                    .catch(function(error) {
-                        // Mostrar SweetAlert de error
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error al guardar los datos: ' + error.message
-                        });
-                        console.log(error.message);
                     });
-                }                
+            } else {
+                    // Crear un region con los datos a enviar al servidor
+        //            // Crear un objeto con los datos a enviar al servidor
+                      var datos = {
+                    
+                        TIPO_PRESTAMO: tipoprestamo,
+                        DESCRIPCION: descripcion,
+                        APLICA_SEGUROS: aplicaseguro,
+                        MONTO_MAXIMO: montomaximo,
+                        MONTO_MINIMO: montominimo,
+                        TASA_MAXIMA: tasamaxima,
+                        TASA_MINIMA: tasaminima,
+                        PLAZO_MAXIMO: plazomaximo,
+                        PLAZO_MINIMO: plazominimo,
+                        ESTADO: estado
+                     };
+
+                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoPrestamo.php?op=InsertTipoprestamo', {
+                             method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(datos)
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                if (response.status === 200) {
+                                    // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Cerrar la modal después de guardar
+                                        $('#crearModal').modal('hide');
+                                        // Mostrar SweetAlert de éxito
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Guardado exitoso',
+                                            text: data.message
+                                        }).then(function() {
+                                            // Recargar la página para mostrar los nuevos datos
+                                            location.reload();
+                                        });
+                                    });
+                                } else if (response.status === 409) {
+                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Mostrar SweetAlert de error
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: data.error // Acceder al mensaje de error
+                                        });
+                                    });
+                                }
+                            } else {
+                                // Si hubo un error en la solicitud, maneja el error aquí
+                                throw new Error('Error en la solicitud');
+                            }
+                        })
+                        .catch(function(error) {
+                            // Mostrar SweetAlert de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al guardar los datos: ' + error.message
+                            });
+                            console.log(error.message);
+                        });
+                }
             });
         }
 
-        function cargarSucursal(id) {
+
+
+        function cargarTipoprestamo(id) {
             // Crear un objeto con el ID de la sucursal
             var data = {
-                "ID_SUCURSAL": id
+                "ID_TIPO_PRESTAMO": id
             };
 
             // Realiza una solicitud FETCH para obtener los detalles del usuario por su ID
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/sucursal.php?op=GetSucursal', {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoPrestamo.php?op=GetTipoprestamo', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -618,34 +631,44 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         throw new Error('Error en la solicitud');
                     }
                 })
-                .then(function(sucursal) {
+                .then(function(tipoprestamo) {
                     // Llena los campos del modal con los datos del sucursal
-                    document.getElementById('editar-id-sucursal').value = sucursal.ID_SUCURSAL;
-                    document.getElementById('editar-sucursal').value = sucursal.SUCURSAL;
-                    document.getElementById('editar-descripcion').value = sucursal.DESCRIPCION;
-                    document.getElementById('editar-direccion').value = sucursal.DIRECCION;
-                    document.getElementById('editar-region').value = sucursal.ID_REGION;
-                    document.getElementById('editar-estado').value = sucursal.ESTADO;
-                    document.getElementById('editar-telefono').value = sucursal.TELEFONO;
+                    document.getElementById('editar-id-tipoprestamo').value = tipoprestamo.ID_TIPO_PRESTAMO;
+                    document.getElementById('editar-tipoprestamo').value = tipoprestamo.TIPO_PRESTAMO;
+                    document.getElementById('editar-descripcion').value = tipoprestamo.DESCRIPCION;
+                    document.getElementById('editar-aplicaseguro').value = tipoprestamo.APLICA_SEGUROS;
+                    document.getElementById('editar-montomaximo').value = tipoprestamo.MONTO_MAXIMO;
+                    document.getElementById('editar-montominimo').value = tipoprestamo.MONTO_MINIMO;
+                    document.getElementById('editar-tasamaxima').value = tipoprestamo.TASA_MAXIMA;
+                    document.getElementById('editar-tasaminima').value = tipoprestamo.TASA_MINIMA;
+                    document.getElementById('editar-plazomaximo').value = tipoprestamo.PLAZO_MAXIMO;
+                    document.getElementById('editar-plazominimo').value = tipoprestamo.PLAZO_MINIMO;
+                    document.getElementById('editar-estado').value = tipoprestamo.ESTADO;
+
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
-                    alert('Error al cargar los datos del sucursal: ' + error.message);
+                    alert('Error al cargar los datos de Tipo Prestamo: ' + error.message);
                 });
         }
 
 
-        function updateSucursal() {
-            var idsucursal = document.getElementById('editar-id-sucursal').value;
-            var sucursal = document.getElementById('editar-sucursal').value;
+         function updateTipoprestamo() {
+            var id_tipoprestamo= document.getElementById('editar-id-tipoprestamo').value;
+            var tipoprestamo = document.getElementById('editar-tipoprestamo').value;
             var descripcion = document.getElementById('editar-descripcion').value;
-            var direccion = document.getElementById('editar-direccion').value;
-            var region = document.getElementById('editar-region').value;
-          
-            var telefono = document.getElementById('editar-telefono').value;
+            var aplicaseguro = document.getElementById('editar-aplicaseguro').value;
+           
+            var montomaximo = document.getElementById('editar-montomaximo').value;
+            var montominimo = document.getElementById('editar-montominimo').value;
+            var tasamaxima = document.getElementById('editar-tasamaxima').value;
+            var tasaminima = document.getElementById('editar-tasaminima').value;
+            var plazomaximo = document.getElementById('editar-plazomaximo').value;
+            var plazominimo = document.getElementById('editar-plazominimo').value;
             var estado = document.getElementById('editar-estado').value;
+            
 
-            if (sucursal == "" || descripcion == "" || direccion == ""||  estado == ""|| telefono == ""|| region == "" ) {
+            if (tipoprestamo == "" || descripcion == "" || aplicaseguro == "" || montomaximo == ""|| montominimo == ""||  tasamaxima == "" || tasaminima == "" || plazomaximo == "" || plazominimo == ""|| estado == "" ) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -653,20 +676,25 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 })
             } else {
             // Realiza una solicitud FETCH para actualizar los datos del objeto
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/sucursal.php?op=updateSucursal', {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoPrestamo.php?op=updateTipoprestamo', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        "ID_SUCURSAL": idsucursal,
-                        "SUCURSAL": sucursal,
+                        "ID_TIPO_PRESTAMO": id_tipoprestamo,
+                        "TIPO_PRESTAMO": tipoprestamo,
                         "DESCRIPCION": descripcion,
-                        "DIRECCION": direccion,
-                        "ID_REGION": region,
-                        "TELEFONO": telefono,
+                        "APLICA_SEGUROS": aplicaseguro,
+                        "MONTO_MAXIMO": montomaximo,
+                        "MONTO_MINIMO": montominimo,
+                        "TASA_MAXIMA": tasamaxima,
+                        "TASA_MINIMA": tasaminima,
+                        "PLAZO_MAXIMO": plazomaximo,
+                        "PLAZO_MINIMO": plazominimo,
                         "ESTADO": estado
+
                     }) // Convierte los datos en formato JSON
                 })
                 .then(function(response) {
@@ -691,14 +719,14 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'Error al actualizar los datos de la sucursal: ' + error.message
+                        text: 'Error al actualizar los datos del Tipo Prestamo: ' + error.message
                     });
                 });
             }    
         }
-
+ 
         //FUNCION CON EL SWEETALERT
-        function eliminarSucursal(idsucursal) {
+        function eliminarTipoprestamo(id_tipoprestamo) {
             Swal.fire({
                 title: '¿Estás seguro?',
                 text: 'No podrás revertir esto.',
@@ -710,20 +738,20 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 cancelButtonText: 'Cancelar' 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/sucursal.php?op=eliminarSucursal', {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoPrestamo.php?op=eliminarTipoprestamo', {
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
-                                "ID_SUCURSAL": idsucursal
+                                "ID_TIPO_PRESTAMO": id_tipoprestamo
                             })
                         })
                         .then(function(response) {
                             if (response.ok) {
                                 // Eliminación exitosa, puedes hacer algo aquí si es necesario
-                                Swal.fire('Sucursal eliminada', '', 'success')
+                                Swal.fire('Tipo Prestamo eliminado', '', 'success')
                                     .then(() => {
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
@@ -736,29 +764,35 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         })
                         .catch(function(error) {
                             // Manejar el error aquí
-                            Swal.fire('Error', 'Error al eliminar la sucursal: ' + error.message, 'error');
+                            Swal.fire('Error', 'Error al eliminar el Tipo prestamo: ' + error.message, 'error');
                         });
                 }
             });
         }
 
-        // VALIDACIONES FUNCIONES    
+//         // VALIDACIONES FUNCIONES    
         function validarNombre() {
-            sucursal = document.getElementById("agregar-sucursal");
+            tipoprestamo = document.getElementById("agregar-tipoprestamo");
             descripcion = document.getElementById("agregar-descripcion");
-            direccion = document.getElementById("agregar-direccion");
-            region = document.getElementById("agregar-region");
+            aplicaseguro = document.getElementById("agregar-aplicaseguro");
+            montomaximo = document.getElementById("agregar-montomaximo");
+            montominimo = document.getElementById("agregar-montominimo");
+            tasamaxima = document.getElementById("agregar-tasamaxima");
+            tasaminima = document.getElementById("agregar-tasaminima");
+            plazomaximo = document.getElementById("agregar-plazomaximo");
+            plazominimo = document.getElementById("agregar-plazominimo");
             estado = document.getElementById("agregar-estado");
-            telefono = document.getElementById("agregar-telefono");
 /////////////////////////////
-           sucursalEditar = document.getElementById("editar-sucursal");
+            tipoprestamoEditar = document.getElementById("editar-tipoprestamo");
             descripcionEditar = document.getElementById("editar-descripcion");
-            direccionEditar = document.getElementById("editar-direccion");
-            regionEditar = document.getElementById("editar-region");
+            aplicaseguroEditar = document.getElementById("editar-aplicaseguro");
+            montomaximoEditar = document.getElementById("editar-montomaximo");
+            montominimoEditar = document.getElementById("editar-montominimo");
+            tasamaximaEditar = document.getElementById("editar-tasamaxima");
+            tasaminimaEditar = document.getElementById("editar-tasaminima");
+            plazomaximoEditar = document.getElementById("editar-plazomaximo");
+            plazominimoEditar = document.getElementById("editar-plazominimo");
             estadoEditar = document.getElementById("editar-estado");
-            telefonoEditar = document.getElementById("editar-telefono");
-            
-
 
 
             function clearMessage(messageElement, inputElement) {
@@ -801,66 +835,89 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 });
             }
 
-            var expresionValidadora1 = /^[A-Z]+$/;
-            var mensaje1 = document.getElementById("mensaje1");
-            handleInputAndBlurEvents(sucursal, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
 
             var expresionValidadora2 = /^[A-Z0-9\s]+$/;
+            var mensaje1 = document.getElementById("mensaje1");
+            handleInputAndBlurEvents(tipoprestamo, expresionValidadora2, mensaje1, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(tipoprestamo);
+
             var mensaje2 = document.getElementById("mensaje2");
             handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(descripcion);
+            handleDescriptionKeypressEvent(descripcion);   
 
+            var expresionValidadora1 = /^[0-9]+$/;
             var mensaje3 = document.getElementById("mensaje3");
-            handleInputAndBlurEvents(direccion, expresionValidadora2, mensaje3, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(direccion);    
+            handleInputAndBlurEvents(aplicaseguro, expresionValidadora1, mensaje3, "Solo se permiten números");     
+   
             
             var mensaje4 = document.getElementById("mensaje4");
-            handleInputAndBlurEvents(region, expresionValidadora2, mensaje4, "Seleccione una opción");
-            handleDescriptionKeypressEvent(region);  
-            
-            var mensaje6 = document.getElementById("mensaje6");
-            handleInputAndBlurEvents(estado, expresionValidadora2, mensaje6, "Seleccione una opción");
-            handleDescriptionKeypressEvent(estado);       
- 
-            
-            var expresionValidadora3 = /^[0-9]+$/;
+            handleInputAndBlurEvents(montomaximo, expresionValidadora1, mensaje4, "Solo se permiten números");
+
+           
             var mensaje5 = document.getElementById("mensaje5");
-            handleInputAndBlurEvents(telefono, expresionValidadora3, mensaje5, "Solo se permiten números");
+            handleInputAndBlurEvents(montominimo, expresionValidadora1, mensaje5, "Solo se permiten números");
+
+            var mensaje6 = document.getElementById("mensaje6");
+            handleInputAndBlurEvents(tasamaxima, expresionValidadora1, mensaje6, "Solo se permiten números");
 
             var mensaje7 = document.getElementById("mensaje7");
-            handleInputAndBlurEvents(sucursalEditar, expresionValidadora2, mensaje7, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(sucursalEditar);     
+            handleInputAndBlurEvents(tasaminima, expresionValidadora1, mensaje7, "Solo se permiten números");
 
             var mensaje8 = document.getElementById("mensaje8");
-            handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje8, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(descripcionEditar);  
+            handleInputAndBlurEvents(plazomaximo, expresionValidadora1, mensaje8, "Solo se permiten números");
 
             var mensaje9 = document.getElementById("mensaje9");
-            handleInputAndBlurEvents(direccionEditar, expresionValidadora2, mensaje9, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(direccionEditar);  
+            handleInputAndBlurEvents(plazominimo, expresionValidadora1, mensaje9, "Solo se permiten números");
 
             var mensaje10 = document.getElementById("mensaje10");
-            handleInputAndBlurEvents(regionEditar, expresionValidadora2, mensaje10, "Seleccione una opción");
-            handleDescriptionKeypressEvent(regionEditar);  
+            handleInputAndBlurEvents(estado, expresionValidadora2, mensaje10, "Solo se permiten Letras Mayúsculas");
+            handleDescriptionKeypressEvent(estado);  
+
+/////editar
+            var mensaje11 = document.getElementById("mensaje11");
+            handleInputAndBlurEvents(tipoprestamoEditar, expresionValidadora2, mensaje11, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(tipoprestamoEditar);
 
             var mensaje12 = document.getElementById("mensaje12");
-            handleInputAndBlurEvents(estadoEditar, expresionValidadora2, mensaje12, "Seleccione una opción");
+            handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje12, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(descripcionEditar);      
+            
+            var mensaje13 = document.getElementById("mensaje13");
+            handleInputAndBlurEvents(aplicaseguroEditar, expresionValidadora1, mensaje13, "Solo se permiten números ( 1 ó 0)");       
+   
+            var mensaje14 = document.getElementById("mensaje14");
+            handleInputAndBlurEvents(montomaximoEditar, expresionValidadora1, mensaje14, "Solo se permiten números");
+
+           
+            var mensaje15 = document.getElementById("mensaje15");
+            handleInputAndBlurEvents(montominimoEditar, expresionValidadora1, mensaje15, "Solo se permiten números");
+
+            var mensaje16 = document.getElementById("mensaje16");
+            handleInputAndBlurEvents(tasamaximaEditar, expresionValidadora1, mensaje16, "Solo se permiten números");
+
+            var mensaje17 = document.getElementById("mensaje17");
+            handleInputAndBlurEvents(tasaminimaEditar, expresionValidadora1, mensaje17, "Solo se permiten números");
+
+            var mensaje18 = document.getElementById("mensaje18");
+            handleInputAndBlurEvents(plazomaximoEditar, expresionValidadora1, mensaje18, "Solo se permiten números");
+
+            var mensaje19 = document.getElementById("mensaje19");
+            handleInputAndBlurEvents(plazominimoEditar, expresionValidadora1, mensaje19, "Solo se permiten números");
+
+            var mensaje20 = document.getElementById("mensaje20");
+            handleInputAndBlurEvents(estadoEditar, expresionValidadora2, mensaje20, "Solo se permiten Letras Mayúsculas");
             handleDescriptionKeypressEvent(estadoEditar);  
 
-            var mensaje11 = document.getElementById("mensaje11");
-            handleInputAndBlurEvents(telefonoEditar, expresionValidadora3, mensaje11, "Solo se permiten números");
 
-
-
-        }
+       }
 
 
 
         
 
         $(document).ready(function() {
-            Lista_Sucursal();
-            Insertar_Sucursal();
+            Lista_Tipoprestamo();
+           Insertar_Tipoprestamo();
             validarNombre();
         });
     </script>
@@ -869,58 +926,81 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
         // Obtén los campos de entrada y el botón "Guardar para insertar"
-        const sucursalInput = document.getElementById('agregar-sucursal');
+        const tipoprestamoInput = document.getElementById('agregar-tipoprestamo');
         const descripcionInput = document.getElementById('agregar-descripcion');
-        const direccionInput = document.getElementById('agregar-direccion');
+        const aplicaseguroInput = document.getElementById('agregar-aplicaseguro');
+        const montomaximoInput = document.getElementById('agregar-montomaximo');
+        const montominimoInput = document.getElementById('agregar-montominimo');
+
+        const tasamaximaInput = document.getElementById('agregar-tasamaxima');
+        const tasaminimaInput = document.getElementById('agregar-tasaminima');
+        const plazomaximoInput = document.getElementById('agregar-plazomaximo');
+        const plazominimoInput = document.getElementById('agregar-plazominimo');
         const estadoInput = document.getElementById('agregar-estado');
-        const regionInput = document.getElementById('agregar-region');
-        const telefonoInput = document.getElementById('agregar-telefono');
         const guardarButton = document.getElementById('btn-agregar');
+
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid =sucursalInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && direccionInput.value.trim() !== '' &&estadoInput.value.trim() !== ''&&regionInput.value.trim() !== '' && telefonoInput.value.trim() !== '';
+            const isFormValid =tipoprestamoInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && 
+            aplicaseguroInput.value.trim() !== '' &&montomaximoInput.value.trim() !== '' && montominimoInput.value.trim() !== ''
+            &&tasamaximaInput.value.trim() !== '' && tasaminimaInput.value.trim() !== '' && plazomaximoInput.value.trim() !== '' 
+            &&plazominimoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid;
         }
         // Agrega un evento input a cada campo de entrada
-        sucursalInput.addEventListener('input', checkForm);
+        tipoprestamoInput.addEventListener('input', checkForm);
         descripcionInput.addEventListener('input', checkForm);
-        direccionInput.addEventListener('input', checkForm);
-       regionInput.addEventListener('input', checkForm);
+        aplicaseguroInput.addEventListener('input', checkForm);
+        montomaximoInput.addEventListener('input', checkForm);
+        montominimoInput.addEventListener('input', checkForm);
+        tasamaximaInput.addEventListener('input', checkForm);
+        tasaminimaInput.addEventListener('input', checkForm);
+        plazomaximoInput.addEventListener('input', checkForm);
+        plazominimoInput.addEventListener('input', checkForm);
         estadoInput.addEventListener('input', checkForm);
-        telefonoInput.addEventListener('input', checkForm);
+
         guardarButton.addEventListener('input', checkForm);
     </script>
 
 <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
-        const sucursalInput1 = document.getElementById('editar-sucursal');
+        const tipoprestamoInput1 = document.getElementById('editar-tipoprestamo');
         const descripcionInput1 = document.getElementById('editar-descripcion');
-        const direccionInput1 = document.getElementById('editar-direccion');
-        const regionInput1 = document.getElementById('editar-region');
+        const aplicaseguroInput1 = document.getElementById('editar-aplicaseguro');
+        const montomaximoInput1 = document.getElementById('editar-montomaximo');
+        const montominimoInput1 = document.getElementById('editar-montominimo');
+
+        const tasamaximaInput1 = document.getElementById('editar-tasamaxima');
+        const tasaminimaInput1 = document.getElementById('editar-tasaminima');
+        const plazomaximoInput1 = document.getElementById('editar-plazomaximo');
+        const plazominimoInput1 = document.getElementById('editar-plazominimo');
         const estadoInput1 = document.getElementById('editar-estado');
-        const telefonoInput1 = document.getElementById('editar-telefono');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = sucursalInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '' && direccionInput1.value.trim() !== ''&& regionInput1.value.trim() !== ''&&estadoInput1.value.trim() !== '' && telefonoInput1.value.trim() !== '';
+            const isFormValid =tipoprestamoInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '' && aplicaseguroInput1.value.trim() !== '' &&montomaximoInput1.value.trim() !== '' && montominimoInput1.value.trim() !== ''&&tasamaximaInput1.value.trim() !== '' && tasaminimaInput1.value.trim() !== '' && plazomaximoInput1.value.trim() !== '' &&plazominimoInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
             guardarButton1.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
-        sucursalInput1.addEventListener('input', checkForm);
+        tipoprestamoInput1.addEventListener('input', checkForm);
         descripcionInput1.addEventListener('input', checkForm);
-        direccionInput1.addEventListener('input', checkForm);
-        regionInput1.addEventListener('input', checkForm);
+        aplicaseguroInput1.addEventListener('input', checkForm);
+        montomaximoInput1.addEventListener('input', checkForm);
+        montominimoInput1.addEventListener('input', checkForm);
+        tasamaximaInput1.addEventListener('input', checkForm);
+        tasaminimaInput1.addEventListener('input', checkForm);
+        plazomaximoInput1.addEventListener('input', checkForm);
+        plazominimoInput1.addEventListener('input', checkForm);
         estadoInput1.addEventListener('input', checkForm);
-        telefonoInput1.addEventListener('input', checkForm);
 
     </script>
 
 <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-sucursal, #agregar-descripcion, #agregar-direccion, #agregar-estado,#agregar-region, #agregar-telefono').on('input', function() {
+        $('#agregar-tipoprestamo, #agregar-descripcion, #agregar-aplicaseguro, #agregar-montomaximo, #agregar-montominimo,  #agregar-tasamaxima, #agregar-tasaminima,  #agregar-plazomaximo, #agregar-plazominimo,  #agregar-estado').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -935,7 +1015,7 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
 
         // Escuchar eventos de cambio en los campos de entrada deshabilitados para eliminar espacios en blanco al principio y al final
-        $('#editar-sucursal, #editar-descripcion, #editar-direccion,#editar-estado,#editar-region,#editar-telefono').on('input', function() {
+        $('#editar-tipoprestamo, #editar-descripcion, #editar-aplicaseguro, #editar-montomaximo, #editar-montominimo,  #editar-tasamaxima, #editar-tasaminima,  #editar-plazomaximo, #editar-plazominimo,  #editar-estado').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -953,21 +1033,29 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <script>
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
         document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
-        document.getElementById('agregar-sucursal').value = "";
+        document.getElementById('agregar-tipoprestamo').value = "";
         document.getElementById('agregar-descripcion').value = "";
-        document.getElementById('agregar-direccion').value = "";
+        document.getElementById('agregar-aplicaseguro').value = "";
+        document.getElementById('agregar-montomaximo').value = "";
+        document.getElementById('agregar-montominimo').value = "";
+        document.getElementById('agregar-tasamaxima').value = "";
+        document.getElementById('agregar-tasaminima').value = "";
+        document.getElementById('agregar-plazomaximo').value = "";
+        document.getElementById('agregar-plazominimo').value = "";
         document.getElementById('agregar-estado').value = "";
-        document.getElementById('agregar-region').value = "";
-        document.getElementById('agregar-telefono').value = "";
 
 
         // Limpia los checkboxes
-        document.getElementById('agregar-sucursal').checked = false;
+        document.getElementById('agregar-tipoprestamo').checked = false;
         document.getElementById('agregar-descripcion').checked = false;
-        document.getElementById('agregar-direccion').checked = false;
+        document.getElementById('agregar-aplicaseguro').checked = false;
+        document.getElementById('agregar-montomaximo').checked = false;
+        document.getElementById('agregar-montominimo').checked = false;
+        document.getElementById('agregar-tasamaxima').checked = false;
+        document.getElementById('agregar-tasaminima').checked = false;
+        document.getElementById('agregar-plazomaximo').checked = false;
+        document.getElementById('agregar-plazominimo').checked = false;
         document.getElementById('agregar-estado').checked = false;
-        document.getElementById('agregar-region').checked = false;
-        document.getElementById('agregar-telefono').checked = false;
 
         });
 
@@ -975,12 +1063,17 @@ $regiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
         document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
        
         // Limpia los checkboxes
-        document.getElementById('editar-sucursal').checked = false;
+
+        document.getElementById('editar-tipoprestamo').checked = false;
         document.getElementById('editar-descripcion').checked = false;
-        document.getElementById('editar-direccion').checked = false;
+        document.getElementById('editar-aplicaseguro').checked = false;
+        document.getElementById('editar-montomaximo').checked = false;
+        document.getElementById('editar-montominimo').checked = false;
+        document.getElementById('editar-tasamaxima').checked = false;
+        document.getElementById('editar-tasaminima').checked = false;
+        document.getElementById('editar-plazomaximo').checked = false;
+        document.getElementById('editar-plazominimo').checked = false;
         document.getElementById('editar-estado').checked = false;
-        document.getElementById('editar-region').checked = false;
-        document.getElementById('editar-telefono').checked = false;
         });
     </script>
 
