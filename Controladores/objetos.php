@@ -1,4 +1,7 @@
 <?php 
+
+session_start();
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, PATCH, OPTIONS');
@@ -13,8 +16,10 @@ header('Content-Type: application/json');
 
 require_once("../config/conexion.php");
 require_once("../modelos/objetos.php"); 
+require_once("../Modelos/bitacora.php"); 
 
 $com = new Objetos(); 
+$bit = new bitacora();
 
 $body = json_decode(file_get_contents("php://input"), true);
 
@@ -29,15 +34,19 @@ switch ($_GET["op"]) {
         $OBJETO = $body["OBJETO"];
         $DESCRIPCION = $body["DESCRIPCION"];
         $TIPO_OBJETO = $body["TIPO_OBJETO"];
-        
         if (verificarExistenciaObjeto($OBJETO) > 0) {
             // Envía una respuesta de conflicto (409) si el objeto ya existe
             http_response_code(409);
             echo json_encode(["error" => "El objeto ya existe en la base de datos."]);
         } else {
             // Inserta el objeto en la base de datos
-            $datos = $com->insert_objeto($OBJETO, $DESCRIPCION, $TIPO_OBJETO);
+            $date = new DateTime(date("Y-m-d H:i:s"));
+            $dateMod = $date->modify("-8 hours");
+            $dateNew = $dateMod->format("Y-m-d H:i:s");
+            $datos = $com->insert_objeto($OBJETO, $DESCRIPCION, $TIPO_OBJETO, $_SESSION['usuario'], $dateNew);
             echo json_encode(["message" => "Objeto insertado exitosamente."]);
+            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL OBJETO: $OBJETO", $_SESSION['id_usuario'], 5, $_SESSION['usuario'], $dateNew);
+
         }
 
     break;
@@ -53,19 +62,31 @@ switch ($_GET["op"]) {
         $DESCRIPCION = $body["DESCRIPCION"];
         $TIPO_OBJETO = $body["TIPO_OBJETO"];
 
+        $date = new DateTime(date("Y-m-d H:i:s"));
+        $dateMod = $date->modify("-8 hours");
+        $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+
         $datos = $com->update_objeto(
             $ID_OBJETO,
             $OBJETO,
             $DESCRIPCION,
-            $TIPO_OBJETO
+            $TIPO_OBJETO,
+            $_SESSION['usuario'],
+            $dateNew
         );
         echo json_encode($datos);
+        $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL OBJETO # $ID_OBJETO", $_SESSION['id_usuario'], 5, $_SESSION['usuario'], $dateNew);
+
     break;
 
     case "EliminarObjeto":
         $ID_OBJETO = $body["ID_OBJETO"];
         $datos = $com->eliminar_objeto($ID_OBJETO);
         echo json_encode("Objeto eliminado");
+        $date = new DateTime(date("Y-m-d H:i:s"));
+        $dateMod = $date->modify("-8 hours");
+        $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+        $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL OBJETO # $ID_OBJETO", $_SESSION['id_usuario'], 5);
     break;
 }
 function verificarExistenciaObjeto($objeto) {

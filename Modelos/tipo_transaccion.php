@@ -25,20 +25,21 @@ class tipoTransaccion extends Conectar
     }
 
     // INSERTA UNA TRANSACCION
-    public function insert_tipoTransaccion($TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION, $ESTADO)
+    public function insert_tipoTransaccion($TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION, $CREADO_POR, $FECHA_CREACION, $ESTADO)
     {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_tipo_transaccion` ( `TIPO_TRANSACCION`, `DESCRIPCION`, `SIGNO_TRANSACCION`, `ESTADO`) VALUES ( :TIPO_TRANSACCION, :DESCRIPCION, :SIGNO_TRANSACCION, :ESTADO)";
+            $sql = "INSERT INTO `siaace`.`tbl_tipo_transaccion` ( `TIPO_TRANSACCION`, `DESCRIPCION`, `SIGNO_TRANSACCION`, `CREADO_POR`, `FECHA_CREACION`, `ESTADO`) VALUES ( :TIPO_TRANSACCION, :DESCRIPCION, :SIGNO_TRANSACCION, :CREADO_POR, :FECHA_CREACION, :ESTADO)";
 
             $stmt = $conectar->prepare($sql);
 
             $stmt->bindParam(':TIPO_TRANSACCION', $TIPO_TRANSACCION, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
             $stmt->bindParam(':SIGNO_TRANSACCION', $SIGNO_TRANSACCION, PDO::PARAM_INT);
+            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
             $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
-
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
@@ -52,7 +53,7 @@ class tipoTransaccion extends Conectar
     }
 
     // EDITA UNA TRANSACCION
-    public function update_tipoTransaccion($ID_TIPO_TRANSACCION, $TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION, $ESTADO )
+    public function update_tipoTransaccion($ID_TIPO_TRANSACCION, $TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION, $MODIFICADO_POR, $FECHA_MODIFICACION, $ESTADO )
     {
         try {
             $conectar = parent::conexion();
@@ -63,6 +64,8 @@ class tipoTransaccion extends Conectar
                     SET `TIPO_TRANSACCION` = :TIPO_TRANSACCION, 
                         `DESCRIPCION` = :DESCRIPCION,
                         `SIGNO_TRANSACCION` = :SIGNO_TRANSACCION,
+                        `MODIFICADO_POR` = :MODIFICADO_POR, 
+                        `FECHA_MODIFICACION` = :FECHA_MODIFICACION,
                         `ESTADO` = :ESTADO
                     WHERE `ID_TIPO_TRANSACCION` = :ID_TIPO_TRANSACCION";
 
@@ -72,8 +75,9 @@ class tipoTransaccion extends Conectar
             $stmt->bindParam(':TIPO_TRANSACCION', $TIPO_TRANSACCION, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
             $stmt->bindParam(':SIGNO_TRANSACCION', $SIGNO_TRANSACCION, PDO::PARAM_INT);
+            $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR);
             $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
-
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {

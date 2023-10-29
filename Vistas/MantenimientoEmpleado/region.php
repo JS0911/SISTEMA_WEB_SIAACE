@@ -391,10 +391,11 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
                             row += '<button class="btn btn-danger eliminar-region" data-id="' + region.ID_REGION + '" onclick="eliminarRegion(' + region.ID_REGION + ')">Eliminar</button>';
                         }
-
-
                         row += '</td>' +
                             '</tr>';
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();

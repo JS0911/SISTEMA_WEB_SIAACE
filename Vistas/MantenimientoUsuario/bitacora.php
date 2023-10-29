@@ -14,7 +14,7 @@ if (!isset($_SESSION['usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Bitacora = "6";
+$id_objeto_Bitacora = "13";
 $id_objeto_Seguridad = "25";
 $id_objeto_Cuentas = "28";
 
@@ -147,9 +147,6 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
                                 echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;">Bitacora</a>';
                             }
-
-
-
                             echo '</nav>';
                             echo '</div>';
                         }
@@ -220,8 +217,8 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     <th>Fecha</th>
                                     <th>Accion</th>
                                     <th>Descripcion</th>
-                                    <th>Id Usuario</th>
-                                    <th>Id Objeto</th>
+                                    <th>Nombre Usuario</th>
+                                    <th>Objeto</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -230,11 +227,6 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         </table>
                     </div>
                 </div>
-
-
-
-
-
             </main>
             <!-- AQUI FINALIZA EL MANTENIMIENTO DE OBJETOS -->
 
@@ -251,9 +243,6 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
     <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-
-
-
         function Lista_Bitacora() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/bitacora.php?op=GetBitacora', {
@@ -282,13 +271,11 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td>' + bitacora.FECHA + '</td>' +
                             '<td>' + bitacora.ACCION + '</td>' +
                             '<td>' + bitacora.DESCRIPCION + '</td>' +
-                            '<td>' + bitacora.ID_USUARIO + '</td>' +
-                            '<td>' + bitacora.ID_OBJETO + '</td>' +
-
+                            '<td>' + bitacora.NOMBRE_USUARIO + '</td>' +
+                            '<td>' + bitacora.OBJETO + '</td>' +
                             '</tr>';
                         tbody.innerHTML += row;
                     });
-
                     habilitarPaginacion();
                 })
 
@@ -298,7 +285,6 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 });
 
         }
-
 
         function habilitarPaginacion() {
             $('#Lista-bitacora').DataTable({
@@ -311,17 +297,12 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             });
         }
 
-
-
         $(document).ready(function() {
 
             Lista_Bitacora();
 
         });
     </script>
-
-
-
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

@@ -18,12 +18,13 @@ $id_rol = $_SESSION['id_rol'];
 $id_objeto_Seguridad = "25";
 $id_objeto_Empleado = "27";
 $id_objeto_Cuentas = "28";
-
+$id_objeto_Prestamos = "29";
 
 
 $permisos1 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
 $permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos3 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos);
 
 ?>
 
@@ -146,12 +147,24 @@ $permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 echo '</nav>';
                                 echo '</div>';
                             }
+                            //-------------------------------MODULO DE PRESTAMOS--------------------------------------
+                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamos" aria-expanded="false" aria-controls="collapseMantenimientoPrestamos">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                                        Modulo Prestamos
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>';
+                                echo '<div class="collapse" id="collapseMantenimientoPrestamos" aria-labelledby="headingMantenimientoPrestamos" data-parent="#sidenavAccordion">';
+                                echo '<nav class="sb-sidenav-menu-nested nav">';
+    
+                                if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
+                                    echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
 
-
-
-                            // PRESTAMOS PENDIENTE MODULO CON PERMISOS
-                            echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
-
+                                }                            
+                                echo '</nav>';
+                                echo '</div>';
+                            }
                         ?>
 
                     </div>

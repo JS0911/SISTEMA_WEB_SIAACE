@@ -12,7 +12,7 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 require_once("../config/conexion.php");
-require_once("../modelos/bitacora.php");
+require_once("../Modelos/bitacora.php");
 
 $com = new bitacora();
 
@@ -20,9 +20,9 @@ $body = json_decode(file_get_contents("php://input"), true);
 
 switch ($_GET["op"]) {
  
-  case "GetBitacora":
-    $datos = $com->get_bitacora();
-    echo json_encode($datos);
+    case "GetBitacora":
+        $datos = $com->get_bitacora();
+        echo json_encode($datos);
     break;
 }
 ?>

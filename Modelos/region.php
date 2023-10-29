@@ -25,19 +25,19 @@ class Region extends Conectar
     }
 
     // INSERTA UNA REGIÓN
-    public function insert_region($REGION, $DESCRIPCION, $ESTADO)
+    public function insert_region($REGION, $DESCRIPCION, $FECHA_CREACION, $ESTADO, $CREADO_POR)
     {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_me_region` ( `REGION`, `DESCRIPCION`, `ESTADO`) VALUES ( :REGION, :DESCRIPCION, :ESTADO)";
+            $sql = "INSERT INTO `siaace`.`tbl_me_region` ( `REGION`, `DESCRIPCION`, `FECHA_CREACION`, `ESTADO`, `CREADO_POR`) VALUES ( :REGION, :DESCRIPCION, :FECHA_CREACION, :ESTADO, :CREADO_POR)";
 
             $stmt = $conectar->prepare($sql);
-
             $stmt->bindParam(':REGION', $REGION, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
             $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
-
+            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
@@ -51,26 +51,27 @@ class Region extends Conectar
     }
 
     // EDITA UNA REGIÓN
-    public function update_region($ID_REGION, $REGION, $DESCRIPCION, $ESTADO)
+    public function update_region($ID_REGION, $REGION, $DESCRIPCION, $MODIFICADO_POR, $FECHA_MODIFICACION, $ESTADO)
     {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-
             // Consulta SQL para actualizar los campos de la región
             $sql = "UPDATE `tbl_me_region` 
-                    SET `REGION` = :REGION, 
-                        `DESCRIPCION` = :DESCRIPCION,
-                        `ESTADO` = :ESTADO
-                    WHERE `ID_REGION` = :ID_REGION";
-
+                SET `REGION` = :REGION, 
+                    `DESCRIPCION` = :DESCRIPCION,
+                    `MODIFICADO_POR` = :MODIFICADO_POR, 
+                    `FECHA_MODIFICACION` = :FECHA_MODIFICACION,
+                    `ESTADO` = :ESTADO
+                WHERE `ID_REGION` = :ID_REGION";
             $stmt = $conectar->prepare($sql);
 
             $stmt->bindParam(':ID_REGION', $ID_REGION, PDO::PARAM_INT);
             $stmt->bindParam(':REGION', $REGION, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
+            $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR);
             $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
-
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {

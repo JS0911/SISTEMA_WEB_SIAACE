@@ -1,4 +1,7 @@
 <?php 
+
+session_start();
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, PATCH, OPTIONS');
@@ -12,9 +15,11 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 require_once("../config/conexion.php");
-require_once("../modelos/forma_pago.php"); 
+require_once("../modelos/forma_pago.php");
+require_once("../Modelos/bitacora.php"); 
 
 $com = new Fpago(); 
+$bit = new bitacora();
 
 $body = json_decode(file_get_contents("php://input"), true);
 
@@ -35,8 +40,12 @@ switch ($_GET["op"]) {
             echo json_encode(["error" => "La Forma de Pago ya existe en la base de datos."]);
         } else {
             // Inserta una Forma de pago en la base de datos
-            $datos = $com->insert_fpago($FORMA_DE_PAGO, $DESCRIPCION, $ESTADO);
+            $date = new DateTime(date("Y-m-d H:i:s"));
+            $dateMod = $date->modify("-8 hours");
+            $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+            $datos = $com->insert_fpago($FORMA_DE_PAGO, $DESCRIPCION, $_SESSION['usuario'], $dateNew, $ESTADO);
             echo json_encode(["message" => "Forma de pago insertada exitosamente."]);
+            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO LA FORMA DE PAGO: $FORMA_DE_PAGO", $_SESSION['id_usuario'], 12, $_SESSION['usuario'], $dateNew);
         }
 
     break;
@@ -52,19 +61,30 @@ switch ($_GET["op"]) {
         $DESCRIPCION = $body["DESCRIPCION"];
         $ESTADO =  $body["ESTADO"];
 
+        $date = new DateTime(date("Y-m-d H:i:s"));
+        $dateMod = $date->modify("-8 hours");
+        $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+
         $datos = $com->update_fpago(
             $ID_FPAGO,
             $FORMA_DE_PAGO,
             $DESCRIPCION,
+            $_SESSION['usuario'],
+            $dateNew,
             $ESTADO
         );
         echo json_encode($datos);
+        $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO LA FORMA DE PAGO # $ID_FPAGO", $_SESSION['id_usuario'], 12, $_SESSION['usuario'], $dateNew);
     break;
 
     case "EliminarFpago":
-        $ID_FPAGO = $body["ID_FPAGO"];
+        $ID_FPAGO = $body["ID_FPAGO"];  
         $datos = $com->eliminar_fpago($ID_FPAGO);
-        echo json_encode("Forma de Pago eliminada");
+        echo json_encode("Forma de Pago eliminado");
+        $date = new DateTime(date("Y-m-d H:i:s"));
+        $dateMod = $date->modify("-8 hours");
+        $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+        $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO LA FORMA DE PAGO #$ID_FPAGO", $_SESSION['id_usuario'], 12);
     break;
 }
 function verificarExistenciaFpago($FORMA_DE_PAGO) {

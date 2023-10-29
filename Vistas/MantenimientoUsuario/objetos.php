@@ -388,9 +388,11 @@ $permisos2 = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas
                             row += '<button class="btn btn-danger eliminar-objeto" data-id="' + objeto.ID_OBJETO + '" onclick="eliminarObjeto(' + objeto.ID_OBJETO + ')">Eliminar</button>';
                         }
 
-
                         row += '</td>' +
                             '</tr>';
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();

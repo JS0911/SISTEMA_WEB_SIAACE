@@ -25,18 +25,18 @@ class Objetos extends Conectar
     }
     
     // INSERTA UN OBJETO
-    public function insert_objeto( $OBJETO, $DESCRIPCION, $TIPO_OBJETO) {
+    public function insert_objeto( $OBJETO, $DESCRIPCION, $TIPO_OBJETO, $CREADO_POR, $FECHA_CREACION) {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_objetos` ( `OBJETO`, `DESCRIPCION`, `TIPO_OBJETO`) VALUES ( :OBJETO, :DESCRIPCION, :TIPO_OBJETO)";
+            $sql = "INSERT INTO `siaace`.`tbl_ms_objetos` ( `OBJETO`, `DESCRIPCION`, `TIPO_OBJETO`, `CREADO_POR`, `FECHA_CREACION`) VALUES ( :OBJETO, :DESCRIPCION, :TIPO_OBJETO, :CREADO_POR, :FECHA_CREACION)";
     
             $stmt = $conectar->prepare($sql);
-          
             $stmt->bindParam(':OBJETO', $OBJETO, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
             $stmt->bindParam(':TIPO_OBJETO', $TIPO_OBJETO, PDO::PARAM_STR);
-            
+            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
             $stmt->execute();
     
             if ($stmt->rowCount() > 0) {
@@ -50,17 +50,18 @@ class Objetos extends Conectar
     }
 
     // EDITA UN OBJETO
-    public function update_objeto($ID_OBJETO, $OBJETO, $DESCRIPCION, $TIPO_OBJETO) {
+    public function update_objeto($ID_OBJETO, $OBJETO, $DESCRIPCION, $TIPO_OBJETO, $MODIFICADO_POR, $FECHA_MODIFICACION,) {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-    
             // Consulta SQL para actualizar los campos del objeto
             $sql = "UPDATE `tbl_ms_objetos` 
-                    SET `OBJETO` = :OBJETO, 
-                        `DESCRIPCION` = :DESCRIPCION, 
-                        `TIPO_OBJETO` = :TIPO_OBJETO 
-                    WHERE `ID_OBJETO` = :ID_OBJETO";
+            SET `OBJETO` = :OBJETO, 
+                `DESCRIPCION` = :DESCRIPCION, 
+                `TIPO_OBJETO` = :TIPO_OBJETO,
+                `MODIFICADO_POR` = :MODIFICADO_POR, 
+                `FECHA_MODIFICACION` = :FECHA_MODIFICACION
+            WHERE `ID_OBJETO` = :ID_OBJETO";        
     
             $stmt = $conectar->prepare($sql);
     
@@ -68,7 +69,8 @@ class Objetos extends Conectar
             $stmt->bindParam(':OBJETO', $OBJETO, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
             $stmt->bindParam(':TIPO_OBJETO', $TIPO_OBJETO, PDO::PARAM_STR);
-    
+            $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR);
             $stmt->execute();
     
             if ($stmt->rowCount() > 0) {
