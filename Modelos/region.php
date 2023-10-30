@@ -25,19 +25,19 @@ class Region extends Conectar
     }
 
     // INSERTA UNA REGIÓN
-    public function insert_region($REGION, $DESCRIPCION, $FECHA_CREACION, $ESTADO, $CREADO_POR)
+    public function insert_region($REGION, $DESCRIPCION, $CREADO_POR, $FECHA_CREACION, $ESTADO)
     {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_me_region` ( `REGION`, `DESCRIPCION`, `FECHA_CREACION`, `ESTADO`, `CREADO_POR`) VALUES ( :REGION, :DESCRIPCION, :FECHA_CREACION, :ESTADO, :CREADO_POR)";
+            $sql = "INSERT INTO `siaace`.`tbl_me_region` ( `REGION`, `DESCRIPCION`, `CREADO_POR`, `FECHA_CREACION`, `ESTADO`) VALUES ( :REGION, :DESCRIPCION, :CREADO_POR, :FECHA_CREACION, :ESTADO)";
 
             $stmt = $conectar->prepare($sql);
             $stmt->bindParam(':REGION', $REGION, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
+            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
             $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
             $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
-            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {

@@ -495,18 +495,18 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                                 }
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('Error en la solicitud');
+                                throw new Error('El registro ya existe en la Base de Datos.');
                             }
                         })
-                        .catch(function(error) {
+                        .catch(function(data) {
                             // Mostrar SweetAlert de error
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: 'Error al guardar los datos: ' + error.message
+                                text: 'Error al guardar los datos: ' + data.error
                             });
-                            console.log(error.message);
-                        });
+                        console.log(data.error);
+                    });
                 }
             });
         }

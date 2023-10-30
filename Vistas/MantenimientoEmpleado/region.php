@@ -235,11 +235,11 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                                     <th style="display: none;">Id</th>
                                     <th>Region</th>
                                     <th>Descripcion</th>
+                                    <th>Creado por</th>
                                     <th>Fecha Creación</th>
                                     <th>Modificado por</th>
                                     <th>Fecha Modificación</th>
                                     <th>Estado</th>
-                                    <th>Creado por</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -375,11 +375,11 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                             '<td style="display:none;">' + region.ID_REGION + '</td>' +
                             '<td>' + region.REGION + '</td>' +
                             '<td>' + region.DESCRIPCION + '</td>' +
+                            '<td>' + region.CREADO_POR + '</td>' +
                             '<td>' + region.FECHA_CREACION + '</td>' +
                             '<td>' + region.MODIFICADO_POR + '</td>' +
                             '<td>' + region.FECHA_MODIFICACION + '</td>' +
                             '<td>' + region.ESTADO + '</td>' +
-                            '<td>' + region.CREADO_POR + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -479,7 +479,7 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                                 }
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('Error en la solicitud');
+                                throw new Error('El registro ya existe en la Base de Datos.');
                             }
                         })
                         .catch(function(error) {
@@ -489,8 +489,8 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                                 title: 'Error',
                                 text: 'Error al guardar los datos: ' + error.message
                             });
-                            console.log(error.message);
-                        });
+                        console.log(error.message);
+                    });
                 }
             });
         }

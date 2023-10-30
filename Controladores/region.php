@@ -43,7 +43,7 @@ switch ($_GET["op"]) {
             $date = new DateTime(date("Y-m-d H:i:s"));
             $dateMod = $date->modify("-8 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-            $datos = $com->insert_region($REGION, $DESCRIPCION, $ESTADO, $_SESSION['usuario'], $dateNew);
+            $datos = $com->insert_region($REGION, $DESCRIPCION, $_SESSION['usuario'], $dateNew, $ESTADO);
             echo json_encode(["message" => "Region insertada exitosamente."]);
             $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO LA REGION: $REGION", $_SESSION['id_usuario'], 8, $_SESSION['usuario'], $dateNew);
         }
@@ -88,15 +88,15 @@ switch ($_GET["op"]) {
         $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO LA REGION # $ID_REGION", $_SESSION['id_usuario'], 8);
     break;
 }
-function verificarExistenciaRegion($REGION) {
+function verificarExistenciaRegion($region) {
     // Realiza una consulta en la base de datos para verificar si el REGION ya existe
-    $sql = "SELECT COUNT(*) as count FROM tbl_me_region WHERE region = :region";
+    $sql = "SELECT COUNT(*) as count FROM tbl_me_region WHERE REGION = :region";
 
     // Realiza la conexión a la base de datos y ejecuta la consulta
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':region', $REGION);
+    $stmt->bindParam(':region', $region);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 

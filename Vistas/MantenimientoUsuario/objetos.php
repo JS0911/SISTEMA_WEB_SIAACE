@@ -445,30 +445,40 @@ $permisos2 = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas
                         },
                         body: JSON.stringify(datos)
                     })
-                    .then(function (response) {
-                        if (response.ok) {
-                            if (response.status === 200) {
-                                return response.json();
-                            } else if (response.status === 409) {
-                                return response.json().then(function (data) {
-                                    throw new Error(data.error);
-                                });
+                    .then(function(response) {
+                            if (response.ok) {
+                                if (response.status === 200) {
+                                    // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Cerrar la modal después de guardar
+                                        $('#crearModal').modal('hide');
+                                        // Mostrar SweetAlert de éxito
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Guardado exitoso',
+                                            text: data.message
+                                        }).then(function() {
+                                            // Recargar la página para mostrar los nuevos datos
+                                            location.reload();
+                                        });
+                                    });
+                                } else if (response.status === 409) {
+                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Mostrar SweetAlert de error
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: data.error // Acceder al mensaje de error
+                                        });
+                                    });
+                                }
+                            } else {
+                                // Si hubo un error en la solicitud, maneja el error aquí
+                                throw new Error('El registro ya existe en la Base de Datos.');
                             }
-                        } else {
-                            throw new Error('Error en la solicitud');
-                        }
-                    })
-                    .then(function (data) {
-                        console.log(data);
-                        $('#crearModal').modal('hide');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Guardado exitoso',
-                            text: data.message
-                        })
-                        .then(function () {
-                            location.reload();
-                        });
                     })
                     .catch(function (error) {
                         Swal.fire({

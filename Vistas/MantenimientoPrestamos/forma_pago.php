@@ -498,7 +498,7 @@ $permisos2 = $permisosFormaPago->get_Permisos_Usuarios($id_rol, $id_objeto_Cuent
                                 }
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('Error en la solicitud');
+                                throw new Error('El registro ya existe en la Base de Datos.');
                             }
                         })
                         .catch(function(error) {
@@ -508,8 +508,8 @@ $permisos2 = $permisosFormaPago->get_Permisos_Usuarios($id_rol, $id_objeto_Cuent
                                 title: 'Error',
                                 text: 'Error al guardar los datos: ' + error.message
                             });
-                            console.log(error.message);
-                        });
+                        console.log(error.message);
+                    });
                 }
             });
         }

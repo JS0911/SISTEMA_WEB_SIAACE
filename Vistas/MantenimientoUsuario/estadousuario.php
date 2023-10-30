@@ -443,7 +443,6 @@ $permisos2 = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas
                     var datos = {
                         NOMBRE: nombre,
                         DESCRIPCION: descripcion,
-
                     };
 
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/estadousuario.php?op=InsertEstado', {
@@ -455,27 +454,38 @@ $permisos2 = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas
                         })
                         .then(function(response) {
                             if (response.ok) {
-                                // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
-                                return response.json();
+                                if (response.status === 200) {
+                                    // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Cerrar la modal después de guardar
+                                        $('#crearModal').modal('hide');
+                                        // Mostrar SweetAlert de éxito
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Guardado exitoso',
+                                            text: data.message
+                                        }).then(function() {
+                                            // Recargar la página para mostrar los nuevos datos
+                                            location.reload();
+                                        });
+                                    });
+                                } else if (response.status === 409) {
+                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Mostrar SweetAlert de error
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: data.error // Acceder al mensaje de error
+                                        });
+                                    });
+                                }
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('Error en la solicitud');
+                                throw new Error('El registro ya existe en la Base de Datos.');
                             }
-                        })
-                        .then(function(data) {
-                            console.log(data);
-                            // Cerrar la modal después de guardar
-                            $('#crearModal').modal('hide');
-
-                            // Mostrar SweetAlert de éxito
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Guardado exitoso',
-                                text: 'Los datos se han guardado correctamente.'
-                            }).then(function() {
-                                // Recargar la página para mostrar los nuevos datos
-                                location.reload();
-                            });
                         })
                         .catch(function(error) {
                             // Mostrar SweetAlert de error
@@ -484,8 +494,8 @@ $permisos2 = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas
                                 title: 'Error',
                                 text: 'Error al guardar los datos: ' + error.message
                             });
-                            console.log(error.message);
-                        });
+                        console.log(error.message);
+                    });
                 }
             });
         }
