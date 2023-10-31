@@ -202,22 +202,24 @@ $permisos2 = $permisosFormaPago->get_Permisos_Usuarios($id_rol, $id_objeto_Cuent
                             echo '</div>';
                         }
 
-                        //-------------------------------MODULO DE PRESTAMOS--------------------------------------
+                             //----------------------------MODULO DE PRESTAMOS------------------------------------
+                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
+                            <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
+                            Modulo Prestamo
+                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                          </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoPrestamo" aria-labelledby="headingMantenimientoPrestamo" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamos" aria-expanded="false" aria-controls="collapseMantenimientoPrestamos">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-file-invoice-dollar"></i></div>
-                                        Modulo Prestamos
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>';
-                                echo '<div class="collapse" id="collapseMantenimientoPrestamos" aria-labelledby="headingMantenimientoPrestamos" data-parent="#sidenavAccordion">';
-                                echo '<nav class="sb-sidenav-menu-nested nav">';
-    
-                                if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
-                                }                            
-                                echo '</nav>';
-                                echo '</div>';
+                                echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
+                                echo '<a class="nav-link" href="tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
+                                echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamo</a>';
                             }
+                            echo '</nav>';
+                            echo '</div>';
+                        }
                         ?>
 
                     </div>

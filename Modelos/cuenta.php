@@ -24,93 +24,62 @@ class cuenta extends Conectar
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // //INSERTA UN USUARIO
-    // public function insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CONTRASENA, $CORREO_ELECTRONICO, $ID_ROL)
-    // {
-    //     try {
-    //         $contrasenaEncriptada = password_hash($CONTRASENA, PASSWORD_DEFAULT);
-    //         //echo $contrasenaEncriptada;
-    //         $conectar = parent::conexion();
-    //         parent::set_names();
-    //         $sql = "INSERT INTO `siaace`.`tbl_ms_usuario` (`USUARIO`, `NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CONTRASENA`, `CORREO_ELECTRONICO`, `ID_ROL`) VALUES ( :USUARIO, :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CONTRASENA, :CORREO_ELECTRONICO, :ID_ROL)";
+    //INSERTA UN USUARIO
+    public function insert_cuenta($ID_EMPLEADO, $ID_TIPOCUENTA, $SALDO, $NUMERO_CUENTA, $ESTADO)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+            $sql = "INSERT INTO `siaace`.`tbl_mc_cuenta` (`ID_EMPLEADO`, `ID_TIPOCUENTA`, `SALDO`, `NUMERO_CUENTA`, `ESTADO`) VALUES ( :ID_EMPLEADO, :ID_TIPOCUENTA, :SALDO, :NUMERO_CUENTA, :ESTADO)";
 
-    //         $stmt = $conectar->prepare($sql);
+            $stmt = $conectar->prepare($sql);
 
-    //         $stmt->bindParam(':USUARIO', $USUARIO, PDO::PARAM_STR);
-    //         $stmt->bindParam(':NOMBRE_USUARIO', $NOMBRE_USUARIO, PDO::PARAM_STR);
-    //         $stmt->bindParam(':ID_ESTADO_USUARIO', $ID_ESTADO_USUARIO, PDO::PARAM_INT);
-    //         $stmt->bindParam(':CONTRASENA', $contrasenaEncriptada, PDO::PARAM_STR);
-    //         $stmt->bindParam(':CORREO_ELECTRONICO', $CORREO_ELECTRONICO, PDO::PARAM_STR);
-    //         $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
+            $stmt->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
+            $stmt->bindParam(':ID_TIPOCUENTA', $ID_TIPOCUENTA, PDO::PARAM_INT);
+            $stmt->bindParam(':SALDO', $SALDO, PDO::PARAM_INT);
+            $stmt->bindParam(':NUMERO_CUENTA', $NUMERO_CUENTA, PDO::PARAM_INT);
+            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
 
-    //         $stmt->execute();
+            $stmt->execute();
 
-    //         if ($stmt->rowCount() > 0) {
-    //             return "Usuario Insertado";
-    //         } else {
-    //             return "Error al insertar el usuario";
-    //         }
-    //     } catch (PDOException $e) {
+            if ($stmt->rowCount() > 0) {
+                return "Cuenta Insertada";
+            } else {
+                return "Error al insertar la cuenta";
+            }
+        } catch (PDOException $e) {
 
-    //         return "Error al insertar el usuario: " . $e->getMessage();
-    //     }
-    // }
+            return "Error al insertar el usuario: " . $e->getMessage();
+        }
+    }
 
-    // //EDITA UN USUARIO
-    // public function update_usuario($ID_USUARIO, $USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CORREO_ELECTRONICO, $ID_ROL)
-    // {
-    //     try {
-    //         $conectar = parent::conexion();
-    //         parent::set_names();
+    //EDITA UN USUARIO
+    public function update_cuenta($ID_CUENTA, $ESTADO)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
 
-    //         // Consulta SQL para actualizar los campos del usuario
-    //         $sql = "UPDATE `tbl_ms_usuario` 
-    //                 SET `USUARIO` = :USUARIO, 
-    //                     `NOMBRE_USUARIO` = :NOMBRE_USUARIO, 
-    //                     `ID_ESTADO_USUARIO` = :ID_ESTADO_USUARIO, 
-    //                     `CORREO_ELECTRONICO` = :CORREO_ELECTRONICO, 
-    //                     `ID_ROL` = :ID_ROL 
-    //                 WHERE `ID_USUARIO` = :ID_USUARIO";
+            // Consulta SQL para actualizar los campos del usuario
+            $sql = "UPDATE `tbl_mc_cuenta` 
+                    SET `ESTADO` = :ESTADO
+                    WHERE `ID_CUENTA` = :ID_CUENTA";
 
-    //         $stmt = $conectar->prepare($sql);
+            $stmt = $conectar->prepare($sql);
 
-    //         $stmt->bindParam(':ID_USUARIO', $ID_USUARIO, PDO::PARAM_INT);
-    //         $stmt->bindParam(':USUARIO', $USUARIO, PDO::PARAM_STR);
-    //         $stmt->bindParam(':NOMBRE_USUARIO', $NOMBRE_USUARIO, PDO::PARAM_STR);
-    //         $stmt->bindParam(':ID_ESTADO_USUARIO', $ID_ESTADO_USUARIO, PDO::PARAM_INT);
-    //         $stmt->bindParam(':CORREO_ELECTRONICO', $CORREO_ELECTRONICO, PDO::PARAM_STR);
-    //         $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
+            $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
+            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
 
-    //         $stmt->execute();
+            $stmt->execute();
 
-    //         if ($stmt->rowCount() > 0) {
-    //             return "Usuario actualizado correctamente";
-    //         } else {
-    //             return "No se realizó ninguna actualización, o el usuario no existe";
-    //         }
-    //     } catch (PDOException $e) {
-    //         return "Error al actualizar el usuario: " . $e->getMessage();
-    //     }
-    // }
+            if ($stmt->rowCount() > 0) {
+                return "Cuenta actualizada correctamente";
+            } else {
+                return "No se realizó ninguna actualización, o el usuario no existe";
+            }
+        } catch (PDOException $e) {
+            return "Error al actualizar la cuenta: " . $e->getMessage();
+        }
+    }
 
-    // // ELIMINA UN USUARIO
-    // public function eliminar_usuario($ID_USUARIO)
-    // {
-    //     try {
-    //         $conectar = parent::conexion();
-    //         parent::set_names();
-    //         // Consulta SQL para eliminar el usuario
-    //         $sql = "DELETE FROM `tbl_ms_usuario` WHERE `ID_USUARIO` = :ID_USUARIO";
-    //         $stmt = $conectar->prepare($sql);
-    //         $stmt->bindParam(':ID_USUARIO', $ID_USUARIO, PDO::PARAM_INT);
-    //         $stmt->execute();
-    //         if ($stmt->rowCount() > 0) {
-    //             return "Usuario eliminado correctamente";
-    //         } else {
-    //             return "No se realizó ninguna eliminación, o el usuario no existe";
-    //         }
-    //     } catch (PDOException $e) {
-    //         return  $e->getCode();
-    //     }
-    // }
 }

@@ -4,7 +4,7 @@ session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
 
-$permisosTransaccion = new PermisosUsuarios();
+$permisosCuenta = new PermisosUsuarios();
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
@@ -13,13 +13,21 @@ if (!isset($_SESSION['usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Transaccion = "11";
-$id_objeto_Cuentas = "28";
 $id_objeto_Seguridad = "25";
+$id_objeto_Cuentas = "28";
+$id_objeto_MantCuenta = "29";
 
-$permisos1 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
-$permisos = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Transaccion);
-$permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos1 = $permisosCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
+$permisos = $permisosCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos2 = $permisosCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_MantCuenta);
+
+$conexion = new Conectar();
+$conn = $conexion->Conexion();
+
+$sql1 = "SELECT ID_TIPOCUENTA, TIPO_CUENTA FROM tbl_mc_tipocuenta";
+$stmt1 = $conn->prepare($sql1);
+$stmt1->execute();
+$TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -43,7 +51,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento Tipo Transacción</title>
+    <title>Mantenimiento Tipo de Cuenta</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
@@ -52,14 +60,14 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <style>
         /* Estilo para la tabla */
-        #Lista-transaccion {
+        #Lista-cuentas {
             border-collapse: collapse;
             /* Combina los bordes de las celdas */
             width: 100%;
         }
 
         /* Estilo para las celdas del encabezado (th) */
-        #Lista-transaccion th {
+        #Lista-cuentas th {
             border: 2px solid white;
             /* Bordes negros para las celdas del encabezado */
             background-color: #333;
@@ -73,7 +81,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
         }
 
         /* Estilo para las celdas de datos (td) */
-        #Lista-transaccion td {
+        #Lista-cuentas td {
             border: 1px solid grey;
             /* Bordes negros para las celdas de datos */
             padding: 8px;
@@ -141,13 +149,12 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
 
                         <?php
-                        //----------------------------MODULO DE SEGURIDAD------------------------------------
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
-                                        Modulo seguridad
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>';
+                                    <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
+                                    Modulo seguridad
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
@@ -167,10 +174,10 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                         //----------------------------MODULO DE EMPLEADO------------------------------------
                         if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                                        Modulo Empleado
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>';
+                                    <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                                    Modulo Empleado
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
                             echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
@@ -183,7 +190,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                             echo '</nav>';
                             echo '</div>';
                         }
-                        
+
                         //----------------------------MODULO DE CUENTAS------------------------------------
                         if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
@@ -198,7 +205,6 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                                 echo '<a class="nav-link" href="tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 echo '<a class="nav-link" href="tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
                                 echo '<a class="nav-link" href="MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
-
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -234,13 +240,13 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
         </div>
         <div id="layoutSidenav_content">
 
-            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE TRANSACCION -->
+            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE TIPO DE CUENTAS -->
             <main>
                 <div class="container-fluid">
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
-                            <h1 class="mt-4 mb-4">Mantenimiento Tipo Transacción</h1>
+                            <h1 class="mt-4 mb-4">Mantenimiento de Cuentas</h1>
                         </center>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -251,17 +257,14 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                             ?>
                         </div>
                         <!-- Tabla para mostrar los datos -->
-                        <table class="table table-bordered mx-auto" id="Lista-transaccion" style="margin-top: 20px; margin-bottom: 20px">
+                        <table class="table table-bordered mx-auto" id="Lista-cuentas" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
                                     <th style="display: none;">Id</th>
-                                    <th>Tipo Transaccion</th>
-                                    <th>Descripcion</th>
-                                    <th>Signo Transaccion</th>
-                                    <th>Creado por</th>
-                                    <th>Fecha Creacion</th>
-                                    <th>Modificado por</th>
-                                    <th>Fecha Modificacion</th>
+                                    <th>Empleado</th>
+                                    <th>Numero De Cuenta</th>
+                                    <th>Saldo</th>
+                                    <th>Tipo De Cuenta</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -287,32 +290,34 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                                 <!-- Formulario de creación -->
                                 <form>
                                     <div class="form-group">
-                                        <label for="nombre">Tipo Transaccion</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-transaccion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje1"></div>
 
-                                        <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
+                                        <label for="nombre">Numero De Cuenta</label>
+                                        <input type="text" maxlength="10" class="form-control" id="NumeroCuenta">
                                         <div id="mensaje2"></div>
 
-                                        <label for="nombre">Signo Transaccion</label>
-                                        <input type="text" class="form-control" id="agregar-signo" required pattern="^[0-9-]+$" title="Solo se permiten - y un numero" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje3"></div>
+                                        <label for="id-estado">Tipo Cuenta</label>
+                                        <select class="form-control" id="agregar-tipo-cuenta" name="Id-tipo-cuenta" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <?php foreach ($TiposCuentas as $TiposCuentas) : ?>
+                                                <option value="<?php echo $TiposCuentas['ID_TIPOCUENTA']; ?>"><?php echo $TiposCuentas['TIPO_CUENTA']; ?></option>
+                                            <?php endforeach; ?>
+                                            <div id="mensaje3"></div>
+                                        </select>
 
                                         <label for="Estado">Estado</label>
-                                        <select class="form-control" id="agregar-estado" maxlength="15" name="IdTipoTransaccion" required>
+                                        <select class="form-control" id="agregar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="ACTIVO">Activo</option>
-                                            <option value="INACTIVO">Inactivo</option>
-                                            <option value="NUEVO">Nuevo</option>
+                                            <option value="ACTIVO">ACTIVO</option>
+                                            <option value="INACTIVO">INACTIVO</option>
                                         </select>
+                                        <div id="mensaje4"></div>
 
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -332,38 +337,29 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                                 <!-- Formulario de edición -->
                                 <form>
                                     <div class="form-group">
-                                        <label for="nombre">Id</label>
-                                        <input type="text" class="form-control" id="editar-id-transaccion" disabled>
-                                        <label for="nombre">Transaccion</label>
-                                        <input type="text" maxlength="15" class="form-control" id="editar-transaccion" disabled>
-
-                                        <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje4"></div>
-
-                                        <label for="nombre">Signo Transaccion</label>
-                                        <input type="text" class="form-control" id="editar-signo" required pattern="^[0-9-]+$" title="Solo se permiten - y un numero" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje5"></div>
+                                        <label for="nombre">Numero De Cuenta</label>
+                                        <input type="text" class="form-control" id="editar-id-cuenta" disabled>
 
                                         <label for="Estado">Estado</label>
                                         <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="ACTIVO">Activo</option>
-                                            <option value="INACTIVO">Inactivo</option>
-                                            <option value="NUEVO">Nuevo</option>
+                                            <option value="ACTIVO">ACTIVO</option>
+                                            <option value="INACTIVO">INACTIVO</option>
                                         </select>
+                                        <div id="mensaje7"></div>
+
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateTransaccion()" disabled>Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateCuenta()" disabled>Guardar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
-            <!-- AQUI FINALIZA EL MANTENIMIENTO DE TRANSACCION -->
+            <!-- AQUI FINALIZA EL MANTENIMIENTO DE TIPO CUENTA -->
 
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid">
@@ -379,10 +375,10 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
 
-        function Lista_Transacciones() {
+        function Lista_Cuentas() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             // Actualizar el valor predeterminado
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipo_transaccion.php?op=GetTipoTransacciones', {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/Cuenta.php?op=GetCuentas', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
@@ -399,38 +395,26 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                 })
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
-                    var tbody = document.querySelector('#Lista-transaccion tbody');
+                    var tbody = document.querySelector('#Lista-cuentas tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
-                    data.forEach(function(transaccion) {
+                    data.forEach(function(cuenta) {
                         var row = '<tr>' +
-                            '<td style="display:none;">' + transaccion.ID_TIPO_TRANSACCION + '</td>' +
-                            '<td>' + transaccion.TIPO_TRANSACCION + '</td>' +
-                            '<td>' + transaccion.DESCRIPCION + '</td>' +
-                            '<td>' + transaccion.SIGNO_TRANSACCION + '</td>' +
-                            '<td>' + transaccion.CREADO_POR + '</td>' +
-                            '<td>' + transaccion.FECHA_CREACION + '</td>' +
-                            '<td>' + transaccion.MODIFICADO_POR + '</td>' +
-                            '<td>' + transaccion.FECHA_MODIFICACION + '</td>' +
-                            '<td>' + transaccion.ESTADO + '</td>' +
+                            '<td style="display:none;">' + cuenta.ID_CUENTA + '</td>' +
+                            '<td>' + cuenta.ID_EMPLEADO + '</td>' +
+                            '<td>' + cuenta.NUMERO_CUENTA + '</td>' +
+                            '<td>' + cuenta.SALDO + '</td>' +
+                            '<td>' + cuenta.ID_TIPOCUENTA + '</td>' +
+                            '<td>' + cuenta.ESTADO + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
-                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarTransaccion(' + transaccion.ID_TIPO_TRANSACCION + ')">Editar</button> ';
+                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) == 1) {
+                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarCuenta(' + cuenta.ID_CUENTA + ')">Editar</button>';
                         }
-
-                        if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-transaccion" data-id="' + transaccion.ID_TIPO_TRANSACCION + '" onclick="eliminarTransaccion(' + transaccion.ID_TIPO_TRANSACCION + ')">Eliminar</button>';
-                        }
-
-
                         row += '</td>' +
                             '</tr>';
-                            //Cambiar palabra null por vacio.
-                            newrow = row.replaceAll("null", " ");
-                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -444,7 +428,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
         }
 
         function habilitarPaginacion() {
-            $('#Lista-transaccion').DataTable({
+            $('#Lista-cuentas').DataTable({
                 "paging": true,
                 "pageLength": 10,
                 "lengthMenu": [10, 20, 30, 50, 100],
@@ -454,38 +438,43 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
             });
         }
 
-        function Insertar_Transaccion() {
+        function Insertar_Cuenta() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
-                var transaccion = $("#agregar-transaccion").val();
-                var descripcion = $("#agregar-descripcion").val();
-                var signo = $("#agregar-signo").val();
-                var estado = document.getElementById("agregar-estado").value; // Obtener el valor del select
+                var tipo_cuenta = $("#agregar-tipo-cuenta").val();
+                var estado = $("#agregar-estado").val();
+                var NumeroCuenta = $("#NumeroCuenta").val();
+                var Id_empleado = 1;
+                var saldo = 0;
 
-                if (transaccion == "" || descripcion == "" || signo == "" || estado == "") {
+                if (tipo_cuenta == "" || estado == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
                         text: 'No se pueden enviar Campos Vacios.'
                     });
                 } else {
-                    // Crear una transaccion con los datos a enviar al servidor
+                    // Crear un tipo_cuenta con los datos a enviar al servidor
                     var datos = {
-                        TIPO_TRANSACCION: transaccion,
-                        DESCRIPCION: descripcion,
-                        SIGNO_TRANSACCION: signo,
+                        ID_EMPLEADO: Id_empleado,
+                        ID_TIPOCUENTA: tipo_cuenta,
+                        SALDO: saldo,
+                        NUMERO_CUENTA: NumeroCuenta,
                         ESTADO: estado
                     };
 
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipo_transaccion.php?op=InsertTipoTransaccion', {
+
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=InsertCuenta', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify(datos)
+
                         })
                         .then(function(response) {
                             if (response.ok) {
+
                                 if (response.status === 200) {
                                     // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
                                     return response.json().then(function(data) {
@@ -503,7 +492,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                                         });
                                     });
                                 } else if (response.status === 409) {
-                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de transferecia existente
+                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de TIPO CUENTA existente
                                     return response.json().then(function(data) {
                                         console.log(data);
                                         // Mostrar SweetAlert de error
@@ -516,233 +505,210 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
                                 }
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('El registro ya existe en la Base de Datos.');
+                                throw new Error('Error en la solicitud');
                             }
                         })
-                        .catch(function(data) {
+                        .catch(function(error) {
                             // Mostrar SweetAlert de error
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: 'Error al guardar los datos: ' + data.error
+                                text: 'Error al guardar los datos: ' + error.message
                             });
-                        console.log(data.error);
-                    });
+                            console.log(error.message);
+                        });
                 }
             });
         }
 
-        function cargarTransaccion(id) {
-            // Crear una transaccion con el ID de la transaccion
-            var data = {
-                "ID_TIPO_TRANSACCION": id
-            };
+        // function updateTipoCuenta() {
+        //     var id_cuenta = document.getElementById('editar-id-cuenta').value;
 
-            // Realiza una solicitud FETCH para obtener los detalles de la transaccion por su ID
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipo_transaccion.php?op=GetTipoTransaccion', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data) // Convierte el region en formato JSON
-                })
-                .then(function(response) {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Error en la solicitud');
-                    }
-                })
-                .then(function(transaccion) {
-                    // Llena los campos del modal con los datos de la transaccion
-                    document.getElementById('editar-id-transaccion').value = transaccion.ID_TIPO_TRANSACCION;
-                    document.getElementById('editar-transaccion').value = transaccion.TIPO_TRANSACCION;
-                    document.getElementById('editar-descripcion').value = transaccion.DESCRIPCION;
-                    document.getElementById('editar-signo').value = transaccion.SIGNO_TRANSACCION;
-                    document.getElementById('editar-estado').value = transaccion.ESTADO;
-                })
-                .catch(function(error) {
-                    // Manejar el error aquí
-                    alert('Error al cargar los datos de la Transaccion: ' + error.message);
-                });
-        }
+        //     var estado = document.getElementById('editar-estado').value;
 
-        function updateTransaccion() {
-            var id_transaccion = document.getElementById('editar-id-transaccion').value;
-            var transaccion = document.getElementById('editar-transaccion').value;
-            var descripcion = document.getElementById('editar-descripcion').value;
-            var signo = document.getElementById('editar-signo').value;
-            var estado = document.getElementById('editar-estado').value;
+        //     if (cuenta == "" || descripcion == "" || tasa == "" || estado == "") {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Error!',
+        //             text: 'No se pueden enviar Campos Vacios.'
+        //         })
+        //     } else {
+        //         // Realiza una solicitud FETCH para actualizar los datos del tipo cuenta
+        //         fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoCuenta.php?op=UpdateTipoCuenta', {
+        //                 method: 'POST',
+        //                 headers: {
+        //                     'Accept': 'application/json',
+        //                     'Content-Type': 'application/json'
+        //                 },
+        //                 body: JSON.stringify({
+        //                     "ID_TIPOCUENTA": id_cuenta,
+        //                     "TIPO_CUENTA": cuenta,
+        //                     "DESCRIPCION": descripcion,
+        //                     "TASA": tasa,
+        //                     "ESTADO": estado
+        //                 }) // Convierte los datos en formato JSON
+        //             })
+        //             .then(function(response) {
+        //                 if (response.ok) {
+        //                     // Cerrar la modal después de guardar
+        //                     $('#editarModal').modal('hide');
+        //                     Swal.fire({
+        //                         icon: 'success',
+        //                         title: 'Actualización exitosa',
+        //                         text: 'Los datos se han actualizado correctamente.'
+        //                     }).then(function() {
+        //                         // Recargar la página para mostrar los nuevos datos
+        //                         location.reload();
+        //                     });
 
-            if (transaccion == "" || descripcion == "" || signo == "" || estado == "" ) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'No se pueden enviar Campos Vacios.'
-                })
-            } else {
-                // Realiza una solicitud FETCH para actualizar los datos de la transaccion
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipo_transaccion.php?op=UpdateTipoTransaccion', {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            "ID_TIPO_TRANSACCION": id_transaccion,
-                            "TIPO_TRANSACCION": transaccion,
-                            "DESCRIPCION": descripcion,
-                            "SIGNO_TRANSACCION": signo,
-                            "ESTADO": estado
-                        }) // Convierte los datos en formato JSON
-                    })
-                    .then(function(response) {
-                        if (response.ok) {
-                            // Cerrar la modal después de guardar
-                            $('#editarModal').modal('hide');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Actualización exitosa',
-                                text: 'Los datos se han actualizado correctamente.'
-                            }).then(function() {
-                                // Recargar la página para mostrar los nuevos datos
-                                location.reload();
-                            });
-
-                        } else {
-                            throw new Error('Error en la solicitud de actualización');
-                        }
-                    })
-                    .catch(function(error) {
-                        // Manejar el error aquí
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error al actualizar los datos de la Transaccion: ' + error.message
-                        });
-                    });
-            }
-        }
+        //                 } else {
+        //                     throw new Error('Error en la solicitud de actualización');
+        //                 }
+        //             })
+        //             .catch(function(error) {
+        //                 // Manejar el error aquí
+        //                 Swal.fire({
+        //                     icon: 'error',
+        //                     title: 'Error',
+        //                     text: 'Error al actualizar los datos de la Tipo de Cuenta: ' + error.message
+        //                 });
+        //             });
+        //     }
+        // }
 
         //FUNCION CON EL SWEETALERT
-        function eliminarTransaccion(id_transaccion) {
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: 'No podrás revertir esto.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipo_transaccion.php?op=EliminarTipoTransaccion', {
-                            method: 'POST',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                "ID_TIPO_TRANSACCION": id_transaccion
-                            })
-                        })
-                        .then(function(response) {
-                            if (response.ok) {
-                                // Eliminación exitosa, puedes hacer algo aquí si es necesario
-                                Swal.fire('Transacción eliminada', '', 'success')
-                                    .then(() => {
-                                        // Recargar la página para mostrar los nuevos datos
-                                        location.reload();
-                                        // Recargar la lista de las transacciones después de eliminar
-                                        //Lista_Transacciones();
-                                    });
-                            } else {
-                                throw new Error('Error en la solicitud de eliminación');
-                            }
-                        })
-                        .catch(function(error) {
-                            // Manejar el error aquí
-                            Swal.fire('Error', 'Error al eliminar la Transacción: ' + error.message, 'error');
-                        });
-                }
-            });
-        }
+        // function eliminarTipoCuenta(id_tipocuenta) {
+        //     Swal.fire({
+        //         title: '¿Estás seguro?',
+        //         text: 'No podrás revertir esto.',
+        //         icon: 'warning',
+        //         showCancelButton: true,
+        //         confirmButtonColor: '#3085d6',
+        //         cancelButtonColor: '#d33',
+        //         confirmButtonText: 'Eliminar',
+        //         cancelButtonText: 'Cancelar'
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+        //             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoCuenta.php?op=EliminarTipoCuenta', {
+        //                     method: 'POST',
+        //                     headers: {
+        //                         'Accept': 'application/json',
+        //                         'Content-Type': 'application/json'
+        //                     },
+        //                     body: JSON.stringify({
+        //                         "ID_TIPOCUENTA": id_tipocuenta
+        //                     })
+        //                 })
+        //                 .then(function(response) {
+        //                     if (response.ok) {
+        //                         // Eliminación exitosa, puedes hacer algo aquí si es necesario
+        //                         Swal.fire('Tipo de Cuenta eliminada', '', 'success')
+        //                             .then(() => {
+        //                                 // Recargar la página para mostrar los nuevos datos
+        //                                 location.reload();
+        //                                 // Recargar la lista de TIPO CUENTA después de eliminar
+        //                                 //Lista_Tipo_Cuenta();
+        //                             });
+        //                     } else {
+        //                         throw new Error('Error en la solicitud de eliminación');
+        //                     }
+        //                 })
+        //                 .catch(function(error) {
+        //                     // Manejar el error aquí
+        //                     Swal.fire('Error', 'Error al eliminar la Tipo de Cuenta: ' + error.message, 'error');
+        //                 });
+        //         }
+        //     });
+        // }
 
-        // VALIDACIONES FUNCIONES    
-        function validarNombre() {
-            var nombreTransaccion = document.getElementById("agregar-transaccion");
-            var descripcion = document.getElementById("agregar-descripcion");
-            var signo = document.getElementById("agregar-signo");
-            var descripcionEditar = document.getElementById("editar-descripcion");
-            var signoEditar = document.getElementById("editar-signo");
+        // // VALIDACIONES FUNCIONES    
+        // function validarNombre() {
+        //     var nombreTipoCuenta = document.getElementById("agregar-cuenta");
+        //     var descripcion = document.getElementById("agregar-descripcion");
+        //     var tasa = document.getElementById("agregar-tasa");
+        //     var estado = document.getElementById("agregar-estado");
+        //     var descripcionEditar = document.getElementById("editar-descripcion");
+        //     var tasaEditar = document.getElementById("editar-tasa");
+        //     var estadoEditar = document.getElementById("editar-estado");
 
-            function clearMessage(messageElement, inputElement) {
-                messageElement.innerHTML = ""; // Elimina el contenido del mensaje
-                inputElement.style.borderColor = ""; // Restablece el borde
-                inputElement.style.boxShadow = ""; // Restablece la sombra
-            }
+        //     function clearMessage(messageElement, inputElement) {
+        //         messageElement.innerHTML = ""; // Elimina el contenido del mensaje
+        //         inputElement.style.borderColor = ""; // Restablece el borde
+        //         inputElement.style.boxShadow = ""; // Restablece la sombra
+        //     }
 
-            function validateInput(inputElement, expression, messageElement, message) {
-                if (inputElement.value === "") {
-                    clearMessage(messageElement, inputElement);
-                } else if (!expression.test(inputElement.value)) {
-                    inputElement.style.borderColor = "red";
-                    inputElement.style.boxShadow = "0 0 10px red";
-                    messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
-                    messageElement.style.color = "red";
-                } else {
-                    clearMessage(messageElement, inputElement); // Restablece los estilos
-                    messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
-                    messageElement.style.color = "green";
-                }
-            }
+        //     function validateInput(inputElement, expression, messageElement, message) {
+        //         if (inputElement.value === "") {
+        //             clearMessage(messageElement, inputElement);
+        //         } else if (!expression.test(inputElement.value)) {
+        //             inputElement.style.borderColor = "red";
+        //             inputElement.style.boxShadow = "0 0 10px red";
+        //             messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
+        //             messageElement.style.color = "red";
+        //         } else {
+        //             clearMessage(messageElement, inputElement); // Restablece los estilos
+        //             messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
+        //             messageElement.style.color = "green";
+        //         }
+        //     }
 
-            function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
-                inputElement.addEventListener("input", function() {
-                    validateInput(inputElement, expression, messageElement, message);
-                });
+        //     function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
+        //         inputElement.addEventListener("input", function() {
+        //             validateInput(inputElement, expression, messageElement, message);
+        //         });
 
-                inputElement.addEventListener("blur", function() {
-                    clearMessage(messageElement, inputElement);
-                });
-            }
+        //         inputElement.addEventListener("blur", function() {
+        //             clearMessage(messageElement, inputElement);
+        //         });
+        //     }
 
-            function handleDescriptionKeypressEvent(inputElement) {
-                inputElement.addEventListener("keypress", function(e) {
-                    var currentDescription = inputElement.value;
-                    if (e.key === " " && currentDescription.endsWith(" ")) {
-                        e.preventDefault();
-                    }
-                });
-            }
+        //     function handleDescriptionKeypressEvent(inputElement) {
+        //         inputElement.addEventListener("keypress", function(e) {
+        //             var currentDescription = inputElement.value;
+        //             if (e.key === " " && currentDescription.endsWith(" ")) {
+        //                 e.preventDefault();
+        //             }
+        //         });
+        //     }
 
-            var expresionValidadora1 = /^[A-Z]+$/;
-            var mensaje1 = document.getElementById("mensaje1");
-            handleInputAndBlurEvents(nombreTransaccion, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
+        //     var expresionValidadora1 = /^[A-Z]+$/;
+        //     var mensaje1 = document.getElementById("mensaje1");
+        //     handleInputAndBlurEvents(nombreTipoCuenta, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
 
-            var expresionValidadora2 = /^[A-Z0-9\s]+$/;
-            var mensaje2 = document.getElementById("mensaje2");
-            handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(descripcion);
+        //     var expresionValidadora2 = /^[A-Z0-9\s]+$/;
+        //     var mensaje2 = document.getElementById("mensaje2");
+        //     handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+        //     handleDescriptionKeypressEvent(descripcion);
 
-            var expresionValidadora3 = /^[0-9-]+/;
-            var mensaje3 = document.getElementById("mensaje3");
-            handleInputAndBlurEvents(signo, expresionValidadora3, mensaje3, "Solo se permiten - y un numero");
+        //     var expresionValidadora3 = /^\d+(\.\d+)?/;
+        //     var mensaje3 = document.getElementById("mensaje3");
+        //     handleInputAndBlurEvents(tasa, expresionValidadora3, mensaje3, "Solo se permiten Datos Numericos");
+        //     handleDescriptionKeypressEvent(tasa);
 
-            var mensaje4 = document.getElementById("mensaje4");
-            handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje4, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(descripcionEditar);
+        //     var mensaje4 = document.getElementById("mensaje4");
+        //     handleInputAndBlurEvents(estado, expresionValidadora1, mensaje4, "Solo se permiten Letras Mayúsculas");
 
-            var mensaje5 = document.getElementById("mensaje5");
-            handleInputAndBlurEvents(signoEditar, expresionValidadora3, mensaje5, "Solo se permiten - y un numero");
 
-        }
+        //     var mensaje5 = document.getElementById("mensaje5");
+        //     handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje5, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+        //     handleDescriptionKeypressEvent(descripcionEditar);
+
+
+        //     var mensaje6 = document.getElementById("mensaje6");
+        //     handleInputAndBlurEvents(tasaEditar, expresionValidadora3, mensaje6, "Solo se permiten Datos Numericos");
+        //     handleDescriptionKeypressEvent(tasaEditar);
+
+        //     var mensaje7 = document.getElementById("mensaje7");
+        //     handleInputAndBlurEvents(estado, expresionValidadora1, mensaje7, "Solo se permiten Letras Mayúsculas");
+
+
+
+
+        // }
 
         $(document).ready(function() {
-            Lista_Transacciones();
-            Insertar_Transaccion();
+            Lista_Cuentas();
+            Insertar_Cuenta();
             validarNombre();
         });
     </script>
@@ -750,47 +716,49 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
     <!-- VALIDACIONES SCRIPT -->
     <script>
         // Obtén los campos de entrada y el botón "Guardar para insertar"
-        const transaccionInput = document.getElementById('agregar-transaccion');
+        const cuentaInput = document.getElementById('agregar-cuenta');
         const descripcionInput = document.getElementById('agregar-descripcion');
-        const signoInput = document.getElementById('agregar-signo');
+        const tasaInput = document.getElementById('agregar-tasa');
         const estadoInput = document.getElementById('agregar-estado');
         const guardarButton = document.getElementById('btn-agregar');
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = transaccionInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && signoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
+            const isFormValid = cuentaInput.value.trim() !== '' && descripcionInput.value.trim() !== '' &&
+                tasaInput.value.trim() !== '' && estadoInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
-        transaccionInput.addEventListener('input', checkForm);
+        cuentaInput.addEventListener('input', checkForm);
         descripcionInput.addEventListener('input', checkForm);
-        signoInput.addEventListener('input', checkForm);
+        tasaInput.addEventListener('input', checkForm);
         estadoInput.addEventListener('input', checkForm);
+        guardarButton.addEventListener('input', checkForm);
     </script>
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
         const descripcionInput1 = document.getElementById('editar-descripcion');
-        const signoInput1 = document.getElementById('editar-signo');
-        const estadoInput1 = document.getElementById('editar-estado');
+        const tasaInput2 = document.getElementById('editar-tasa');
+        const estadoInput3 = document.getElementById('editar-estado');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = descripcionInput1.value.trim() !== '' && signoInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
+            const isFormValid = descripcionInput1.value.trim() !== '' || tasaInput2.value.trim() !== '' || estadoInput3.value.trim() !== '';
             guardarButton1.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
         descripcionInput1.addEventListener('input', checkForm);
-        signoInput1.addEventListener('input', checkForm);
-        estadoInput1.addEventListener('input', checkForm);
+        tasaInput2.addEventListener('input', checkForm);
+        estadoInput3.addEventListener('input', checkForm);
     </script>
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-transaccion, #editar-transaccion, #agregar-estado, #editar-estado').on('input', function() {
+        $('#agregar-cuenta, #editar-cuenta').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -805,7 +773,7 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
         });
 
         // Validar que no hayan campos vacios
-        $('#agregar-signo, #editar-signo, #agregar-descripcion, #editar-descripcion').on('input', function() {
+        $('#agregar-descripcion, #editar-descripcion').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val();
             input.val(trimmedValue);
@@ -823,16 +791,15 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
     <script>
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
         document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
-            document.getElementById('agregar-transaccion').value = "";
+            document.getElementById('agregar-cuenta').value = "";
             document.getElementById('agregar-descripcion').value = "";
-            document.getElementById('agregar-signo').value = "";
+            document.getElementById('agregar-tasa').value = "";
             document.getElementById('agregar-estado').value = "";
 
+
             // Limpia los checkboxes
-            document.getElementById('agregar-transaccion').checked = false;
+            document.getElementById('agregar-cuenta').checked = false;
             document.getElementById('agregar-descripcion').checked = false;
-            document.getElementById('agregar-signo').checked = false;
-            document.getElementById('agregar-estado').checked = false;
 
             location.reload();
         });
@@ -842,8 +809,6 @@ $permisos2 = $permisosTransaccion->get_Permisos_Usuarios($id_rol, $id_objeto_Cue
 
             // Limpia los checkboxes
             document.getElementById('editar-descripcion').checked = false;
-            document.getElementById('editar-signo').checked = false;
-            document.getElementById('editar-estado').checked = false;
         });
     </script>
 

@@ -31,5 +31,16 @@ switch ($_GET["op"]) {
         echo json_encode($datos);
         break;
 
+    case "InsertCuenta":
+        $datos = $com->insert_cuenta($body["ID_EMPLEADO"],$body["ID_TIPOCUENTA"],$body["SALDO"],$body["NUMERO_CUENTA"],$body["ESTADO"]);
+        echo json_encode($datos);
+        break;
+
+    case "EditCuenta":
+        $datos = $com->update_cuenta($body["ID_CUENTA"],$body["ESTADO"]);
+        echo json_encode($datos);
+        break;
+   
+
 }
 ?>

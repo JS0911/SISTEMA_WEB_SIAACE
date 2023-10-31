@@ -181,7 +181,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             echo '</div>';
                         }
 
-                        
+
                         //----------------------------MODULO DE CUENTAS------------------------------------
                         if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
@@ -195,6 +195,27 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
+                            }
+                            echo '</nav>';
+                            echo '</div>';
+                        }
+
+
+                        //----------------------------MODULO DE PRESTAMOS------------------------------------
+                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
+                            <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
+                            Modulo Prestamo
+                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                          </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoPrestamo" aria-labelledby="headingMantenimientoPrestamo" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
+                                echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamo</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -235,16 +256,14 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 <tr>
                                     <th style="display: none;">Id Empleado</th>
                                     <th>DNI</th>
-                                    <th>Primer Nombre</th>
-                                    <th>Segundo Nombre</th>
-                                    <th>Primer Apellido</th>
-                                    <th>Segundo Apellido</th>
+                                    <th>Nombre</th>
+                                    <th>Apellidos</th>
                                     <th>Email</th>
-                                    <th>Salario</th>
-                                    <th>Estado</th>
+                                    <th style="display: none;">Salario</th>
                                     <th>Telefono</th>
                                     <th>Direccion1</th>
-                                    <th>Direccion2</th>
+                                    <th style="display: none;">Direccion2</th>
+                                    <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -359,7 +378,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         <div id="mensaje14"></div>
 
                                         <label for="Papellido">Primer Apellido</label>
-                                        <input type="text" maxlength="15" class="form-control" id="editar-Papellido"  required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="15" class="form-control" id="editar-Papellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje15"></div>
 
                                         <label for="Sapellido">Segundo Apellido</label>
@@ -445,19 +464,20 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
                     data.forEach(function(empleado) {
+                        var nombreCompleto = empleado.PRIMER_NOMBRE + ' ' + empleado.SEGUNDO_NOMBRE;
+                        var apellidoCompleto = empleado.PRIMER_APELLIDO + ' ' + empleado.SEGUNDO_APELLIDO;
+
                         var row = '<tr>' +
                             '<td style="display:none;">' + empleado.ID_EMPLEADO + '</td>' +
                             '<td>' + empleado.DNI + '</td>' +
-                            '<td>' + empleado.PRIMER_NOMBRE + '</td>' +
-                            '<td>' + empleado.SEGUNDO_NOMBRE + '</td>' +
-                            '<td>' + empleado.PRIMER_APELLIDO + '</td>' +
-                            '<td>' + empleado.SEGUNDO_APELLIDO + '</td>' +
+                            '<td>' + nombreCompleto + '</td>' + // Concatenación de primer y segundo nombre
+                            '<td>' + apellidoCompleto + '</td>' + //concatenacion de primer y segundo apellido  
                             '<td>' + empleado.EMAIL + '</td>' +
-                            '<td>' + empleado.SALARIO + '</td>' +
-                            '<td>' + empleado.ESTADO + '</td>' +
+                            '<td style="display:none;">' + empleado.SALARIO + '</td>' +
                             '<td>' + empleado.TELEFONO + '</td>' +
                             '<td>' + empleado.DIRECCION1 + '</td>' +
-                            '<td>' + empleado.DIRECCION2 + '</td>' +
+                            '<td style="display:none;">' + empleado.DIRECCION2 + '</td>' +
+                            '<td>' + empleado.ESTADO + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -470,7 +490,9 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             row += '<button class="btn btn-danger eliminar-empleado" data-id="' + empleado.ID_EMPLEADO + '" onclick="eliminarEmpleado(' + empleado.ID_EMPLEADO + ')">Eliminar</button>';
                         }
 
-
+                        if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
+                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + empleado.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo()">Movimiento</button>';
+                        }
                         row += '</td>' +
                             '</tr>';
                         tbody.innerHTML += row;
@@ -484,6 +506,12 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     alert('Error al cargar los datos: ' + error.message);
                 });
 
+        }
+
+
+        function redirectToIngresarPrestamo() {
+            // Redirige a la página IngresarPrestamo.php
+            window.location.href = '../MantenimientoPrestamos/IngresarPrestamo.php';
         }
 
         function habilitarPaginacion() {
@@ -828,7 +856,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             var mensaje1 = document.getElementById("mensaje1");
             handleInputAndBlurEvents(dni, expresionValidadora1, mensaje1, "Solo se permiten números");
 
-            var expresionValidadora2 =  /^[A-Z]+$/;
+            var expresionValidadora2 = /^[A-Z]+$/;
             var mensaje2 = document.getElementById("mensaje2");
             handleInputAndBlurEvents(Pnombre, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas");
 
@@ -848,12 +876,12 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             var expresionValidadora4 = /^\d+(\.\d{2})?$/;
             var mensaje7 = document.getElementById("mensaje7");
             handleInputAndBlurEvents(salario, expresionValidadora4, mensaje7, "Ingrese un salario válido (por ejemplo, 1000.00)");
-            
+
             var expresionValidadora6 = /^[0-9-]+/;
             var mensaje9 = document.getElementById("mensaje9");
             handleInputAndBlurEvents(telefono, expresionValidadora6, mensaje9, "Ingrese un número de teléfono válido (solo números y -)");
-            
-            var expresionValidadora7 =/^[A-Za-z0-9\s.,-]*$/;
+
+            var expresionValidadora7 = /^[A-Za-z0-9\s.,-]*$/;
             var mensaje10 = document.getElementById("mensaje10");
             handleInputAndBlurEvents(direccion1, expresionValidadora7, mensaje10, "Ingrese una dirección válida (mayúsculas y caracteres)");
             handleDescriptionKeypressEvent(direccion1);
@@ -886,7 +914,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
 
             var mensaje20 = document.getElementById("mensaje20");
             handleInputAndBlurEvents(telefonoEditar, expresionValidadora6, mensaje20, "Ingrese un número de teléfono válido (solo números y -)");
-            
+
             var mensaje21 = document.getElementById("mensaje21");
             handleInputAndBlurEvents(direccion1Editar, expresionValidadora7, mensaje21, "Ingrese una dirección válida (mayúsculas y caracteres)");
             handleDescriptionKeypressEvent(direccion1Editar);
@@ -941,95 +969,95 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         direccion1Input.addEventListener('input', checkForm);
         direccion2Input.addEventListener('input', checkForm);
     </script>
-    
+
     <script>
-            // Obtén los campos de entrada y el botón "Guardar para Editar"
-            const dniInput1 = document.getElementById("editar-dni");
-            const PnombreInput1 = document.getElementById("editar-Pnombre");
-            const SnombreInput1 = document.getElementById("editar-Snombre");
-            const PapellidoInput1 = document.getElementById("editar-Papellido");
-            const SapellidoInput1 = document.getElementById("editar-Sapellido");
-            const emailInput1 = document.getElementById("editar-email");
-            const salarioInput1 = document.getElementById("editar-salario");
-            const estadoInput1 = document.getElementById("editar-estado");
-            const telefonoInput1 = document.getElementById("editar-telefono");
-            const direccion1Input1 = document.getElementById("editar-direccion1");
-            const direccion2Input1 = document.getElementById("editar-direccion2");
-            const guardarButton1 = document.getElementById('btn-editar');
+        // Obtén los campos de entrada y el botón "Guardar para Editar"
+        const dniInput1 = document.getElementById("editar-dni");
+        const PnombreInput1 = document.getElementById("editar-Pnombre");
+        const SnombreInput1 = document.getElementById("editar-Snombre");
+        const PapellidoInput1 = document.getElementById("editar-Papellido");
+        const SapellidoInput1 = document.getElementById("editar-Sapellido");
+        const emailInput1 = document.getElementById("editar-email");
+        const salarioInput1 = document.getElementById("editar-salario");
+        const estadoInput1 = document.getElementById("editar-estado");
+        const telefonoInput1 = document.getElementById("editar-telefono");
+        const direccion1Input1 = document.getElementById("editar-direccion1");
+        const direccion2Input1 = document.getElementById("editar-direccion2");
+        const guardarButton1 = document.getElementById('btn-editar');
 
-            // Función para verificar si todos los campos están llenos
-            function checkForm() {
-                const isFormValid = dniInput1.value.trim() !== '' && PnombreInput1.value.trim() !== '' && SnombreInput1.value !== '' &&
-                    PapellidoInput1.value.trim() !== '' && SapellidoInput1.value.trim() !== '' && emailInput1.value !== '' &&
-                    salarioInput1.value.trim() !== '' && estadoInput1.value.trim() !== '' && telefonoInput1.value.trim() !== '' && direccion1Input1.value.trim() !== '' && direccion2Input1.value.trim() !== '';
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isFormValid = dniInput1.value.trim() !== '' && PnombreInput1.value.trim() !== '' && SnombreInput1.value !== '' &&
+                PapellidoInput1.value.trim() !== '' && SapellidoInput1.value.trim() !== '' && emailInput1.value !== '' &&
+                salarioInput1.value.trim() !== '' && estadoInput1.value.trim() !== '' && telefonoInput1.value.trim() !== '' && direccion1Input1.value.trim() !== '' && direccion2Input1.value.trim() !== '';
 
-                guardarButton1.disabled = !isFormValid;
+            guardarButton1.disabled = !isFormValid;
+        }
+
+        // Agrega un evento input a cada campo de entrada
+        dniInput1.addEventListener('input', checkForm);
+        PnombreInput1.addEventListener('input', checkForm);
+        SnombreInput1.addEventListener('input', checkForm);
+        PapellidoInput1.addEventListener('input', checkForm);
+        SapellidoInput1.addEventListener('input', checkForm);
+        emailInput1.addEventListener('input', checkForm);
+        salarioInput1.addEventListener('input', checkForm);
+        estadoInput1.addEventListener('input', checkForm);
+        telefonoInput1.addEventListener('input', checkForm);
+        direccion1Input1.addEventListener('input', checkForm);
+        direccion2Input1.addEventListener('input', checkForm);
+    </script>
+
+    <script>
+        // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
+        $('#agregar-dni, #agregar-Pnombre, #agregar-Snombre, #agregar-Papellido, #agregar-Sapellido, #agregar-email, #agregar-salario, #agregar-estado, #agregar-telefono').on('input', function() {
+            var input = $(this);
+            var trimmedValue = input.val().trim();
+            input.val(trimmedValue);
+
+            if (trimmedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'El campo no puede estar vacío',
+                    icon: 'warning',
+                });
             }
+        });
 
-            // Agrega un evento input a cada campo de entrada
-            dniInput1.addEventListener('input', checkForm);
-            PnombreInput1.addEventListener('input', checkForm);
-            SnombreInput1.addEventListener('input', checkForm);
-            PapellidoInput1.addEventListener('input', checkForm);
-            SapellidoInput1.addEventListener('input', checkForm);
-            emailInput1.addEventListener('input', checkForm);
-            salarioInput1.addEventListener('input', checkForm);
-            estadoInput1.addEventListener('input', checkForm);
-            telefonoInput1.addEventListener('input', checkForm);
-            direccion1Input1.addEventListener('input', checkForm);
-            direccion2Input1.addEventListener('input', checkForm);
-        </script>
+        // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
+        $('#editar-dni, #editar-Pnombre, #editar-Snombre, #editar-Papellido, #editar-Sapellido, #editar-email, #editar-salario, #editar-estado, #editar-telefono').on('input', function() {
+            var input = $(this);
+            var trimmedValue = input.val().trim();
+            input.val(trimmedValue);
 
-        <script>
-                // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-                $('#agregar-dni, #agregar-Pnombre, #agregar-Snombre, #agregar-Papellido, #agregar-Sapellido, #agregar-email, #agregar-salario, #agregar-estado, #agregar-telefono').on('input', function() {
-                    var input = $(this);
-                    var trimmedValue = input.val().trim();
-                    input.val(trimmedValue);
-
-                    if (trimmedValue === '') {
-                        Swal.fire({
-                            title: 'Advertencia',
-                            text: 'El campo no puede estar vacío',
-                            icon: 'warning',
-                        });
-                    }
+            if (trimmedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'El campo no puede estar vacío',
+                    icon: 'warning',
                 });
+            }
+        });
 
-                // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-                $('#editar-dni, #editar-Pnombre, #editar-Snombre, #editar-Papellido, #editar-Sapellido, #editar-email, #editar-salario, #editar-estado, #editar-telefono').on('input', function() {
-                    var input = $(this);
-                    var trimmedValue = input.val().trim();
-                    input.val(trimmedValue);
+        $('#agregar-direccion1, #agregar-direccion2, #editar-direccion1, #editar-direccion2').on('input', function() {
+            var input = $(this);
+            var trimmedValue = input.val();
+            input.val(trimmedValue);
 
-                    if (trimmedValue === '') {
-                        Swal.fire({
-                            title: 'Advertencia',
-                            text: 'El campo no puede estar vacío',
-                            icon: 'warning',
-                        });
-                    }
+            if (trimmedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'El campo no puede estar vacío',
+                    icon: 'warning',
                 });
-
-                $('#agregar-direccion1, #agregar-direccion2, #editar-direccion1, #editar-direccion2').on('input', function() {
-                    var input = $(this);
-                    var trimmedValue = input.val();
-                    input.val(trimmedValue);
-
-                    if (trimmedValue === '') {
-                        Swal.fire({
-                            title: 'Advertencia',
-                            text: 'El campo no puede estar vacío',
-                            icon: 'warning',
-                        });
-                    }
-                }); 
-
-        </script>
+            }
+        });
+    </script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
 
 </body>
+
 </html>

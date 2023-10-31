@@ -50,9 +50,9 @@ switch ($_GET["op"]) {
         $datos = $com->update_prestamo($ID_PRESTAMO, $ID_FPAGO, $FECHA_DE_CANCELACION, $FECHA_DE_DESEMBOLSO, $ESTADO_PRESTAMO, $MONTO_SOLICITADO, $MONTO_DESEMBOLSO, $MONTO_ADEUDADO);
         echo json_encode($datos);
         break;
-    // case "eliminarUsuario":
-    //     $ID_USUARIO = $body["ID_USUARIO"];
-    //     $datos = $com->eliminar_usuario($ID_USUARIO);
-    //     echo json_encode($datos);
-    //     break;
+    case "anularPrestamo":
+        $ID_PRESTAMO = $body["ID_PRESTAMO"];
+        $datos = $com->anular_prestamo($ID_PRESTAMO);
+        echo json_encode($datos);
+        break;
 }

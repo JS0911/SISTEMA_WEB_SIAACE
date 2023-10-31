@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 session_start();
 require "../../Config/conexion.php";
@@ -13,7 +13,7 @@ if (!isset($_SESSION['usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Tipoprestamo = "29";
+$id_objeto_Tipoprestamo = "13"; // CAMBIO DEL NUMERO DEL OBJETO
 $id_objeto_Seguridad = "25";
 $id_objeto_Cuentas = "28";
 
@@ -141,7 +141,7 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                         </a>
 
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
-                    
+
                         <?php
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
@@ -159,10 +159,10 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                                 echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
                             }
 
-                           
+
 
                             echo '</nav>';
                             echo '</div>';
@@ -178,18 +178,16 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
-                                echo '<a class="nav-link" href="cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
-                                echo '<a class="nav-link" href="region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
-                                echo '<a class="nav-link" href="sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
-                                echo '<a class="nav-link" href="tipoPrestamo.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Tipo Prestamo</a>';
-
-
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/tipoPrestamo.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Tipo Prestamo</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
                         }
-                        
+
                         //----------------------------MODULO DE CUENTAS------------------------------------
                         if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
@@ -203,6 +201,25 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
+                            }
+                            echo '</nav>';
+                            echo '</div>';
+                        }
+                        //----------------------------MODULO DE PRESTAMOS------------------------------------
+                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
+                            <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
+                            Modulo Prestamo
+                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                          </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoPrestamo" aria-labelledby="headingMantenimientoPrestamo" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
+                                echo '<a class="nav-link" href="tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
+                                echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamo</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -233,13 +250,13 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
                                 echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
                             }
-                            ?> 
+                            ?>
                         </div>
                         <!-- Tabla para mostrar los datos -->
                         <table class="table table-bordered mx-auto" id="Lista-tipoprestamo" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-                                <th style="display: none;">Id Tipo Prestamo</th>
+                                    <th style="display: none;">Id Tipo Prestamo</th>
                                     <th>Tipo Prestamo</th>
                                     <th>Descripcion</th>
                                     <th>Aplica Seguro</th>
@@ -275,25 +292,23 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Tipo Prestamo</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-tipoprestamo" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-tipoprestamo" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
-                                        
+
                                         <label for="nombre">Aplica seguro</label>
                                         <input type="text" maxlength="1" class="form-control" id="agregar-aplicaseguro" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje3"></div>
 
-                                        
+
                                         <label for="nombre"> Monto Maximo</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-montomaximo" required pattern="[0-9]+" title="Solo se permiten números (1, 0)">
                                         <div id="mensaje4"></div>
-                                        
+
                                         <label for="nombre">Monto Minimo</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-montominimo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje5"></div>
@@ -301,7 +316,7 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                                         <label for="nombre"> Tasa Maxima</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-tasamaxima" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje6"></div>
-                                        
+
                                         <label for="nombre">Tasa Minima</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-tasaminima" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje7"></div>
@@ -309,12 +324,12 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                                         <label for="nombre"> Plazo Maximo</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-plazomaximo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje8"></div>
-                                        
+
                                         <label for="nombre">Plazo Minimo</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-plazominimo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje9"></div>
 
-                                        
+
                                         <label for="nombre">Estado</label>
                                         <select class="form-control" id="agregar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
@@ -329,7 +344,7 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                             </div>
                             <div class="modal-footer">
 
-                            <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
 
                             </div>
@@ -355,25 +370,23 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                                         <input type="text" class="form-control" id="editar-id-tipoprestamo" disabled>
 
                                         <label for="nombre">Tipo Prestamo</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-tipoprestamo" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="editar-tipoprestamo" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje11"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" 
-                                        required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje12"></div>
 
-                                        
+
                                         <label for="nombre">Aplica seguro</label>
                                         <input type="text" maxlength="1" class="form-control" id="editar-aplicaseguro" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje13"></div>
 
-                                        
+
                                         <label for="nombre"> Monto Maximo</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-montomaximo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje14"></div>
-                                        
+
                                         <label for="nombre">Monto Minimo</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-montominimo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje15"></div>
@@ -381,7 +394,7 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                                         <label for="nombre"> Tasa Maxima</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-tasamaxima" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje16"></div>
-                                        
+
                                         <label for="nombre">Tasa Minima</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-tasaminima" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje17"></div>
@@ -389,12 +402,12 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                                         <label for="nombre"> Plazo Maximo</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-plazomaximo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje18"></div>
-                                        
+
                                         <label for="nombre">Plazo Minimo</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-plazominimo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje19"></div>
 
-                                        
+
                                         <label for="nombre">Estado</label>
                                         <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
@@ -408,7 +421,7 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                                 </form>
                             </div>
                             <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateTipoprestamo()" disabled>Guardar</button>
 
                             </div>
@@ -479,7 +492,7 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-tipoprestamo" data-id="' + tipoprestamo.ID_TIPO_PRESTAMO  + '" onclick="eliminarTipoprestamo(' + tipoprestamo.ID_TIPO_PRESTAMO  + ')">Eliminar</button>';
+                            row += '<button class="btn btn-danger eliminar-tipoprestamo" data-id="' + tipoprestamo.ID_TIPO_PRESTAMO + '" onclick="eliminarTipoprestamo(' + tipoprestamo.ID_TIPO_PRESTAMO + ')">Eliminar</button>';
                         }
 
 
@@ -496,50 +509,50 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                 });
 
         }
-                                
-        
+
+
 
         function habilitarPaginacion() {
             $('#Lista-tipoprestamo').DataTable({
-                "paging": true, 
+                "paging": true,
                 "pageLength": 10,
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
             });
         }
 
 
         function Insertar_Tipoprestamo() {
-           $("#btn-agregar").click(function() {
-               // Obtener los valores de los campos del formulario
-           
-            var tipoprestamo =$("#agregar-tipoprestamo").val();
-            var descripcion =$("#agregar-descripcion").val();
-            var aplicaseguro =$("#agregar-aplicaseguro").val();
-            var montomaximo =$("#agregar-montomaximo").val();
-            var montominimo =$("#agregar-montominimo").val();
-            var tasamaxima =$("#agregar-tasamaxima").val();
-            var tasaminima =$("#agregar-tasaminima").val();
-            var plazomaximo =$("#agregar-plazomaximo").val();
-            var plazominimo =$("#agregar-plazominimo").val();
-            var estado = $("#agregar-estado").val();
+            $("#btn-agregar").click(function() {
+                // Obtener los valores de los campos del formulario
 
-            
+                var tipoprestamo = $("#agregar-tipoprestamo").val();
+                var descripcion = $("#agregar-descripcion").val();
+                var aplicaseguro = $("#agregar-aplicaseguro").val();
+                var montomaximo = $("#agregar-montomaximo").val();
+                var montominimo = $("#agregar-montominimo").val();
+                var tasamaxima = $("#agregar-tasamaxima").val();
+                var tasaminima = $("#agregar-tasaminima").val();
+                var plazomaximo = $("#agregar-plazomaximo").val();
+                var plazominimo = $("#agregar-plazominimo").val();
+                var estado = $("#agregar-estado").val();
 
-                if (tipoprestamo == "" || descripcion == "" || aplicaseguro == "" || montomaximo == ""|| montominimo == ""|| 
-                 tasamaxima == "" || tasaminima == "" || plazomaximo == "" || plazominimo == ""|| estado == "" ) {
+
+
+                if (tipoprestamo == "" || descripcion == "" || aplicaseguro == "" || montomaximo == "" || montominimo == "" ||
+                    tasamaxima == "" || tasaminima == "" || plazomaximo == "" || plazominimo == "" || estado == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
                         text: 'No se pueden enviar Campos Vacios.'
                     });
-            } else {
+                } else {
                     // Crear un region con los datos a enviar al servidor
-        //            // Crear un objeto con los datos a enviar al servidor
-                      var datos = {
-                    
+                    //            // Crear un objeto con los datos a enviar al servidor
+                    var datos = {
+
                         TIPO_PRESTAMO: tipoprestamo,
                         DESCRIPCION: descripcion,
                         APLICA_SEGUROS: aplicaseguro,
@@ -550,10 +563,10 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                         PLAZO_MAXIMO: plazomaximo,
                         PLAZO_MINIMO: plazominimo,
                         ESTADO: estado
-                     };
+                    };
 
-                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoPrestamo.php?op=InsertTipoprestamo', {
-                             method: 'POST',
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoPrestamo.php?op=InsertTipoprestamo', {
+                            method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
@@ -653,12 +666,12 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
         }
 
 
-         function updateTipoprestamo() {
-            var id_tipoprestamo= document.getElementById('editar-id-tipoprestamo').value;
+        function updateTipoprestamo() {
+            var id_tipoprestamo = document.getElementById('editar-id-tipoprestamo').value;
             var tipoprestamo = document.getElementById('editar-tipoprestamo').value;
             var descripcion = document.getElementById('editar-descripcion').value;
             var aplicaseguro = document.getElementById('editar-aplicaseguro').value;
-           
+
             var montomaximo = document.getElementById('editar-montomaximo').value;
             var montominimo = document.getElementById('editar-montominimo').value;
             var tasamaxima = document.getElementById('editar-tasamaxima').value;
@@ -666,65 +679,65 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
             var plazomaximo = document.getElementById('editar-plazomaximo').value;
             var plazominimo = document.getElementById('editar-plazominimo').value;
             var estado = document.getElementById('editar-estado').value;
-            
 
-            if (tipoprestamo == "" || descripcion == "" || aplicaseguro == "" || montomaximo == ""|| montominimo == ""||  tasamaxima == "" || tasaminima == "" || plazomaximo == "" || plazominimo == ""|| estado == "" ) {
+
+            if (tipoprestamo == "" || descripcion == "" || aplicaseguro == "" || montomaximo == "" || montominimo == "" || tasamaxima == "" || tasaminima == "" || plazomaximo == "" || plazominimo == "" || estado == "") {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
                     text: 'No se pueden enviar Campos Vacios.'
                 })
             } else {
-            // Realiza una solicitud FETCH para actualizar los datos del objeto
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoPrestamo.php?op=updateTipoprestamo', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "ID_TIPO_PRESTAMO": id_tipoprestamo,
-                        "TIPO_PRESTAMO": tipoprestamo,
-                        "DESCRIPCION": descripcion,
-                        "APLICA_SEGUROS": aplicaseguro,
-                        "MONTO_MAXIMO": montomaximo,
-                        "MONTO_MINIMO": montominimo,
-                        "TASA_MAXIMA": tasamaxima,
-                        "TASA_MINIMA": tasaminima,
-                        "PLAZO_MAXIMO": plazomaximo,
-                        "PLAZO_MINIMO": plazominimo,
-                        "ESTADO": estado
+                // Realiza una solicitud FETCH para actualizar los datos del objeto
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoPrestamo.php?op=updateTipoprestamo', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "ID_TIPO_PRESTAMO": id_tipoprestamo,
+                            "TIPO_PRESTAMO": tipoprestamo,
+                            "DESCRIPCION": descripcion,
+                            "APLICA_SEGUROS": aplicaseguro,
+                            "MONTO_MAXIMO": montomaximo,
+                            "MONTO_MINIMO": montominimo,
+                            "TASA_MAXIMA": tasamaxima,
+                            "TASA_MINIMA": tasaminima,
+                            "PLAZO_MAXIMO": plazomaximo,
+                            "PLAZO_MINIMO": plazominimo,
+                            "ESTADO": estado
 
-                    }) // Convierte los datos en formato JSON
-                })
-                .then(function(response) {
-                    if (response.ok) {
-                        // Cerrar la modal después de guardar
-                        $('#editarModal').modal('hide');
+                        }) // Convierte los datos en formato JSON
+                    })
+                    .then(function(response) {
+                        if (response.ok) {
+                            // Cerrar la modal después de guardar
+                            $('#editarModal').modal('hide');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Actualización exitosa',
+                                text: 'Los datos se han actualizado correctamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                            });
+
+                        } else {
+                            throw new Error('Error en la solicitud de actualización');
+                        }
+                    })
+                    .catch(function(error) {
+                        // Manejar el error aquí
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Actualización exitosa',
-                            text: 'Los datos se han actualizado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al actualizar los datos del Tipo Prestamo: ' + error.message
                         });
-
-                    } else {
-                        throw new Error('Error en la solicitud de actualización');
-                    }
-                })
-                .catch(function(error) {
-                    // Manejar el error aquí
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error al actualizar los datos del Tipo Prestamo: ' + error.message
                     });
-                });
-            }    
+            }
         }
- 
+
         //FUNCION CON EL SWEETALERT
         function eliminarTipoprestamo(id_tipoprestamo) {
             Swal.fire({
@@ -735,7 +748,7 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar' 
+                cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoPrestamo.php?op=eliminarTipoprestamo', {
@@ -756,7 +769,7 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
                                         // Recargar la página para mostrar los nuevos datos
                                         location.reload();
                                         // Recargar la lista de objetos después de eliminar
-                                        
+
                                     });
                             } else {
                                 throw new Error('Error en la solicitud de eliminación');
@@ -770,7 +783,7 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
             });
         }
 
-//         // VALIDACIONES FUNCIONES    
+        //         // VALIDACIONES FUNCIONES    
         function validarNombre() {
             tipoprestamo = document.getElementById("agregar-tipoprestamo");
             descripcion = document.getElementById("agregar-descripcion");
@@ -782,7 +795,7 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
             plazomaximo = document.getElementById("agregar-plazomaximo");
             plazominimo = document.getElementById("agregar-plazominimo");
             estado = document.getElementById("agregar-estado");
-/////////////////////////////
+            /////////////////////////////
             tipoprestamoEditar = document.getElementById("editar-tipoprestamo");
             descripcionEditar = document.getElementById("editar-descripcion");
             aplicaseguroEditar = document.getElementById("editar-aplicaseguro");
@@ -817,11 +830,11 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
             }
 
             function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
-                inputElement.addEventListener("input", function () {
+                inputElement.addEventListener("input", function() {
                     validateInput(inputElement, expression, messageElement, message);
                 });
 
-                inputElement.addEventListener("blur", function () {
+                inputElement.addEventListener("blur", function() {
                     clearMessage(messageElement, inputElement);
                 });
             }
@@ -843,17 +856,17 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
 
             var mensaje2 = document.getElementById("mensaje2");
             handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(descripcion);   
+            handleDescriptionKeypressEvent(descripcion);
 
             var expresionValidadora1 = /^[0-9]+$/;
             var mensaje3 = document.getElementById("mensaje3");
-            handleInputAndBlurEvents(aplicaseguro, expresionValidadora1, mensaje3, "Solo se permiten números");     
-   
-            
+            handleInputAndBlurEvents(aplicaseguro, expresionValidadora1, mensaje3, "Solo se permiten números");
+
+
             var mensaje4 = document.getElementById("mensaje4");
             handleInputAndBlurEvents(montomaximo, expresionValidadora1, mensaje4, "Solo se permiten números");
 
-           
+
             var mensaje5 = document.getElementById("mensaje5");
             handleInputAndBlurEvents(montominimo, expresionValidadora1, mensaje5, "Solo se permiten números");
 
@@ -871,24 +884,24 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
 
             var mensaje10 = document.getElementById("mensaje10");
             handleInputAndBlurEvents(estado, expresionValidadora2, mensaje10, "Solo se permiten Letras Mayúsculas");
-            handleDescriptionKeypressEvent(estado);  
+            handleDescriptionKeypressEvent(estado);
 
-/////editar
+            /////editar
             var mensaje11 = document.getElementById("mensaje11");
             handleInputAndBlurEvents(tipoprestamoEditar, expresionValidadora2, mensaje11, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(tipoprestamoEditar);
 
             var mensaje12 = document.getElementById("mensaje12");
             handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje12, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(descripcionEditar);      
-            
+            handleDescriptionKeypressEvent(descripcionEditar);
+
             var mensaje13 = document.getElementById("mensaje13");
-            handleInputAndBlurEvents(aplicaseguroEditar, expresionValidadora1, mensaje13, "Solo se permiten números ( 1 ó 0)");       
-   
+            handleInputAndBlurEvents(aplicaseguroEditar, expresionValidadora1, mensaje13, "Solo se permiten números ( 1 ó 0)");
+
             var mensaje14 = document.getElementById("mensaje14");
             handleInputAndBlurEvents(montomaximoEditar, expresionValidadora1, mensaje14, "Solo se permiten números");
 
-           
+
             var mensaje15 = document.getElementById("mensaje15");
             handleInputAndBlurEvents(montominimoEditar, expresionValidadora1, mensaje15, "Solo se permiten números");
 
@@ -906,25 +919,25 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
 
             var mensaje20 = document.getElementById("mensaje20");
             handleInputAndBlurEvents(estadoEditar, expresionValidadora2, mensaje20, "Solo se permiten Letras Mayúsculas");
-            handleDescriptionKeypressEvent(estadoEditar);  
+            handleDescriptionKeypressEvent(estadoEditar);
 
 
-       }
+        }
 
 
 
-        
+
 
         $(document).ready(function() {
             Lista_Tipoprestamo();
-           Insertar_Tipoprestamo();
+            Insertar_Tipoprestamo();
             validarNombre();
         });
     </script>
 
 
 
-<script>
+    <script>
         // Obtén los campos de entrada y el botón "Guardar para insertar"
         const tipoprestamoInput = document.getElementById('agregar-tipoprestamo');
         const descripcionInput = document.getElementById('agregar-descripcion');
@@ -942,10 +955,10 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid =tipoprestamoInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && 
-            aplicaseguroInput.value.trim() !== '' &&montomaximoInput.value.trim() !== '' && montominimoInput.value.trim() !== ''
-            &&tasamaximaInput.value.trim() !== '' && tasaminimaInput.value.trim() !== '' && plazomaximoInput.value.trim() !== '' 
-            &&plazominimoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
+            const isFormValid = tipoprestamoInput.value.trim() !== '' && descripcionInput.value.trim() !== '' &&
+                aplicaseguroInput.value.trim() !== '' && montomaximoInput.value.trim() !== '' && montominimoInput.value.trim() !== '' &&
+                tasamaximaInput.value.trim() !== '' && tasaminimaInput.value.trim() !== '' && plazomaximoInput.value.trim() !== '' &&
+                plazominimoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid;
         }
         // Agrega un evento input a cada campo de entrada
@@ -963,7 +976,7 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
         guardarButton.addEventListener('input', checkForm);
     </script>
 
-<script>
+    <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
         const tipoprestamoInput1 = document.getElementById('editar-tipoprestamo');
         const descripcionInput1 = document.getElementById('editar-descripcion');
@@ -980,7 +993,7 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid =tipoprestamoInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '' && aplicaseguroInput1.value.trim() !== '' &&montomaximoInput1.value.trim() !== '' && montominimoInput1.value.trim() !== ''&&tasamaximaInput1.value.trim() !== '' && tasaminimaInput1.value.trim() !== '' && plazomaximoInput1.value.trim() !== '' &&plazominimoInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
+            const isFormValid = tipoprestamoInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '' && aplicaseguroInput1.value.trim() !== '' && montomaximoInput1.value.trim() !== '' && montominimoInput1.value.trim() !== '' && tasamaximaInput1.value.trim() !== '' && tasaminimaInput1.value.trim() !== '' && plazomaximoInput1.value.trim() !== '' && plazominimoInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
             guardarButton1.disabled = !isFormValid;
         }
 
@@ -995,16 +1008,15 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
         plazomaximoInput1.addEventListener('input', checkForm);
         plazominimoInput1.addEventListener('input', checkForm);
         estadoInput1.addEventListener('input', checkForm);
-
     </script>
 
-<script>
+    <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
         $('#agregar-tipoprestamo, #agregar-descripcion, #agregar-aplicaseguro, #agregar-montomaximo, #agregar-montominimo,  #agregar-tasamaxima, #agregar-tasaminima,  #agregar-plazomaximo, #agregar-plazominimo,  #agregar-estado').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
-            
+
             if (trimmedValue === '') {
                 Swal.fire({
                     title: 'Advertencia',
@@ -1030,50 +1042,50 @@ $permisos2 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cu
         });
     </script>
 
-<script>
+    <script>
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
         document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
-        document.getElementById('agregar-tipoprestamo').value = "";
-        document.getElementById('agregar-descripcion').value = "";
-        document.getElementById('agregar-aplicaseguro').value = "";
-        document.getElementById('agregar-montomaximo').value = "";
-        document.getElementById('agregar-montominimo').value = "";
-        document.getElementById('agregar-tasamaxima').value = "";
-        document.getElementById('agregar-tasaminima').value = "";
-        document.getElementById('agregar-plazomaximo').value = "";
-        document.getElementById('agregar-plazominimo').value = "";
-        document.getElementById('agregar-estado').value = "";
+            document.getElementById('agregar-tipoprestamo').value = "";
+            document.getElementById('agregar-descripcion').value = "";
+            document.getElementById('agregar-aplicaseguro').value = "";
+            document.getElementById('agregar-montomaximo').value = "";
+            document.getElementById('agregar-montominimo').value = "";
+            document.getElementById('agregar-tasamaxima').value = "";
+            document.getElementById('agregar-tasaminima').value = "";
+            document.getElementById('agregar-plazomaximo').value = "";
+            document.getElementById('agregar-plazominimo').value = "";
+            document.getElementById('agregar-estado').value = "";
 
 
-        // Limpia los checkboxes
-        document.getElementById('agregar-tipoprestamo').checked = false;
-        document.getElementById('agregar-descripcion').checked = false;
-        document.getElementById('agregar-aplicaseguro').checked = false;
-        document.getElementById('agregar-montomaximo').checked = false;
-        document.getElementById('agregar-montominimo').checked = false;
-        document.getElementById('agregar-tasamaxima').checked = false;
-        document.getElementById('agregar-tasaminima').checked = false;
-        document.getElementById('agregar-plazomaximo').checked = false;
-        document.getElementById('agregar-plazominimo').checked = false;
-        document.getElementById('agregar-estado').checked = false;
+            // Limpia los checkboxes
+            document.getElementById('agregar-tipoprestamo').checked = false;
+            document.getElementById('agregar-descripcion').checked = false;
+            document.getElementById('agregar-aplicaseguro').checked = false;
+            document.getElementById('agregar-montomaximo').checked = false;
+            document.getElementById('agregar-montominimo').checked = false;
+            document.getElementById('agregar-tasamaxima').checked = false;
+            document.getElementById('agregar-tasaminima').checked = false;
+            document.getElementById('agregar-plazomaximo').checked = false;
+            document.getElementById('agregar-plazominimo').checked = false;
+            document.getElementById('agregar-estado').checked = false;
 
         });
 
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
         document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
-       
-        // Limpia los checkboxes
 
-        document.getElementById('editar-tipoprestamo').checked = false;
-        document.getElementById('editar-descripcion').checked = false;
-        document.getElementById('editar-aplicaseguro').checked = false;
-        document.getElementById('editar-montomaximo').checked = false;
-        document.getElementById('editar-montominimo').checked = false;
-        document.getElementById('editar-tasamaxima').checked = false;
-        document.getElementById('editar-tasaminima').checked = false;
-        document.getElementById('editar-plazomaximo').checked = false;
-        document.getElementById('editar-plazominimo').checked = false;
-        document.getElementById('editar-estado').checked = false;
+            // Limpia los checkboxes
+
+            document.getElementById('editar-tipoprestamo').checked = false;
+            document.getElementById('editar-descripcion').checked = false;
+            document.getElementById('editar-aplicaseguro').checked = false;
+            document.getElementById('editar-montomaximo').checked = false;
+            document.getElementById('editar-montominimo').checked = false;
+            document.getElementById('editar-tasamaxima').checked = false;
+            document.getElementById('editar-tasaminima').checked = false;
+            document.getElementById('editar-plazomaximo').checked = false;
+            document.getElementById('editar-plazominimo').checked = false;
+            document.getElementById('editar-estado').checked = false;
         });
     </script>
 

@@ -112,24 +112,23 @@ class Prestamo extends Conectar
         }
     }
 
-    // // ELIMINA UN USUARIO
-    // public function eliminar_usuario($ID_USUARIO)
-    // {
-    //     try {
-    //         $conectar = parent::conexion();
-    //         parent::set_names();
-    //         // Consulta SQL para eliminar el usuario
-    //         $sql = "DELETE FROM `tbl_ms_usuario` WHERE `ID_USUARIO` = :ID_USUARIO";
-    //         $stmt = $conectar->prepare($sql);
-    //         $stmt->bindParam(':ID_USUARIO', $ID_USUARIO, PDO::PARAM_INT);
-    //         $stmt->execute();
-    //         if ($stmt->rowCount() > 0) {
-    //             return "Usuario eliminado correctamente";
-    //         } else {
-    //             return "No se realizó ninguna eliminación, o el usuario no existe";
-    //         }
-    //     } catch (PDOException $e) {
-    //         return  $e->getCode();
-    //     }
-    // }
+    public function anular_prestamo($ID_PRESTAMO)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+            // Consulta SQL para actualizar el estado del préstamo a "Anulado"
+            $sql = "UPDATE `tbl_mp_prestamos` SET `ESTADO_PRESTAMO` = 'ANULADO' WHERE `ID_PRESTAMO` = :ID_PRESTAMO";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                echo json_encode(array('message' => 'Préstamo anulado correctamente'));
+            } else {
+                echo json_encode(array('message' => 'No se realizó ninguna anulación, o el préstamo no existe'));
+            }
+        } catch (PDOException $e) {
+            echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
+        }
+    }
 }
