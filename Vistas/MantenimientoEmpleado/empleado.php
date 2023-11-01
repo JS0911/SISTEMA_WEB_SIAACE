@@ -21,6 +21,7 @@ $permisos1 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Seguri
 $permisos = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
 $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 
+
 ?>
 
 <style>
@@ -263,6 +264,8 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     <th>Telefono</th>
                                     <th>Direccion1</th>
                                     <th style="display: none;">Direccion2</th>
+                                    <th style="display: none;">Id Sucursal</th>
+                                    <th style="display: none;">Id Cargo</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -318,13 +321,6 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         <input type="text" class="form-control" id="agregar-salario" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
                                         <div id="mensaje7"></div>
 
-                                        <label for="Estado">Estado</label>
-                                        <select class="form-control" id="agregar-estado" maxlength="15" name="IdEstado" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="Activo">ACTIVO</option>
-                                            <option value="Inactivo">INACTIVO</option>
-                                            <option value="Nuevo">NUEVO</option>
-                                        </select>
 
                                         <label for="telefono">Teléfono</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-telefono" required pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -)">
@@ -337,6 +333,59 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         <label for="direccion2">Dirección 2</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-direccion2" required pattern="^[A-Za-z0-9\s.,-]*$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje11"></div>
+
+                                        <?php
+                                        //---------CONEXION A LA TABLA SUCURSAL --------
+                                        // Crear una instancia de la clase Conectar
+                                        $conexion = new Conectar();
+                                        $conn = $conexion->Conexion();
+
+                                        // Consultar la contraseña actual del usuario desde la base de datos
+                                        $sql = "SELECT id_sucursal ,sucursal FROM tbl_me_sucursal";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
+
+                                        // Obtener los resultados en un array asociativo
+                                        $sucursales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                        ?>
+                                        <label for="sucursal">Sucursal</label>
+                                        <select class="form-control" id="agregar-sucursal" name="idSucursal">
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <?php foreach ($sucursales as $sucursal) : ?>
+                                                <option value="<?php echo $sucursal['id_sucursal']; ?>"><?php echo $sucursal['sucursal']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+
+                                        <?php
+                                        //---------CONEXION A LA TABLA CARGO --------
+                                        // Crear una instancia de la clase Conectar
+                                        $conexion = new Conectar();
+                                        $conn = $conexion->Conexion();
+
+                                        // Consultar la contraseña actual del usuario desde la base de datos
+                                        $sql = "SELECT id_cargo ,cargo FROM tbl_me_cargo";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
+
+                                        // Obtener los resultados en un array asociativo
+                                        $cargo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        ?>
+                                        <label for="cargo">Cargo</label>
+                                        <select class="form-control" id="agregar-cargo" name="idCargo">
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <?php foreach ($cargo as $cargo) : ?>
+                                                <option value="<?php echo $cargo['id_cargo']; ?>"><?php echo $cargo['cargo']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+
+                                        <label for="Estado">Estado</label>
+                                        <select class="form-control" id="agregar-estado" maxlength="15" name="IdEstado" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <option value="ACTIVO">ACTIVO</option>
+                                            <option value="INACTIVO">INACTIVO</option>
+                                            <option value="NUEVO">NUEVO</option>
+                                        </select>
                                     </div>
                                 </form>
                             </div>
@@ -394,14 +443,6 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         <input type="text" class="form-control" id="editar-salario" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (por ejemplo, 1000.00)">
                                         <div id="mensaje18"></div>
 
-                                        <label for="Estado">Estado</label>
-                                        <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="Activo">ACTIVO</option>
-                                            <option value="Inactivo">INACTIVO</option>
-                                            <option value="Nuevo">NUEVO</option>
-                                        </select>
-
                                         <label for="telefono">Teléfono</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-telefono" required pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -)">
                                         <div id="mensaje20"></div>
@@ -413,6 +454,63 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         <label for="direccion2">Dirección 2</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-direccion2" required pattern="^[A-Za-z0-9\s.,-]*$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje22"></div>
+
+
+                                        <?php
+                                        //---------CONEXION A LA TABLA SUCURSAL --------
+                                        // Crear una instancia de la clase Conectar
+                                        $conexion = new Conectar();
+                                        $conn = $conexion->Conexion();
+
+                                        // Consultar la contraseña actual del usuario desde la base de datos
+                                        $sql = "SELECT id_sucursal ,sucursal FROM tbl_me_sucursal";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
+
+                                        // Obtener los resultados en un array asociativo
+                                        $sucursales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                        ?>
+
+                                        <label for="sucursal">Sucursal</label>
+                                        <select class="form-control" id="editar-sucursal" name="idSucursal">
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <?php foreach ($sucursales as $sucursal) : ?>
+                                                <option value="<?php echo $sucursal['id_sucursal']; ?>"><?php echo $sucursal['sucursal']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+
+
+
+                                        <?php
+                                        //---------CONEXION A LA TABLA CARGO --------
+                                        // Crear una instancia de la clase Conectar
+                                        $conexion = new Conectar();
+                                        $conn = $conexion->Conexion();
+
+                                        // Consultar la contraseña actual del usuario desde la base de datos
+                                        $sql = "SELECT id_cargo ,cargo FROM tbl_me_cargo";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
+
+                                        // Obtener los resultados en un array asociativo
+                                        $cargo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        ?>
+                                        <label for="cargo">Cargo</label>
+                                        <select class="form-control" id="editar-cargo" name="idCargo">
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <?php foreach ($cargo as $cargo) : ?>
+                                                <option value="<?php echo $cargo['id_cargo']; ?>"><?php echo $cargo['cargo']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+
+                                        <label for="Estado">Estado</label>
+                                        <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <option value="Activo">ACTIVO</option>
+                                            <option value="Inactivo">INACTIVO</option>
+                                            <option value="Nuevo">NUEVO</option>
+                                        </select>
                                     </div>
                                 </form>
                             </div>
@@ -477,6 +575,8 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td>' + empleado.TELEFONO + '</td>' +
                             '<td>' + empleado.DIRECCION1 + '</td>' +
                             '<td style="display:none;">' + empleado.DIRECCION2 + '</td>' +
+                            '<td style="display:none;">' + empleado.ID_SUCURSAL + '</td>' +
+                            '<td style="display:none;">' + empleado.ID_CARGO + '</td>' +
                             '<td>' + empleado.ESTADO + '</td>' +
                             '<td>';
 
@@ -508,7 +608,6 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
 
         }
 
-
         function redirectToIngresarPrestamo() {
             // Redirige a la página IngresarPrestamo.php
             window.location.href = '../MantenimientoPrestamos/IngresarPrestamo.php';
@@ -535,13 +634,15 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 var Sapellido = $("#agregar-Sapellido").val();
                 var email = $("#agregar-email").val();
                 var salario = $("#agregar-salario").val();
-                var estado = document.getElementById("agregar-estado").value; // Obtener el valor del select
                 var telefono = $("#agregar-telefono").val();
                 var direccion1 = $("#agregar-direccion1").val();
                 var direccion2 = $("#agregar-direccion2").val();
+                var sucursal = document.getElementById("agregar-sucursal").value; // Obtener el valor del select
+                var cargo = document.getElementById("agregar-cargo").value; // Obtener el valor del select
+                var estado = document.getElementById("agregar-estado").value; // Obtener el valor del select
 
-                if (dni == "" || Pnombre == "" || Snombre == "" || Papellido == "" || Sapellido == "" ||
-                    email == "" || salario == "" || estado == "" || telefono == "" || direccion1 == "" || direccion2 == "") {
+                if (dni == "" || Pnombre == "" || Snombre == "" || Papellido == "" || Sapellido == "" || email == "" ||
+                    salario == "" || telefono == "" || direccion1 == "" || direccion2 == "" || estado == "" || sucursal == "" || cargo == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
@@ -557,10 +658,12 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         SEGUNDO_APELLIDO: Sapellido,
                         EMAIL: email,
                         SALARIO: salario,
-                        ESTADO: estado,
                         TELEFONO: telefono,
                         DIRECCION1: direccion1,
-                        DIRECCION2: direccion2
+                        DIRECCION2: direccion2,
+                        ID_SUCURSAL: sucursal,
+                        ID_CARGO: cargo,
+                        ESTADO: estado
                     };
 
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/empleados.php?op=InsertEmpleado', {
@@ -643,10 +746,12 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     document.getElementById('editar-Sapellido').value = empleado.SEGUNDO_APELLIDO;
                     document.getElementById('editar-email').value = empleado.EMAIL;
                     document.getElementById('editar-salario').value = empleado.SALARIO;
-                    document.getElementById('editar-estado').value = empleado.ESTADO;
                     document.getElementById('editar-telefono').value = empleado.TELEFONO;
                     document.getElementById('editar-direccion1').value = empleado.DIRECCION1;
                     document.getElementById('editar-direccion2').value = empleado.DIRECCION2;
+                    document.getElementById('editar-sucursal').value = empleado.ID_SUCURSAL;
+                    document.getElementById('editar-cargo').value = empleado.ID_CARGO;
+                    document.getElementById('editar-estado').value = empleado.ESTADO;
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
@@ -665,10 +770,12 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             var Sapellido = document.getElementById('editar-Sapellido').value;
             var email = document.getElementById('editar-email').value;
             var salario = document.getElementById('editar-salario').value;
-            var estado = document.getElementById('editar-estado').value;
             var telefono = document.getElementById('editar-telefono').value;
             var direccion1 = document.getElementById('editar-direccion1').value;
             var direccion2 = document.getElementById('editar-direccion2').value;
+            var sucursal = document.getElementById('editar-sucursal').value;
+            var cargo = document.getElementById('editar-cargo').value;
+            var estado = document.getElementById('editar-estado').value;
 
             // Realiza una solicitud FETCH para actualizar los datos del usuario
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/empleados.php?op=updateEmpleado', {
@@ -686,10 +793,12 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         "SEGUNDO_APELLIDO": Sapellido,
                         "EMAIL": email,
                         "SALARIO": salario,
-                        "ESTADO": estado,
                         "TELEFONO": telefono,
                         "DIRECCION1": direccion1,
-                        "DIRECCION2": direccion2
+                        "DIRECCION2": direccion2,
+                        "ID_SUCURSAL": sucursal,
+                        "ID_CARGO": cargo,
+                        "ESTADO": estado
                     }) // Convierte los datos en formato JSON
                 })
                 .then(function(response) {

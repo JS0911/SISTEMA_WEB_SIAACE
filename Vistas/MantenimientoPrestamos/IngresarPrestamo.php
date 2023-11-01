@@ -19,6 +19,7 @@ if (isset($_GET['ID_EMPLEADO'])) {
     echo "No se proporcionó el ID_EMPLEADO en la URL.";
 }
 
+
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 //$selec_id_usuario = $session['selec_idusuario'];
@@ -296,11 +297,8 @@ $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
                                     <!-- Formulario de creación -->
                                     <form>
                                         <div class="form-group">
-
-
-                                            <label for="Empleado">Empleado</label>
-                                            <input type="text" maxlength="15" class="form-control" id="agregar-empleado" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                            <div id="mensaje2"></div>
+                                        
+                                            
 
                                             <label for="tipoPrestamo">Tipo Prestamo</label>
                                             <input type="text" maxlength="15" class="form-control" id="agregar-tipoPrestamo" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
@@ -310,45 +308,10 @@ $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
                                             <input type="text" maxlength="15" class="form-control" id="agregar-Fpago" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                             <div id="mensaje4"></div>
 
-                                            <label for="FSolicitud">Fecha Solicitud</label>
-                                            <input type="text" maxlength="15" class="form-control" id="agregar-Fsolicitud" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                            <div id="mensaje5"></div>
-
-                                            <label for="Faprobacion">Fecha Aprobacion</label>
-                                            <input type="email" maxlength="45" class="form-control" id="agregar-Faprobacion" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida">
-                                            <div id="mensaje6"></div>
-
-                                            <label for="Fcancelacion">Fecha Cancelacion</label>
-                                            <input type="text" class="form-control" id="agregar-Fcancelacion" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
-                                            <div id="mensaje7"></div>
-
-
-
-                                            <label for="Fdesembolso">Fecha Desembolso</label>
-                                            <input type="text" maxlength="45" class="form-control" id="agregar-Fdesembolso" required pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -)">
-                                            <div id="mensaje9"></div>
-
-                                            <label for="MSolicitado">Monto Solicitado</label>
-                                            <input type="text" class="form-control" id="agregar-MSolicitado" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
-                                            <div id="mensaje7"></div>
-
-                                            <label for="Mdesembolso">Monto Desembolso</label>
+                                            <label for="Mdesembolso">Monto Solicitado</label>
                                             <input type="text" class="form-control" id="agregar-MDesembolsao" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
                                             <div id="mensaje7"></div>
 
-
-                                            <label for="Madeudado">Monto Adeudado</label>
-                                            <input type="text" class="form-control" id="agregar-MAdeudado" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
-                                            <div id="mensaje7"></div>
-
-
-                                            <label for="Estado">Estado Prestamo</label>
-                                            <select class="form-control" id="agregar-estado" maxlength="15" name="IdEstado" required>
-                                                <option value="" disabled selected>Selecciona una opción</option>
-                                                <option value="Activo">ACTIVO</option>
-                                                <option value="Inactivo">EN PROCESO</option>
-                                                <option value="Nuevo">FINALIZADO</option>
-                                            </select>
                                         </div>
                                     </form>
                                 </div>

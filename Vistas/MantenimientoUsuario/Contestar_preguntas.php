@@ -63,18 +63,18 @@ echo $PregunContes;
                         <div class="col-lg-5">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
                                 <div class="card-header">
-                                    <h3 class="text-center font-weight-light my-4">Formulario de Preguntas de Seguridad</h3><img src="../../src/Logo.png" alt="Logo SIAACE" class="logo">
+                                    <h3 class="text-center font-weight-light my-4">Preguntas De Seguridad</h3><img src="../../src/Logo.png" alt="Logo SIAACE" class="logo">
                                 </div>
                                 <div class="card-body">
                                     <form>
                                         <div class="form-group">
-                                            <label for="preguntaSeguridad">Selecciona una pregunta de seguridad:</label>
+                                            <label for="preguntaSeguridad">Selecciona una pregunta</label>
                                             <select class="form-control" id="preguntaSeguridad" name="preguntaSeguridad">
                                                 <!-- Agrega más opciones de preguntas aquí -->
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="respuestaSeguridad">Tu respuesta:</label>
+                                            <label for="respuestaSeguridad">Respuesta:</label>
                                             <input type="text" class="form-control" id="respuestaSeguridad" name="respuestaSeguridad" required>
                                         </div>
                                         <button type="submit" class="btn btn-primary" id="btn-enviar" onclick="EnviarRespuestas()">Enviar</button>

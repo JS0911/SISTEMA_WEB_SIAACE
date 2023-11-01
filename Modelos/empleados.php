@@ -25,14 +25,14 @@ class Empleados extends Conectar
     }
 
     //INSERTA UN EMPLEADO
-    public function insert_empleado($DNI, $PRIMER_NOMBRE, $SEGUNDO_NOMBRE, $PRIMER_APELLIDO, $SEGUNDO_APELLIDO, $EMAIL, $SALARIO, $ESTADO, $TELEFONO, $DIRECCION1, $DIRECCION2)
+    public function insert_empleado($DNI, $PRIMER_NOMBRE, $SEGUNDO_NOMBRE, $PRIMER_APELLIDO, $SEGUNDO_APELLIDO, $EMAIL, $SALARIO, $ESTADO, $TELEFONO, $DIRECCION1, $DIRECCION2,$ID_SUCURSAL,$ID_CARGO)
     {
         try {
 
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_me_empleados` ( `DNI`, `PRIMER_NOMBRE`, `SEGUNDO_NOMBRE`, `PRIMER_APELLIDO`, `SEGUNDO_APELLIDO`, `EMAIL`,`SALARIO`,`ESTADO`,`TELEFONO`,`DIRECCION1`,`DIRECCION2`) 
-            VALUES ( :DNI, :PRIMER_NOMBRE, :SEGUNDO_NOMBRE, :PRIMER_APELLIDO, :SEGUNDO_APELLIDO, :EMAIL, :SALARIO, :ESTADO, :TELEFONO, :DIRECCION1, :DIRECCION2)";
+            $sql = "INSERT INTO `siaace`.`tbl_me_empleados` ( `DNI`, `PRIMER_NOMBRE`, `SEGUNDO_NOMBRE`, `PRIMER_APELLIDO`, `SEGUNDO_APELLIDO`, `EMAIL`,`SALARIO`,`ESTADO`,`TELEFONO`,`DIRECCION1`,`DIRECCION2`,`ID_SUCURSAL`,`ID_CARGO`) 
+            VALUES ( :DNI, :PRIMER_NOMBRE, :SEGUNDO_NOMBRE, :PRIMER_APELLIDO, :SEGUNDO_APELLIDO, :EMAIL, :SALARIO, :ESTADO, :TELEFONO, :DIRECCION1, :DIRECCION2 , :ID_SUCURSAL, :ID_CARGO)";
 
             $stmt = $conectar->prepare($sql);
 
@@ -47,6 +47,8 @@ class Empleados extends Conectar
             $stmt->bindParam(':TELEFONO', $TELEFONO, PDO::PARAM_INT);
             $stmt->bindParam(':DIRECCION1', $DIRECCION1, PDO::PARAM_STR);
             $stmt->bindParam(':DIRECCION2', $DIRECCION2, PDO::PARAM_STR);
+            $stmt->bindParam(':ID_SUCURSAL', $ID_SUCURSAL, PDO::PARAM_INT);
+            $stmt->bindParam(':ID_CARGO', $ID_CARGO, PDO::PARAM_INT);
 
 
             $stmt->execute();
@@ -72,10 +74,12 @@ class Empleados extends Conectar
         $SEGUNDO_APELLIDO,
         $EMAIL,
         $SALARIO,
-        $ESTADO,
         $TELEFONO,
         $DIRECCION1,
-        $DIRECCION2
+        $DIRECCION2,
+        $ID_SUCURSAL,
+        $ID_CARGO,
+        $ESTADO
     ) {
         try {
             $conectar = parent::conexion();
@@ -90,10 +94,12 @@ class Empleados extends Conectar
                     `SEGUNDO_APELLIDO` = :SEGUNDO_APELLIDO, 
                     `EMAIL` = :EMAIL ,
                     `SALARIO` = :SALARIO , 
-                    `ESTADO` = :ESTADO ,
                     `TELEFONO` = :TELEFONO ,
                     `DIRECCION1` = :DIRECCION1 ,
-                    `DIRECCION2` = :DIRECCION2 
+                    `DIRECCION2` = :DIRECCION2,
+                    `ID_SUCURSAL` = :ID_SUCURSAL ,
+                    `ID_CARGO` = :ID_CARGO ,
+                    `ESTADO` = :ESTADO 
                     
                 WHERE `ID_EMPLEADO` = :ID_EMPLEADO";
 
@@ -108,10 +114,12 @@ class Empleados extends Conectar
             $stmt->bindParam(':SEGUNDO_APELLIDO', $SEGUNDO_APELLIDO, PDO::PARAM_STR);
             $stmt->bindParam(':EMAIL', $EMAIL, PDO::PARAM_STR);
             $stmt->bindParam(':SALARIO', $SALARIO, PDO::PARAM_INT);
-            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);  // HACER EN SELECT 
             $stmt->bindParam(':TELEFONO', $TELEFONO, PDO::PARAM_INT);
             $stmt->bindParam(':DIRECCION1', $DIRECCION1, PDO::PARAM_STR);
             $stmt->bindParam(':DIRECCION2', $DIRECCION2, PDO::PARAM_STR);
+            $stmt->bindParam(':ID_SUCURSAL', $ID_SUCURSAL, PDO::PARAM_INT);
+            $stmt->bindParam(':ID_CARGO', $ID_CARGO, PDO::PARAM_INT);
+            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);  // HACER EN SELECT 
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
