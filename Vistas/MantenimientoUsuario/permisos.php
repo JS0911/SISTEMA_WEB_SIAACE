@@ -581,10 +581,6 @@ $permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                             '<td>' + (permiso.PERMISOS_CONSULTAR === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
                             '<td>';
 
-
-
-
-                        console.log(permiso);
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarPermiso(' + permiso.ID_ROL + ',' + permiso.ID_OBJETO + ')">Editar</button>';
@@ -731,7 +727,6 @@ $permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
             });
         }
 
-
         function cargarPermiso(id_rol, id_objeto) {
             // Crear un objeto con el ID del PERMISO
             var data = {
@@ -759,26 +754,17 @@ $permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                 .then(function(permiso) {
                     if (permiso) {
 
-                        console.log(permiso);
                         document.getElementById('editar-IdRol').value = id_rol;
                         document.getElementById('editar-IdObjeto').value = id_objeto;
 
-                        if (permiso && permiso.PERMISOS_INSERCION) {
-                            console.log("SI SON IGUALES");
-                        } else {
-                            console.log("NO SON IGUALES");
-                        }
+                        // Convertir el array a un objeto
+                        permiso = Object.assign({}, permiso[0]);
 
                         // Establecer el estado de los checks en la modal de edición
                         document.getElementById('editar-pInsercion').checked = (permiso.PERMISOS_INSERCION === '1');
                         document.getElementById('editar-pEliminacion').checked = (permiso.PERMISOS_ELIMINACION === '1');
                         document.getElementById('editar-pActualizacion').checked = (permiso.PERMISOS_ACTUALIZACION === '1');
                         document.getElementById('editar-pConsultar').checked = (permiso.PERMISOS_CONSULTAR === '1');
-
-                        console.log("Permiso de Inserción: " + permiso.PERMISOS_INSERCION);
-                        console.log("Permiso de Eliminación: " + permiso.PERMISOS_ELIMINACION);
-                        console.log("Permiso de Actualización: " + permiso.PERMISOS_ACTUALIZACION);
-                        console.log("Permiso de Consulta: " + permiso.PERMISOS_CONSULTAR);
 
 
                     } else {

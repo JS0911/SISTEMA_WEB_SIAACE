@@ -259,7 +259,9 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 <tr>
                                     <th style="display: none;">Id Prestamo</th>
                                     <th>Empleado</th>
+                                    <th style="display: none;"> Id Tipo Prestamo</th>
                                     <th>Tipo Prestamo</th>
+                                    <th style="display: none;">Id Forma/Pago</th>
                                     <th>Forma/Pago</th>
                                     <th>Fecha /Solicitud</th>
                                     <th>Fecha/Aprobacion</th>
@@ -325,8 +327,10 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         var row = '<tr>' +
                             '<td style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
                             '<td>' + prestamo.ID_EMPLEADO + '</td>' +
-                            '<td>' + prestamo.ID_TIPO_PRESTAMO + '</td>' +
-                            '<td>' + prestamo.ID_FPAGO + '</td>' +
+                            '<td style="display:none;">' + prestamo.ID_TIPO_PRESTAMO + '</td>' +
+                            '<td >' + prestamo.TIPO_PRESTAMO + '</td>' +
+                            '<td style="display:none;">' + prestamo.ID_FPAGO + '</td>' +
+                            '<td>' + prestamo.FORMA_DE_PAGO + '</td>' +
                             '<td>' + prestamo.FECHA_SOLICITUD + '</td>' +
                             '<td>' + prestamo.FECHA_APROBACION + '</td>' +
                             '<td style="display:none;">' + prestamo.FECHA_DE_CANCELACION + '</td>' +
@@ -346,6 +350,8 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
 
                         row += '</td>' +
                             '</tr>';
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();

@@ -416,6 +416,8 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                         }
                         row += '</td>' +
                             '</tr>';
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();

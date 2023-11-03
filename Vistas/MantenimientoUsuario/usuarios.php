@@ -174,10 +174,9 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                 echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
                                 echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i></i><span style="margin-left: 5px;"> Bitacora </a>';
-        
                             }
 
-                           
+
                             echo '</nav>';
                             echo '</div>';
                         }
@@ -193,16 +192,15 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
-
-                                }
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+                            }
                             echo '</nav>';
                             echo '</div>';
                         }
-                        
+
                         //----------------------------MODULO DE CUENTAS------------------------------------
                         if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
@@ -479,7 +477,7 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                             '<td>' + usuario.CORREO_ELECTRONICO + '</td>' +
                             '<td style="display:none;">' + usuario.ID_ROL + '</td>' +
                             '<td>' + usuario.ROL + '</td>' +
-                            '<td>' + usuario.NOMBRE + '</td>' +   //AQUI DEBERIA DE SER ESTADO 
+                            '<td>' + usuario.NOMBRE + '</td>' + //AQUI DEBERIA DE SER ESTADO 
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -495,6 +493,8 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
                         row += '</td>' +
                             '</tr>';
+                        //Cambiar palabra null por vacio.
+                        newrow = row.replaceAll("null", " ");
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -1126,8 +1126,8 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById("agregar-contrasena").value = "";
             document.getElementById("confirmar-contrasena").value = "";
 
-           // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
-           location.reload();
+            // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
+            location.reload();
 
 
         });
@@ -1141,14 +1141,14 @@ $Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById("editar-estado").value = "";
             document.getElementById("editar-correo").value = "";
             document.getElementById("editar-rol").value = "";
-             
-            // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
-           location.reload();
 
-            
+            // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
+            location.reload();
+
+
         });
     </script>
-    
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>

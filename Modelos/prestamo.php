@@ -6,10 +6,21 @@ class Prestamo extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_mp_prestamos;";
+
+        $sql = "SELECT P.*, T.TIPO_PRESTAMO, F.FORMA_DE_PAGO
+        FROM siaace.tbl_mp_prestamos AS P
+        INNER JOIN siaace.tbl_mp_tipo_prestamo AS T ON P.ID_TIPO_PRESTAMO = T.ID_TIPO_PRESTAMO
+        INNER JOIN siaace.tbl_formapago AS F ON P.ID_FPAGO = F.ID_FPAGO";
+
         $sql = $conectar->prepare($sql);
+
         $sql->execute();
-        return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($sql->rowCount() > 0) {
+            return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            return array();
+        }
     }
 
     // //TRAE SOLO UN PRESTAMO
@@ -34,7 +45,7 @@ class Prestamo extends Conectar
     }
 
     // //INSERTA UN PRESTAMO
-    public function insert_prestamo( $ID_TIPO_PRESTAMO, $ID_FPAGO, $MONTO_SOLICITADO)
+    public function insert_prestamo($ID_TIPO_PRESTAMO, $ID_FPAGO, $MONTO_SOLICITADO)
     {
         try {
 
@@ -46,11 +57,11 @@ class Prestamo extends Conectar
 
             $stmt = $conectar->prepare($sql);
 
-       
+
             $stmt->bindParam(':ID_TIPO_PRESTAMO', $ID_TIPO_PRESTAMO, PDO::PARAM_INT);
             $stmt->bindParam(':ID_FPAGO', $ID_FPAGO, PDO::PARAM_INT);
             $stmt->bindParam(':MONTO_SOLICITADO', $MONTO_SOLICITADO, PDO::PARAM_STR);
-            
+
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
