@@ -14,7 +14,7 @@ if (!isset($_SESSION['usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Bitacora = "13";
+$id_objeto_Bitacora = "14";
 $id_objeto_Seguridad = "25";
 $id_objeto_Cuentas = "28";
 

@@ -412,6 +412,7 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) == 1) {
                             row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarCuenta(' + cuenta.ID_CUENTA + ')">Editar</button>';
+                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + cuenta.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo()">Movimiento</button>';
                         }
                         row += '</td>' +
                             '</tr>';
@@ -427,6 +428,11 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
         }
 
+        function redirectToIngresarPrestamo() {
+            // Redirige a la página IngresarPrestamo.php
+            window.location.href = '../MantenimientoPrestamos/IngresarPrestamo.php';
+        }
+        
         function habilitarPaginacion() {
             $('#Lista-cuentas').DataTable({
                 "paging": true,

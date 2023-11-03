@@ -34,30 +34,23 @@ class Prestamo extends Conectar
     }
 
     // //INSERTA UN PRESTAMO
-    public function insert_prestamo($ID_EMPLEADO, $ID_TIPO_PRESTAMO, $ID_FPAGO, $FECHA_SOLICITUD, $FECHA_APROBACION, $FECHA_DE_CANCELACION, $FECHA_DE_DESEMBOLSO, $ESTADO_PRESTAMO, $MONTO_SOLICITADO, $MONTO_DESEMBOLSO, $MONTO_ADEUDADO)
+    public function insert_prestamo( $ID_TIPO_PRESTAMO, $ID_FPAGO, $MONTO_SOLICITADO)
     {
         try {
 
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_mp_prestamos` (`ID_EMPLEADO`, `ID_TIPO_PRESTAMO`, `ID_FPAGO`, `FECHA_SOLICITUD`, `FECHA_APROBACION`, `FECHA_DE_CANCELACION`, `FECHA_DE_DESEMBOLSO`, `ESTADO_PRESTAMO`, `MONTO_SOLICITADO`, `MONTO_DESEMBOLSO`, `MONTO_ADEUDADO`) 
-            VALUES (:ID_EMPLEADO, :ID_TIPO_PRESTAMO, :ID_FPAGO, :FECHA_SOLICITUD, :FECHA_APROBACION, :FECHA_DE_CANCELACION, :FECHA_DE_DESEMBOLSO, :ESTADO_PRESTAMO, :MONTO_SOLICITADO, :MONTO_DESEMBOLSO, :MONTO_ADEUDADO)";
+            $sql = "INSERT INTO `siaace`.`tbl_mp_prestamos` ( `ID_TIPO_PRESTAMO`, `ID_FPAGO`, `MONTO_SOLICITADO`) 
+            VALUES ( :ID_TIPO_PRESTAMO, :ID_FPAGO, :MONTO_SOLICITADO)";
 
 
             $stmt = $conectar->prepare($sql);
 
-            $stmt->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_STR);
+       
             $stmt->bindParam(':ID_TIPO_PRESTAMO', $ID_TIPO_PRESTAMO, PDO::PARAM_INT);
             $stmt->bindParam(':ID_FPAGO', $ID_FPAGO, PDO::PARAM_INT);
-            $stmt->bindParam(':FECHA_SOLICITUD', $FECHA_SOLICITUD, PDO::PARAM_STR);
-            $stmt->bindParam(':FECHA_APROBACION', $FECHA_APROBACION, PDO::PARAM_STR);
-            $stmt->bindParam(':FECHA_DE_CANCELACION', $FECHA_DE_CANCELACION, PDO::PARAM_STR);
-            $stmt->bindParam(':FECHA_DE_DESEMBOLSO', $FECHA_DE_DESEMBOLSO, PDO::PARAM_STR);
-            $stmt->bindParam(':ESTADO_PRESTAMO', $ESTADO_PRESTAMO, PDO::PARAM_STR);
             $stmt->bindParam(':MONTO_SOLICITADO', $MONTO_SOLICITADO, PDO::PARAM_STR);
-            $stmt->bindParam(':MONTO_DESEMBOLSO', $MONTO_DESEMBOLSO, PDO::PARAM_STR);
-            $stmt->bindParam(':MONTO_ADEUDADO', $MONTO_ADEUDADO, PDO::PARAM_STR);
-
+            
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {

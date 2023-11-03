@@ -4,6 +4,11 @@ require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
 
 $permisosPrestamo1 = new PermisosUsuarios();
+$usuario = $_SESSION['usuario'];
+$id_rol = $_SESSION['id_rol'];
+$id_objeto_PrestamoMantenimiento = "30";
+
+$permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_PrestamoMantenimiento);
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
@@ -11,22 +16,54 @@ if (!isset($_SESSION['usuario'])) {
 
 if (isset($_GET['ID_EMPLEADO'])) {
     $ID_EMPLEADO = $_GET['ID_EMPLEADO'];
-
-    // Redirige al usuario a la página IngresarPrestamo.php con el parámetro ID_EMPLEADO
-    header("Location: http://localhost:90/SISTEMA_WEB_SIAACE/Vistas/MantenimientoPrestamo/IngresarPrestamo.php?ID_EMPLEADO=$ID_EMPLEADO");
-    exit; // Asegúrate de salir para evitar que se siga ejecutando el código actual
 } else {
     echo "No se proporcionó el ID_EMPLEADO en la URL.";
 }
 
+//---------CONEXION A LA TABLA EMPLEADOS --------
+// Crear una instancia de la clase Conectar
+$conexion = new Conectar();
+$conn = $conexion->Conexion();
 
-$usuario = $_SESSION['usuario'];
-$id_rol = $_SESSION['id_rol'];
-//$selec_id_usuario = $session['selec_idusuario'];
-$id_objeto_PrestamoMantenimiento = "30";
+// Consultar la contraseña actual del usuario desde la base de datos
+$sql = "SELECT PRIMER_NOMBRE ,PRIMER_APELLIDO FROM tbl_me_empleados WHERE ID_EMPLEADO= $ID_EMPLEADO ";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
 
+// Obtener los resultados en un array asociativo
+$nombre_empleado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_PrestamoMantenimiento);
+// Unir el primer nombre y apellido
+$nombre_empleado_unido = implode(" ", $nombre_empleado[0]);
+
+//------------------------------------------------------------------------
+
+//---------CONEXION A LA TABLA TIPO PRESTAMO --------
+// Crear una instancia de la clase Conectar
+$conexion = new Conectar();
+$conn = $conexion->Conexion();
+
+// Consultar la contraseña actual del usuario desde la base de datos
+$sql = "SELECT id_tipo_prestamo ,tipo_prestamo FROM tbl_mp_tipo_prestamo";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+
+// Obtener los resultados en un array asociativo
+$TipoPrestamo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+//-----------------------------------------------------------------------------
+
+//---------CONEXION A LA TABLA FORMA DE PAGO --------
+// Crear una instancia de la clase Conectar
+$conexion = new Conectar();
+$conn = $conexion->Conexion();
+
+// Consultar la contraseña actual del usuario desde la base de datos
+$sql = "SELECT id_fpago ,forma_de_pago FROM tbl_formapago";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+
+// Obtener los resultados en un array asociativo
+$formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <style>
@@ -66,58 +103,7 @@ $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <style>
-        /* Estilo para la tabla */
-        #Lista-tipoprestamo {
-            border-collapse: collapse;
-            /* Combina los bordes de las celdas */
-            width: 100%;
-        }
 
-        /* Estilo para las celdas del encabezado (th) */
-        #Lista-tipoprestamo th {
-            border: 2px solid white;
-            /* Bordes negros para las celdas del encabezado */
-            background-color: #333;
-            color: white;
-            font-family: Arial, sans-serif;
-            /* Cambia el tipo de letra */
-            padding: 8px;
-            /* Espaciado interno para las celdas */
-            text-align: center;
-            /* Alineación del texto al centro */
-        }
-
-        /* Estilo para el main (td) */
-        #Lista-tipoprestamo td {
-            border: 1px solid grey;
-            /* Bordes negros para las celdas de datos */
-            padding: 8px;
-            /* Espaciado interno para las celdas */
-            text-align: center;
-            /* Alineación del texto al centro */
-        }
-
-        /* Estilo personalizado para el placeholder */
-        #myInput {
-            border: 1px solid #000;
-            /* Borde más oscuro, en este caso, negro (#000) */
-        }
-
-        /*BOTON DE CREAR NUEVO */
-        .custom-button {
-            background-color: #4CAF50;
-            /* Verde */
-            color: #fff;
-            /* Texto en blanco */
-            border: 2px solid #4CAF50;
-            /* Borde verde */
-            margin-top: 1px;
-
-        }
-    </style>
-
-    </style>
 </head>
 
 <body class="sb-nav-fixed">
@@ -200,7 +186,7 @@ $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
                                         <div class="col-9 bel-padding-reset">
                                             <div class="display-flex flex-direction-column">
                                                 <h2 class="bel-typography bel-typography-h2">Cuentas y Prestamos</h2>
-                                                <span class="bel-typography bel-typography-h5"><?php echo $usuario; ?></span>
+                                                <span class="bel-typography bel-typography-h5"><?php echo $nombre_empleado_unido; ?></span>
                                             </div>
                                         </div>
                                         <div class="col-6 bel-padding-reset">
@@ -297,19 +283,27 @@ $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
                                     <!-- Formulario de creación -->
                                     <form>
                                         <div class="form-group">
-                                        
-                                            
+
+                
 
                                             <label for="tipoPrestamo">Tipo Prestamo</label>
-                                            <input type="text" maxlength="15" class="form-control" id="agregar-tipoPrestamo" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                            <div id="mensaje3"></div>
+                                            <select class="form-control" id="agregar-tipoPrestamo" name="tipoPrestamo">
+                                                <option value="" disabled selected>Selecciona una opción</option>
+                                                <?php foreach ($TipoPrestamo as $tipo) : ?>
+                                                    <option value="<?php echo $tipo['id_tipo_prestamo']; ?>"><?php echo $tipo['tipo_prestamo']; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
 
                                             <label for="FPago">Forma de Pago</label>
-                                            <input type="text" maxlength="15" class="form-control" id="agregar-Fpago" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                            <div id="mensaje4"></div>
+                                            <select class="form-control" id="agregar-formaPago" name="formaPago">
+                                                <option value="" disabled selected>Selecciona una opción</option>
+                                                <?php foreach ($formaPago as $formaPago) : ?>
+                                                    <option value="<?php echo $formaPago['id_fpago']; ?>"><?php echo $formaPago['forma_de_pago']; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
 
-                                            <label for="Mdesembolso">Monto Solicitado</label>
-                                            <input type="text" class="form-control" id="agregar-MDesembolsao" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
+                                            <label for="MSolicitado">Monto Solicitado</label>
+                                            <input type="text" class="form-control" id="agregar-MSolicitado" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
                                             <div id="mensaje7"></div>
 
                                         </div>
@@ -317,7 +311,7 @@ $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" id="btn-agregarCancelar" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                                    <button type="button" class="btn btn-primary" id="btn-agregar" >Guardar</button>
                                 </div>
                             </div>
                         </div>
@@ -330,20 +324,12 @@ $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
         function Insertar_Prestamo() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
-                var dni = $("#agregar-dni").val();
-                var Pnombre = $("#agregar-Pnombre").val();
-                var Snombre = $("#agregar-Snombre").val();
-                var Papellido = $("#agregar-Papellido").val();
-                var Sapellido = $("#agregar-Sapellido").val();
-                var email = $("#agregar-email").val();
-                var salario = $("#agregar-salario").val();
-                var estado = document.getElementById("agregar-estado").value; // Obtener el valor del select
-                var telefono = $("#agregar-telefono").val();
-                var direccion1 = $("#agregar-direccion1").val();
-                var direccion2 = $("#agregar-direccion2").val();
+                
+                var tipoPrestamo = document.getElementById("agregar-tipoPrestamo").value; // Obtener el valor del select
+                var formaPago = document.getElementById("agregar-formaPago").value; // Obtener el valor del select
+                var montoSolicitado = $("#agregar-MSolicitado").val();
 
-                if (dni == "" || Pnombre == "" || Snombre == "" || Papellido == "" || Sapellido == "" ||
-                    email == "" || salario == "" || estado == "" || telefono == "" || direccion1 == "" || direccion2 == "") {
+                if (tipoPrestamo == "" || formaPago == "" || montoSolicitado == "" ) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
@@ -352,20 +338,13 @@ $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
                 } else {
                     // Crear un objeto con los datos a enviar al servidor
                     var datos = {
-                        DNI: dni,
-                        PRIMER_NOMBRE: Pnombre,
-                        SEGUNDO_NOMBRE: Snombre,
-                        PRIMER_APELLIDO: Papellido,
-                        SEGUNDO_APELLIDO: Sapellido,
-                        EMAIL: email,
-                        SALARIO: salario,
-                        ESTADO: estado,
-                        TELEFONO: telefono,
-                        DIRECCION1: direccion1,
-                        DIRECCION2: direccion2
+                        ID_TIPO_PRESTAMO: tipoPrestamo,
+                        ID_FPAGO: formaPago,
+                        MONTO_SOLICITADO: montoSolicitado,
+                       
                     };
 
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/empleados.php?op=InsertEmpleado', {
+                    fetch('http://localhost:90/SISTEMA1/Controladores/prestamo.php?op=InsertPrestamo', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -411,13 +390,18 @@ $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
                 }
             });
         }
+     
+        $(document).ready(function() {
+            Insertar_Prestamo();
+        });
     </script>
+
+
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="../js/scripts.js"></script>
+    <script src="../../js/scripts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>

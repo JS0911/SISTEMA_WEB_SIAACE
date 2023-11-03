@@ -260,7 +260,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     <th>Nombre</th>
                                     <th>Apellidos</th>
                                     <th>Email</th>
-                                    <th style="display: none;">Salario</th>
+                                    <th >Salario</th>
                                     <th>Telefono</th>
                                     <th>Direccion1</th>
                                     <th style="display: none;">Direccion2</th>
@@ -571,7 +571,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td>' + nombreCompleto + '</td>' + // Concatenación de primer y segundo nombre
                             '<td>' + apellidoCompleto + '</td>' + //concatenacion de primer y segundo apellido  
                             '<td>' + empleado.EMAIL + '</td>' +
-                            '<td style="display:none;">' + empleado.SALARIO + '</td>' +
+                            '<td >' + empleado.SALARIO + '</td>' +
                             '<td>' + empleado.TELEFONO + '</td>' +
                             '<td>' + empleado.DIRECCION1 + '</td>' +
                             '<td style="display:none;">' + empleado.DIRECCION2 + '</td>' +
@@ -591,7 +591,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
-                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + empleado.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo()">Movimiento</button>';
+                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + empleado.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + empleado.ID_EMPLEADO + ')">Movimiento</button>';
                         }
                         row += '</td>' +
                             '</tr>';
@@ -608,9 +608,10 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
 
         }
 
-        function redirectToIngresarPrestamo() {
-            // Redirige a la página IngresarPrestamo.php
-            window.location.href = '../MantenimientoPrestamos/IngresarPrestamo.php';
+        
+        function redirectToIngresarPrestamo(ID_EMPLEADO) {
+            // Redirigir a la página IngresarPrestamo.php con el parámetro ID_EMPLEADO
+            window.location.href = ' ../MantenimientoPrestamos/IngresarPrestamo.php?ID_EMPLEADO=' + ID_EMPLEADO;
         }
 
         function habilitarPaginacion() {
