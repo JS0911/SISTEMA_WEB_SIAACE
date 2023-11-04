@@ -41,7 +41,7 @@ switch ($_GET["op"]) {
         } else {
             // Inserta el objeto en la base de datos
             $date = new DateTime(date("Y-m-d H:i:s"));
-            $dateMod = $date->modify("-8 hours");
+            $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_objeto($OBJETO, $DESCRIPCION, $TIPO_OBJETO, $_SESSION['usuario'], $dateNew);
             echo json_encode(["message" => "Objeto insertado exitosamente."]);
@@ -63,7 +63,7 @@ switch ($_GET["op"]) {
         $TIPO_OBJETO = $body["TIPO_OBJETO"];
 
         $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-8 hours");
+        $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
 
         $datos = $com->update_objeto(
@@ -84,7 +84,7 @@ switch ($_GET["op"]) {
         $datos = $com->eliminar_objeto($ID_OBJETO);
         echo json_encode("Objeto eliminado");
         $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-8 hours");
+        $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
         $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL OBJETO # $ID_OBJETO", $_SESSION['id_usuario'], 5);
     break;

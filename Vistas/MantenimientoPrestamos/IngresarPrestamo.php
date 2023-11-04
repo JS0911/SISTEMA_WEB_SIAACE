@@ -25,8 +25,7 @@ if (isset($_GET['ID_EMPLEADO'])) {
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
-// Consultar la contraseña actual del usuario desde la base de datos
-$sql = "SELECT PRIMER_NOMBRE ,PRIMER_APELLIDO FROM tbl_me_empleados WHERE ID_EMPLEADO= $ID_EMPLEADO ";
+$sql = "SELECT PRIMER_NOMBRE, PRIMER_APELLIDO FROM tbl_me_empleados WHERE ID_EMPLEADO= $ID_EMPLEADO ";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 
@@ -43,8 +42,7 @@ $nombre_empleado_unido = implode(" ", $nombre_empleado[0]);
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
-// Consultar la contraseña actual del usuario desde la base de datos
-$sql = "SELECT id_tipo_prestamo ,tipo_prestamo FROM tbl_mp_tipo_prestamo";
+$sql = "SELECT id_tipo_prestamo, tipo_prestamo FROM tbl_mp_tipo_prestamo";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 
@@ -57,8 +55,7 @@ $TipoPrestamo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
-// Consultar la contraseña actual del usuario desde la base de datos
-$sql = "SELECT id_fpago ,forma_de_pago FROM tbl_formapago";
+$sql = "SELECT id_fpago, forma_de_pago FROM tbl_formapago";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 
@@ -96,14 +93,13 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vista Prestamo</title>
+    <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
-    <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-
 </head>
 
 <body class="sb-nav-fixed">
@@ -175,7 +171,6 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div id="layoutAuthentication">
         <div id="layoutAuthentication_content">
             <main>
-
                 <div class="container">
                     <br>
                     <div class="row justify-content-center">
@@ -283,11 +278,8 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <!-- Formulario de creación -->
                                     <form>
                                         <div class="form-group">
-
-                
-
                                             <label for="tipoPrestamo">Tipo Prestamo</label>
-                                            <select class="form-control" id="agregar-tipoPrestamo" name="tipoPrestamo">
+                                            <select class="form-control" id="agregar-tipoPrestamo" name="tipoPrestamo" required>
                                                 <option value="" disabled selected>Selecciona una opción</option>
                                                 <?php foreach ($TipoPrestamo as $tipo) : ?>
                                                     <option value="<?php echo $tipo['id_tipo_prestamo']; ?>"><?php echo $tipo['tipo_prestamo']; ?></option>
@@ -295,7 +287,7 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             </select>
 
                                             <label for="FPago">Forma de Pago</label>
-                                            <select class="form-control" id="agregar-formaPago" name="formaPago">
+                                            <select class="form-control" id="agregar-formaPago" name="formaPago" required>
                                                 <option value="" disabled selected>Selecciona una opción</option>
                                                 <?php foreach ($formaPago as $formaPago) : ?>
                                                     <option value="<?php echo $formaPago['id_fpago']; ?>"><?php echo $formaPago['forma_de_pago']; ?></option>
@@ -304,14 +296,13 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                             <label for="MSolicitado">Monto Solicitado</label>
                                             <input type="text" class="form-control" id="agregar-MSolicitado" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
-                                            <div id="mensaje7"></div>
-
+                                            <div id="mensaje1"></div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" id="btn-agregarCancelar" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-primary" id="btn-agregar" >Guardar</button>
+                                    <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                                 </div>
                             </div>
                         </div>
@@ -338,13 +329,14 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 } else {
                     // Crear un objeto con los datos a enviar al servidor
                     var datos = {
+                        ID_EMPLEADO: <?php echo $ID_EMPLEADO; ?>,
                         ID_TIPO_PRESTAMO: tipoPrestamo,
                         ID_FPAGO: formaPago,
                         MONTO_SOLICITADO: montoSolicitado,
-                       
+                        ESTADO_PRESTAMO: "PENDIENTE"
                     };
 
-                    fetch('http://localhost:90/SISTEMA1/Controladores/prestamo.php?op=InsertPrestamo', {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=InsertPrestamo', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -373,7 +365,8 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 text: 'Los datos se han guardado correctamente.'
                             }).then(function() {
                                 // Recargar la página para mostrar los nuevos datos
-                                location.reload();
+                                //location.reload();
+                                window.location.href = 'prestamo.php';
                             });
 
                         })
@@ -390,21 +383,116 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 }
             });
         }
+
+        // VALIDACIONES FUNCIONES    
+        function validarNombre() {
+            var agregarMSolicitado = document.getElementById("agregar-MSolicitado");
+
+            function clearMessage(messageElement, inputElement) {
+                messageElement.innerHTML = ""; // Elimina el contenido del mensaje
+                inputElement.style.borderColor = ""; // Restablece el borde
+                inputElement.style.boxShadow = ""; // Restablece la sombra
+            }
+
+            function validateInput(inputElement, expression, messageElement, message) {
+                if (inputElement.value === "") {
+                    clearMessage(messageElement, inputElement);
+                } else if (!expression.test(inputElement.value)) {
+                    inputElement.style.borderColor = "red";
+                    inputElement.style.boxShadow = "0 0 10px red";
+                    messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
+                    messageElement.style.color = "red";
+                } else {
+                    clearMessage(messageElement, inputElement); // Restablece los estilos
+                    messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
+                    messageElement.style.color = "green";
+                }
+            }
+
+            function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
+                inputElement.addEventListener("input", function() {
+                    validateInput(inputElement, expression, messageElement, message);
+                });
+
+                inputElement.addEventListener("blur", function() {
+                    clearMessage(messageElement, inputElement);
+                });
+            }
+
+            function handleDescriptionKeypressEvent(inputElement) {
+                inputElement.addEventListener("keypress", function(e) {
+                    var currentDescription = inputElement.value;
+                    if (e.key === " " && currentDescription.endsWith(" ")) {
+                        e.preventDefault();
+                    }
+                });
+            }
+
+            var expresionValidadora1 = /^\d+(\.\d{2})?$/;
+            var mensaje1 = document.getElementById("mensaje1");
+            handleInputAndBlurEvents(agregarMSolicitado, expresionValidadora1, mensaje1, "Ingrese un salario válido (por ejemplo, 1000.00)");
+        }
      
         $(document).ready(function() {
             Insertar_Prestamo();
+            validarNombre();
         });
     </script>
 
+    <!-- VALIDACIONES SCRIPT -->
+    <script>
+        // Obtén los campos de entrada y el botón "Guardar para insertar"
+        const agregartipoPrestamo = document.getElementById("agregar-tipoPrestamo");
+        const agregarformaPago = document.getElementById("agregar-formaPago");
+        const agregarMSolicitadoInput = document.getElementById("agregar-MSolicitado");
+        const guardarButton = document.getElementById('btn-agregar');
 
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isFormValid = agregartipoPrestamo.value.trim() !== '' && agregarformaPago.value.trim() !== '' && agregarMSolicitadoInput.value.trim() !== '';
+            guardarButton.disabled = !isFormValid;
+        }
 
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        // Agrega un evento input a cada campo de entrada
+        agregartipoPrestamo.addEventListener('input', checkForm);
+        agregarformaPago.addEventListener('input', checkForm);
+        agregarMSolicitadoInput.addEventListener('input', checkForm);
+    </script>
+
+    <script>
+        // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
+        $('#agregar-tipoPrestamo, #agregar-formaPago, #agregar-MSolicitado').on('input', function() {
+            var input = $(this);
+            var trimmedValue = input.val().trim();
+            input.val(trimmedValue);
+
+            if (trimmedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'El campo no puede estar vacío',
+                    icon: 'warning',
+                });
+            }
+        });
+    </script>
+
+    <script>
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
+        document.getElementById('btn-agregarCancelar').addEventListener('click', function() {
+            document.getElementById('agregar-tipoPrestamo').value = "";
+            document.getElementById('agregar-formaPago').value = "";
+            document.getElementById('agregar-MSolicitado').value = "";
+
+            // Limpia los checkboxes
+            document.getElementById('agregar-tipoPrestamo').checked = false;
+            document.getElementById('agregar-formaPago').checked = false;
+            document.getElementById('agregar-MSolicitado').checked = false;
+            location.reload();  
+        });
+    </script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-    <!-- <script src="../assets/demo/datatables-demo.js"></script>                     -->
 </body>
 <html>

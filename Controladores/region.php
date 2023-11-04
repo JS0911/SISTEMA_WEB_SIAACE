@@ -41,7 +41,7 @@ switch ($_GET["op"]) {
         } else {
             // Inserta una region en la base de datos
             $date = new DateTime(date("Y-m-d H:i:s"));
-            $dateMod = $date->modify("-8 hours");
+            $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s"); 
             $datos = $com->insert_region($REGION, $DESCRIPCION, $_SESSION['usuario'], $dateNew, $ESTADO);
             echo json_encode(["message" => "Region insertada exitosamente."]);
@@ -62,7 +62,7 @@ switch ($_GET["op"]) {
         $ESTADO =  $body["ESTADO"];
 
         $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-8 hours");
+        $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
 
         $datos = $com->update_region(
@@ -83,7 +83,7 @@ switch ($_GET["op"]) {
         $datos = $com->eliminar_region($ID_REGION);
         echo json_encode("Region eliminada");
         $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-8 hours");
+        $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
         $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO LA REGION # $ID_REGION", $_SESSION['id_usuario'], 8);
     break;

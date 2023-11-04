@@ -42,7 +42,8 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento Region</title>
+    <title>Mantenimiento Regiones</title>
+    <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
@@ -798,7 +799,6 @@ $permisos2 = $permisosRegion->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
             document.getElementById('agregar-region').checked = false;
             document.getElementById('agregar-descripcion').checked = false;
             document.getElementById('agregar-estado').checked = false;
-        
             location.reload();  
         });
 

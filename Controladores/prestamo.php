@@ -24,20 +24,21 @@ switch ($_GET["op"]) {
     case "GetPrestamos":
         $datos = $com->get_prestamos();
         echo json_encode($datos);
-        break;
+    break;
 
     case "InsertPrestamo":
-        $datos = $com->insert_prestamo( $body["ID_TIPO_PRESTAMO"], $body["ID_FPAGO"], $body["MONTO_SOLICITADO"]);
-        echo json_encode("Prestamo Insertado");
-        break;
+        $datos = $com->insert_prestamo( $body["ID_EMPLEADO"], $body["ID_TIPO_PRESTAMO"], $body["ID_FPAGO"], $body["MONTO_SOLICITADO"], $body["ESTADO_PRESTAMO"]);
+        echo json_encode($datos);
+    break;
 
     case "GetPrestamo":
         $datos = $com->get_Prestamo($body["ID_PRESTAMO"]);
         echo json_encode($datos);
-        break;
+    break;
 
     case "updatePrestamo":
         $ID_PRESTAMO = $body["ID_PRESTAMO"];
+        $ID_EMPLEADO = $body["ID_EMPLEADO"];
         $ID_FPAGO = $body["ID_FPAGO"];
         $FECHA_DE_CANCELACION = $body["FECHA_DE_CANCELACION"];
         $FECHA_DE_DESEMBOLSO = $body["FECHA_DE_DESEMBOLSO"];
@@ -45,13 +46,26 @@ switch ($_GET["op"]) {
         $MONTO_SOLICITADO = $body["MONTO_SOLICITADO"];
         $MONTO_DESEMBOLSO = $body["MONTO_DESEMBOLSO"];
         $MONTO_ADEUDADO = $body["MONTO_ADEUDADO"];
-
-        $datos = $com->update_prestamo($ID_PRESTAMO, $ID_FPAGO, $FECHA_DE_CANCELACION, $FECHA_DE_DESEMBOLSO, $ESTADO_PRESTAMO, $MONTO_SOLICITADO, $MONTO_DESEMBOLSO, $MONTO_ADEUDADO);
+        
+        $datos = $com->update_prestamo($ID_PRESTAMO, $ID_EMPLEADO, $ID_FPAGO, $FECHA_DE_CANCELACION, $FECHA_DE_DESEMBOLSO, $ESTADO_PRESTAMO, $MONTO_SOLICITADO, $MONTO_DESEMBOLSO, $MONTO_ADEUDADO);
         echo json_encode($datos);
-        break;
+    break;
+
     case "anularPrestamo":
         $ID_PRESTAMO = $body["ID_PRESTAMO"];
         $datos = $com->anular_prestamo($ID_PRESTAMO);
         echo json_encode($datos);
-        break;
+    break;
+
+    case "aprobarPrestamo":
+        $ID_PRESTAMO = $body["ID_PRESTAMO"];
+        $datos = $com->aprobar_prestamo($ID_PRESTAMO);
+        echo json_encode($datos);
+    break;
+
+    case "desembolsoPrestamo":
+        $ID_PRESTAMO = $body["ID_PRESTAMO"];
+        $datos = $com->desembolso_prestamo($ID_PRESTAMO);
+        echo json_encode($datos);
+    break;
 }

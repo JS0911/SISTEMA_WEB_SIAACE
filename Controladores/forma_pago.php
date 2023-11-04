@@ -41,7 +41,7 @@ switch ($_GET["op"]) {
         } else {
             // Inserta una Forma de pago en la base de datos
             $date = new DateTime(date("Y-m-d H:i:s"));
-            $dateMod = $date->modify("-8 hours");
+            $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s"); 
             $datos = $com->insert_fpago($FORMA_DE_PAGO, $DESCRIPCION, $_SESSION['usuario'], $dateNew, $ESTADO);
             echo json_encode(["message" => "Forma de pago insertada exitosamente."]);
@@ -62,7 +62,7 @@ switch ($_GET["op"]) {
         $ESTADO =  $body["ESTADO"];
 
         $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-8 hours");
+        $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
 
         $datos = $com->update_fpago(
@@ -82,7 +82,7 @@ switch ($_GET["op"]) {
         $datos = $com->eliminar_fpago($ID_FPAGO);
         echo json_encode("Forma de Pago eliminado");
         $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-8 hours");
+        $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
         $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO LA FORMA DE PAGO #$ID_FPAGO", $_SESSION['id_usuario'], 12);
     break;

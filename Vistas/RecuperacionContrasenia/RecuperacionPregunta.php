@@ -45,7 +45,7 @@ require("../../Controladores/RecuperacionContrasenia/RecuperacionPregunta.php");
                                         </form>
                                     </div>
                                     <div class="card-footer text-center">
-                                        <div class="small"><a href="../../register.php">¿Aún no tiene una cuenta? Registrarse</a></div>
+                                        <div class="small"><a href="../../InicioSesion/register.php">¿Aún no tiene una cuenta? Registrarse</a></div>
                                     </div>
                                 </div>
                             </div>

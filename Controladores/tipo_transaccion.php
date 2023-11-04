@@ -42,7 +42,7 @@ switch ($_GET["op"]) {
         } else {
             // Inserta una transacción en la base de datos
             $date = new DateTime(date("Y-m-d H:i:s"));
-            $dateMod = $date->modify("-8 hours");
+            $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_tipoTransaccion($TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION, $_SESSION['usuario'], $dateNew, $ESTADO);
             echo json_encode(["message" => "Transacción insertada exitosamente."]);
@@ -64,7 +64,7 @@ switch ($_GET["op"]) {
         $ESTADO =  $body["ESTADO"];
 
         $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-8 hours");
+        $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s");
 
         $datos = $com->update_tipoTransaccion(
@@ -86,7 +86,7 @@ switch ($_GET["op"]) {
         $datos = $com->eliminar_tipoTransaccion($ID_TIPO_TRANSACCION);
         echo json_encode("Transacción eliminada");
         $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-8 hours");
+        $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
         $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL TIPO DE TRANSACCION # $ID_TIPO_TRANSACCION", $_SESSION['id_usuario'], 11);
 

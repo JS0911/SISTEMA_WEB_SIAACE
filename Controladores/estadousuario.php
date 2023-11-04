@@ -40,7 +40,7 @@ switch ($_GET["op"]) {
         } else {
             // Inserta el estado en la base de datos
             $date = new DateTime(date("Y-m-d H:i:s"));
-            $dateMod = $date->modify("-8 hours");
+            $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_estado($NOMBRE, $DESCRIPCION);
             echo json_encode(["message" => "Estado insertado exitosamente."]);
@@ -61,7 +61,7 @@ switch ($_GET["op"]) {
         $DESCRIPCION = $body["DESCRIPCION"];
 
         $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-8 hours");
+        $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s");
 
         $datos = $com->update_estado(
@@ -79,7 +79,7 @@ switch ($_GET["op"]) {
         $datos = $com->eliminar_estado($ID_ESTADO_USUARIO);
         echo json_encode("Estado eliminado");
         $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-8 hours");
+        $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
         $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL ESTADO # $ID_ESTADO_USUARIO", $_SESSION['id_usuario'], 6);
     break;

@@ -76,13 +76,13 @@ switch ($_GET["op"]) {
             $TIPO_PRESTAMO, 
             $DESCRIPCION, 
             $APLICA_SEGUROS,
-             $MONTO_MAXIMO, 
-             $MONTO_MINIMO,
-              $TASA_MAXIMA,
-               $TASA_MINIMA,
-                $PLAZO_MAXIMO,
-                $PLAZO_MINIMO,
-                 $ESTADO );
+            $MONTO_MAXIMO, 
+            $MONTO_MINIMO,
+            $TASA_MAXIMA,
+            $TASA_MINIMA,
+            $PLAZO_MAXIMO,
+            $PLAZO_MINIMO,
+            $ESTADO );
         echo json_encode($datos);
         break;
 
@@ -93,7 +93,6 @@ switch ($_GET["op"]) {
         echo json_encode("Tipo Prestamo eliminada");
         break;
 }
-
 
 function verificarExistenciaTipoprestamo($TIPO_PRESTAMO) {
     // Realiza una consulta en la base de datos para verificar si el Tipo Prestamo ya existe

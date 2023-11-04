@@ -111,6 +111,7 @@ if ($_POST) {
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>SIAACE - Login</title>
+    <link rel="shortcut icon" href="../src/IconoIDH.ico">
     <link href="../css/styles.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
 </head>

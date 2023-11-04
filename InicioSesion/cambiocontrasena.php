@@ -116,6 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Cambio de Contraseña</title>
+    <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <link href="../css/styles.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">

@@ -181,8 +181,6 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             echo '</nav>';
                             echo '</div>';
                         }
-
-
                         //----------------------------MODULO DE CUENTAS------------------------------------
                         if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
@@ -201,8 +199,6 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             echo '</nav>';
                             echo '</div>';
                         }
-
-
                         //----------------------------MODULO DE PRESTAMOS------------------------------------
                         if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
@@ -350,7 +346,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
 
                                         ?>
                                         <label for="sucursal">Sucursal</label>
-                                        <select class="form-control" id="agregar-sucursal" name="idSucursal">
+                                        <select class="form-control" id="agregar-sucursal" name="idSucursal" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
                                             <?php foreach ($sucursales as $sucursal) : ?>
                                                 <option value="<?php echo $sucursal['id_sucursal']; ?>"><?php echo $sucursal['sucursal']; ?></option>
@@ -372,7 +368,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         $cargo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         ?>
                                         <label for="cargo">Cargo</label>
-                                        <select class="form-control" id="agregar-cargo" name="idCargo">
+                                        <select class="form-control" id="agregar-cargo" name="idCargo" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
                                             <?php foreach ($cargo as $cargo) : ?>
                                                 <option value="<?php echo $cargo['id_cargo']; ?>"><?php echo $cargo['cargo']; ?></option>
@@ -434,7 +430,6 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         <input type="text" maxlength="15" class="form-control" id="editar-Sapellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje16"></div>
 
-
                                         <label for="agregar-email">Email</label>
                                         <input type="email" maxlength="45" class="form-control" id="editar-email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida">
                                         <div id="mensaje17"></div>
@@ -473,14 +468,12 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         ?>
 
                                         <label for="sucursal">Sucursal</label>
-                                        <select class="form-control" id="editar-sucursal" name="idSucursal">
+                                        <select class="form-control" id="editar-sucursal" name="idSucursal" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
                                             <?php foreach ($sucursales as $sucursal) : ?>
                                                 <option value="<?php echo $sucursal['id_sucursal']; ?>"><?php echo $sucursal['sucursal']; ?></option>
                                             <?php endforeach; ?>
                                         </select>
-
-
 
                                         <?php
                                         //---------CONEXION A LA TABLA CARGO --------
@@ -497,7 +490,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                         $cargo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         ?>
                                         <label for="cargo">Cargo</label>
-                                        <select class="form-control" id="editar-cargo" name="idCargo">
+                                        <select class="form-control" id="editar-cargo" name="idCargo" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
                                             <?php foreach ($cargo as $cargo) : ?>
                                                 <option value="<?php echo $cargo['id_cargo']; ?>"><?php echo $cargo['cargo']; ?></option>
@@ -516,7 +509,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" id="btn-editarCancelar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateEmpleado()">Guardar </button>
+                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateEmpleado()" disabled>Guardar </button>
                             </div>
                         </div>
                     </div>
@@ -597,6 +590,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '</tr>';
                             //Cambiar palabra null por vacio.
                             newrow = row.replaceAll("null", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -609,7 +603,6 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 });
 
         }
-
         
         function redirectToIngresarPrestamo(ID_EMPLEADO) {
             // Redirigir a la página IngresarPrestamo.php con el parámetro ID_EMPLEADO
@@ -715,7 +708,6 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 }
             });
         }
-
 
         function cargaEmpleado(id) {
             // Crear un objeto con el ID del usuario
@@ -836,8 +828,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 });
         }
 
-
-        //     //FUNCION CON EL SWEETALERT
+        //FUNCION CON EL SWEETALERT
         function eliminarEmpleado(idEmpleado) {
             Swal.fire({
                 title: '¿Estás seguro?',
@@ -1034,7 +1025,6 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             var mensaje22 = document.getElementById("mensaje22");
             handleInputAndBlurEvents(direccion2Editar, expresionValidadora7, mensaje22, "Ingrese una dirección válida (mayúsculas y caracteres)");
             handleDescriptionKeypressEvent(direccion2Editar);
-
         }
 
         $(document).ready(function() {
@@ -1053,17 +1043,20 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         const SapellidoInput = document.getElementById("agregar-Sapellido");
         const emailInput = document.getElementById("agregar-email");
         const salarioInput = document.getElementById("agregar-salario");
-        const estadoInput = document.getElementById("agregar-estado");
         const telefonoInput = document.getElementById("agregar-telefono");
         const direccion1Input = document.getElementById("agregar-direccion1");
         const direccion2Input = document.getElementById("agregar-direccion2");
+        const sucursalInput = document.getElementById("agregar-sucursal");
+        const cargoInput = document.getElementById("agregar-cargo");
+        const estadoInput = document.getElementById("agregar-estado");
         const guardarButton = document.getElementById('btn-agregar');
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
             const isFormValid = dniInput.value.trim() !== '' && PnombreInput.value.trim() !== '' && SnombreInput.value !== '' &&
                 PapellidoInput.value.trim() !== '' && SapellidoInput.value.trim() !== '' && emailInput.value !== '' &&
-                salarioInput.value.trim() !== '' && estadoInput.value.trim() !== '' && telefonoInput.value.trim() !== '' && direccion1Input.value.trim() !== '' && direccion2Input.value.trim() !== '';
+                salarioInput.value.trim() !== '' && telefonoInput.value.trim() !== '' && direccion1Input.value.trim() !== '' && 
+                direccion2Input.value.trim() !== '' && sucursalInput.value.trim() !== ''  && cargoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
 
             guardarButton.disabled = !isFormValid;
         }
@@ -1076,10 +1069,12 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         SapellidoInput.addEventListener('input', checkForm);
         emailInput.addEventListener('input', checkForm);
         salarioInput.addEventListener('input', checkForm);
-        estadoInput.addEventListener('input', checkForm);
         telefonoInput.addEventListener('input', checkForm);
         direccion1Input.addEventListener('input', checkForm);
         direccion2Input.addEventListener('input', checkForm);
+        sucursalInput.addEventListener('input', checkForm);
+        cargoInput.addEventListener('input', checkForm);
+        estadoInput.addEventListener('input', checkForm);
     </script>
 
     <script>
@@ -1091,17 +1086,20 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         const SapellidoInput1 = document.getElementById("editar-Sapellido");
         const emailInput1 = document.getElementById("editar-email");
         const salarioInput1 = document.getElementById("editar-salario");
-        const estadoInput1 = document.getElementById("editar-estado");
         const telefonoInput1 = document.getElementById("editar-telefono");
         const direccion1Input1 = document.getElementById("editar-direccion1");
         const direccion2Input1 = document.getElementById("editar-direccion2");
         const guardarButton1 = document.getElementById('btn-editar');
+        const sucursalInput1 = document.getElementById("editar-sucursal");
+        const cargoInput1 = document.getElementById("editar-cargo");
+        const estadoInput1 = document.getElementById("editar-estado");
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
             const isFormValid = dniInput1.value.trim() !== '' && PnombreInput1.value.trim() !== '' && SnombreInput1.value !== '' &&
                 PapellidoInput1.value.trim() !== '' && SapellidoInput1.value.trim() !== '' && emailInput1.value !== '' &&
-                salarioInput1.value.trim() !== '' && estadoInput1.value.trim() !== '' && telefonoInput1.value.trim() !== '' && direccion1Input1.value.trim() !== '' && direccion2Input1.value.trim() !== '';
+                salarioInput1.value.trim() !== '' && telefonoInput1.value.trim() !== '' && direccion1Input1.value.trim() !== '' && 
+                direccion2Input1.value.trim() !== '' && sucursalInput1.value.trim() !== '' && cargoInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
 
             guardarButton1.disabled = !isFormValid;
         }
@@ -1114,15 +1112,17 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         SapellidoInput1.addEventListener('input', checkForm);
         emailInput1.addEventListener('input', checkForm);
         salarioInput1.addEventListener('input', checkForm);
-        estadoInput1.addEventListener('input', checkForm);
         telefonoInput1.addEventListener('input', checkForm);
         direccion1Input1.addEventListener('input', checkForm);
         direccion2Input1.addEventListener('input', checkForm);
+        sucursalInput1.addEventListener('input', checkForm);
+        cargoInput1.addEventListener('input', checkForm);
+        estadoInput1.addEventListener('input', checkForm);
     </script>
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-dni, #agregar-Pnombre, #agregar-Snombre, #agregar-Papellido, #agregar-Sapellido, #agregar-email, #agregar-salario, #agregar-estado, #agregar-telefono').on('input', function() {
+        $('#agregar-dni, #agregar-Pnombre, #agregar-Snombre, #agregar-Papellido, #agregar-Sapellido, #agregar-email, #agregar-salario, #agregar-telefono, #agregar-sucursal, #agregar-cargo, #agregar-estado').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -1137,7 +1137,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         });
 
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#editar-dni, #editar-Pnombre, #editar-Snombre, #editar-Papellido, #editar-Sapellido, #editar-email, #editar-salario, #editar-estado, #editar-telefono').on('input', function() {
+        $('#editar-dni, #editar-Pnombre, #editar-Snombre, #editar-Papellido, #editar-Sapellido, #editar-email, #editar-salario, #editar-telefono, #editar-sucursal, #editar-cargo, #editar-estado').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -1163,6 +1163,60 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     icon: 'warning',
                 });
             }
+        });
+    </script>
+
+    <script>
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
+        document.getElementById('btn-agregarCancelar').addEventListener('click', function() {
+            document.getElementById('agregar-dni').value = "";
+            document.getElementById("agregar-Pnombre").value = "";
+            document.getElementById("agregar-Snombre").value = "";
+            document.getElementById("agregar-Papellido").value = "";
+            document.getElementById("agregar-Sapellido").value = "";
+            document.getElementById("agregar-email").value = "";
+            document.getElementById("agregar-salario").value = "";
+            document.getElementById("agregar-telefono").value = "";
+            document.getElementById("agregar-direccion1").value = "";
+            document.getElementById("agregar-direccion2").value = "";
+            document.getElementById("agregar-sucursal").value = "";
+            document.getElementById("agregar-cargo").value = "";
+            document.getElementById("agregar-estado").value = "";
+
+            // Limpia los checkboxes
+            document.getElementById('agregar-dni').checked = false;
+            document.getElementById("agregar-Pnombre").checked = false;
+            document.getElementById("agregar-Snombre").checked = false;
+            document.getElementById("agregar-Papellido").checked = false;
+            document.getElementById("agregar-Sapellido").checked = false;
+            document.getElementById("agregar-email").checked = false;
+            document.getElementById("agregar-salario").checked = false;
+            document.getElementById("agregar-telefono").checked = false;
+            document.getElementById("agregar-direccion1").checked = false;
+            document.getElementById("agregar-direccion2").checked = false;
+            document.getElementById("agregar-sucursal").checked = false;
+            document.getElementById("agregar-cargo").checked = false;
+            document.getElementById("agregar-estado").checked = false;
+            location.reload();  
+        });
+
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
+        document.getElementById('btn-editarCancelar').addEventListener('click', function() {
+
+            // Limpia los checkboxes
+            document.getElementById('editar-dni').checked = false;
+            document.getElementById("editar-Pnombre").checked = false;
+            document.getElementById("editar-Snombre").checked = false;
+            document.getElementById("editar-Papellido").checked = false;
+            document.getElementById("editar-Sapellido").checked = false;
+            document.getElementById("editar-email").checked = false;
+            document.getElementById("editar-salario").checked = false;
+            document.getElementById("editar-telefono").checked = false;
+            document.getElementById("editar-direccion1").checked = false;
+            document.getElementById("editar-direccion2").checked = false;
+            document.getElementById("editar-sucursal").checked = false;
+            document.getElementById("editar-cargo").checked = false;
+            document.getElementById("editar-estado").checked = false;
         });
     </script>
 

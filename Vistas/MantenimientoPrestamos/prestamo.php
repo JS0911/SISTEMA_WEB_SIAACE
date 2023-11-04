@@ -46,6 +46,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantenimiento Prestamo</title>
+    <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
@@ -162,8 +163,6 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
                             }
 
-
-
                             echo '</nav>';
                             echo '</div>';
                         }
@@ -187,7 +186,6 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             echo '</nav>';
                             echo '</div>';
                         }
-
                         //----------------------------MODULO DE CUENTAS------------------------------------
                         if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
@@ -206,8 +204,6 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             echo '</nav>';
                             echo '</div>';
                         }
-
-
                         //----------------------------MODULO DE PRESTAMOS------------------------------------
                         if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
@@ -245,14 +241,6 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         <center>
                             <h1 class="mt-4 mb-4">Mantenimiento Prestamos</h1>
                         </center>
-
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <?php
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
-                            }
-                            ?>
-                        </div>
                         <!-- Tabla para mostrar los datos -->
                         <table class="table table-bordered mx-auto" id="Lista-prestamo" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
@@ -265,7 +253,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     <th>Forma/Pago</th>
                                     <th>Fecha /Solicitud</th>
                                     <th>Fecha/Aprobacion</th>
-                                    <th style="display: none;">Fecha Cancelacion</th>
+                                    <th>Fecha Cancelacion</th>
                                     <th>Fecha/Desembolso</th>
                                     <th>Monto/Solicitado</th>
                                     <th style="display: none;">Monto Desembolsado </th>
@@ -293,12 +281,8 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         </div>
     </div>
 
-
-
-
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-
 
         function Lista_Prestamo() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
@@ -333,13 +317,12 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td>' + prestamo.FORMA_DE_PAGO + '</td>' +
                             '<td>' + prestamo.FECHA_SOLICITUD + '</td>' +
                             '<td>' + prestamo.FECHA_APROBACION + '</td>' +
-                            '<td style="display:none;">' + prestamo.FECHA_DE_CANCELACION + '</td>' +
+                            '<td>' + prestamo.FECHA_DE_CANCELACION + '</td>' +
                             '<td>' + prestamo.FECHA_DE_DESEMBOLSO + '</td>' +
                             '<td>' + prestamo.MONTO_SOLICITADO + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_DESEMBOLSO + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_ADEUDADO + '</td>' +
                             '<td>' + prestamo.ESTADO_PRESTAMO + '</td>' +
-
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -348,10 +331,19 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             row += '<button class="btn btn-danger" id="AnularButton" onclick="AnularPrestamo(' + prestamo.ID_PRESTAMO + ')">Anular</button>';
                         }
 
+                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
+                            row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ')">Aprobar</button>';
+                        }
+                        
+                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
+                            row += '<button class="btn btn-success" id="DesembolsoButton" onclick="DesembolsoPrestamo(' + prestamo.ID_PRESTAMO + ')">Desembolso</button>';
+                        }
+
                         row += '</td>' +
                             '</tr>';
                             //Cambiar palabra null por vacio.
                             newrow = row.replaceAll("null", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -364,8 +356,6 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
 
         }
 
-
-
         function habilitarPaginacion() {
             $('#Lista-prestamo').DataTable({
                 "paging": true,
@@ -376,8 +366,6 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 },
             });
         }
-
-
 
         function AnularPrestamo(ID_PRESTAMO) {
             // Realiza una solicitud FETCH al servidor para anular el préstamo
@@ -409,12 +397,69 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 });
         }
 
+        function AprobarPrestamo(ID_PRESTAMO) {
+            // Realiza una solicitud FETCH al servidor para anular el préstamo
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=aprobarPrestamo', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_PRESTAMO": ID_PRESTAMO
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // La solicitud se completó con éxito
+                        document.getElementById('AprobarButton').classList.remove('btn-primary');
+                        document.getElementById('AprobarButton').classList.add('btn-secondary');
+                        document.getElementById('AprobarButton').disabled = true;
+                        // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
+                        location.reload();
 
+                    } else {
+                        console.error('Error en la solicitud');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function DesembolsoPrestamo(ID_PRESTAMO) {
+            // Realiza una solicitud FETCH al servidor para anular el préstamo
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=desembolsoPrestamo', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_PRESTAMO": ID_PRESTAMO
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // La solicitud se completó con éxito
+                        document.getElementById('DesembolsoButton').classList.remove('btn-success');
+                        document.getElementById('DesembolsoButton').classList.add('btn-secondary');
+                        document.getElementById('DesembolsoButton').disabled = true;
+                        // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
+                        location.reload();
+
+                    } else {
+                        console.error('Error en la solicitud');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
 
         $(document).ready(function() {
             Lista_Prestamo();
             //Insertar_Tipoprestamo();
-            //validarNombre();
         });
     </script>
 
