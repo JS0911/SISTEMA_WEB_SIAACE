@@ -4,7 +4,7 @@ session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
 
-$permisosCuenta = new PermisosUsuarios();
+$permisosTipoCuenta = new PermisosUsuarios();
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
@@ -13,21 +13,13 @@ if (!isset($_SESSION['usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
+$id_objeto_Tipo_cuenta = "28";
 $id_objeto_Seguridad = "25";
 $id_objeto_Cuentas = "28";
-$id_objeto_MantCuenta = "29";
+$permisos1 = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
+$permisos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_cuenta);
+$permisos2 = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 
-$permisos1 = $permisosCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
-$permisos = $permisosCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
-$permisos2 = $permisosCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_MantCuenta);
-
-$conexion = new Conectar();
-$conn = $conexion->Conexion();
-
-$sql1 = "SELECT ID_TIPOCUENTA, TIPO_CUENTA FROM tbl_mc_tipocuenta";
-$stmt1 = $conn->prepare($sql1);
-$stmt1->execute();
-$TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -60,14 +52,14 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <style>
         /* Estilo para la tabla */
-        #Lista-cuentas {
+        #Lista-tipo-cuenta {
             border-collapse: collapse;
             /* Combina los bordes de las celdas */
             width: 100%;
         }
 
         /* Estilo para las celdas del encabezado (th) */
-        #Lista-cuentas th {
+        #Lista-tipo-cuenta th {
             border: 2px solid white;
             /* Bordes negros para las celdas del encabezado */
             background-color: #333;
@@ -81,7 +73,7 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
         }
 
         /* Estilo para las celdas de datos (td) */
-        #Lista-cuentas td {
+        #Lista-tipo-cuenta td {
             border: 1px solid grey;
             /* Bordes negros para las celdas de datos */
             padding: 8px;
@@ -205,6 +197,7 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                 echo '<a class="nav-link" href="tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 echo '<a class="nav-link" href="tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
                                 echo '<a class="nav-link" href="MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
+
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -246,7 +239,7 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
-                            <h1 class="mt-4 mb-4">Mantenimiento de Cuentas</h1>
+                            <h1 class="mt-4 mb-4">Mantenimiento Tipo de Cuentas</h1>
                         </center>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -257,15 +250,13 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                             ?>
                         </div>
                         <!-- Tabla para mostrar los datos -->
-                        <table class="table table-bordered mx-auto" id="Lista-cuentas" style="margin-top: 20px; margin-bottom: 20px">
+                        <table class="table table-bordered mx-auto" id="Lista-tipo-cuenta" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
                                     <th style="display: none;">Id</th>
-                                    <th>Empleado</th>
-                                    <th>Numero De Cuenta</th>
-                                    <th>Saldo</th>
-                                    <th>Tipo De Cuenta</th>
-                                    <th>Estado</th>
+                                    <th>Fecha</th>
+                                    <th>Monto</th>
+                                    <th>Tipo Transaccion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -276,89 +267,8 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
 
-                <!-- Modal para crear un nuevo registro de cuentas -->
-                <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="crearModalLabel">Crear Nuevo Registro</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <!-- Formulario de creación -->
-                                <form>
-                                    <div class="form-group">
+            
 
-                                        <label for="nombre">Numero De Cuenta</label>
-                                        <input type="text" maxlength="10" class="form-control" id="NumeroCuenta">
-                                        <div id="mensaje2"></div>
-
-                                        <label for="id-estado">Tipo Cuenta</label>
-                                        <select class="form-control" id="agregar-tipo-cuenta" name="Id-tipo-cuenta" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <?php foreach ($TiposCuentas as $TiposCuentas) : ?>
-                                                <option value="<?php echo $TiposCuentas['ID_TIPOCUENTA']; ?>"><?php echo $TiposCuentas['TIPO_CUENTA']; ?></option>
-                                            <?php endforeach; ?>
-                                            <div id="mensaje3"></div>
-                                        </select>
-
-                                        <label for="Estado">Estado</label>
-                                        <select class="form-control" id="agregar-estado" maxlength="15" name="estado" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="ACTIVO">ACTIVO</option>
-                                            <option value="INACTIVO">INACTIVO</option>
-                                        </select>
-                                        <div id="mensaje4"></div>
-
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar">Guardar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal para editar un registro -->
-                <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editarModalLabel">Editar Registro</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <!-- Formulario de edición -->
-                                <form>
-                                    <div class="form-group">
-                                        <label for="nombre">Numero De Cuenta</label>
-                                        <input type="text" class="form-control" id="editar-id-cuenta" disabled>
-
-                                        <label for="Estado">Estado</label>
-                                        <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="ACTIVO">ACTIVO</option>
-                                            <option value="INACTIVO">INACTIVO</option>
-                                        </select>
-                                        <div id="mensaje7"></div>
-
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateCuenta()" disabled>Guardar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
             <!-- AQUI FINALIZA EL MANTENIMIENTO DE TIPO CUENTA -->
 
             <footer class="py-4 bg-light mt-auto">
@@ -375,10 +285,10 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
 
-        function Lista_Cuentas() {
+        function Historial_Cuenta() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             // Actualizar el valor predeterminado
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/Cuenta.php?op=GetCuentas', {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=HistorialCuenta', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
@@ -395,32 +305,31 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                 })
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
-                    var tbody = document.querySelector('#Lista-cuentas tbody');
+                    var tbody = document.querySelector('#Lista-tipo-cuenta tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
                     data.forEach(function(cuenta) {
                         var row = '<tr>' +
-                            '<td style="display:none;">' + cuenta.ID_CUENTA + '</td>' +
-                            '<td>' + cuenta.ID_EMPLEADO + '</td>' +
-                            '<td>' + cuenta.NUMERO_CUENTA + '</td>' +
-                            '<td>' + cuenta.SALDO + '</td>' +
-                            '<td>' + cuenta.ID_TIPOCUENTA + '</td>' +
-                            '<td>' + cuenta.ESTADO + '</td>' +
+                            '<td style="display:none;">' + cuenta.ID_TRASACCION + '</td>' +
+                            '<td>' + cuenta.FECHA + '</td>' +
+                            '<td>' + cuenta.MONTO + '</td>' +
+                            '<td>' + cuenta.TIPO_TRANSACCION + '</td>' +
+
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
-                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) == 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarCuenta(' + cuenta.ID_CUENTA + ')">Editar</button>';
-                            
+                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
+                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarTipoCuenta(' + cuenta.ID_TIPOCUENTA + ')">Editar</button>';
                         }
-                        if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
-                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + cuenta.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + cuenta.ID_EMPLEADO + ')">Movimiento</button>';
+
+                        if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
+                            row += '<button class="btn btn-danger eliminar-tipo-cuenta" data-id="' + cuenta.ID_TIPOCUENTA + '" onclick="eliminarTipoCuenta(' + cuenta.ID_TIPOCUENTA + ')">Eliminar</button>';
                         }
+
+
                         row += '</td>' +
                             '</tr>';
-                            //Cambiar palabra null por vacio.
-                            newrow = row.replaceAll("null", " ");
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -433,13 +342,8 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
         }
 
-        function redirectToIngresarPrestamo(ID_EMPLEADO) {
-            // Redirige a la página IngresarPrestamo.php
-            window.location.href = ' ../MantenimientoPrestamos/IngresarPrestamo.php?ID_EMPLEADO=' + ID_EMPLEADO;
-        }
-        
         function habilitarPaginacion() {
-            $('#Lista-cuentas').DataTable({
+            $('#Lista-tipo-cuenta').DataTable({
                 "paging": true,
                 "pageLength": 10,
                 "lengthMenu": [10, 20, 30, 50, 100],
@@ -449,277 +353,199 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             });
         }
 
-        function Insertar_Cuenta() {
-            $("#btn-agregar").click(function() {
-                // Obtener los valores de los campos del formulario
-                var tipo_cuenta = $("#agregar-tipo-cuenta").val();
-                var estado = $("#agregar-estado").val();
-                var NumeroCuenta = $("#NumeroCuenta").val();
-                var Id_empleado = 1;
-                var saldo = 0;
+  
 
-                if (tipo_cuenta == "" || estado == "") {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'No se pueden enviar Campos Vacios.'
+
+
+        function updateTipoCuenta() {
+            var id_cuenta = document.getElementById('editar-id-cuenta').value;
+            var cuenta = document.getElementById('editar-cuenta').value;
+            var descripcion = document.getElementById('editar-descripcion').value;
+            var tasa = document.getElementById('editar-tasa').value;
+            var estado = document.getElementById('editar-estado').value;
+
+            if (cuenta == "" || descripcion == "" || tasa == "" || estado == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'No se pueden enviar Campos Vacios.'
+                })
+            } else {
+                // Realiza una solicitud FETCH para actualizar los datos del tipo cuenta
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoCuenta.php?op=UpdateTipoCuenta', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "ID_TIPOCUENTA": id_cuenta,
+                            "TIPO_CUENTA": cuenta,
+                            "DESCRIPCION": descripcion,
+                            "TASA": tasa,
+                            "ESTADO": estado
+                        }) // Convierte los datos en formato JSON
+                    })
+                    .then(function(response) {
+                        if (response.ok) {
+                            // Cerrar la modal después de guardar
+                            $('#editarModal').modal('hide');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Actualización exitosa',
+                                text: 'Los datos se han actualizado correctamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                            });
+
+                        } else {
+                            throw new Error('Error en la solicitud de actualización');
+                        }
+                    })
+                    .catch(function(error) {
+                        // Manejar el error aquí
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al actualizar los datos de la Tipo de Cuenta: ' + error.message
+                        });
                     });
-                } else {
-                    // Crear un tipo_cuenta con los datos a enviar al servidor
-                    var datos = {
-                        ID_EMPLEADO: Id_empleado,
-                        ID_TIPOCUENTA: tipo_cuenta,
-                        SALDO: saldo,
-                        NUMERO_CUENTA: NumeroCuenta,
-                        ESTADO: estado
-                    };
+            }
+        }
 
-
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=InsertCuenta', {
+        //FUNCION CON EL SWEETALERT
+        function eliminarTipoCuenta(id_tipocuenta) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'No podrás revertir esto.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoCuenta.php?op=EliminarTipoCuenta', {
                             method: 'POST',
                             headers: {
+                                'Accept': 'application/json',
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify(datos)
-
+                            body: JSON.stringify({
+                                "ID_TIPOCUENTA": id_tipocuenta
+                            })
                         })
                         .then(function(response) {
                             if (response.ok) {
-
-                                if (response.status === 200) {
-                                    // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
-                                    return response.json().then(function(data) {
-                                        console.log(data);
-                                        // Cerrar la modal después de guardar
-                                        $('#crearModal').modal('hide');
-                                        // Mostrar SweetAlert de éxito
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Guardado exitoso',
-                                            text: data.message
-                                        }).then(function() {
-                                            // Recargar la página para mostrar los nuevos datos
-                                            location.reload();
-                                        });
+                                // Eliminación exitosa, puedes hacer algo aquí si es necesario
+                                Swal.fire('Tipo de Cuenta eliminada', '', 'success')
+                                    .then(() => {
+                                        // Recargar la página para mostrar los nuevos datos
+                                        location.reload();
+                                        // Recargar la lista de TIPO CUENTA después de eliminar
+                                        //Lista_Tipo_Cuenta();
                                     });
-                                } else if (response.status === 409) {
-                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de TIPO CUENTA existente
-                                    return response.json().then(function(data) {
-                                        console.log(data);
-                                        // Mostrar SweetAlert de error
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Error',
-                                            text: data.error // Acceder al mensaje de error
-                                        });
-                                    });
-                                }
                             } else {
-                                // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('Error en la solicitud');
+                                throw new Error('Error en la solicitud de eliminación');
                             }
                         })
                         .catch(function(error) {
-                            // Mostrar SweetAlert de error
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Error al guardar los datos: ' + error.message
-                            });
-                            console.log(error.message);
+                            // Manejar el error aquí
+                            Swal.fire('Error', 'Error al eliminar la Tipo de Cuenta: ' + error.message, 'error');
                         });
                 }
             });
         }
 
-        // function updateTipoCuenta() {
-        //     var id_cuenta = document.getElementById('editar-id-cuenta').value;
+        // VALIDACIONES FUNCIONES    
+        function validarNombre() {
+            var nombreTipoCuenta = document.getElementById("agregar-cuenta");
+            var descripcion = document.getElementById("agregar-descripcion");
+            var tasa = document.getElementById("agregar-tasa");
+            var estado = document.getElementById("agregar-estado");
+            var descripcionEditar = document.getElementById("editar-descripcion");
+            var tasaEditar = document.getElementById("editar-tasa");
+            var estadoEditar = document.getElementById("editar-estado");
 
-        //     var estado = document.getElementById('editar-estado').value;
+            function clearMessage(messageElement, inputElement) {
+                messageElement.innerHTML = ""; // Elimina el contenido del mensaje
+                inputElement.style.borderColor = ""; // Restablece el borde
+                inputElement.style.boxShadow = ""; // Restablece la sombra
+            }
 
-        //     if (cuenta == "" || descripcion == "" || tasa == "" || estado == "") {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Error!',
-        //             text: 'No se pueden enviar Campos Vacios.'
-        //         })
-        //     } else {
-        //         // Realiza una solicitud FETCH para actualizar los datos del tipo cuenta
-        //         fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoCuenta.php?op=UpdateTipoCuenta', {
-        //                 method: 'POST',
-        //                 headers: {
-        //                     'Accept': 'application/json',
-        //                     'Content-Type': 'application/json'
-        //                 },
-        //                 body: JSON.stringify({
-        //                     "ID_TIPOCUENTA": id_cuenta,
-        //                     "TIPO_CUENTA": cuenta,
-        //                     "DESCRIPCION": descripcion,
-        //                     "TASA": tasa,
-        //                     "ESTADO": estado
-        //                 }) // Convierte los datos en formato JSON
-        //             })
-        //             .then(function(response) {
-        //                 if (response.ok) {
-        //                     // Cerrar la modal después de guardar
-        //                     $('#editarModal').modal('hide');
-        //                     Swal.fire({
-        //                         icon: 'success',
-        //                         title: 'Actualización exitosa',
-        //                         text: 'Los datos se han actualizado correctamente.'
-        //                     }).then(function() {
-        //                         // Recargar la página para mostrar los nuevos datos
-        //                         location.reload();
-        //                     });
+            function validateInput(inputElement, expression, messageElement, message) {
+                if (inputElement.value === "") {
+                    clearMessage(messageElement, inputElement);
+                } else if (!expression.test(inputElement.value)) {
+                    inputElement.style.borderColor = "red";
+                    inputElement.style.boxShadow = "0 0 10px red";
+                    messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
+                    messageElement.style.color = "red";
+                } else {
+                    clearMessage(messageElement, inputElement); // Restablece los estilos
+                    messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
+                    messageElement.style.color = "green";
+                }
+            }
 
-        //                 } else {
-        //                     throw new Error('Error en la solicitud de actualización');
-        //                 }
-        //             })
-        //             .catch(function(error) {
-        //                 // Manejar el error aquí
-        //                 Swal.fire({
-        //                     icon: 'error',
-        //                     title: 'Error',
-        //                     text: 'Error al actualizar los datos de la Tipo de Cuenta: ' + error.message
-        //                 });
-        //             });
-        //     }
-        // }
+            function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
+                inputElement.addEventListener("input", function() {
+                    validateInput(inputElement, expression, messageElement, message);
+                });
 
-        //FUNCION CON EL SWEETALERT
-        // function eliminarTipoCuenta(id_tipocuenta) {
-        //     Swal.fire({
-        //         title: '¿Estás seguro?',
-        //         text: 'No podrás revertir esto.',
-        //         icon: 'warning',
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#d33',
-        //         confirmButtonText: 'Eliminar',
-        //         cancelButtonText: 'Cancelar'
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoCuenta.php?op=EliminarTipoCuenta', {
-        //                     method: 'POST',
-        //                     headers: {
-        //                         'Accept': 'application/json',
-        //                         'Content-Type': 'application/json'
-        //                     },
-        //                     body: JSON.stringify({
-        //                         "ID_TIPOCUENTA": id_tipocuenta
-        //                     })
-        //                 })
-        //                 .then(function(response) {
-        //                     if (response.ok) {
-        //                         // Eliminación exitosa, puedes hacer algo aquí si es necesario
-        //                         Swal.fire('Tipo de Cuenta eliminada', '', 'success')
-        //                             .then(() => {
-        //                                 // Recargar la página para mostrar los nuevos datos
-        //                                 location.reload();
-        //                                 // Recargar la lista de TIPO CUENTA después de eliminar
-        //                                 //Lista_Tipo_Cuenta();
-        //                             });
-        //                     } else {
-        //                         throw new Error('Error en la solicitud de eliminación');
-        //                     }
-        //                 })
-        //                 .catch(function(error) {
-        //                     // Manejar el error aquí
-        //                     Swal.fire('Error', 'Error al eliminar la Tipo de Cuenta: ' + error.message, 'error');
-        //                 });
-        //         }
-        //     });
-        // }
+                inputElement.addEventListener("blur", function() {
+                    clearMessage(messageElement, inputElement);
+                });
+            }
 
-        // // VALIDACIONES FUNCIONES    
-        // function validarNombre() {
-        //     var nombreTipoCuenta = document.getElementById("agregar-cuenta");
-        //     var descripcion = document.getElementById("agregar-descripcion");
-        //     var tasa = document.getElementById("agregar-tasa");
-        //     var estado = document.getElementById("agregar-estado");
-        //     var descripcionEditar = document.getElementById("editar-descripcion");
-        //     var tasaEditar = document.getElementById("editar-tasa");
-        //     var estadoEditar = document.getElementById("editar-estado");
+            function handleDescriptionKeypressEvent(inputElement) {
+                inputElement.addEventListener("keypress", function(e) {
+                    var currentDescription = inputElement.value;
+                    if (e.key === " " && currentDescription.endsWith(" ")) {
+                        e.preventDefault();
+                    }
+                });
+            }
 
-        //     function clearMessage(messageElement, inputElement) {
-        //         messageElement.innerHTML = ""; // Elimina el contenido del mensaje
-        //         inputElement.style.borderColor = ""; // Restablece el borde
-        //         inputElement.style.boxShadow = ""; // Restablece la sombra
-        //     }
+            var expresionValidadora1 = /^[A-Z]+$/;
+            var mensaje1 = document.getElementById("mensaje1");
+            handleInputAndBlurEvents(nombreTipoCuenta, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
 
-        //     function validateInput(inputElement, expression, messageElement, message) {
-        //         if (inputElement.value === "") {
-        //             clearMessage(messageElement, inputElement);
-        //         } else if (!expression.test(inputElement.value)) {
-        //             inputElement.style.borderColor = "red";
-        //             inputElement.style.boxShadow = "0 0 10px red";
-        //             messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
-        //             messageElement.style.color = "red";
-        //         } else {
-        //             clearMessage(messageElement, inputElement); // Restablece los estilos
-        //             messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
-        //             messageElement.style.color = "green";
-        //         }
-        //     }
+            var expresionValidadora2 = /^[A-Z0-9\s]+$/;
+            var mensaje2 = document.getElementById("mensaje2");
+            handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(descripcion);
 
-        //     function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
-        //         inputElement.addEventListener("input", function() {
-        //             validateInput(inputElement, expression, messageElement, message);
-        //         });
+            var expresionValidadora3 = /^\d+(\.\d+)?/;
+            var mensaje3 = document.getElementById("mensaje3");
+            handleInputAndBlurEvents(tasa, expresionValidadora3, mensaje3, "Solo se permiten Datos Numericos");
+            handleDescriptionKeypressEvent(tasa);
 
-        //         inputElement.addEventListener("blur", function() {
-        //             clearMessage(messageElement, inputElement);
-        //         });
-        //     }
-
-        //     function handleDescriptionKeypressEvent(inputElement) {
-        //         inputElement.addEventListener("keypress", function(e) {
-        //             var currentDescription = inputElement.value;
-        //             if (e.key === " " && currentDescription.endsWith(" ")) {
-        //                 e.preventDefault();
-        //             }
-        //         });
-        //     }
-
-        //     var expresionValidadora1 = /^[A-Z]+$/;
-        //     var mensaje1 = document.getElementById("mensaje1");
-        //     handleInputAndBlurEvents(nombreTipoCuenta, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
-
-        //     var expresionValidadora2 = /^[A-Z0-9\s]+$/;
-        //     var mensaje2 = document.getElementById("mensaje2");
-        //     handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-        //     handleDescriptionKeypressEvent(descripcion);
-
-        //     var expresionValidadora3 = /^\d+(\.\d+)?/;
-        //     var mensaje3 = document.getElementById("mensaje3");
-        //     handleInputAndBlurEvents(tasa, expresionValidadora3, mensaje3, "Solo se permiten Datos Numericos");
-        //     handleDescriptionKeypressEvent(tasa);
-
-        //     var mensaje4 = document.getElementById("mensaje4");
-        //     handleInputAndBlurEvents(estado, expresionValidadora1, mensaje4, "Solo se permiten Letras Mayúsculas");
+            var mensaje4 = document.getElementById("mensaje4");
+            handleInputAndBlurEvents(estado, expresionValidadora1, mensaje4, "Solo se permiten Letras Mayúsculas");
 
 
-        //     var mensaje5 = document.getElementById("mensaje5");
-        //     handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje5, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-        //     handleDescriptionKeypressEvent(descripcionEditar);
+            var mensaje5 = document.getElementById("mensaje5");
+            handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje5, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(descripcionEditar);
 
 
-        //     var mensaje6 = document.getElementById("mensaje6");
-        //     handleInputAndBlurEvents(tasaEditar, expresionValidadora3, mensaje6, "Solo se permiten Datos Numericos");
-        //     handleDescriptionKeypressEvent(tasaEditar);
+            var mensaje6 = document.getElementById("mensaje6");
+            handleInputAndBlurEvents(tasaEditar, expresionValidadora3, mensaje6, "Solo se permiten Datos Numericos");
+            handleDescriptionKeypressEvent(tasaEditar);
 
-        //     var mensaje7 = document.getElementById("mensaje7");
-        //     handleInputAndBlurEvents(estado, expresionValidadora1, mensaje7, "Solo se permiten Letras Mayúsculas");
+            var mensaje7 = document.getElementById("mensaje7");
+            handleInputAndBlurEvents(estado, expresionValidadora1, mensaje7, "Solo se permiten Letras Mayúsculas");
 
 
 
 
-        // }
+        }
 
         $(document).ready(function() {
-            Lista_Cuentas();
-            Insertar_Cuenta();
+            Historial_Cuenta();
             validarNombre();
         });
     </script>

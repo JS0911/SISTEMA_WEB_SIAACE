@@ -27,7 +27,7 @@ switch ($_GET["op"]) {
         break;
 
     case "GetCuenta":
-        $datos = $com->get_cuenta($body["ID_CUENTA"]);
+        $datos = $com->get_cuenta($body["ID_EMPLEADO"]);
         echo json_encode($datos);
         break;
 
@@ -40,7 +40,15 @@ switch ($_GET["op"]) {
         $datos = $com->update_cuenta($body["ID_CUENTA"],$body["ESTADO"]);
         echo json_encode($datos);
         break;
-   
 
+    case "HistorialCuenta":
+        $datos = $com->historial_cuenta($body["ID_CUENTA"]);
+        echo json_encode($datos);
+        break;
+
+    case "DepositoCuenta":
+        $datos = $com->deposito_cuenta($body["ID_CUENTA"],$body["DEPOSITO"]);
+        echo json_encode($datos);
+        break;
 }
 ?>

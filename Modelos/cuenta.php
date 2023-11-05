@@ -13,15 +13,15 @@ class cuenta extends Conectar
     }
 
     //TRAE SOLO UN USUARIO
-    public function get_cuenta($ID_CUENTA)
+    public function get_cuenta($ID_EMPLEADO)
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_mc_cuenta where ID_CUENTA = :ID";
+        $sql = "SELECT * FROM siaace.tbl_mc_cuenta where ID_EMPLEADO = :ID";
         $stmt = $conectar->prepare($sql);
-        $stmt->bindParam(':ID', $ID_CUENTA, PDO::PARAM_INT);
+        $stmt->bindParam(':ID', $ID_EMPLEADO, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     //INSERTA UN USUARIO
@@ -82,4 +82,45 @@ class cuenta extends Conectar
         }
     }
 
+    //HISTORIAL DE LA CUENTA
+    public function historial_cuenta($ID_CUENTA)
+    {
+         
+              $conectar = parent::conexion();
+              parent::set_names();
+  
+              // Consulta SQL para actualizar los campos del usuario
+              $sql = "SELECT  T.FECHA, T.MONTO, TT.TIPO_TRANSACCION FROM tbl_transacciones AS T
+              INNER JOIN tbl_tipo_transaccion AS TT ON T.ID_TIPO_TRANSACCION = TT.ID_TIPO_TRANSACCION
+              WHERE T.ID_CUENTA = :ID_CUENTA";
+  
+              $stmt = $conectar->prepare($sql);
+  
+              $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
+  
+              $stmt->execute();
+              return $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+          
+    }
+
+    public function deposito_cuenta($ID_CUENTA, $DEPOSITO){
+        $conectar = parent::conexion();
+        parent::set_names();
+
+        // Consulta SQL para actualizar los campos del usuario
+        $sql = "UPDATE tbl_mc_cuenta SET SALDO = SALDO + :SALDO  WHERE ID_CUENTA = :ID_CUENTA";
+
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
+        $stmt->bindParam(':SALDO', $DEPOSITO, PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            return "Saldo Actualizado";
+        } else {
+            return "Error al actualizar saldo";
+        }
+
+
+    }
 }

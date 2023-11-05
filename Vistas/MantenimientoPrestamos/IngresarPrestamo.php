@@ -7,8 +7,10 @@ $permisosPrestamo1 = new PermisosUsuarios();
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_PrestamoMantenimiento = "30";
+$id_objeto_MantCuenta = "29";
 
 $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_PrestamoMantenimiento);
+$permisos2 =  $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_MantCuenta);
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
@@ -52,7 +54,7 @@ $TipoPrestamo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 //---------CONEXION A LA TABLA FORMA DE PAGO --------
 // Crear una instancia de la clase Conectar
-$conexion = new Conectar();
+$conexion = new Conectar(); 
 $conn = $conexion->Conexion();
 
 $sql = "SELECT id_fpago, forma_de_pago FROM tbl_formapago";
@@ -61,6 +63,15 @@ $stmt->execute();
 
 // Obtener los resultados en un array asociativo
 $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Traer tipo de cuentas
+
+
+$sql1 = "SELECT ID_TIPOCUENTA, TIPO_CUENTA FROM tbl_mc_tipocuenta";
+$stmt1 = $conn->prepare($sql1);
+$stmt1->execute();
+$TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
 
 ?>
 <style>
@@ -208,7 +219,7 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <button class="btn btn-success" data-toggle="modal" data-target="#crearModal"> Nuevo</button>
+                                            <button class="btn btn-success" data-toggle="modal" data-target="#crearModalP"> Nuevo</button>
                                         </div>
                                         <table class="table table-striped">
                                             <thead>
@@ -241,20 +252,19 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </div>
                                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                     <div class="card-body">
-                                        <table class="table table-striped">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <button class="btn btn-success" data-toggle="modal" data-target="#crearModalC"> Nuevo</button>
+                                        </div>
+                                        <table class="table table-bordered mx-auto" id="Lista-Cuentas" style="margin-top: 20px; margin-bottom: 20px">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col">Numero</th>
+                                                    <th scope="col">Numero De Cuenta</th>
                                                     <th scope="col">Saldo</th>
                                                     <th scope="col">Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <th scope="row">1</th>
-                                                    <td>10000</td>
-                                                    <td><a href="URL_DEL_DESTINO">Depositos</a><br><a href="URL_DEL_DESTINO">Retiros</a></td>
-                                                </tr>
+                                
                                             </tbody>
                                         </table>
                                     </div>
@@ -264,8 +274,8 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <br>
 
-                    <!-- Modal para crear un nuevo registro -->
-                    <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
+                    <!-- Modal para crear un nuevo registro de prestamo -->
+                    <div class="modal fade" id="crearModalP" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -306,6 +316,53 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Modal para crear un nuevo registro de cuentas -->
+                    <div class="modal fade" id="crearModalC" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="crearModalLabel">Crear Nuevo Registro</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Formulario de creación -->
+                                <form>
+                                    <div class="form-group">
+
+                                        <label for="nombre">Numero De Cuenta</label>
+                                        <input type="text" maxlength="10" class="form-control" id="NumeroCuenta">
+                                        <div id="mensaje2"></div>
+
+                                        <label for="id-estado">Tipo Cuenta</label>
+                                        <select class="form-control" id="agregar-tipo-cuenta" name="Id-tipo-cuenta" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <?php foreach ($TiposCuentas as $TiposCuentas) : ?>
+                                                <option value="<?php echo $TiposCuentas['ID_TIPOCUENTA']; ?>"><?php echo $TiposCuentas['TIPO_CUENTA']; ?></option>
+                                            <?php endforeach; ?>
+                                            <div id="mensaje3"></div>
+                                        </select>
+
+                                        <label for="Estado">Estado</label>
+                                        <select class="form-control" id="agregar-estado" maxlength="15" name="estado" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <option value="ACTIVO">ACTIVO</option>
+                                            <option value="INACTIVO">INACTIVO</option>
+                                        </select>
+                                        <div id="mensaje4"></div>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" id="btn-agregarC">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
                     </div>
             </main>
         </div>
@@ -384,6 +441,158 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
             });
         }
 
+
+        function Lista_Cuentas() {
+            // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
+            // Actualizar el valor predeterminado
+
+            var data = {
+                "ID_EMPLEADO": <?php echo $ID_EMPLEADO; ?>, 
+            };
+
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=GetCuenta', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data) // Convierte la forma de pago en formato JSON
+                })
+                .then(function(response) {
+                    if (response.ok) {
+                        // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+                        return response.json();
+                    } else {
+                        // Si hubo un error en la solicitud, maneja el error aquí
+                        throw new Error('Error en la solicitud');
+                    }
+                })
+                .then(function(data) {
+                    // Recorre los datos JSON y agrega filas a la tabla
+                    var tbody = document.querySelector('#Lista-Cuentas tbody');
+                    tbody.innerHTML = ''; // Limpia el contenido anterior
+
+                    data.forEach(function(pago) {
+                        var row = '<tr>' +
+                            '<td style="display:none;">' + pago.ID_CUENTA + '</td>' +
+                            '<td>' + pago.NUMERO_CUENTA + '</td>' +
+                            '<td>' + pago.SALDO + '</td>' +
+                            '<td>';
+
+                        // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
+        
+                        
+                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + pago.ID_CUENTA + '" onclick="redirectToIngresarPrestamo(' + pago.ID_CUENTA + ')">Depositar</button>';
+                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + pago.ID_CUENTA + '" onclick="redirectToIngresarPrestamo(' + pago.ID_CUENTA + ')">Reembolso</button>';
+                       
+                        row += '</td>' +
+                            '</tr>';
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
+                            row = newrow;
+                        tbody.innerHTML += row;
+                    });
+                    habilitarPaginacion();
+                })
+
+                .catch(function(error) {
+                    // Manejar el error aquí
+                    alert('Error al cargar los datos: ' + error.message);
+                });
+
+        }
+        function Insertar_Cuenta() {
+            $("#btn-agregarC").click(function() {
+                // Obtener los valores de los campos del formulario
+                var tipo_cuenta = $("#agregar-tipo-cuenta").val();
+                var estado = $("#agregar-estado").val();
+                var NumeroCuenta = $("#NumeroCuenta").val();
+                var saldo = 0;
+
+                if (tipo_cuenta == "" || estado == "" || NumeroCuenta == "" ) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'No se pueden enviar Campos Vacios.'
+                    });
+                } else {
+                    // Crear un tipo_cuenta con los datos a enviar al servidor
+                    var datos = {
+                        ID_EMPLEADO: <?php echo $ID_EMPLEADO; ?>,
+                        ID_TIPOCUENTA: tipo_cuenta,
+                        SALDO: saldo,
+                        NUMERO_CUENTA: NumeroCuenta,
+                        ESTADO: estado
+                    };
+
+                    
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=InsertCuenta', {
+                            
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(datos)
+
+                        })
+                        .then(function(response) {
+                            
+                            if (response.ok) {
+
+                                if (response.status === 200) {
+                                    // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Cerrar la modal después de guardar
+                                        $('#crearModalC').modal('hide');
+                                        // Mostrar SweetAlert de éxito
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Guardado exitoso',
+                                            text: data.message
+                                        }).then(function() {
+                                            // Recargar la página para mostrar los nuevos datos
+                                            window.location.href = '../MantenimientoCuentas/MantenimientoCuentas.php';
+                                        });
+                                    });
+                                } else if (response.status === 409) {
+                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de TIPO CUENTA existente
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Mostrar SweetAlert de error
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: data.error // Acceder al mensaje de error
+                                        });
+                                    });
+                                }
+                            } else {
+                                // Si hubo un error en la solicitud, maneja el error aquí
+                                throw new Error('Error en la solicitud');
+                            }
+                        })
+                        .catch(function(error) {
+                            // Mostrar SweetAlert de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al guardar los datos: ' + error.message
+                            });
+                            console.log(error.message);
+                        });
+                }
+            });
+        }
+
+        
+        function Deposito(){
+
+
+        }
+
+
+
         // VALIDACIONES FUNCIONES    
         function validarNombre() {
             var agregarMSolicitado = document.getElementById("agregar-MSolicitado");
@@ -434,8 +643,11 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
      
         $(document).ready(function() {
+            Lista_Cuentas();
             Insertar_Prestamo();
+            Insertar_Cuenta();
             validarNombre();
+            
         });
     </script>
 
