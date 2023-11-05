@@ -25,17 +25,19 @@ class Roles extends Conectar
     }
     
     // INSERTA UN ROL
-    public function insert_rol( $ROL, $DESCRIPCION) {
+    public function insert_rol( $ROL, $DESCRIPCION, $CREADO_POR, $FECHA_CREACION) {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_roles` ( `ROL`, `DESCRIPCION`) VALUES ( :ROL, :DESCRIPCION)";
+            $sql = "INSERT INTO `siaace`.`tbl_ms_roles` ( `ROL`, `DESCRIPCION`,`CREADO_POR`,`FECHA_CREACION`) VALUES ( :ROL, :DESCRIPCION,:CREADO_POR,:FECHA_CREACION)";
     
             $stmt = $conectar->prepare($sql);
           
             $stmt->bindParam(':ROL', $ROL, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
-          
+            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
+            
             
             $stmt->execute();
     
@@ -50,7 +52,7 @@ class Roles extends Conectar
     }
 
     // EDITA UN ROL
-    public function update_rol($ID_ROL, $ROL, $DESCRIPCION) {
+    public function update_rol($ID_ROL, $ROL, $DESCRIPCION, $MODIFICADO_POR, $FECHA_MODIFICACION) {
         try {
             $conectar = parent::conexion();
             parent::set_names();
@@ -58,7 +60,9 @@ class Roles extends Conectar
             // Consulta SQL para actualizar los campos del ROL
             $sql = "UPDATE `tbl_ms_roles` 
                     SET `ROL` = :ROL, 
-                        `DESCRIPCION` = :DESCRIPCION 
+                        `DESCRIPCION` = :DESCRIPCION ,
+                        `MODIFICADO_POR` = :MODIFICADO_POR, 
+                `FECHA_MODIFICACION` = :FECHA_MODIFICACION
                     WHERE `ID_ROL` = :ID_ROL";
     
             $stmt = $conectar->prepare($sql);
@@ -66,7 +70,9 @@ class Roles extends Conectar
             $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
             $stmt->bindParam(':ROL', $ROL, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
-    
+            $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR);
+            
             $stmt->execute();
     
             if ($stmt->rowCount() > 0) {

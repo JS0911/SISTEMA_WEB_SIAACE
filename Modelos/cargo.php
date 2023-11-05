@@ -25,19 +25,20 @@ class Cargos extends Conectar
     }
     
     // INSERTA UN CARGO
-    public function insert_cargo($CARGO, $DESCRIPCION, $ESTADO) {
+    public function insert_cargo($CARGO, $DESCRIPCION, $ESTADO, $CREADO_POR, $FECHA_CREACION) {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $fecha_actual = DATE("Y-m-d H:i:s"); 
-            $sql = "INSERT INTO `siaace`.`tbl_me_cargo` (`CARGO`, `DESCRIPCION`, `FECHA_CREACION`, `ESTADO`) VALUES (:CARGO, :DESCRIPCION, :FECHA_CREACION, :ESTADO)";
+          
+            $sql = "INSERT INTO `siaace`.`tbl_me_cargo` (`CARGO`, `DESCRIPCION`, `ESTADO`,`CREADO_POR`,`FECHA_CREACION`) VALUES (:CARGO, :DESCRIPCION, :ESTADO,:CREADO_POR,:FECHA_CREACION)";
     
             $stmt = $conectar->prepare($sql);
-    
             $stmt->bindParam(':CARGO', $CARGO, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
-            $stmt->bindParam(':FECHA_CREACION', $fecha_actual, PDO::PARAM_STR); // Enlaza la fecha actual
             $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
+            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
+           
             $stmt->execute();
     
             if ($stmt->rowCount() > 0) {
@@ -52,19 +53,20 @@ class Cargos extends Conectar
     
 
     // EDITA UN CARGO
-    public function update_cargo($ID_CARGO, $CARGO, $DESCRIPCION, $ESTADO) {
+    public function update_cargo($ID_CARGO, $CARGO, $DESCRIPCION, $ESTADO,$MODIFICADO_POR, $FECHA_MODIFICACION) {
         try {
             $conectar = parent::conexion();
             parent::set_names();
             
-            $fecha_modificacion = date("Y-m-d H:i:s"); // Obtiene la fecha actual en el formato 'YYYY-MM-DD HH:MM:SS'
+        
     
             // Consulta SQL para actualizar los campos del CARGO
             $sql = "UPDATE `tbl_me_cargo` 
                     SET `CARGO` = :CARGO, 
                         `DESCRIPCION` = :DESCRIPCION, 
                         `ESTADO` = :ESTADO,
-                        `FECHA_MODIFICACION` = :FECHA_MODIFICACION
+                        `MODIFICADO_POR` = :MODIFICADO_POR, 
+                `FECHA_MODIFICACION` = :FECHA_MODIFICACION
                     WHERE `ID_CARGO` = :ID_CARGO";
     
             $stmt = $conectar->prepare($sql);
@@ -73,7 +75,10 @@ class Cargos extends Conectar
             $stmt->bindParam(':CARGO', $CARGO, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
             $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
-            $stmt->bindParam(':FECHA_MODIFICACION', $fecha_modificacion, PDO::PARAM_STR); // Enlaza la fecha de modificación
+            $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR);
+            
+           
     
             $stmt->execute();
     

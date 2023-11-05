@@ -1,3 +1,43 @@
+<!-- -----------------------------------------------------------------------
+	Universidad Nacional Autonoma de Honduras (UNAH)
+		Facultad de Ciencias Economicas
+	Departamento de Informatica administrativa
+         Analisis, Programacion y Evaluacion de Sistemas
+                    Tercer Periodo 2023
+
+
+Equipo:
+Sahory Garcia          sahori.garcia@unah.hn
+Jairo Garcia           jairo.lagos@unah.hn
+Ashley Matamoros       Ashley.matamoros@unah.hn
+Lester Padilla         Lester.padilla@unah.hn
+Khaterine Ordoñez      khaterine.ordonez@unah.hn
+Yeniffer Velasquez     yeniffer.velasquez@unah.hn
+Kevin Zuniga           kgzuniga@unah.hn
+
+Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
+catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
+catedratico evaluacion de sistemas:???
+
+
+---------------------------------------------------------------------
+
+Programa:         Pantalla de Ingreso de Roles
+Fecha:             09-oct-2023
+Programador:       Khaterine Areli Ordoñez Espinal
+descripcion:       Pantalla que que Registra el rol que tendra el usuario en  el sistema
+
+-----------------------------------------------------------------------
+
+                Historial de Cambio
+
+-----------------------------------------------------------------------
+
+Programador               Fecha                      Descripcion
+
+
+----------------------------------------------------------------------- -->
+
 <?php 
 
 session_start();
@@ -44,13 +84,14 @@ $permisos2 = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantenimiento Roles</title>
+    <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <style>
+     <style>
         /* Estilo para la tabla */
         #Lista-rol {
             border-collapse: collapse;
@@ -398,6 +439,9 @@ $permisos2 = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 
                         row += '</td>' +
                             '</tr>';
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -449,31 +493,41 @@ $permisos2 = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
                         body: JSON.stringify(datos)
                     })
                     .then(function(response) {
-                        if (response.ok) {
-                            // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
-                            return response.json();
-                        } else {
-                            // Si hubo un error en la solicitud, maneja el error aquí
-                            throw new Error('Error en la solicitud');
-                        }
+                            if (response.ok) {
+                                if (response.status === 200) {
+                                    // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Cerrar la modal después de guardar
+                                        $('#crearModal').modal('hide');
+                                        // Mostrar SweetAlert de éxito
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Guardado exitoso',
+                                            text: data.message
+                                        }).then(function() {
+                                            // Recargar la página para mostrar los nuevos datos
+                                            location.reload();
+                                        });
+                                    });
+                                } else if (response.status === 409) {
+                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Mostrar SweetAlert de error
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: data.error // Acceder al mensaje de error
+                                        });
+                                    });
+                                }
+                            } else {
+                                // Si hubo un error en la solicitud, maneja el error aquí
+                                throw new Error('El registro ya existe en la Base de Datos.');
+                            }
                     })
-                    .then(function(data) {
-                        console.log(data);
-                        // Cerrar la modal después de guardar
-                        $('#crearModal').modal('hide');
-
-                        // Mostrar SweetAlert de éxito
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Guardado exitoso',
-                            text: 'Los datos se han guardado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
-                        });
-                    })
-                    .catch(function(error) {
-                        // Mostrar SweetAlert de error
+                    .catch(function (error) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -481,10 +535,9 @@ $permisos2 = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
                         });
                         console.log(error.message);
                     });
-                }                
+                }
             });
         }
-
         function cargarRol(id) {
             // Crear un rol con el ID del rol
             var data = {

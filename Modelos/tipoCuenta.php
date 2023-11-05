@@ -25,20 +25,23 @@ class Cuentas extends Conectar
     }
     
     // INSERTA UN TIPO DE CUENTA
-    public function insert_tipoCuenta($TIPO_CUENTA, $DESCRIPCION,$TASA, $ESTADO) {
+    public function insert_tipoCuenta($TIPO_CUENTA, $DESCRIPCION,$TASA, $ESTADO, $CREADO_POR, $FECHA_CREACION) {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $fecha_actual = DATE("Y-m-d"); 
-            $sql = "INSERT INTO `siaace`.`tbl_mc_tipocuenta` (`TIPO_CUENTA`, `DESCRIPCION`, `TASA`, `FECHA_CREACION`, `ESTADO`) VALUES (:TIPO_CUENTA, :DESCRIPCION, :TASA, :FECHA_CREACION, :ESTADO)";
+           
+            $sql = "INSERT INTO `siaace`.`tbl_mc_tipocuenta` (`TIPO_CUENTA`, `DESCRIPCION`, `TASA`, `ESTADO`,`CREADO_POR`,`FECHA_CREACION`) VALUES (:TIPO_CUENTA, :DESCRIPCION, :TASA, :ESTADO,:CREADO_POR,:FECHA_CREACION)";
 
             $stmt = $conectar->prepare($sql);
     
             $stmt->bindParam(':TIPO_CUENTA', $TIPO_CUENTA, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
             $stmt->bindParam(':TASA', $TASA, PDO::PARAM_INT);
-            $stmt->bindParam(':FECHA_CREACION', $fecha_actual, PDO::PARAM_STR); // Enlaza la fecha actual
             $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
+            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
+            
+            
             $stmt->execute();
     
             if ($stmt->rowCount() > 0) {
@@ -53,11 +56,11 @@ class Cuentas extends Conectar
     
 
  // EDITA UN TIPO CUENTA
- public function update_tipoCuenta($ID_TIPOCUENTA, $TIPO_CUENTA, $DESCRIPCION, $TASA, $ESTADO) {
+ public function update_tipoCuenta($ID_TIPOCUENTA, $TIPO_CUENTA, $DESCRIPCION, $TASA, $ESTADO, $MODIFICADO_POR, $FECHA_MODIFICACION) {
     try {
         $conectar = parent::conexion();
         parent::set_names();
-        $FECHA_MODIFICACION = date("Y-m-d");
+      
 
         // Consulta SQL para actualizar los campos del ROL
         $sql = "UPDATE `tbl_mc_tipocuenta` 
@@ -65,9 +68,9 @@ class Cuentas extends Conectar
             `DESCRIPCION` = :DESCRIPCION, 
             `TASA` = :TASA, 
             `ESTADO` = :ESTADO,
-            `FECHA_MODIFICACION` = :FECHA_MODIFICACION
-        WHERE `ID_TIPOCUENTA` = :ID_TIPOCUENTA
-        ";
+            `MODIFICADO_POR` = :MODIFICADO_POR, 
+                `FECHA_MODIFICACION` = :FECHA_MODIFICACION
+        WHERE `ID_TIPOCUENTA` = :ID_TIPOCUENTA";
 
         $stmt = $conectar->prepare($sql);
 
@@ -76,8 +79,9 @@ class Cuentas extends Conectar
         $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
         $stmt->bindParam(':TASA', $TASA, PDO::PARAM_STR);
         $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
+        $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR);
         $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR);
-
+       
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {

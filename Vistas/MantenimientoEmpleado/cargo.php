@@ -1,3 +1,42 @@
+<!-- -----------------------------------------------------------------------
+	Universidad Nacional Autonoma de Honduras (UNAH)
+		Facultad de Ciencias Economicas
+	Departamento de Informatica administrativa
+         Analisis, Programacion y Evaluacion de Sistemas
+                    Tercer Periodo 2023
+
+
+Equipo:
+Sahory Garcia          sahori.garcia@unah.hn
+Jairo Garcia           jairo.lagos@unah.hn
+Ashley Matamoros       Ashley.matamoros@unah.hn
+Lester Padilla         Lester.padilla@unah.hn
+Khaterine Ordoñez      khaterine.ordonez@unah.hn
+Yeniffer Velasquez     yeniffer.velasquez@unah.hn
+Kevin Zuniga           kgzuniga@unah.hn
+
+Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
+catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
+catedratico evaluacion de sistemas:???
+
+
+---------------------------------------------------------------------
+
+Programa:         Pantalla de Ingreso de Cargos
+Fecha:             19-oct-2023
+Programador:       Khaterine Areli Ordoñez Espinal
+descripcion:       Pantalla que que Registra todo los cargos que tiene la empresa 
+
+-----------------------------------------------------------------------
+
+                Historial de Cambio
+
+-----------------------------------------------------------------------
+
+Programador               Fecha                      Descripcion
+
+
+----------------------------------------------------------------------- -->
 <?php
 
 session_start();
@@ -44,6 +83,7 @@ $permisos2 = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantenimiento Cargos</title>
+    <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
@@ -300,7 +340,7 @@ $permisos2 = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarAgregar"  data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                             </div>
                         </div>
@@ -341,7 +381,7 @@ $permisos2 = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
                                 <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateCargo()" disabled>Guardar</button>
                             </div>
                         </div>
@@ -409,6 +449,9 @@ $permisos2 = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
 
                         row += '</td>' +
                             '</tr>';
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -463,37 +506,47 @@ $permisos2 = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
                         })
                         .then(function(response) {
                             if (response.ok) {
-                                // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
-                                return response.json();
+                                if (response.status === 200) {
+                                    // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Cerrar la modal después de guardar
+                                        $('#crearModal').modal('hide');
+                                        // Mostrar SweetAlert de éxito
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Guardado exitoso',
+                                            text: data.message
+                                        }).then(function() {
+                                            // Recargar la página para mostrar los nuevos datos
+                                            location.reload();
+                                        });
+                                    });
+                                } else if (response.status === 409) {
+                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Mostrar SweetAlert de error
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: data.error // Acceder al mensaje de error
+                                        });
+                                    });
+                                }
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('Error en la solicitud');
+                                throw new Error('El registro ya existe en la Base de Datos.');
                             }
-                        })
-                        .then(function(data) {
-                            console.log(data);
-                            // Cerrar la modal después de guardar
-                            $('#crearModal').modal('hide');
-
-                            // Mostrar SweetAlert de éxito
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Guardado exitoso',
-                                text: 'Los datos se han guardado correctamente.'
-                            }).then(function() {
-                                // Recargar la página para mostrar los nuevos datos
-                                location.reload();
-                            });
-                        })
-                        .catch(function(error) {
-                            // Mostrar SweetAlert de error
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Error al guardar los datos: ' + error.message
-                            });
-                            console.log(error.message);
+                    })
+                    .catch(function (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al guardar los datos: ' + error.message
                         });
+                        console.log(error.message);
+                    });
                 }
             });
         }
@@ -790,7 +843,7 @@ $permisos2 = $permisosCargos->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas)
         document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
             document.getElementById('agregar-cuenta').value = "";
             document.getElementById('agregar-descripcion').value = "";
-            document.getElementById('agregar-tasa').value = "";
+          
             document.getElementById('agregar-estado').value = "";
 
 
