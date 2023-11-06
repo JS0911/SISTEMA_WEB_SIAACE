@@ -1,7 +1,7 @@
 <?php
 class cuenta extends Conectar
 {
-    //TRAE TODOS LOS USUARIO
+    //TRAE TODAS LAS CUENTAS
     public function get_cuentas()
     {
         $conectar = parent::conexion();
@@ -12,8 +12,20 @@ class cuenta extends Conectar
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    //TRAE SOLO UN USUARIO
-    public function get_cuenta($ID_EMPLEADO)
+     //TRAE SOLO UNA CUENTA 
+     public function get_cuenta($ID_CUENTA)
+     {
+         $conectar = parent::conexion();
+         parent::set_names();
+         $sql = "SELECT * FROM siaace.tbl_mc_cuenta where ID_CUENTA = :ID";
+         $stmt = $conectar->prepare($sql);
+         $stmt->bindParam(':ID', $ID_CUENTA, PDO::PARAM_INT);
+         $stmt->execute();
+         return $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+     } 
+
+    //TRAE SOLO LAS CUENTAS PERTENECIENTES A UN EMPLEADO
+    public function get_cuentas_emp($ID_EMPLEADO)
     {
         $conectar = parent::conexion();
         parent::set_names();
@@ -24,7 +36,7 @@ class cuenta extends Conectar
         return $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    //INSERTA UN USUARIO
+    //INSERTA CUENTA
     public function insert_cuenta($ID_EMPLEADO, $ID_TIPOCUENTA, $SALDO, $NUMERO_CUENTA, $ESTADO)
     {
         try {
@@ -53,7 +65,7 @@ class cuenta extends Conectar
         }
     }
 
-    //EDITA UN USUARIO
+    //EDITA CUENTA
     public function update_cuenta($ID_CUENTA, $ESTADO)
     {
         try {
@@ -102,7 +114,8 @@ class cuenta extends Conectar
               return $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
           
     }
-
+    
+    //HACE DEPOSITO EN CUENTA
     public function deposito_cuenta($ID_CUENTA, $DEPOSITO){
         $conectar = parent::conexion();
         parent::set_names();
@@ -114,6 +127,34 @@ class cuenta extends Conectar
         $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
         $stmt->bindParam(':SALDO', $DEPOSITO, PDO::PARAM_INT);
         $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            return "Saldo Actualizado";
+        } else {
+            return "Error al actualizar saldo";
+        }
+
+
+    }
+
+    public function reembolso_cuenta($ID_CUENTA, $REEMBOLSO){
+        $conectar = parent::conexion();
+        parent::set_names();
+
+        // Consulta SQL para actualizar los campos del usuario
+        $sql = "UPDATE tbl_mc_cuenta SET SALDO = SALDO - :SALDO  WHERE ID_CUENTA = :ID_CUENTA";
+        $sql2 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`) VALUES (:SALDO_R,:ID_CUENTA_R, 2)";
+
+        $stmt = $conectar->prepare($sql);
+        
+        $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
+        $stmt->bindParam(':SALDO', $REEMBOLSO, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $stmt2 = $conectar->prepare($sql2);
+        $stmt2->bindParam(':ID_CUENTA_R', $ID_CUENTA, PDO::PARAM_INT);
+        $stmt2->bindParam(':SALDO_R', $REEMBOLSO, PDO::PARAM_INT);
+        $stmt2->execute();
 
         if ($stmt->rowCount() > 0) {
             return "Saldo Actualizado";

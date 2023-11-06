@@ -333,11 +333,11 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                 <form>
                                     <div class="form-group">
 
-                                        <label for="nombre">Numero De Cuenta</label>
+                                        <label for="NumeroCuenta">Numero De Cuenta</label>
                                         <input type="text" maxlength="10" class="form-control" id="NumeroCuenta">
                                         <div id="mensaje2"></div>
 
-                                        <label for="id-estado">Tipo Cuenta</label>
+                                        <label for="id-tipo-cuenta">Tipo Cuenta</label>
                                         <select class="form-control" id="agregar-tipo-cuenta" name="Id-tipo-cuenta" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
                                             <?php foreach ($TiposCuentas as $TiposCuentas) : ?>
@@ -364,11 +364,79 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     </div>
+
+                    <!-- Modal para hacer un deposito -->
+                <div class="modal fade" id="DepositoModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editarModalLabel">Hacer Deposito</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Formulario de edición -->
+                                <form>
+                                    <div class="form-group">
+                                        <input style="display:none" type="text" class="form-control" id="id-cuenta-edit" disabled>
+                                        <label for="numero">Numero De Cuenta</label>
+                                        <input type="text" class="form-control" id="Numero-Cuenta" disabled>
+                                        <label for="saldo">Saldo</label>
+                                        <input type="text" class="form-control" id="Saldo" disabled>
+                                        <label for="Deposito">Monto De Deposito</label>
+                                        <input type="text" class="form-control" id="Monto-Deposito">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" id="btn-enviar-deposito">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                       <!-- Modal para hacer un reembolso -->
+                    <div class="modal fade" id="ReembolsoModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editarModalLabel">Hacer Reembolso</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Formulario de edición -->
+                                <form>
+                                    <div class="form-group">
+                                        <input style="display:none" type="text" class="form-control" id="id-cuenta-editR" disabled>
+                                        <label for="numero">Numero De Cuenta</label>
+                                        <input type="text" class="form-control" id="Numero-CuentaR" disabled>
+                                        <label for="saldo">Saldo</label>
+                                        <input type="text" class="form-control" id="SaldoR" disabled>
+                                        <label for="Deposito">Monto De Reembolso</label>
+                                        <input type="text" class="form-control" id="Monto-Reembolso">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" id="btn-enviar-reembolso">Guardar</button>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
             </main>
         </div>
     </div>
 
     <script>
+        var permisos = <?php echo json_encode($permisos); ?>;
+
+
         function Insertar_Prestamo() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
@@ -450,7 +518,7 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                 "ID_EMPLEADO": <?php echo $ID_EMPLEADO; ?>, 
             };
 
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=GetCuenta', {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=GetCuenta_Emple', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -472,18 +540,20 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                     var tbody = document.querySelector('#Lista-Cuentas tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
-                    data.forEach(function(pago) {
+                    data.forEach(function(cuenta) {
                         var row = '<tr>' +
-                            '<td style="display:none;">' + pago.ID_CUENTA + '</td>' +
-                            '<td>' + pago.NUMERO_CUENTA + '</td>' +
-                            '<td>' + pago.SALDO + '</td>' +
+                            '<td style="display:none;">' + cuenta.ID_CUENTA + '</td>' +
+                            '<td>' + cuenta.NUMERO_CUENTA + '</td>' +
+                            '<td>' + cuenta.SALDO + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
-        
-                        
-                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + pago.ID_CUENTA + '" onclick="redirectToIngresarPrestamo(' + pago.ID_CUENTA + ')">Depositar</button>';
-                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + pago.ID_CUENTA + '" onclick="redirectToIngresarPrestamo(' + pago.ID_CUENTA + ')">Reembolso</button>';
+                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
+                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#DepositoModal" onclick="CargarCuenta(' + cuenta.ID_CUENTA + ')">Deposito</button>';
+                            row += '<button class="btn btn-secondary crear-movimiento" data-toggle="modal" data-target="#ReembolsoModal" onclick="CargarCuentaR(' + cuenta.ID_CUENTA + ')">Reembolso</button>';  
+                         }
+  
+                            
                        
                         row += '</td>' +
                             '</tr>';
@@ -492,7 +562,7 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                             row = newrow;
                         tbody.innerHTML += row;
                     });
-                    habilitarPaginacion();
+                    //habilitarPaginacion();
                 })
 
                 .catch(function(error) {
@@ -584,13 +654,215 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                 }
             });
         }
+        function CargarCuenta(id) {
+            var data = {
+                "ID_CUENTA": id
+            };
+            
+            // Realiza una solicitud FETCH para obtener los detalles de la forma de pago por su ID
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=GetCuenta', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data) // Convierte la forma de pago en formato JSON
+                   
+                })
 
-        
-        function Deposito(){
+                .then(function(response) {
+                    
+                    if (response.ok) {
+                       
+                        return response.json();
+                    } else {
+                        throw new Error('Error en la solicitud');
+                    }
+                })
+                .then(function(cuenta) {
+                   
 
+                      // Convertir el array a un objeto
+                      cuenta = Object.assign({}, cuenta[0]);
 
+                    // Llena los campos del modal con los datos de la forma de pago
+                    document.getElementById('id-cuenta-edit').value = cuenta.ID_CUENTA;
+                    document.getElementById('Numero-Cuenta').value = cuenta.NUMERO_CUENTA;
+                    document.getElementById('Saldo').value = cuenta.SALDO;
+                })
+                .catch(function(error) {
+                    // Manejar el error aquí
+                    alert('Error al cargar los datos de la forma de pago: ' + error.message);
+                });
         }
 
+        function CargarCuentaR(id) {
+            var data = {
+                "ID_CUENTA": id
+            };
+            
+            // Realiza una solicitud FETCH para obtener los detalles de la forma de pago por su ID
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=GetCuenta', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data) // Convierte la forma de pago en formato JSON
+                   
+                })
+
+                .then(function(response) {
+                    
+                    if (response.ok) {
+                       
+                        return response.json();
+                    } else {
+                        throw new Error('Error en la solicitud');
+                    }
+                })
+                .then(function(cuenta) {
+                   
+
+                      // Convertir el array a un objeto
+                      cuenta = Object.assign({}, cuenta[0]);
+
+                    // Llena los campos del modal con los datos de la forma de pago
+                    document.getElementById('id-cuenta-editR').value = cuenta.ID_CUENTA;
+                    document.getElementById('Numero-CuentaR').value = cuenta.NUMERO_CUENTA;
+                    document.getElementById('SaldoR').value = cuenta.SALDO;
+                })
+                .catch(function(error) {
+                    // Manejar el error aquí
+                    alert('Error al cargar los datos de la forma de pago: ' + error.message);
+                });
+        }
+    
+        function Deposito(){
+            $("#btn-enviar-deposito").click(function() {
+                // Obtener los valores de los campos del formulario
+                
+                var id_cuenta = document.getElementById("id-cuenta-edit").value; // Obtener el valor del select
+                var deposito = document.getElementById("Monto-Deposito").value; // Obtener el valor del select
+
+                
+                    // Crear un objeto con los datos a enviar al servidor
+                    var datos = {
+                        ID_CUENTA: id_cuenta,
+                        DEPOSITO: deposito
+                    }  
+                    
+
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=DepositoCuenta', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(datos)
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+                                return response.json();
+                            } else {
+                                // Si hubo un error en la solicitud, maneja el error aquí
+                                throw new Error('Error en la solicitud');
+                            }
+                        })
+                        .then(function(data) {
+                            console.log(data);
+
+                            // Cerrar la modal después de guardar
+                            $('#DepositoModal').modal('hide');
+
+                            // Mostrar SweetAlert de éxito
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Guardado exitoso',
+                                text: 'Los datos se han guardado correctamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                                
+                            });
+
+                        })
+                        .catch(function(error) {
+                            console.log(error.message);
+
+                            // Mostrar SweetAlert de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al guardar los datos: ' + error.message
+                            });
+                        });
+                
+            });
+        }
+
+        function Reembolso(){
+            $("#btn-enviar-reembolso").click(function() {
+                // Obtener los valores de los campos del formulario
+                
+                var id_cuenta = document.getElementById("id-cuenta-editR").value; // Obtener el valor del select
+                var reembolso = document.getElementById("Monto-Reembolso").value; // Obtener el valor del select
+
+                
+                    // Crear un objeto con los datos a enviar al servidor
+                    var datos = {
+                        ID_CUENTA: id_cuenta,
+                        REEMBOLSO: reembolso
+                    }  
+                    
+
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=ReembolsoCuenta', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(datos)
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+                                return response.json();
+                            } else {
+                                // Si hubo un error en la solicitud, maneja el error aquí
+                                throw new Error('Error en la solicitud');
+                            }
+                        })
+                        .then(function(data) {
+                            console.log(data);
+
+                            // Cerrar la modal después de guardar
+                            $('#ReembolsoModal').modal('hide');
+
+                            // Mostrar SweetAlert de éxito
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Guardado exitoso',
+                                text: 'Los datos se han guardado correctamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                                
+                            });
+
+                        })
+                        .catch(function(error) {
+                            console.log(error.message);
+
+                            // Mostrar SweetAlert de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al guardar los datos: ' + error.message
+                            });
+                        });
+                
+            });
+        }
 
 
         // VALIDACIONES FUNCIONES    
@@ -647,7 +919,8 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             Insertar_Prestamo();
             Insertar_Cuenta();
             validarNombre();
-            
+            Deposito();
+            Reembolso();
         });
     </script>
 
