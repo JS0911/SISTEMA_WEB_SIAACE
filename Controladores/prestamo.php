@@ -32,7 +32,7 @@ switch ($_GET["op"]) {
     break;
 
     case "GetPrestamo":
-        $datos = $com->get_Prestamo($body["ID_PRESTAMO"]);
+        $datos = $com->get_Prestamo($body["ID_EMPLEADO"]);
         echo json_encode($datos);
     break;
 

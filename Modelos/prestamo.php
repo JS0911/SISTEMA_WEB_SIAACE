@@ -24,15 +24,15 @@ class Prestamo extends Conectar
     }
 
     // //TRAE SOLO UN PRESTAMO
-    public function get_Prestamo($ID_PRESTAMO)
+    public function get_Prestamo($ID_EMPLEADO)
     {
         $conectar = parent::conexion();
         parent::set_names();
         $sql = "SELECT ID_EMPLEADO, ID_TIPO_PRESTAMO, ID_FPAGO, FECHA_SOLICITUD, FECHA_APROBACION, FECHA_DE_CANCELACION, FECHA_DE_DESEMBOLSO, ESTADO_PRESTAMO, MONTO_SOLICITADO, MONTO_DESEMBOLSO, MONTO_ADEUDADO 
                 FROM siaace.tbl_mp_prestamos 
-                WHERE ID_PRESTAMO = :ID_PRESTAMO";
+                WHERE ID_EMPLEADO = :ID_EMPLEADO";
         $sql = $conectar->prepare($sql);
-        $sql->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+        $sql->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
         $sql->execute();
         //echo $sql;
         // Verificar si se obtuvieron resultados
