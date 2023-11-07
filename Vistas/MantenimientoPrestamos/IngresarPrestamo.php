@@ -221,22 +221,16 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <button class="btn btn-success" data-toggle="modal" data-target="#crearModalP"> Nuevo</button>
                                         </div>
-                                        <table class="table table-striped">
+                                        <table class="table table-bordered mx-auto" id="Lista-Prestamos" style="margin-top: 20px; margin-bottom: 20px">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col">Numero</th>
-                                                    <th scope="col">Saldo Capital</th>
-                                                    <th scope="col">Saldo interes</th>
+                                                <th scope="col">Tipo Prestamo</th>
+                                                    <th scope="col">Forma Pago</th>
                                                     <th scope="col">Detalles</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <th scope="row">1</th>
-                                                    <td>1000</td>
-                                                    <td>10000</td>
-                                                    <td><a href="URL_DEL_DESTINO">Ver Cuotas</a></td>
-                                                </tr>
+                                                
                                             </tbody>
                                         </table>
                                     </div>
@@ -312,7 +306,7 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" id="btn-agregarCancelar" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                                    <button type="button" class="btn btn-primary" id="btn-agregarP">Guardar</button>
                                 </div>
                             </div>
                         </div>
@@ -436,9 +430,61 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
 
+        //FUNCIONES PARA PRESTAMOS                                       
+        function Lista_Prestamos() {
+            // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
+            // Actualizar el valor predeterminado
 
+            var data = {
+                "ID_EMPLEADO": <?php echo $ID_EMPLEADO; ?>, 
+            };
+
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=GetPrestamo', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data) // Convierte la forma de pago en formato JSON
+                })
+                .then(function(response) {
+                    if (response.ok) {
+                        // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+                        return response.json();
+                    } else {
+                        // Si hubo un error en la solicitud, maneja el error aquí
+                        throw new Error('Error en la solicitud');
+                    }
+                })
+                .then(function(data) {
+                    // Recorre los datos JSON y agrega filas a la tabla
+                    var tbody = document.querySelector('#Lista-Prestamos tbody');
+                    tbody.innerHTML = ''; // Limpia el contenido anterior
+
+                    data.forEach(function(prestamo) {
+                        var row = '<tr>' +
+                            '<td style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
+                            '<td>' + prestamo.ID_TIPO_PRESTAMO + '</td>' +
+                            '<td>' + prestamo.ID_FPAGO + '</td>' +
+                            '<td>';
+                            // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
+                            row += '<button class="btn btn-secondary ver-cuotas" data-id="' + prestamo.ID_PRESTAMO + '" onclick="redirectToIngresarPrestamo(' + prestamo.ID_PRESTAMO + ')">Cuotas</button>';
+                            row += '</td>' +
+                            '</tr>';
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
+                            row = newrow;
+                        tbody.innerHTML += row;
+                    });
+                    
+                })
+                .catch(function(error) {
+                    // Manejar el error aquí
+                    //alert('Error al cargar los datos: ' + error.message);
+                });
+        }
         function Insertar_Prestamo() {
-            $("#btn-agregar").click(function() {
+            $("#btn-agregarP").click(function() {
                 // Obtener los valores de los campos del formulario
                 
                 var tipoPrestamo = document.getElementById("agregar-tipoPrestamo").value; // Obtener el valor del select
@@ -481,7 +527,7 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                             console.log(data);
 
                             // Cerrar la modal después de guardar
-                            $('#crearModal').modal('hide');
+                            $('#crearModalP').modal('hide');
 
                             // Mostrar SweetAlert de éxito
                             Swal.fire({
@@ -509,7 +555,7 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             });
         }
 
-
+        //FUNCIONES PARA CUENTAS
         function Lista_Cuentas() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             // Actualizar el valor predeterminado
@@ -915,12 +961,15 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
         }
      
         $(document).ready(function() {
-            Lista_Cuentas();
+            Lista_Prestamos();
             Insertar_Prestamo();
+            
+            Lista_Cuentas();
             Insertar_Cuenta();
-            validarNombre();
             Deposito();
             Reembolso();
+
+            validarNombre();
         });
     </script>
 
@@ -930,7 +979,7 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
         const agregartipoPrestamo = document.getElementById("agregar-tipoPrestamo");
         const agregarformaPago = document.getElementById("agregar-formaPago");
         const agregarMSolicitadoInput = document.getElementById("agregar-MSolicitado");
-        const guardarButton = document.getElementById('btn-agregar');
+        const guardarButton = document.getElementById('btn-agregarp}P');
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
@@ -960,10 +1009,46 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             }
         });
     </script>
+ <!-- VALIDACIONES SCRIPT -->
+ <script>
+        // Obtén los campos de entrada y el botón "Guardar para insertar"
+        const agregarNCuenta = document.getElementById("NumeroCuenta");
+        const agregarTipoCuenta = document.getElementById("agregar-tipo-cuenta");
+        const agregarEstado = document.getElementById("agregar-estado");
+        const guardarButton1 = document.getElementById('btn-agregarC');
+
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isFormValid = agregarNCuenta.value.trim() !== '' && agregarTipoCuenta.value.trim() !== '' && agregarEstado.value.trim() !== '';
+            guardarButton1.disabled = !isFormValid;
+        }
+
+        // Agrega un evento input a cada campo de entrada
+        agregarNCuenta.addEventListener('input', checkForm);
+        agregarTipoCuenta.addEventListener('input', checkForm);
+        agregarEstado.addEventListener('input', checkForm);
+    </script>
+
+    <script>
+        // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
+        $('#NumeroCuenta, #agregar-tipo-cuenta, #agregar-estado').on('input', function() {
+            var input = $(this);
+            var trimmedValue = input.val().trim();
+            input.val(trimmedValue);
+
+            if (trimmedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'El campo no puede estar vacío',
+                    icon: 'warning',
+                });
+            }
+        });
+    </script>
 
     <script>
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
-        document.getElementById('btn-agregarCancelar').addEventListener('click', function() {
+            document.getElementById('btn-agregarCancelar').addEventListener('click', function() {
             document.getElementById('agregar-tipoPrestamo').value = "";
             document.getElementById('agregar-formaPago').value = "";
             document.getElementById('agregar-MSolicitado').value = "";
@@ -976,8 +1061,24 @@ $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
         });
     </script>
 
+    <script>
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
+            document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
+            document.getElementById('NumeroCuenta').value = "";
+            document.getElementById('agregar-tipo-cuenta').value = "";
+            document.getElementById('agregar-estado').value = "";
+
+            // Limpia los checkboxes
+            document.getElementById('NumeroCuenta').checked = false;
+            document.getElementById('agregar-tipo-cuenta').checked = false;
+            document.getElementById('agregar-estado').checked = false;
+            location.reload();  
+        });
+    </script>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
+   
 </body>
 <html>

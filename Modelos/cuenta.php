@@ -143,7 +143,7 @@ class cuenta extends Conectar
 
         // Consulta SQL para actualizar los campos del usuario
         $sql = "UPDATE tbl_mc_cuenta SET SALDO = SALDO - :SALDO  WHERE ID_CUENTA = :ID_CUENTA";
-        $sql2 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`) VALUES (:SALDO_R,:ID_CUENTA_R, 2)";
+        $sql2 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`) VALUES (:SALDO_R,:ID_CUENTA_R, 2, NOW())";
 
         $stmt = $conectar->prepare($sql);
         

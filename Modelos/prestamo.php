@@ -55,6 +55,8 @@ class Prestamo extends Conectar
             $sql = "INSERT INTO `siaace`.`tbl_mp_prestamos` ( `ID_EMPLEADO`, `ID_TIPO_PRESTAMO`, `ID_FPAGO`, `MONTO_SOLICITADO`, `FECHA_SOLICITUD`, `ESTADO_PRESTAMO`) 
             VALUES ( :ID_EMPLEADO, :ID_TIPO_PRESTAMO, :ID_FPAGO, :MONTO_SOLICITADO, NOW(), :ESTADO_PRESTAMO)";
 
+            
+
             $stmt = $conectar->prepare($sql);
 
             $stmt->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
