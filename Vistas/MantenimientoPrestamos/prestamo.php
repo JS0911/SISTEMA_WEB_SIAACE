@@ -250,7 +250,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     <th style="display: none;"> Id Tipo Prestamo</th>
                                     <th>Tipo Prestamo</th>
                                     <th style="display: none;">Id Forma/Pago</th>
-                                    <th>Forma/Pago</th>
+                                    <th >Forma/Pago</th>
                                     <th>Fecha /Solicitud</th>
                                     <th>Fecha/Aprobacion</th>
                                     <th>Fecha Cancelacion</th>
@@ -306,11 +306,13 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-prestamo tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
+                    
 
                     data.forEach(function(prestamo) {
+                        var nombre = prestamo.PRIMER_NOMBRE + ' ' + prestamo.PRIMER_APELLIDO;
                         var row = '<tr>' +
                             '<td style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
-                            '<td>' + prestamo.ID_EMPLEADO + '</td>' +
+                            '<td>' + nombre + '</td>' +
                             '<td style="display:none;">' + prestamo.ID_TIPO_PRESTAMO + '</td>' +
                             '<td >' + prestamo.TIPO_PRESTAMO + '</td>' +
                             '<td style="display:none;">' + prestamo.ID_FPAGO + '</td>' +

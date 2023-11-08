@@ -7,9 +7,10 @@ class Prestamo extends Conectar
         $conectar = parent::conexion();
         parent::set_names();
 
-        $sql = "SELECT P.*, T.TIPO_PRESTAMO, F.FORMA_DE_PAGO
+        $sql = "SELECT P.*, T.TIPO_PRESTAMO, F.FORMA_DE_PAGO, E.PRIMER_NOMBRE, E.PRIMER_APELLIDO
         FROM siaace.tbl_mp_prestamos AS P
         INNER JOIN siaace.tbl_mp_tipo_prestamo AS T ON P.ID_TIPO_PRESTAMO = T.ID_TIPO_PRESTAMO
+        INNER JOIN siaace.tbl_me_empleados AS E ON P.ID_EMPLEADO = E.ID_EMPLEADO
         INNER JOIN siaace.tbl_formapago AS F ON P.ID_FPAGO = F.ID_FPAGO";
 
         $sql = $conectar->prepare($sql);
@@ -28,8 +29,12 @@ class Prestamo extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT ID_EMPLEADO, ID_TIPO_PRESTAMO, ID_FPAGO, FECHA_SOLICITUD, FECHA_APROBACION, FECHA_DE_CANCELACION, FECHA_DE_DESEMBOLSO, ESTADO_PRESTAMO, MONTO_SOLICITADO, MONTO_DESEMBOLSO, MONTO_ADEUDADO 
-                FROM siaace.tbl_mp_prestamos 
+
+
+        $sql = "SELECT P.*, T.TIPO_PRESTAMO, F.FORMA_DE_PAGO
+        FROM siaace.tbl_mp_prestamos AS P
+        INNER JOIN siaace.tbl_mp_tipo_prestamo AS T ON P.ID_TIPO_PRESTAMO = T.ID_TIPO_PRESTAMO
+        INNER JOIN siaace.tbl_formapago AS F ON P.ID_FPAGO = F.ID_FPAGO 
                 WHERE ID_EMPLEADO = :ID_EMPLEADO";
         $sql = $conectar->prepare($sql);
         $sql->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
@@ -55,7 +60,7 @@ class Prestamo extends Conectar
             $sql = "INSERT INTO `siaace`.`tbl_mp_prestamos` ( `ID_EMPLEADO`, `ID_TIPO_PRESTAMO`, `ID_FPAGO`, `MONTO_SOLICITADO`, `FECHA_SOLICITUD`, `ESTADO_PRESTAMO`) 
             VALUES ( :ID_EMPLEADO, :ID_TIPO_PRESTAMO, :ID_FPAGO, :MONTO_SOLICITADO, NOW(), :ESTADO_PRESTAMO)";
 
-            
+
 
             $stmt = $conectar->prepare($sql);
 
