@@ -1173,8 +1173,8 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 if (plazo.id_tipo_prestamo === parseInt(selectedTipoPrestamo)) {
 
-                    console.log("tasa.id_tipo_prestamo:", plazo.id_tipo_prestamo);
-                    console.log("selectedTipoPrestamo:", selectedTipoPrestamo);
+                   // console.log("tasa.id_tipo_prestamo:", plazo.id_tipo_prestamo);
+                  //  console.log("selectedTipoPrestamo:", selectedTipoPrestamo);
 
                     // Crear un rango de números entre plazo_minimo y plazo_maximo
                     for (let i = plazo.plazo_minimo; i <= plazo.plazo_maximo; i++) {

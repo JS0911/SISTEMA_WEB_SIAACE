@@ -250,7 +250,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     <th style="display: none;"> Id Tipo Prestamo</th>
                                     <th>Tipo Prestamo</th>
                                     <th style="display: none;">Id Forma/Pago</th>
-                                    <th >Forma/Pago</th>
+                                    <th>Forma/Pago</th>
                                     <th>Fecha /Solicitud</th>
                                     <th>Fecha/Aprobacion</th>
                                     <th>Fecha Cancelacion</th>
@@ -258,6 +258,8 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     <th>Monto/Solicitado</th>
                                     <th style="display: none;">Monto Desembolsado </th>
                                     <th style="display: none;">Monto Adeudado </th>
+                                    <th>Plazo</th>
+                                    <th>Tasa</th>
                                     <th>Estado/Prestamo</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -306,7 +308,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-prestamo tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
-                    
+
 
                     data.forEach(function(prestamo) {
                         var nombre = prestamo.PRIMER_NOMBRE + ' ' + prestamo.PRIMER_APELLIDO;
@@ -324,6 +326,8 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td>' + prestamo.MONTO_SOLICITADO + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_DESEMBOLSO + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_ADEUDADO + '</td>' +
+                            '<td>' + prestamo.PLAZO + '</td>' +
+                            '<td>' + prestamo.TASA + '</td>' +
                             '<td>' + prestamo.ESTADO_PRESTAMO + '</td>' +
                             '<td>';
 
@@ -333,19 +337,23 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             row += '<button class="btn btn-danger" id="AnularButton" onclick="AnularPrestamo(' + prestamo.ID_PRESTAMO + ')">Anular</button>';
                         }
 
+                        // if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
+                        //     row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ')">Aprobar</button>';
+                        // }
+
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ')">Aprobar</button>';
+                            row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ',' + prestamo.MONTO_SOLICITADO + ',' + prestamo.PLAZO + ',' + prestamo.TASA + ',' + prestamo.ESTADO_PRESTAMO +')">Aprobar</button>';
                         }
-                        
+
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-success" id="DesembolsoButton" onclick="DesembolsoPrestamo(' + prestamo.ID_PRESTAMO + ')">Desembolso</button>';
                         }
 
                         row += '</td>' +
                             '</tr>';
-                            //Cambiar palabra null por vacio.
-                            newrow = row.replaceAll("null", " ");
-                            row = newrow;
+                        //Cambiar palabra null por vacio.
+                        newrow = row.replaceAll("null", " ");
+                        row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -399,9 +407,11 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 });
         }
 
-        function AprobarPrestamo(ID_PRESTAMO) {
-            // Realiza una solicitud FETCH al servidor para anular el préstamo
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=aprobarPrestamo', {
+        const APROBADO = 'APROBADO';
+
+        function AprobarPrestamo(ID_PRESTAMO, MONTO_SOLICITADO, PLAZO, TASA, ESTADO_PRESTAMO) {
+            // Verificar el estado del préstamo antes de aprobar
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=obtenerEstadoPrestamo', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -411,23 +421,56 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         "ID_PRESTAMO": ID_PRESTAMO
                     })
                 })
-                .then(response => {
-                    if (response.ok) {
-                        // La solicitud se completó con éxito
-                        document.getElementById('AprobarButton').classList.remove('btn-primary');
-                        document.getElementById('AprobarButton').classList.add('btn-secondary');
-                        document.getElementById('AprobarButton').disabled = true;
-                        // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
-                        location.reload();
+                .then(response => response.json())
+                .then(data => {
+                     console.log(ESTADO_PRESTAMO);
+                    if (data && data.ESTADO_PRESTAMO !== APROBADO) {
+                        // El préstamo no ha sido aprobado, proceder con la aprobación
+                        fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=aprobarPrestamo', {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    "ID_PRESTAMO": ID_PRESTAMO
+                                })
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    // La solicitud se completó con éxito
+                                    document.getElementById('AprobarButton').classList.remove('btn-primary');
+                                    document.getElementById('AprobarButton').classList.add('btn-secondary');
+                                    document.getElementById('AprobarButton').disabled = true;
+                                    // // Recargar la página para mostrar los nuevos datos
+                                    // location.reload();
+                                    setTimeout(function() {
+                                        location.reload();
+                                    }, 5000);
+                                } else {
+                                    console.error('Error en la solicitud');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
 
+                        planPago(ID_PRESTAMO, MONTO_SOLICITADO, PLAZO, TASA);
                     } else {
-                        console.error('Error en la solicitud');
+                        // El préstamo ya ha sido aprobado
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Préstamo Aprobado',
+                            text: 'Este préstamo ya ha sido aprobado anteriormente.'
+                        });
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
+
+
 
         function DesembolsoPrestamo(ID_PRESTAMO) {
             // Realiza una solicitud FETCH al servidor para anular el préstamo
@@ -458,6 +501,16 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     console.error('Error:', error);
                 });
         }
+
+        function planPago(ID_PRESTAMOP, MONTO_SOLICITADO, PLAZO, TASA) {
+            // Redirige a la página planPago.php con parámetros
+            window.location.href = 'http://localhost:90/SISTEMA_WEB_SIAACE/Vistas/MantenimientoPrestamos/planPago.php?ID_PRESTAMOP=' + ID_PRESTAMOP +
+                '&MONTO_SOLICITADO=' + MONTO_SOLICITADO +
+                '&PLAZO=' + PLAZO +
+                '&TASA=' + TASA;
+        }
+
+
 
         $(document).ready(function() {
             Lista_Prestamo();

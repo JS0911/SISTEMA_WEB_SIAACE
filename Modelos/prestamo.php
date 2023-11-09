@@ -83,47 +83,6 @@ class Prestamo extends Conectar
         }
     }
 
-    //EDITA UN PRESTAMO
-    public function update_prestamo($ID_EMPLEADO, $ID_PRESTAMO, $ID_FPAGO, $FECHA_DE_CANCELACION, $FECHA_DE_DESEMBOLSO, $ESTADO_PRESTAMO, $MONTO_SOLICITADO, $MONTO_DESEMBOLSO, $MONTO_ADEUDADO)
-    {
-        try {
-            $conectar = parent::conexion();
-            parent::set_names();
-
-            // Consulta SQL para actualizar los campos del usuario
-            $sql = "UPDATE `tbl_mp_prestamos` 
-            SET `ID_EMPLEADO` = :ID_EMPLEADO,
-                `ID_FPAGO` = :ID_FPAGO, 
-                `FECHA_DE_CANCELACION` = :FECHA_DE_CANCELACION, 
-                `FECHA_DE_DESEMBOLSO` = :FECHA_DE_DESEMBOLSO, 
-                `ESTADO_PRESTAMO` = :ESTADO_PRESTAMO, 
-                `MONTO_SOLICITADO` = :MONTO_SOLICITADO, 
-                `MONTO_DESEMBOLSO` = :MONTO_DESEMBOLSO,  
-                `MONTO_ADEUDADO` = :MONTO_ADEUDADO 
-            WHERE `ID_PRESTAMO` = :ID_PRESTAMO";
-
-            $stmt = $conectar->prepare($sql);
-            $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-            $stmt->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
-            $stmt->bindParam(':ID_FPAGO', $ID_FPAGO, PDO::PARAM_INT);
-            $stmt->bindParam(':FECHA_DE_CANCELACION', $FECHA_DE_CANCELACION, PDO::PARAM_STR);
-            $stmt->bindParam(':FECHA_DE_DESEMBOLSO', $FECHA_DE_DESEMBOLSO, PDO::PARAM_STR);
-            $stmt->bindParam(':ESTADO_PRESTAMO', $ESTADO_PRESTAMO, PDO::PARAM_STR);
-            $stmt->bindParam(':MONTO_SOLICITADO', $MONTO_SOLICITADO, PDO::PARAM_INT);
-            $stmt->bindParam(':MONTO_DESEMBOLSO', $MONTO_DESEMBOLSO, PDO::PARAM_INT);
-            $stmt->bindParam(':MONTO_ADEUDADO', $MONTO_ADEUDADO, PDO::PARAM_INT);
-
-            $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                return "Prestamo actualizado correctamente";
-            } else {
-                return "No se realizó ninguna actualización, o el prestamo no existe";
-            }
-        } catch (PDOException $e) {
-            return "Error al actualizar el prestamo: " . $e->getMessage();
-        }
-    }
 
     public function anular_prestamo($ID_PRESTAMO)
     {
@@ -201,4 +160,32 @@ class Prestamo extends Conectar
             echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
         }
     }
+
+    public function obtenerEstadoPrestamo($ID_PRESTAMO)
+{
+    try {
+        $conectar = parent::conexion();
+        parent::set_names();
+
+        // Consulta SELECT para obtener el estado del préstamo
+        $select_sql = "SELECT `ESTADO_PRESTAMO` FROM `tbl_mp_prestamos` WHERE `ID_PRESTAMO` = :ID_PRESTAMO";
+        $stmt_select = $conectar->prepare($select_sql);
+        $stmt_select->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+        $stmt_select->execute();
+
+        // Obtener el resultado como un array asociativo
+        $resultado = $stmt_select->fetch(PDO::FETCH_ASSOC);
+
+        if ($resultado) {
+            // Devolver el estado del préstamo
+            return $resultado['ESTADO_PRESTAMO'];
+        } else {
+            // El préstamo no se encontró o no existe
+            return "NO ENCONTRADO";
+        }
+    } catch (PDOException $e) {
+        return "Error al Consultar el Estado de Prestamo: " . $e->getMessage();
+    }
+}
+
 }
