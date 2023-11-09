@@ -8,7 +8,9 @@ $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_PrestamoMantenimiento = "30";
 $id_objeto_MantCuenta = "29";
+$id_objeto_Seguridad = "25";
 
+$permisos1 = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_PrestamoMantenimiento);
 $permisos2 =  $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_MantCuenta);
 
@@ -18,6 +20,7 @@ if (!isset($_SESSION['usuario'])) {
 
 if (isset($_GET['ID_EMPLEADO'])) {
     $ID_EMPLEADO = $_GET['ID_EMPLEADO'];
+    $_SESSION['id_empleado']=$ID_EMPLEADO;
 } else {
     echo "No se proporcionó el ID_EMPLEADO en la URL.";
 }
@@ -139,9 +142,18 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand" href="index.php">
+        <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
-        <!-- Navbar-->
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline mr-0 my-2 my-md-0 order-2">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </form>
+            <!-- Navbar-->
         <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
@@ -152,15 +164,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </li>
         </ul>
-        <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline mr-0 my-2 my-md-0 order-2">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
-                </div>
-            </div>
-        </form>
+        
     </nav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
@@ -173,7 +177,65 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
 
                         <?php
+                        //------------------------MODULO DE SEGURIDAD--------------------------------
+                        if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
+                                    Modulo seguridad
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
+                            echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
 
+                            if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                            }
+                            echo '</nav>';
+                            echo '</div>';
+                        }
+                        //------------------------MODULO DE EMPLEADO--------------------------------
+                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                                    Modulo Empleado
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+                            }
+                            echo '</nav>';
+                            echo '</div>';
+                        }
+                        //----------------------------MODULO DE CUENTAS------------------------------------
+                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
+                            <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
+                            Modulo Cuenta
+                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                          </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
+                            }
+                            echo '</nav>';
+                            echo '</div>';
+                        }
                         //----------------------------MODULO DE PRESTAMOS------------------------------------
                         if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
@@ -636,6 +698,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-primary" data-toggle="modal" data-target="#DepositoModal" onclick="CargarCuenta(' + cuenta.ID_CUENTA + ')">Deposito</button>';
                             row += '<button class="btn btn-secondary crear-movimiento" data-toggle="modal" data-target="#ReembolsoModal" onclick="CargarCuentaR(' + cuenta.ID_CUENTA + ')">Reembolso</button>';
+                            row += '<button class="btn btn-info crear-movimiento" data-id="' + cuenta.ID_CUENTA + '" onclick="redirectToHistorialCuenta(' + cuenta.ID_CUENTA + ')">Historial Transaccional</button>';
                         }
 
 
@@ -739,6 +802,12 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         });
                 }
             });
+        }
+
+        // REDIRIGIR A HISTORIAL 
+        function redirectToHistorialCuenta(ID_CUENTA) {
+            // Redirigir a la página HistorialCuenta.php con el parámetro ID_CUENTA
+            window.location.href = '../MantenimientoPrestamos/HistorialCuenta.php?ID_CUENTA=' + ID_CUENTA;
         }
 
         function CargarCuenta(id) {
