@@ -4,6 +4,44 @@
 class PlanPago extends Conectar
 
 {
+
+    public function get_planPago()
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "        SELECT
+        planp.ID_PLANP,
+        planp.ID_PRESTAMO,
+        tipo_prestamo.TIPO_PRESTAMO,
+        prestamo.TASA,
+        prestamo.PLAZO,
+        planp.FECHA_VENC_C,
+        planp.NUMERO_CUOTA,
+        planp.FECHA_R_PAGO,
+        planp.VALOR_CUOTA,
+        planp.MONTO_ADEUDADO,
+        planp.MONTO_PAGADO,
+        planp.MONTO_ADEUDADO_CAP,
+        planp.MONTO_PAGADO_CAP,
+        planp.MONTO_ADEUDADO_ITS,
+        planp.MONTO_PAGADO_ITS,
+        planp.MONTO_ADEUDADO_MORA,
+        planp.MONTO_PAGADO_MORA,
+        planp.ESTADO
+       
+    FROM
+        tbl_mp_planp AS planp
+    INNER JOIN
+        tbl_mp_prestamos AS prestamo ON planp.ID_PRESTAMO = prestamo.ID_PRESTAMO
+    INNER JOIN
+        tbl_mp_tipo_prestamo AS tipo_prestamo ON prestamo.ID_TIPO_PRESTAMO = tipo_prestamo.ID_TIPO_PRESTAMO;
+    
+          ";
+        $sql = $conectar->prepare($sql);
+        $sql->execute();
+        return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function insert_amortizacion(
         $ID_PRESTAMO,
         $FECHA_VENC_C,
@@ -170,4 +208,5 @@ class PlanPago extends Conectar
             return "Error al insertar registros: " . $e->getMessage();
         }
     }
+
 }

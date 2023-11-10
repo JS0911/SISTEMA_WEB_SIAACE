@@ -21,6 +21,11 @@ $body = json_decode(file_get_contents("php://input"), true);
 
 
 switch ($_GET["op"]) {
+    case "GetPlanPago":
+        $datos = $com->get_planPago();
+        echo json_encode($datos);
+        break;
+
     case "InsertPlanPago":
         $ID_PRESTAMO = 8;
         $datos = $com->insert_amortizacion(

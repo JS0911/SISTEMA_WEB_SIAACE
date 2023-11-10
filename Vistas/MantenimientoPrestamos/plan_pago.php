@@ -248,6 +248,9 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 <tr>
                                     <th style="display: none;">Id Plan Pago</th>
                                     <th style="display: none;">Id Prestamo</th>
+                                    <th>Prestamo</th>
+                                    <th>Tasa</th>
+                                    <th>Plazo Pago</th>
                                     <th>Fecha Vencimiento/Cuota</th>
                                     <th>Numero Cuota</th>
                                     <th>Fecha Pago</th>
@@ -289,7 +292,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         function Lista_PlanPago() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             // Actualizar el valor predeterminado
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=GetPlanes', {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=GetPlanPago', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
@@ -313,6 +316,9 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         var row = '<tr>' +
                             '<td style="display:none;">' + plan.ID_PLANP + '</td>' +
                             '<td style="display:none;">' + plan.ID_PRESTAMO + '</td>' +
+                            '<td>' + plan.TIPO_PRESTAMO + '</td>' +
+                            '<td>' + plan.TASA + '</td>' +
+                            '<td>' + plan.PLAZO + '</td>' +
                             '<td>' + plan.FECHA_VENC_C + '</td>' +
                             '<td>' + plan.NUMERO_CUOTA + '</td>' +
                             '<td>' + plan.FECHA_R_PAGO + '</td>' +
@@ -323,8 +329,8 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td>' + plan.MONTO_PAGADO_CAP + '</td>' +
                             '<td>' + plan.MONTO_ADEUDADO_ITS + '</td>' +
                             '<td>' + plan.MONTO_PAGADO_ITS + '</td>' +
-                            '<td>' + plan.MONTO_ADEUDADO_MORA + '</td>' +
-                            '<td>' + plan.MONTO_PAGADO_MORA + '</td>' +
+                            '<td style="display:none;">' + plan.MONTO_ADEUDADO_MORA + '</td>' +
+                            '<td style="display:none;">' + plan.MONTO_PAGADO_MORA + '</td>' +
                             '<td>' + plan.ESTADO + '</td>' +
                             '<td>';
 
@@ -357,7 +363,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         }
 
         $(document).ready(function() {
-            //Lista_PlanPago();
+            Lista_PlanPago();
         });
     </script>
 
