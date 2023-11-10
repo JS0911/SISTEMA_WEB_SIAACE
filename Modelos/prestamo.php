@@ -50,23 +50,23 @@ class Prestamo extends Conectar
     }
 
     // //INSERTA UN PRESTAMO
-    public function insert_prestamo($ID_EMPLEADO, $ID_TIPO_PRESTAMO, $ID_FPAGO, $MONTO_SOLICITADO, $ESTADO_PRESTAMO)
+    public function insert_prestamo($ID_EMPLEADO, $ID_TIPO_PRESTAMO, $ID_FPAGO, $TASA, $PLAZO, $MONTO_SOLICITADO, $ESTADO_PRESTAMO)
     {
         try {
 
             $conectar = parent::conexion();
             parent::set_names();
             $ESTADO_PRESTAMO = "PENDIENTE";
-            $sql = "INSERT INTO `siaace`.`tbl_mp_prestamos` ( `ID_EMPLEADO`, `ID_TIPO_PRESTAMO`, `ID_FPAGO`, `MONTO_SOLICITADO`, `FECHA_SOLICITUD`, `ESTADO_PRESTAMO`) 
-            VALUES ( :ID_EMPLEADO, :ID_TIPO_PRESTAMO, :ID_FPAGO, :MONTO_SOLICITADO, NOW(), :ESTADO_PRESTAMO)";
-
-
+            $sql = "INSERT INTO `siaace`.`tbl_mp_prestamos` ( `ID_EMPLEADO`, `ID_TIPO_PRESTAMO`, `ID_FPAGO`, `PLAZO`, `TASA`, `MONTO_SOLICITADO`, `FECHA_SOLICITUD`, `ESTADO_PRESTAMO`) 
+            VALUES ( :ID_EMPLEADO, :ID_TIPO_PRESTAMO, :ID_FPAGO, :PLAZO, :TASA, :MONTO_SOLICITADO, NOW(), :ESTADO_PRESTAMO)";
 
             $stmt = $conectar->prepare($sql);
 
             $stmt->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
             $stmt->bindParam(':ID_TIPO_PRESTAMO', $ID_TIPO_PRESTAMO, PDO::PARAM_INT);
             $stmt->bindParam(':ID_FPAGO', $ID_FPAGO, PDO::PARAM_INT);
+            $stmt->bindParam(':PLAZO', $PLAZO, PDO::PARAM_INT);
+            $stmt->bindParam(':TASA', $TASA, PDO::PARAM_INT);
             $stmt->bindParam(':MONTO_SOLICITADO', $MONTO_SOLICITADO, PDO::PARAM_STR);
             $stmt->bindParam(':ESTADO_PRESTAMO', $ESTADO_PRESTAMO, PDO::PARAM_STR);
 
@@ -82,7 +82,6 @@ class Prestamo extends Conectar
             return "Error al insertar el prestamo: " . $e->getMessage();
         }
     }
-
 
     public function anular_prestamo($ID_PRESTAMO)
     {
@@ -109,7 +108,6 @@ class Prestamo extends Conectar
             echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
         }
     }
-
     public function aprobar_prestamo($ID_PRESTAMO)
     {
         try {
@@ -160,32 +158,30 @@ class Prestamo extends Conectar
             echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
         }
     }
-
     public function obtenerEstadoPrestamo($ID_PRESTAMO)
-{
-    try {
-        $conectar = parent::conexion();
-        parent::set_names();
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
 
-        // Consulta SELECT para obtener el estado del préstamo
-        $select_sql = "SELECT `ESTADO_PRESTAMO` FROM `tbl_mp_prestamos` WHERE `ID_PRESTAMO` = :ID_PRESTAMO";
-        $stmt_select = $conectar->prepare($select_sql);
-        $stmt_select->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-        $stmt_select->execute();
+            // Consulta SELECT para obtener el estado del préstamo
+            $select_sql = "SELECT `ESTADO_PRESTAMO` FROM `tbl_mp_prestamos` WHERE `ID_PRESTAMO` = :ID_PRESTAMO";
+            $stmt_select = $conectar->prepare($select_sql);
+            $stmt_select->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmt_select->execute();
 
-        // Obtener el resultado como un array asociativo
-        $resultado = $stmt_select->fetch(PDO::FETCH_ASSOC);
+            // Obtener el resultado como un array asociativo
+            $resultado = $stmt_select->fetch(PDO::FETCH_ASSOC);
 
-        if ($resultado) {
-            // Devolver el estado del préstamo
-            return $resultado['ESTADO_PRESTAMO'];
-        } else {
-            // El préstamo no se encontró o no existe
-            return "NO ENCONTRADO";
+            if ($resultado) {
+                // Devolver el estado del préstamo
+                return $resultado['ESTADO_PRESTAMO'];
+            } else {
+                // El préstamo no se encontró o no existe
+                return "NO ENCONTRADO";
+            }
+        } catch (PDOException $e) {
+            return "Error al Consultar el Estado de Prestamo: " . $e->getMessage();
         }
-    } catch (PDOException $e) {
-        return "Error al Consultar el Estado de Prestamo: " . $e->getMessage();
     }
-}
-
 }

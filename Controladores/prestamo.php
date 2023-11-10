@@ -27,7 +27,7 @@ switch ($_GET["op"]) {
     break;
 
     case "InsertPrestamo":
-        $datos = $com->insert_prestamo( $body["ID_EMPLEADO"], $body["ID_TIPO_PRESTAMO"], $body["ID_FPAGO"], $body["MONTO_SOLICITADO"], $body["ESTADO_PRESTAMO"]);
+        $datos = $com->insert_prestamo( $body["ID_EMPLEADO"], $body["ID_TIPO_PRESTAMO"], $body["ID_FPAGO"], $body["PLAZO"], $body["TASA"], $body["MONTO_SOLICITADO"], $body["ESTADO_PRESTAMO"]);
         echo json_encode($datos);
     break;
 

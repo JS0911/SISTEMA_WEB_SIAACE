@@ -50,6 +50,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
@@ -85,6 +86,10 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             /* Alineación del texto al centro */
         }
 
+        #Lista-forma-pago_wrapper .buttons-html5:first-child {
+            margin-left: 20px;
+            /* Adjust the margin value as needed */
+        }
         /* Estilo personalizado para el placeholder */
         #myInput {
             border: 1px solid #000;
@@ -250,16 +255,16 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     <th style="display: none;"> Id Tipo Prestamo</th>
                                     <th>Tipo Prestamo</th>
                                     <th style="display: none;">Id Forma/Pago</th>
-                                    <th>Forma/Pago</th>
-                                    <th>Fecha /Solicitud</th>
+                                    <th>Tasa</th>
+                                    <th>Plazo</th>
+                                    <th style="display: none;">Forma/Pago</th>
+                                    <th>Fecha/Solicitud</th>
                                     <th>Fecha/Aprobacion</th>
-                                    <th>Fecha Cancelacion</th>
+                                    <th>Fecha/Cancelacion</th>
                                     <th>Fecha/Desembolso</th>
                                     <th>Monto/Solicitado</th>
                                     <th style="display: none;">Monto Desembolsado </th>
                                     <th style="display: none;">Monto Adeudado </th>
-                                    <th>Plazo</th>
-                                    <th>Tasa</th>
                                     <th>Estado/Prestamo</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -283,6 +288,18 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
 
@@ -318,7 +335,9 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td style="display:none;">' + prestamo.ID_TIPO_PRESTAMO + '</td>' +
                             '<td >' + prestamo.TIPO_PRESTAMO + '</td>' +
                             '<td style="display:none;">' + prestamo.ID_FPAGO + '</td>' +
-                            '<td>' + prestamo.FORMA_DE_PAGO + '</td>' +
+                            '<td style="display:none;">' + prestamo.FORMA_DE_PAGO + '</td>' +
+                            '<td>' + prestamo.PLAZO + '</td>' +
+                            '<td>' + prestamo.TASA + '</td>' +
                             '<td>' + prestamo.FECHA_SOLICITUD + '</td>' +
                             '<td>' + prestamo.FECHA_APROBACION + '</td>' +
                             '<td>' + prestamo.FECHA_DE_CANCELACION + '</td>' +
@@ -326,8 +345,6 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td>' + prestamo.MONTO_SOLICITADO + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_DESEMBOLSO + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_ADEUDADO + '</td>' +
-                            '<td>' + prestamo.PLAZO + '</td>' +
-                            '<td>' + prestamo.TASA + '</td>' +
                             '<td>' + prestamo.ESTADO_PRESTAMO + '</td>' +
                             '<td>';
 
@@ -335,18 +352,16 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-danger" id="AnularButton" onclick="AnularPrestamo(' + prestamo.ID_PRESTAMO + ')">Anular</button>';
+                            row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ',' + prestamo.MONTO_SOLICITADO + ',' + prestamo.PLAZO + ',' + prestamo.TASA + ',' + prestamo.ESTADO_PRESTAMO +')">Aprobar</button>';
+                            row += '<button class="btn btn-success" id="DesembolsoButton" onclick="DesembolsoPrestamo(' + prestamo.ID_PRESTAMO + ')">Desembolso</button>';
                         }
 
                         // if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                         //     row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ')">Aprobar</button>';
                         // }
 
-                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ',' + prestamo.MONTO_SOLICITADO + ',' + prestamo.PLAZO + ',' + prestamo.TASA + ',' + prestamo.ESTADO_PRESTAMO +')">Aprobar</button>';
-                        }
-
-                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-success" id="DesembolsoButton" onclick="DesembolsoPrestamo(' + prestamo.ID_PRESTAMO + ')">Desembolso</button>';
+                        if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
+                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + prestamo.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + prestamo.ID_EMPLEADO + ')">Movimiento</button>';
                         }
 
                         row += '</td>' +
@@ -370,11 +385,34 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             $('#Lista-prestamo').DataTable({
                 "paging": true,
                 "pageLength": 10,
+                dom: 'lBfrtip',
+                buttons: [{
+                        extend: 'copy',
+                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>'
+                    }
+                ],
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
             });
+        }
+
+        function redirectToIngresarPrestamo(ID_EMPLEADO) {
+            // Redirige a la página IngresarPrestamo.php
+            window.location.href = 'IngresarPrestamo.php?ID_EMPLEADO=' + ID_EMPLEADO;
         }
 
         function AnularPrestamo(ID_PRESTAMO) {
@@ -469,9 +507,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     console.error('Error:', error);
                 });
         }
-
-
-
+        
         function DesembolsoPrestamo(ID_PRESTAMO) {
             // Realiza una solicitud FETCH al servidor para anular el préstamo
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=desembolsoPrestamo', {
@@ -509,8 +545,6 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 '&PLAZO=' + PLAZO +
                 '&TASA=' + TASA;
         }
-
-
 
         $(document).ready(function() {
             Lista_Prestamo();
