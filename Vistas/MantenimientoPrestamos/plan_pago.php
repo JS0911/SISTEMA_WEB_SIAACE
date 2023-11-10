@@ -3,9 +3,9 @@
 session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
-require_once '../../Modelos/bitacora.php';
 
-$permisosBitacora = new PermisosUsuarios();
+
+$permisosPrestamo = new PermisosUsuarios();
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
@@ -14,15 +14,17 @@ if (!isset($_SESSION['usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Bitacora = "14";
+$id_objeto_Prestamo = "29";
 $id_objeto_Seguridad = "25";
 $id_objeto_Cuentas = "28";
+$id_objeto_MantenimientoPlanPago = "32";
 
-$permisos1 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
-$permisos = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacora);
-$permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos1 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
+$permisos = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_MantenimientoPlanPago);
+$permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+
+
 ?>
-
 <style>
     .logo {
         width: 50px;
@@ -43,25 +45,24 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bitacora</title>
+    <title>Mantenimiento Plan Pago</title>
     <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <style>
         /* Estilo para la tabla */
-        #Lista-bitacora {
+        #Lista-planpago {
             border-collapse: collapse;
             /* Combina los bordes de las celdas */
             width: 100%;
         }
 
         /* Estilo para las celdas del encabezado (th) */
-        #Lista-bitacora th {
+        #Lista-planpago th {
             border: 2px solid white;
             /* Bordes negros para las celdas del encabezado */
             background-color: #333;
@@ -75,7 +76,7 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         }
 
         /* Estilo para las celdas de datos (td) */
-        #Lista-bitacora td {
+        #Lista-planpago td {
             border: 1px solid grey;
             /* Bordes negros para las celdas de datos */
             padding: 8px;
@@ -84,15 +85,22 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             /* Alineación del texto al centro */
         }
 
-        #Lista-forma-pago_wrapper .buttons-html5:first-child {
-            margin-left: 20px;
-            /* Adjust the margin value as needed */
-        }
-
         /* Estilo personalizado para el placeholder */
         #myInput {
             border: 1px solid #000;
             /* Borde más oscuro, en este caso, negro (#000) */
+        }
+
+        /*BOTON DE CREAR NUEVO */
+        .custom-button {
+            background-color: #4CAF50;
+            /* Verde */
+            color: #fff;
+            /* Texto en blanco */
+            border: 2px solid #4CAF50;
+            /* Borde verde */
+            margin-top: 1px;
+
         }
     </style>
 
@@ -134,7 +142,7 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         </a>
 
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
-                        
+
                         <?php
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
@@ -146,18 +154,19 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
-                                echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                                echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
-                                echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                                echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
-                                echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                                echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;">Bitacora</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
                             }
+
                             echo '</nav>';
                             echo '</div>';
                         }
-                         //-------------------------MODULO DE EMPLEADO---------------------------------------------
+                        //-------------------------------------MODULO DE EMPLEADO--------------------------------
                         if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
@@ -168,16 +177,15 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
-
-                                }
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/tipoPrestamo.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Tipo Prestamo</a>';
+                            }
                             echo '</nav>';
                             echo '</div>';
                         }
-
                         //----------------------------MODULO DE CUENTAS------------------------------------
                         if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
@@ -196,7 +204,6 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             echo '</nav>';
                             echo '</div>';
                         }
-
                         //----------------------------MODULO DE PRESTAMOS------------------------------------
                         if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
@@ -208,15 +215,15 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
-                                echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
-                                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamo</a>';
+                                echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
+                                echo '<a class="nav-link" href="tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
+                                echo '<a class="nav-link" href="plan_pago.php"><i class="fa fa-money-check-alt" aria-hidden="true"></i><span style="margin-left: 5px;"> Plan Pago</a>';
+                                echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamo</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
                         }
                         ?>
-
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -227,25 +234,34 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         </div>
         <div id="layoutSidenav_content">
 
-            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE BITACORA -->
+            <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE SUCURSAL -->
             <main>
                 <div class="container-fluid">
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
-                            <h1 class="mt-4 mb-4">Bitacora</h1>
+                            <h1 class="mt-4 mb-4">Mantenimiento Plan Pago</h1>
                         </center>
-
                         <!-- Tabla para mostrar los datos -->
-                        <table class="table table-bordered mx-auto" id="Lista-bitacora" style="margin-top: 20px; margin-bottom: 20px">
+                        <table class="table table-bordered mx-auto" id="Lista-planpago" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-                                    <th style="display: none;">Id Bitacora</th>
-                                    <th>Fecha</th>
-                                    <th>Accion</th>
-                                    <th>Descripcion</th>
-                                    <th>Nombre Usuario</th>
-                                    <th>Objeto</th>
+                                    <th style="display: none;">Id Plan Pago</th>
+                                    <th style="display: none;">Id Prestamo</th>
+                                    <th>Fecha Vencimiento/Cuota</th>
+                                    <th>Numero Cuota</th>
+                                    <th>Fecha Pago</th>
+                                    <th>Valor Cuota</th>
+                                    <th>Monto Adeudado</th>
+                                    <th>Monto Pagado</th>
+                                    <th>Monto Adeudado Capital</th>
+                                    <th>Monto Pagado Capital</th>
+                                    <th>Monto Adeudado Interes</th>
+                                    <th>Monto Pagado Interes</th>
+                                    <th style="display: none;">Monto Adeudaro Mora</th>
+                                    <th style="display: none;">Monto Pagado Mora</th>
+                                    <th>Estado/Plan Pago</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -255,7 +271,7 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     </div>
                 </div>
             </main>
-            <!-- AQUI FINALIZA EL MANTENIMIENTO DE OBJETOS -->
+            <!-- AQUI FINALIZA EL MANTENIMIENTO DE SUCURSAL -->
 
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid">
@@ -267,24 +283,13 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         </div>
     </div>
 
-    <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-        function Lista_Bitacora() {
+
+        function Lista_PlanPago() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/bitacora.php?op=GetBitacora', {
+            // Actualizar el valor predeterminado
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=GetPlanes', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
@@ -301,18 +306,33 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 })
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
-                    var tbody = document.querySelector('#Lista-bitacora tbody');
+                    var tbody = document.querySelector('#Lista-planpago tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
-
-                    data.forEach(function(bitacora) {
+                
+                    data.forEach(function(plan) {
                         var row = '<tr>' +
-                            '<td style="display:none;">' + bitacora.ID_BITACORA + '</td>' +
-                            '<td>' + bitacora.FECHA + '</td>' +
-                            '<td>' + bitacora.ACCION + '</td>' +
-                            '<td>' + bitacora.DESCRIPCION + '</td>' +
-                            '<td>' + bitacora.NOMBRE_USUARIO + '</td>' +
-                            '<td>' + bitacora.OBJETO + '</td>' +
+                            '<td style="display:none;">' + plan.ID_PLANP + '</td>' +
+                            '<td style="display:none;">' + plan.ID_PRESTAMO + '</td>' +
+                            '<td>' + plan.FECHA_VENC_C + '</td>' +
+                            '<td>' + plan.NUMERO_CUOTA + '</td>' +
+                            '<td>' + plan.FECHA_R_PAGO + '</td>' +
+                            '<td>' + plan.VALOR_CUOTA + '</td>' +
+                            '<td>' + plan.MONTO_ADEUDADO + '</td>' +
+                            '<td>' + plan.MONTO_PAGADO + '</td>' +
+                            '<td>' + plan.MONTO_ADEUDADO_CAP + '</td>' +
+                            '<td>' + plan.MONTO_PAGADO_CAP + '</td>' +
+                            '<td>' + plan.MONTO_ADEUDADO_ITS + '</td>' +
+                            '<td>' + plan.MONTO_PAGADO_ITS + '</td>' +
+                            '<td>' + plan.MONTO_ADEUDADO_MORA + '</td>' +
+                            '<td>' + plan.MONTO_PAGADO_MORA + '</td>' +
+                            '<td>' + plan.ESTADO + '</td>' +
+                            '<td>';
+
+                            row += '</td>' +
                             '</tr>';
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -326,27 +346,9 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         }
 
         function habilitarPaginacion() {
-            $('#Lista-bitacora').DataTable({
+            $('#Lista-planpago').DataTable({
                 "paging": true,
                 "pageLength": 10,
-                dom: 'lBfrtip',
-                buttons: [{
-                        extend: 'copy',
-                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
-                    },
-                    {
-                        extend: 'excel',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>'
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>'
-                    },
-                    {
-                        extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>'
-                    }
-                ],
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
@@ -355,9 +357,7 @@ $permisos2 = $permisosBitacora->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         }
 
         $(document).ready(function() {
-
-            Lista_Bitacora();
-
+            //Lista_PlanPago();
         });
     </script>
 

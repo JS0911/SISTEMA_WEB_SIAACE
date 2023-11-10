@@ -115,7 +115,7 @@ $permisos3 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
+                                        <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                         Modulo Empleado
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                     </a>';
@@ -162,7 +162,7 @@ $permisos3 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
                                 if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                     echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
-                                    echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Prestamo</a>';
+                                    echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Prestamos</a>';
 
                                 }                            
                                 echo '</nav>';

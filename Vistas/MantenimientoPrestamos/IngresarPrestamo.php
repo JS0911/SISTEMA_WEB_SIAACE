@@ -8,7 +8,9 @@ $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_PrestamoMantenimiento = "30";
 $id_objeto_MantCuenta = "29";
+$id_objeto_Seguridad = "25";
 
+$permisos1 = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_PrestamoMantenimiento);
 $permisos2 =  $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_MantCuenta);
 
@@ -18,6 +20,7 @@ if (!isset($_SESSION['usuario'])) {
 
 if (isset($_GET['ID_EMPLEADO'])) {
     $ID_EMPLEADO = $_GET['ID_EMPLEADO'];
+    $_SESSION['id_empleado']=$ID_EMPLEADO;
 } else {
     echo "No se proporcionó el ID_EMPLEADO en la URL.";
 }
@@ -139,9 +142,18 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand" href="index.php">
+        <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
-        <!-- Navbar-->
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline mr-0 my-2 my-md-0 order-2">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </form>
+            <!-- Navbar-->
         <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
@@ -152,15 +164,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </li>
         </ul>
-        <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline mr-0 my-2 my-md-0 order-2">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
-                </div>
-            </div>
-        </form>
+        
     </nav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
@@ -173,7 +177,65 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
 
                         <?php
+                        //------------------------MODULO DE SEGURIDAD--------------------------------
+                        if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
+                                    Modulo seguridad
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
+                            echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
 
+                            if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                            }
+                            echo '</nav>';
+                            echo '</div>';
+                        }
+                        //------------------------MODULO DE EMPLEADO--------------------------------
+                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                                    Modulo Empleado
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+                            }
+                            echo '</nav>';
+                            echo '</div>';
+                        }
+                        //----------------------------MODULO DE CUENTAS------------------------------------
+                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
+                            <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
+                            Modulo Cuenta
+                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                          </a>';
+                            echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
+                            echo '<nav class="sb-sidenav-menu-nested nav">';
+
+                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
+                            }
+                            echo '</nav>';
+                            echo '</div>';
+                        }
                         //----------------------------MODULO DE PRESTAMOS------------------------------------
                         if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
@@ -250,6 +312,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <tr>
                                                     <th scope="col">Tipo Prestamo</th>
                                                     <th scope="col">Forma Pago</th>
+                                                    <th scope="col">Monto</th>
                                                     <th scope="col">Detalles</th>
                                                 </tr>
                                             </thead>
@@ -322,7 +385,6 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <?php endforeach; ?>
                                             </select>
 
-
                                             <!-- Segundo select para la tasa, inicialmente vacío -->
                                             <label for="tipoPrestamoTasa">Tasa (menor a mayor)</label>
                                             <select class="form-control" id="agregar-tipoPrestamoTasa" name="tipoPrestamoTasa" required>
@@ -336,14 +398,14 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             </select>
 
                                             <label for="MSolicitado">Monto Solicitado</label>
-                                            <input type="text" class="form-control" id="agregar-MSolicitado" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
+                                            <input type="text" class="form-control" id="agregar-MSolicitado" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un monto válido (hasta 8 dígitos enteros y 2 decimales)">
                                             <div id="mensaje1"></div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" id="btn-agregarCancelar" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-primary" id="btn-agregarP">Guardar</button>
+                                    <button type="button" class="btn btn-primary" id="btn-agregarP" disabled>Guardar</button>
                                 </div>
                             </div>
                         </div>
@@ -365,7 +427,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <div class="form-group">
 
                                             <label for="NumeroCuenta">Numero De Cuenta</label>
-                                            <input type="text" maxlength="10" class="form-control" id="NumeroCuenta">
+                                            <input type="text" maxlength="10" class="form-control" id="NumeroCuenta" required pattern="^[0-9-]+$" title="Ingrese un número de cuenta válido (solo números y -)">
                                             <div id="mensaje2"></div>
 
                                             <label for="id-tipo-cuenta">Tipo Cuenta</label>
@@ -374,7 +436,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <?php foreach ($TiposCuentas as $TiposCuentas) : ?>
                                                     <option value="<?php echo $TiposCuentas['ID_TIPOCUENTA']; ?>"><?php echo $TiposCuentas['TIPO_CUENTA']; ?></option>
                                                 <?php endforeach; ?>
-                                                <div id="mensaje3"></div>
+                                                
                                             </select>
 
                                             <label for="Estado">Estado</label>
@@ -383,14 +445,12 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <option value="ACTIVO">ACTIVO</option>
                                                 <option value="INACTIVO">INACTIVO</option>
                                             </select>
-                                            <div id="mensaje4"></div>
-
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-primary" id="btn-agregarC">Guardar</button>
+                                    <button type="button" class="btn btn-primary" id="btn-agregarC" disabled>Guardar</button>
                                 </div>
                             </div>
                         </div>
@@ -416,13 +476,14 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <label for="saldo">Saldo</label>
                                             <input type="text" class="form-control" id="Saldo" disabled>
                                             <label for="Deposito">Monto De Deposito</label>
-                                            <input type="text" class="form-control" id="Monto-Deposito">
+                                            <input type="text" class="form-control" id="Monto-Deposito" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un deposito válido (hasta 8 dígitos enteros y 2 decimales)">
+                                            <div id="mensaje3"></div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-primary" id="btn-enviar-deposito">Guardar</button>
+                                    <button type="button" class="btn btn-primary" id="btn-enviar-deposito" disabled>Guardar</button>
                                 </div>
                             </div>
                         </div>
@@ -448,13 +509,14 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <label for="saldo">Saldo</label>
                                             <input type="text" class="form-control" id="SaldoR" disabled>
                                             <label for="Deposito">Monto De Reembolso</label>
-                                            <input type="text" class="form-control" id="Monto-Reembolso">
+                                            <input type="text" class="form-control" id="Monto-Reembolso" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un retiro válido (hasta 8 dígitos enteros y 2 decimales)">
+                                            <div id="mensaje4"></div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-primary" id="btn-enviar-reembolso">Guardar</button>
+                                    <button type="button" class="btn btn-danger" id="btn-cancelarEditar1" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary" id="btn-enviar-reembolso" disabled>Guardar</button>
                                 </div>
                             </div>
 
@@ -504,6 +566,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             '<td>' + prestamo.TIPO_PRESTAMO + '</td>' +
                             '<td style="display:none;">' + prestamo.ID_FPAGO + '</td>' +
                             '<td>' + prestamo.FORMA_DE_PAGO + '</td>' +
+                            '<td>' + prestamo.MONTO_SOLICITADO + '</td>' +
                             '<td>';
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         row += '<button class="btn btn-secondary ver-cuotas" data-id="' + prestamo.ID_PRESTAMO + '" onclick="redirectToIngresarPrestamo(' + prestamo.ID_PRESTAMO + ')">Cuotas</button>';
@@ -529,8 +592,11 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 var tipoPrestamo = document.getElementById("agregar-tipoPrestamo").value; // Obtener el valor del select
                 var formaPago = document.getElementById("agregar-formaPago").value; // Obtener el valor del select
                 var montoSolicitado = $("#agregar-MSolicitado").val();
+                var plazo = $("#agregar-tipoPrestamoPlazo").val();
+                var tasa = $("#agregar-tipoPrestamoTasa").val();
 
-                if (tipoPrestamo == "" || formaPago == "" || montoSolicitado == "") {
+
+                if (tipoPrestamo == "" || formaPago == "" || montoSolicitado == "" || tasa == "" || plazo == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
@@ -542,6 +608,8 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         ID_EMPLEADO: <?php echo $ID_EMPLEADO; ?>,
                         ID_TIPO_PRESTAMO: tipoPrestamo,
                         ID_FPAGO: formaPago,
+                        PLAZO: plazo,
+                        TASA: tasa,
                         MONTO_SOLICITADO: montoSolicitado,
                         ESTADO_PRESTAMO: "PENDIENTE"
                     };
@@ -636,9 +704,8 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-primary" data-toggle="modal" data-target="#DepositoModal" onclick="CargarCuenta(' + cuenta.ID_CUENTA + ')">Deposito</button>';
                             row += '<button class="btn btn-secondary crear-movimiento" data-toggle="modal" data-target="#ReembolsoModal" onclick="CargarCuentaR(' + cuenta.ID_CUENTA + ')">Reembolso</button>';
+                            row += '<button class="btn btn-info crear-movimiento" data-id="' + cuenta.ID_CUENTA + '" onclick="redirectToHistorialCuenta(' + cuenta.ID_CUENTA + ')">Historial Transaccional</button>';
                         }
-
-
 
                         row += '</td>' +
                             '</tr>';
@@ -680,8 +747,6 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         NUMERO_CUENTA: NumeroCuenta,
                         ESTADO: estado
                     };
-
-
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=InsertCuenta', {
 
                             method: 'POST',
@@ -739,6 +804,12 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         });
                 }
             });
+        }
+
+        // REDIRIGIR A HISTORIAL 
+        function redirectToHistorialCuenta(ID_CUENTA) {
+            // Redirigir a la página HistorialCuenta.php con el parámetro ID_CUENTA
+            window.location.href = '../MantenimientoPrestamos/HistorialCuenta.php?ID_CUENTA=' + ID_CUENTA;
         }
 
         function CargarCuenta(id) {
@@ -831,15 +902,11 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 var id_cuenta = document.getElementById("id-cuenta-edit").value; // Obtener el valor del select
                 var deposito = document.getElementById("Monto-Deposito").value; // Obtener el valor del select
-
-
                 // Crear un objeto con los datos a enviar al servidor
                 var datos = {
                     ID_CUENTA: id_cuenta,
                     DEPOSITO: deposito
                 }
-
-
                 fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=DepositoCuenta', {
                         method: 'POST',
                         headers: {
@@ -894,15 +961,11 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 var id_cuenta = document.getElementById("id-cuenta-editR").value; // Obtener el valor del select
                 var reembolso = document.getElementById("Monto-Reembolso").value; // Obtener el valor del select
-
-
                 // Crear un objeto con los datos a enviar al servidor
                 var datos = {
                     ID_CUENTA: id_cuenta,
                     REEMBOLSO: reembolso
                 }
-
-
                 fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=ReembolsoCuenta', {
                         method: 'POST',
                         headers: {
@@ -951,10 +1014,12 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
             });
         }
 
-
         // VALIDACIONES FUNCIONES    
         function validarNombre() {
             var agregarMSolicitado = document.getElementById("agregar-MSolicitado");
+            var agregarNumeroCuenta = document.getElementById("NumeroCuenta");
+            var agregarDeposito = document.getElementById("Monto-Deposito");
+            var agregarRetiro = document.getElementById("Monto-Reembolso");
 
             function clearMessage(messageElement, inputElement) {
                 messageElement.innerHTML = ""; // Elimina el contenido del mensaje
@@ -998,7 +1063,18 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             var expresionValidadora1 = /^\d+(\.\d{2})?$/;
             var mensaje1 = document.getElementById("mensaje1");
-            handleInputAndBlurEvents(agregarMSolicitado, expresionValidadora1, mensaje1, "Ingrese un salario válido (por ejemplo, 1000.00)");
+            handleInputAndBlurEvents(agregarMSolicitado, expresionValidadora1, mensaje1, "Ingrese un monto válido (por ejemplo, 1000.00)");
+            
+            var expresionValidadora2 = /^[0-9-]+/;
+            var mensaje2 = document.getElementById("mensaje2");
+            handleInputAndBlurEvents(NumeroCuenta, expresionValidadora2, mensaje2, "Ingrese un número de cuenta válido (solo números y -)");
+        
+            var mensaje3 = document.getElementById("mensaje3");
+            handleInputAndBlurEvents(Monto-Deposito, expresionValidadora1, mensaje3, "Ingrese un deposito válido (por ejemplo, 1000.00)");
+        
+            var mensaje4 = document.getElementById("mensaje4");
+            handleInputAndBlurEvents(Monto-Reembolso, expresionValidadora1, mensaje4, "Ingrese un retiro válido (por ejemplo, 1000.00)");
+            
         }
 
         $(document).ready(function() {
@@ -1019,24 +1095,28 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
         // Obtén los campos de entrada y el botón "Guardar para insertar"
         const agregartipoPrestamo = document.getElementById("agregar-tipoPrestamo");
         const agregarformaPago = document.getElementById("agregar-formaPago");
+        const agregarTasa = document.getElementById("agregar-tipoPrestamoTasa");
+        const agregarPlazo = document.getElementById("agregar-tipoPrestamoPlazo");
         const agregarMSolicitadoInput = document.getElementById("agregar-MSolicitado");
-        const guardarButton = document.getElementById('btn-agregarp}P');
+        const guardarButton = document.getElementById('btn-agregarP');
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = agregartipoPrestamo.value.trim() !== '' && agregarformaPago.value.trim() !== '' && agregarMSolicitadoInput.value.trim() !== '';
+            const isFormValid = agregartipoPrestamo.value.trim() !== '' && agregarformaPago.value.trim() !== ''  && agregarTasa.value.trim() !== '' && agregarPlazo.value.trim() !== '' && agregarMSolicitadoInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
         agregartipoPrestamo.addEventListener('input', checkForm);
         agregarformaPago.addEventListener('input', checkForm);
+        agregarTasa.addEventListener('input', checkForm);
+        agregarPlazo.addEventListener('input', checkForm);
         agregarMSolicitadoInput.addEventListener('input', checkForm);
     </script>
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-tipoPrestamo, #agregar-formaPago, #agregar-MSolicitado').on('input', function() {
+        $('#agregar-tipoPrestamo, #agregar-formaPago, #agregar-MSolicitado, #agregar-tipoPrestamoTasa, #agregar-tipoPrestamoPlazo').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -1071,8 +1151,38 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </script>
 
     <script>
+        // Obtén los campos de entrada y el botón "Guardar para editar"
+        const agregarDeposito = document.getElementById("Monto-Deposito");
+        const guardarButton2 = document.getElementById('btn-enviar-deposito');
+
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isFormValid = agregarDeposito.value.trim() !== '';
+            guardarButton2.disabled = !isFormValid;
+        }
+
+        // Agrega un evento input a cada campo de entrada
+        agregarDeposito.addEventListener('input', checkForm);
+    </script>
+
+    <script>
+        // Obtén los campos de entrada y el botón "Guardar para editar"
+        const agregarRetiro = document.getElementById("Monto-Reembolso");
+        const guardarButton3 = document.getElementById('btn-enviar-reembolso');
+
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isFormValid = agregarRetiro.value.trim() !== '';
+            guardarButton3.disabled = !isFormValid;
+        }
+
+        // Agrega un evento input a cada campo de entrada
+        agregarRetiro.addEventListener('input', checkForm);
+    </script>
+
+    <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#NumeroCuenta, #agregar-tipo-cuenta, #agregar-estado').on('input', function() {
+        $('#NumeroCuenta, #agregar-tipo-cuenta, #agregar-estado, #Monto-Deposito, #Monto-Reembolso').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -1093,11 +1203,14 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('agregar-tipoPrestamo').value = "";
             document.getElementById('agregar-formaPago').value = "";
             document.getElementById('agregar-MSolicitado').value = "";
-
+            document.getElementById('agregar-tipoPrestamoTasa').value = "";
+            document.getElementById('agregar-tipoPrestamoPlazo').value = "";
             // Limpia los checkboxes
             document.getElementById('agregar-tipoPrestamo').checked = false;
             document.getElementById('agregar-formaPago').checked = false;
             document.getElementById('agregar-MSolicitado').checked = false;
+            document.getElementById('agregar-tipoPrestamoTasa').checked = false;
+            document.getElementById('agregar-tipoPrestamoPlazo').checked = false;
             location.reload();
         });
     </script>
@@ -1108,7 +1221,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('NumeroCuenta').value = "";
             document.getElementById('agregar-tipo-cuenta').value = "";
             document.getElementById('agregar-estado').value = "";
-
+        
             // Limpia los checkboxes
             document.getElementById('NumeroCuenta').checked = false;
             document.getElementById('agregar-tipo-cuenta').checked = false;
@@ -1117,6 +1230,27 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
     </script>
 
+    <script>
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
+        document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
+            document.getElementById('Monto-Deposito').value = "";
+            
+            // Limpia los checkboxes
+            document.getElementById('Monto-Deposito').checked = false;
+            location.reload();
+        });
+    </script>
+
+    <script>
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
+        document.getElementById('btn-cancelarEditar1').addEventListener('click', function() {
+            document.getElementById('Monto-Reembolso').value = "";
+        
+            // Limpia los checkboxes
+            document.getElementById('Monto-Reembolso').checked = false;
+            location.reload();
+        });
+    </script>
 
     <script>
         var TipoPrestamoTasa = <?php echo json_encode($TipoPrestamoTasa); ?>;
