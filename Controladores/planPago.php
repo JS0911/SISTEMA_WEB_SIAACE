@@ -32,8 +32,12 @@ switch ($_GET["op"]) {
         echo json_encode($datos);
         break;
 
-        /* case "Pago":
-            $datos = $com->pago($body["tasa"],$body["nper"],$body["va"]);
+        case "calcularCuota":
+            $datos = $com->calcularCuota($body["TASA"],$body["PLAZO"],$body["MONTO_SOLICITADO"],$body["PLAZOQUINCENAS"]);
             echo json_encode($datos);
-        break; */
+        break;
+        case "repetirIdPrestamo":
+            $datos = $com->repetirIDPrestamo($body["ID_PRESTAMO"],$body["TASA"],$body["PLAZO"],$body["MONTO_SOLICITADO"],$body["PLAZOQUINCENAS"]);
+            echo json_encode($datos);
+        break;
 }

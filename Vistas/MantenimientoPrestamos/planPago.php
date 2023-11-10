@@ -57,32 +57,32 @@ if (isset($_GET['ID_PRESTAMOP'], $_GET['MONTO_SOLICITADO'], $_GET['PLAZO'], $_GE
         var PLAZO = <?php echo json_encode($PLAZO); ?>;
         var MONTO_SOLICITADO = <?php echo json_encode($MONTO_SOLICITADO); ?>;
         var TASA = <?php echo json_encode($TASA); ?>;
+        var plazoQuincenas = PLAZO * 2;
 
         function Insertar_Amortizacion() {
             ID_PRESTAMO = ID_PRESTAMOP;
-            QUINCENAS = PLAZO * 2;
-            TASAREAL = (TASA/PLAZO);
-            MONTO_APROBADO = -(MONTO_SOLICITADO);
-            VALOR_CUOTA = pago(TASAREAL, QUINCENAS, MONTO_APROBADO);
-
-            console.log('VALOR_CUOTA:', VALOR_CUOTA);
-            console.log('QUINCENAS:', QUINCENAS);
-            console.log('TASA REAL:', TASAREAL);
-            console.log('MONTO APROBADO:', MONTO_APROBADO);
+           
+            VALOR_CUOTA = calcularCuota(TASA, PLAZO, MONTO_SOLICITADO);
+             console.log('VALOR_CUOTA:', VALOR_CUOTA);
+           // console.log('PRESTAMO:', ID_PRESTAMO);
 
         }
 
 
-        function pago(tasa, nper, va) {
+        function calcularCuota(TASA, PLAZO, MONTO_SOLICITADO) {
             try {
-                if (isNaN(tasa) || isNaN(nper) || isNaN(va)) {
+                if (isNaN(TASA) || isNaN(PLAZO) || isNaN(MONTO_SOLICITADO)) {
                     throw new Error("Los parámetros deben ser numéricos.");
                 }
-                const vp = va * Math.pow(1 + tasa, -nper);
-                const f_desc = 1 / (1 - Math.pow(1 + tasa, -nper));
+               
+                // Calcular la cuota usando la fórmula PMT
+                const tasaPeriodica = parseFloat((TASA / 100 / 24).toFixed(5)); // Tasa de interés periódica
+                const cuota = (parseFloat(MONTO_SOLICITADO) * tasaPeriodica * 1) / (1-Math.pow(1+tasaPeriodica,-plazoQuincenas));
 
-                return parseFloat((vp * f_desc).toFixed(5));
-
+                console.log('tasa:', tasaPeriodica);
+                console.log('monto:', MONTO_SOLICITADO);
+                // Redondear a dos decimales
+                return parseFloat(cuota.toFixed(2));
             } catch (error) {
                 // Manejar el error aquí
                 console.log(error.message);

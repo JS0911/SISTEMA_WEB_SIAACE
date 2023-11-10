@@ -3,9 +3,7 @@
 
 class PlanPago extends Conectar
 
-
 {
-
     public function insert_amortizacion(
         $ID_PRESTAMO,
         $FECHA_VENC_C,
@@ -22,7 +20,7 @@ class PlanPago extends Conectar
         $MONTO_PAGADO_MORA,
         $ESTADO
     ) {
-        
+
 
         // Conectar a la base de datos
         $conectar = parent::conexion();
@@ -97,19 +95,79 @@ class PlanPago extends Conectar
         }
     }
 
-    /* function pago($tasa, $nper, $va)
+    public function calcularCuota($TASA, $PLAZO, $MONTO_SOLICITADO, $PLAZOQUINCENAS)
     {
         try {
-            if (!is_numeric($tasa) || !is_numeric($nper) || !is_numeric($va)) {
+            if (!is_numeric($TASA) || !is_numeric($PLAZO) || !is_numeric($MONTO_SOLICITADO)) {
                 throw new Exception("Los parámetros deben ser numéricos.");
             }
 
-            $vp = $va * pow(1 + $tasa, -$nper);
-            $f_desc = 1 / (1 - pow(1 + $tasa, -$nper));
+            // Calcular la cuota usando la fórmula PMT
+            $tasaPeriodica = floatval($TASA / 100 / 24); // Tasa de interés periódica
+            $cuota = (floatval($MONTO_SOLICITADO) * $tasaPeriodica * 1) / (1 - pow(1 + $tasaPeriodica, -$PLAZOQUINCENAS));
 
-            return number_format($vp * $f_desc, 2);
-        } catch (Exception $e) {
-            echo json_encode(array('error' => $e->getMessage()));
+            // Redondear a dos decimales
+           // return number_format($cuota, 2);
+            // Redondear a dos decimales
+              return  round($cuota, 2);
+        } catch (Exception $error) {
+            // Manejar el error aquí
+            return "Error: " . $error->getMessage();
         }
-    } */
+    }
+
+    public function repetirIDPrestamo($ID_PRESTAMO, $TASA, $PLAZO, $MONTO_SOLICITADO, $PLAZOQUINCENAS)
+    {
+        // Conectar a la base de datos
+        $conectar = parent::conexion();
+        parent::set_names();
+
+        try {
+            // Consulta SQL para realizar el INSERT repetido
+            $sql = "INSERT INTO `siaace`.`tbl_mp_planp` (
+            ID_PRESTAMO,
+            FECHA_VENC_C,
+            NUMERO_CUOTA,
+            ESTADO,
+            VALOR_CUOTA
+        ) VALUES (
+            :ID_PRESTAMO,
+            :FECHA_VENC_C,
+            :NUMERO_CUOTA,
+            :ESTADO,
+            :VALOR_CUOTA
+        )";
+
+            // Preparar la consulta
+            $stmt = $conectar->prepare($sql);
+            
+
+            // Loop para insertar según plazoQuincenas
+            for ($i = 1; $i <= $PLAZOQUINCENAS; $i++) {
+                // Calcular la fecha según la lógica
+                $fechaVencimiento = date('Y-m-d ', strtotime('+' . ($i * 14) . ' days')); // Sumar 15 días por cuincena
+                $ESTADO = "PENDIENTE";
+                // Setear los valores para cada iteración
+                // Calcular el valor de la cuota
+               $VALOR_CUOTA = $this->calcularCuota($TASA, $PLAZO, $MONTO_SOLICITADO, $PLAZOQUINCENAS);
+                $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+                $stmt->bindParam(':FECHA_VENC_C', $fechaVencimiento, PDO::PARAM_STR);
+                $stmt->bindParam(':NUMERO_CUOTA', $i, PDO::PARAM_INT);
+                $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
+                $stmt->bindParam(':VALOR_CUOTA', $VALOR_CUOTA, PDO::PARAM_STR);
+
+                // Ejecutar la consulta
+                $stmt->execute();
+                
+            }
+  
+            //return "Registros insertados correctamente.";
+            return [
+                'message' => 'Registros insertados correctamente.',
+                'valor_cuota' => $VALOR_CUOTA,
+            ];
+        } catch (PDOException $e) {
+            return "Error al insertar registros: " . $e->getMessage();
+        }
+    }
 }
