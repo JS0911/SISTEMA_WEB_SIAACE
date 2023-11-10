@@ -122,18 +122,24 @@ class cuenta extends Conectar
 
         // Consulta SQL para actualizar los campos del usuario
         $sql = "UPDATE tbl_mc_cuenta SET SALDO = SALDO + :SALDO  WHERE ID_CUENTA = :ID_CUENTA";
+        $sql2 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`) VALUES (:SALDO_D,:ID_CUENTA_D, 1, NOW())";
+
 
         $stmt = $conectar->prepare($sql);
         $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
         $stmt->bindParam(':SALDO', $DEPOSITO, PDO::PARAM_INT);
         $stmt->execute();
 
+        $stmt2 = $conectar->prepare($sql2);
+        $stmt2->bindParam(':ID_CUENTA_D', $ID_CUENTA, PDO::PARAM_INT);
+        $stmt2->bindParam(':SALDO_D', $DEPOSITO, PDO::PARAM_INT);
+        $stmt2->execute();
+
         if ($stmt->rowCount() > 0) {
             return "Saldo Actualizado";
         } else {
             return "Error al actualizar saldo";
         }
-
 
     }
 
