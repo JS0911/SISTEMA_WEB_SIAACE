@@ -334,6 +334,14 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td>' + plan.ESTADO + '</td>' +
                             '<td>';
 
+                          // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botónes
+
+                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
+                            row += '<button class="btn btn-secondary id="Pago_CapitalButton" onclick="PagoCapital(' + plan.ID_PLANP + ')">P Capital</button>';
+                            row += '<button class="btn btn-primary" id="Pago_InteresButton" onclick="PagoInteres(' + plan.ID_PLANP + ')">P Interes</button>';
+                            row += '<button class="btn btn-success" id="Pago_totalButton" onclick="PagoTotal(' + plan.ID_PLANP + ')">P Total</button>';
+                        }
+
                             row += '</td>' +
                             '</tr>';
                             //Cambiar palabra null por vacio.
