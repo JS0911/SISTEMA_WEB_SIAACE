@@ -24,6 +24,7 @@ if (isset($_GET['ID_PRESTAMOP'], $_GET['MONTO_SOLICITADO'], $_GET['PLAZO'], $_GE
 
 <head>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Plan de Pago</title>
 </head>
 
@@ -57,36 +58,68 @@ if (isset($_GET['ID_PRESTAMOP'], $_GET['MONTO_SOLICITADO'], $_GET['PLAZO'], $_GE
         var PLAZO = <?php echo json_encode($PLAZO); ?>;
         var MONTO_SOLICITADO = <?php echo json_encode($MONTO_SOLICITADO); ?>;
         var TASA = <?php echo json_encode($TASA); ?>;
-        var plazoQuincenas = PLAZO * 2;
+        var PLAZOQUINCENAS = PLAZO * 2;
 
         function Insertar_Amortizacion() {
-            ID_PRESTAMO = ID_PRESTAMOP;
-           
-            VALOR_CUOTA = calcularCuota(TASA, PLAZO, MONTO_SOLICITADO);
-             console.log('VALOR_CUOTA:', VALOR_CUOTA);
-           // console.log('PRESTAMO:', ID_PRESTAMO);
+           if (PLAZO == "" || MONTO_SOLICITADO == "" || TASA == "" || PLAZOQUINCENAS == "" ) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'No se pueden enviar Campos Vacios.'
+                    });
+                } else {
+                    // Crear un objeto con los datos a enviar al servidor
+                    var datos = {
+                        ID_PRESTAMO: ID_PRESTAMOP,
+                        TASA: TASA,
+                        PLAZO: PLAZO,
+                        MONTO_SOLICITADO: MONTO_SOLICITADO,
+                        PLAZOQUINCENAS: PLAZOQUINCENAS
+                    };
 
-        }
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=InsertarAmortizacion', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(datos)
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+                                return response.json();
+                            } else {
+                                // Si hubo un error en la solicitud, maneja el error aquí
+                                throw new Error('Error en la solicitud');
+                            }
+                        })
+                        .then(function(data) {
+                            console.log(data);
 
+                            // Mostrar SweetAlert de éxito
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Guardado exitoso',
+                                text: 'Plan de pago Creado Exitosamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                //location.reload();
+                                window.location.href = 'prestamo.php';
+                            });
 
-        function calcularCuota(TASA, PLAZO, MONTO_SOLICITADO) {
-            try {
-                if (isNaN(TASA) || isNaN(PLAZO) || isNaN(MONTO_SOLICITADO)) {
-                    throw new Error("Los parámetros deben ser numéricos.");
+                        })
+                        .catch(function(error) {
+                            console.log(error.message);
+
+                            // Mostrar SweetAlert de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al guardar los datos: ' + error.message
+                            });
+                        });
                 }
-               
-                // Calcular la cuota usando la fórmula PMT
-                const tasaPeriodica = parseFloat((TASA / 100 / 24).toFixed(5)); // Tasa de interés periódica
-                const cuota = (parseFloat(MONTO_SOLICITADO) * tasaPeriodica * 1) / (1-Math.pow(1+tasaPeriodica,-plazoQuincenas));
 
-                console.log('tasa:', tasaPeriodica);
-                console.log('monto:', MONTO_SOLICITADO);
-                // Redondear a dos decimales
-                return parseFloat(cuota.toFixed(2));
-            } catch (error) {
-                // Manejar el error aquí
-                console.log(error.message);
-            }
         }
 
         $(document).ready(function() {

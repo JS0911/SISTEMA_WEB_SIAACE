@@ -22,27 +22,20 @@ $body = json_decode(file_get_contents("php://input"), true);
 
 switch ($_GET["op"]) {
     case "GetPlanPago":
-        $datos = $com->get_planPago();
+        $datos = $com->get_planPago($body["ID_PRESTAMO"]);
         echo json_encode($datos);
         break;
 
-    case "InsertPlanPago":
-        $ID_PRESTAMO = 8;
-        $datos = $com->insert_amortizacion(
-            $ID_PRESTAMO,$body["FECHA_VENC_C"], $body["NUMERO_CUOTA"], $body["FECHA_R_PAGO"], $body["VALOR_CUOTA"], $body["MONTO_ADEUDADO"], 
-            $body["MONTO_PAGADO"], $body["MONTO_ADEUDADO_CAP"], $body["MONTO_PAGADO_CAP"], 
-            $body["MONTO_ADEUDADO_ITS"], $body["MONTO_PAGADO_ITS"], $body["MONTO_ADEUDADO_MORA"],
-            $body["MONTO_PAGADO_MORA"], $body["ESTADO"]
-        );
+    case "calcularCuota":
+        $datos = $com->calcularCuota($body["TASA"], $body["PLAZO"], $body["MONTO_SOLICITADO"], $body["PLAZOQUINCENAS"]);
         echo json_encode($datos);
         break;
-
-        case "calcularCuota":
-            $datos = $com->calcularCuota($body["TASA"],$body["PLAZO"],$body["MONTO_SOLICITADO"],$body["PLAZOQUINCENAS"]);
-            echo json_encode($datos);
+    case "InsertarAmortizacion":
+        $datos = $com->InsertarAmortizacion($body["ID_PRESTAMO"], $body["TASA"], $body["PLAZO"], $body["MONTO_SOLICITADO"], $body["PLAZOQUINCENAS"]);
+        echo json_encode($datos);
         break;
-        case "repetirIdPrestamo":
-            $datos = $com->repetirIDPrestamo($body["ID_PRESTAMO"],$body["TASA"],$body["PLAZO"],$body["MONTO_SOLICITADO"],$body["PLAZOQUINCENAS"]);
-            echo json_encode($datos);
+    case "calcularInteresCapital":
+        $datos = $com->calcularInteresCapital($body["TASA"], $body["SALDO"], $body["VALOR_CUOTA"]);
+        echo json_encode($datos);
         break;
 }

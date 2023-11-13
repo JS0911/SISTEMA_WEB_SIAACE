@@ -569,7 +569,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             '<td>' + prestamo.MONTO_SOLICITADO + '</td>' +
                             '<td>';
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
-                        row += '<button class="btn btn-secondary ver-cuotas" data-id="' + prestamo.ID_PRESTAMO + '" onclick="redirectToIngresarPrestamo(' + prestamo.ID_PRESTAMO + ')">Cuotas</button>';
+                        row += '<button class="btn btn-secondary ver-cuotas" data-id="' + prestamo.ID_PRESTAMO + '" onclick="redirectToPlanPago(' + prestamo.ID_PRESTAMO + ')">Cuotas</button>';
                         row += '</td>' +
                             '</tr>';
                         //Cambiar palabra null por vacio.
@@ -806,6 +806,11 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
             });
         }
 
+        // REDIRIGIR A HISTORIAL 
+        function redirectToPlanPago(ID_PRESTAMO) {
+            // Redirigir a la página Plan_pago con el parametro ID_PRESTAMO
+            window.location.href = 'plan_pago.php?ID_PRESTAMO=' + ID_PRESTAMO;
+        }
         // REDIRIGIR A HISTORIAL 
         function redirectToHistorialCuenta(ID_CUENTA) {
             // Redirigir a la página HistorialCuenta.php con el parámetro ID_CUENTA

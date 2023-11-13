@@ -11,6 +11,11 @@ if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
 }
 
+if (isset($_GET['ID_PRESTAMO'])) {
+    $ID_PRESTAMO = $_GET['ID_PRESTAMO'];
+} else {
+    echo "No se proporcionó la cuenta en la URL.";
+}
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
@@ -248,11 +253,8 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 <tr>
                                     <th style="display: none;">Id Plan Pago</th>
                                     <th style="display: none;">Id Prestamo</th>
-                                    <th>Prestamo</th>
-                                    <th>Tasa</th>
-                                    <th>Plazo Pago</th>
-                                    <th>Fecha Vencimiento/Cuota</th>
                                     <th>Numero Cuota</th>
+                                    <th>Fecha Vencimiento/Cuota</th>
                                     <th>Fecha Pago</th>
                                     <th>Valor Cuota</th>
                                     <th>Monto Adeudado</th>
@@ -288,8 +290,15 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
 
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
+        var ID_PRESTAMO = <?php echo json_encode($ID_PRESTAMO); ?>;
 
-        function Lista_PlanPago() {
+        function Lista_PlanPago(ID_PRESTAMO) {
+
+
+            // Crear un objeto con el ID del usuario
+            var data = {
+                "ID_PRESTAMO": ID_PRESTAMO
+            };
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             // Actualizar el valor predeterminado
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=GetPlanPago', {
@@ -316,11 +325,8 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         var row = '<tr>' +
                             '<td style="display:none;">' + plan.ID_PLANP + '</td>' +
                             '<td style="display:none;">' + plan.ID_PRESTAMO + '</td>' +
-                            '<td>' + plan.TIPO_PRESTAMO + '</td>' +
-                            '<td>' + plan.TASA + '</td>' +
-                            '<td>' + plan.PLAZO + '</td>' +
-                            '<td>' + plan.FECHA_VENC_C + '</td>' +
                             '<td>' + plan.NUMERO_CUOTA + '</td>' +
+                            '<td>' + plan.FECHA_VENC_C + '</td>' +
                             '<td>' + plan.FECHA_R_PAGO + '</td>' +
                             '<td>' + plan.VALOR_CUOTA + '</td>' +
                             '<td>' + plan.MONTO_ADEUDADO + '</td>' +
