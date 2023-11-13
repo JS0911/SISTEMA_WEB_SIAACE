@@ -290,29 +290,26 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
 
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-        var ID_PRESTAMO = <?php echo json_encode($ID_PRESTAMO); ?>;
 
-        function Lista_PlanPago(ID_PRESTAMO) {
-
-
+        function Lista_PlanPago() {
             // Crear un objeto con el ID del usuario
             var data = {
-                "ID_PRESTAMO": ID_PRESTAMO
+                "ID_PRESTAMO": <?php echo json_encode($ID_PRESTAMO); ?>,
             };
+
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
-            // Actualizar el valor predeterminado
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=GetPlanPago', {
-                    method: 'GET',
+                    method: 'POST',
                     headers: {
-                        'Accept': 'application/json'
-                    }
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data) // Convierte el objeto en formato JSON
                 })
                 .then(function(response) {
                     if (response.ok) {
-                        // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
                         return response.json();
                     } else {
-                        // Si hubo un error en la solicitud, maneja el error aquí
                         throw new Error('Error en la solicitud');
                     }
                 })
@@ -320,50 +317,52 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-planpago tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
-                
+
                     data.forEach(function(plan) {
-                        var row = '<tr>' +
-                            '<td style="display:none;">' + plan.ID_PLANP + '</td>' +
-                            '<td style="display:none;">' + plan.ID_PRESTAMO + '</td>' +
-                            '<td>' + plan.NUMERO_CUOTA + '</td>' +
-                            '<td>' + plan.FECHA_VENC_C + '</td>' +
-                            '<td>' + plan.FECHA_R_PAGO + '</td>' +
-                            '<td>' + plan.VALOR_CUOTA + '</td>' +
-                            '<td>' + plan.MONTO_ADEUDADO + '</td>' +
-                            '<td>' + plan.MONTO_PAGADO + '</td>' +
-                            '<td>' + plan.MONTO_ADEUDADO_CAP + '</td>' +
-                            '<td>' + plan.MONTO_PAGADO_CAP + '</td>' +
-                            '<td>' + plan.MONTO_ADEUDADO_ITS + '</td>' +
-                            '<td>' + plan.MONTO_PAGADO_ITS + '</td>' +
-                            '<td style="display:none;">' + plan.MONTO_ADEUDADO_MORA + '</td>' +
-                            '<td style="display:none;">' + plan.MONTO_PAGADO_MORA + '</td>' +
-                            '<td>' + plan.ESTADO + '</td>' +
-                            '<td>';
+                            // Convertir el array a un objeto
+                           // plan = Object.assign({}, plan[0]);
+                            var row = '<tr>' +
+                                '<td style="display:none;">' + plan.ID_PLANP + '</td>' +
+                                '<td style="display:none;">' + plan.ID_PRESTAMO + '</td>' +
+                                '<td>' + plan.NUMERO_CUOTA + '</td>' +
+                                '<td>' + plan.FECHA_VENC_C + '</td>' +
+                                '<td>' + plan.FECHA_R_PAGO + '</td>' +
+                                '<td>' + plan.VALOR_CUOTA + '</td>' +
+                                '<td>' + plan.MONTO_ADEUDADO + '</td>' +
+                                '<td>' + plan.MONTO_PAGADO + '</td>' +
+                                '<td>' + plan.MONTO_ADEUDADO_CAP + '</td>' +
+                                '<td>' + plan.MONTO_PAGADO_CAP + '</td>' +
+                                '<td>' + plan.MONTO_ADEUDADO_ITS + '</td>' +
+                                '<td>' + plan.MONTO_PAGADO_ITS + '</td>' +
+                                '<td style="display:none;">' + plan.MONTO_ADEUDADO_MORA + '</td>' +
+                                '<td style="display:none;">' + plan.MONTO_PAGADO_MORA + '</td>' +
+                                '<td>' + plan.ESTADO + '</td>' +
+                                '<td>';
 
-                          // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botónes
+                            // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar los botones
+                            if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
+                                row += '<button class="btn btn-secondary" id="Pago_CapitalButton" onclick="PagoCapital(' + plan.ID_PLANP + ')">P Capital</button>';
+                                row += '<button class="btn btn-primary" id="Pago_InteresButton" onclick="PagoInteres(' + plan.ID_PLANP + ')">P Interes</button>';
+                                row += '<button class="btn btn-success" id="Pago_totalButton" onclick="PagoTotal(' + plan.ID_PLANP + ')">P Total</button>';
+                            }
+                       
 
-                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-secondary id="Pago_CapitalButton" onclick="PagoCapital(' + plan.ID_PLANP + ')">P Capital</button>';
-                            row += '<button class="btn btn-primary" id="Pago_InteresButton" onclick="PagoInteres(' + plan.ID_PLANP + ')">P Interes</button>';
-                            row += '<button class="btn btn-success" id="Pago_totalButton" onclick="PagoTotal(' + plan.ID_PLANP + ')">P Total</button>';
-                        }
-
-                            row += '</td>' +
+                        console.log(plan);
+                        row += '</td>' +
                             '</tr>';
-                            //Cambiar palabra null por vacio.
-                            newrow = row.replaceAll("null", " ");
-                            row = newrow;
+                        //Cambiar palabra null por vacio.
+                        newrow = row.replaceAll("null", " ");
+                        row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
                 })
-
                 .catch(function(error) {
                     // Manejar el error aquí
                     alert('Error al cargar los datos: ' + error.message);
                 });
-
         }
+
 
         function habilitarPaginacion() {
             $('#Lista-planpago').DataTable({

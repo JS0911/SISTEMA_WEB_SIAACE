@@ -90,6 +90,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             margin-left: 20px;
             /* Adjust the margin value as needed */
         }
+
         /* Estilo personalizado para el placeholder */
         #myInput {
             border: 1px solid #000;
@@ -352,7 +353,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-danger" id="AnularButton" onclick="AnularPrestamo(' + prestamo.ID_PRESTAMO + ')">Anular</button>';
-                            row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ',' + prestamo.MONTO_SOLICITADO + ',' + prestamo.PLAZO + ',' + prestamo.TASA + ',' + prestamo.ESTADO_PRESTAMO +')">Aprobar</button>';
+                            row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ',' + prestamo.MONTO_SOLICITADO + ',' + prestamo.PLAZO + ',' + prestamo.TASA + ',' + prestamo.ESTADO_PRESTAMO + ')">Aprobar</button>';
                             row += '<button class="btn btn-success" id="DesembolsoButton" onclick="DesembolsoPrestamo(' + prestamo.ID_PRESTAMO + ')">Desembolso</button>';
                         }
 
@@ -410,9 +411,9 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 page: 'current'
                             },
                         },
-                        customize: function (doc) {
-                            doc.pageOrientation = 'landscape'; 
-                            doc.pageSize = 'LETTER'; 
+                        customize: function(doc) {
+                            doc.pageOrientation = 'landscape';
+                            doc.pageSize = 'LETTER';
 
                             var now = new Date();
                             var date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
@@ -439,33 +440,28 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 image: LogoBase64,
                                 width: 70,
                                 height: 70,
-                            },{
+                            }, {
                                 margin: [0, -20, 0, 20],
                                 alignment: 'left',
                                 text: 'Fecha: ' + date + '\nHora: ' + horas,
                                 fontSize: 10,
                                 bold: true
                             });
-                            doc.footer = function (currentPage, pageCount) {
+                            doc.footer = function(currentPage, pageCount) {
                                 return {
                                     margin: 10,
-                                    columns: [
-                                        {
-                                            fontSize: 10,
-                                            text: [
-                                                {
-                                                    text:
-                                                        "Página " +
-                                                        currentPage.toString() +
-                                                        " de " +
-                                                        pageCount,
-                                                    alignment: "center",
-                                                    bold: true
-                                                },
-                                            ],
+                                    columns: [{
+                                        fontSize: 10,
+                                        text: [{
+                                            text: "Página " +
+                                                currentPage.toString() +
+                                                " de " +
+                                                pageCount,
                                             alignment: "center",
-                                        },
-                                    ],
+                                            bold: true
+                                        }, ],
+                                        alignment: "center",
+                                    }, ],
                                 };
                             };
                         }
@@ -480,7 +476,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 page: 'current'
                             },
                         },
-                        customize: function (doc) {
+                        customize: function(doc) {
                             doc.pageOrientation = 'landscape';
                         }
                     }
@@ -527,8 +523,10 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 });
         }
 
+        const PENDIENTE = 'PENDIENTE';
         const APROBADO = 'APROBADO';
-
+        const ANULADO = 'ANULADO';
+       
         function AprobarPrestamo(ID_PRESTAMO, MONTO_SOLICITADO, PLAZO, TASA, ESTADO_PRESTAMO) {
             // Verificar el estado del préstamo antes de aprobar
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=obtenerEstadoPrestamo', {
@@ -544,7 +542,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 .then(response => response.json())
                 .then(data => {
                     console.log(ESTADO_PRESTAMO);
-                    if (data && data.ESTADO_PRESTAMO !== APROBADO) {
+                    if (data && data.ESTADO_PRESTAMO !== 'PENDIENTE') {
                         // El préstamo no ha sido aprobado, proceder con la aprobación
                         fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=aprobarPrestamo', {
                                 method: 'POST',
@@ -562,11 +560,14 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     document.getElementById('AprobarButton').classList.remove('btn-primary');
                                     document.getElementById('AprobarButton').classList.add('btn-secondary');
                                     document.getElementById('AprobarButton').disabled = true;
+                                    // Llamar a la función planPago aquí
+                                    planPago(ID_PRESTAMO, MONTO_SOLICITADO, PLAZO, TASA);
                                     // // Recargar la página para mostrar los nuevos datos
                                     // location.reload();
                                     setTimeout(function() {
                                         location.reload();
                                     }, 5000);
+
                                 } else {
                                     console.error('Error en la solicitud');
                                 }
@@ -575,7 +576,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 console.error('Error:', error);
                             });
 
-                        planPago(ID_PRESTAMO, MONTO_SOLICITADO, PLAZO, TASA);
+
                     } else {
                         // El préstamo ya ha sido aprobado
                         Swal.fire({
@@ -589,7 +590,8 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     console.error('Error:', error);
                 });
         }
-        
+
+
         function DesembolsoPrestamo(ID_PRESTAMO) {
             // Realiza una solicitud FETCH al servidor para anular el préstamo
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=desembolsoPrestamo', {

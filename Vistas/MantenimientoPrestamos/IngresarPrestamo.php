@@ -581,7 +581,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
-                    //alert('Error al cargar los datos: ' + error.message);
+                   // alert('Error al cargar los datos: ' + error.message);
                 });
         }
 

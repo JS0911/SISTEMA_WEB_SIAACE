@@ -13,8 +13,9 @@ class PlanPago extends Conectar
         $stmt = $conectar->prepare($sql);
         $stmt->bindParam(":ID_PRESTAMO", $ID_PRESTAMO, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 
     /* public function get_planPago()
     {
