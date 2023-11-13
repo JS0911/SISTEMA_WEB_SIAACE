@@ -6,10 +6,6 @@ require_once '../Modelos/permisoUsuario.php';
 
 $permisosUsuarios = new PermisosUsuarios();
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
-}
-
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 //$id_estado_usuario = $_POST['id_estado_usuario'];
@@ -20,6 +16,10 @@ $id_objeto_Empleado = "27";
 $id_objeto_Cuentas = "28";
 $id_objeto_Prestamos = "29";
 
+if (!isset($_SESSION['usuario'])) {
+    header("Location: login.php");
+    exit();
+}
 
 $permisos1 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);

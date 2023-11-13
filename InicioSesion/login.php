@@ -2,6 +2,7 @@
 session_start();
 
 require "../Config/conexion.php";
+require "../Modelos/bitacora.php";
 
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
@@ -37,13 +38,19 @@ if ($_POST) {
                 } elseif ($row['id_estado_usuario'] == 4) {
                     $mensajeEstado = 'Su usuario se encuentra bloqueado.';
                 } else {
+                    $date = new DateTime(date("Y-m-d H:i:s"));
+                    $dateMod = $date->modify("-7 hours");
+                    $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+                    $bitacora = new bitacora();
+                    $bitacora->insert_bitacora($dateNew, "INICIO DE SESION", "INGRESO EL USUARIO: " . $_SESSION['usuario'], $_SESSION['id_usuario'], 14, $_SESSION['usuario'], $dateNew);
+                    //$bitacora->insert_bitacora($dateNew, "INICIO DE SESION", "INGRESO EL USUARIO: " . $_SESSION['usuario'], $_SESSION['id_usuario'], 32, $_SESSION['usuario'], $dateNew);
                     header("Location: index.php");
-                    //echo $id_rol;
+                    exit();
                 }
             } else {
 
                 $contrasenaNoCoincide = "La contraseña no coincide";
-                
+
                 if (!isset($_COOKIE['intentosFallidos'])) {
                     setcookie('intentosFallidos', 1, time() + 86400);
                     setcookie('usuarioIntento', $usuario, time() + 86400);
@@ -57,22 +64,22 @@ if ($_POST) {
                     } else {
                         $cont++;
                         setcookie('intentosFallidos', $cont, time() + 86400);
-                    
+
                         // Obtener el valor máximo de intentos permitidos desde la base de datos
                         $sqlParametro = "SELECT VALOR FROM tbl_ms_parametros WHERE PARAMETRO = 'BLOQUEO'";
                         $stmtParametro = $conn->query($sqlParametro);
                         $rowParametro = $stmtParametro->fetch(PDO::FETCH_ASSOC);
                         $cantMaximaIntentos = $rowParametro['VALOR'];
-                        
+
                         if ($cantMaximaIntentos <= $_COOKIE['intentosFallidos']) {
                             $contrasenaNoCoincide = "Su usuario ha sido bloqueado debido a que excedió la cantidad de intentos.";
-                            
+
                             // Actualizar el estado del usuario en la base de datos
                             $sqlBloquearUsuario = "UPDATE tbl_ms_usuario SET id_estado_usuario = 4 WHERE usuario = :usuario";
                             $stmtBloquearUsuario = $conn->prepare($sqlBloquearUsuario);
                             $stmtBloquearUsuario->bindParam(':usuario', $usuario);
                             $stmtBloquearUsuario->execute();
-                            
+
                             // Eliminar las cookies de intentosFallidos y usuarioIntento
                             setcookie('intentosFallidos', "", time() - 3600);
                             setcookie('usuarioIntento', "", time() - 3600);
@@ -88,6 +95,12 @@ if ($_POST) {
     }
     header("refresh: 2; url=login.php");
 }
+
+if (isset($_SESSION['usuario'])) {
+    header("Location: index.php");
+    exit();
+}
+
 ?>
 
 <style>

@@ -549,7 +549,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-
+        //import LogoBase64 from '../../src/LogoBase64.js';                                        
         function Lista_Empleados() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/empleados.php?op=GetEmpleados', {
@@ -626,8 +626,9 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             // Redirigir a la página IngresarPrestamo.php con el parámetro ID_EMPLEADO
             window.location.href = ' ../MantenimientoPrestamos/IngresarPrestamo.php?ID_EMPLEADO=' + ID_EMPLEADO;
         }
-
+        //import LogoBase64 from '../../src/LogoBase64.js';      
         function habilitarPaginacion() {
+            var LogoBase64 = "";
             $('#Lista-Empleados').DataTable({
                 "paging": true,
                 "pageLength": 10,
@@ -638,16 +639,94 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     },
                     {
                         extend: 'excel',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>'
+                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 11],
+                            modifier: {
+                                page: 'current'
+                            },
+                        }
                     },
                     {
                         extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>'
+                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 11],
+                            modifier: {
+                                page: 'current'
+                            }
+                        },
+                        customize: function (doc) {
+                            doc.pageOrientation = 'portrait'; 
+                            doc.pageSize = 'LETTER'; 
+
+                            var now = new Date();
+                            var date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
+                            var horas = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+
+                            doc.content.splice(0, 1);
+                            doc.content.unshift({
+                                margin: [0, 0, 0, 0],
+                                alignment: 'center',
+                                text: 'IDH-Microfinanciera',
+                                fontSize: 20,
+                                bold: true,
+                                color: '#063970',
+                                margin: [0, 0, 0, 20]
+                            }, {
+                                margin: [0, 0, 0, 0],
+                                alignment: 'center',
+                                text: 'Reporte de Empleados',
+                                fontSize: 20,
+                                bold: true
+                            }, {
+                                margin: [0, -60, 0, 20],
+                                alignment: 'right',
+                                image: LogoBase64,
+                                width: 70,
+                                height: 70,
+                            },{
+                                margin: [0, -20, 0, 20],
+                                alignment: 'left',
+                                text: 'Fecha: ' + date + '\nHora: ' + horas,
+                                fontSize: 10,
+                                bold: true
+                            });
+                            doc.footer = function (currentPage, pageCount) {
+                                return {
+                                    margin: 10,
+                                    columns: [
+                                        {
+                                            fontSize: 10,
+                                            text: [
+                                                {
+                                                    text:
+                                                        "Página " +
+                                                        currentPage.toString() +
+                                                        " de " +
+                                                        pageCount,
+                                                    alignment: "center",
+                                                    bold: true
+                                                },
+                                            ],
+                                            alignment: "center",
+                                        },
+                                    ],
+                                };
+                            };
+                        }
                     },
                     {
                         extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>'
-                    }
+                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>',
+                        autoPrint: true,
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 11],
+                            modifier: {
+                                page: 'current'
+                            },
+                        },
+                    }       
                 ],
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
