@@ -48,8 +48,8 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
             $asunto = "IDH - Recuperación de Correo";
             $mensaje = "<div>Hola $usuario.</div><br><div>Recibimos una solicitud para restablecer tu password de IDH.</div>
             <div>Ingresa el siguiente codigo para restablecer la password.</div><br>
-            <div>$tokeng</div><br>
-            <div><a href=http://localhost:90/sistema_web_siaace/Vistas/RecuperacionContrasenia/IngresoToken.php?token='$tokeng'&usuario='$id_usuario'>Recuperar</a></div>";
+            <div><h2>$tokeng</h2></div><br>";
+            //<div><a href=http://localhost:90/sistema_web_siaace/Vistas/RecuperacionContrasenia/IngresoToken.php?token='$tokeng'&usuario='$id_usuario'>Recuperar</a></div>";
 
             $errors = $savetoken->enviarCorreo($email,$asunto,$mensaje);
             echo "<script>

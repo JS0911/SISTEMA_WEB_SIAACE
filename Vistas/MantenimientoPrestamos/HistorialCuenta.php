@@ -257,53 +257,30 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <thead>
                                                 <tr>
                                                     <th scope="col">Fecha</th>
-                                                    <th scope="col">Referencia</th>
+                                                    <th scope="col">Monto</th>
                                                     <th scope="col">Descripcion</th>
-                                                    <th scope="col">Debitos</th>
-                                                    <th scope="col">Creditos</th>
-                                                    <th scope="col">Balance</th>
+                                                    <th scope="col">Acciones</th>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-header" id="headingTwo">
-                                    <h2 class="mb-0">
-                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            Resumen de Cuentas
-                                        </button>
-                                    </h2>
-                                </div>
-                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        <h5 class="bel-typography bel-typography-h2">Debitos</h5>
-                                        <table class="table table-bordered mx-auto" id="Lista-Debitos" style="margin-top: 20px; margin-bottom: 20px">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Codigo</th>
-                                                    <th scope="col">Movimiento</th>
-                                                    <th scope="col">Cantidad</th>
-                                                    <th scope="col">Monto</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
-                                        <h5 class="bel-typography bel-typography-h2">Creditos</h5>
-                                        <table class="table table-bordered mx-auto" id="Lista-Creditos" style="margin-top: 20px; margin-bottom: 20px">
-                                            <thead>
-                                                <tr>
-                                                <th scope="col">Codigo</th>
-                                                    <th scope="col">Movimiento</th>
-                                                    <th scope="col">Cantidad</th>
-                                                    <th scope="col">Monto</th>
-                                                </tr>
+                                                <?php
+                                                $consulta = new cuenta();
+                                                $result = $consulta->historial_cuenta($ID_CUENTA);
+                                                if ($result !== false) {
+                                                    if (is_array($result) && count($result) > 0) {
+                                                        foreach ($result as $row) {
+                                                            echo "<tr>";
+                                                            echo "<td>" . $row["FECHA"] . "</td>";
+                                                            echo "<td>" . $row["MONTO"] . "</td>";
+                                                            echo "<td>" . $row["TIPO_TRANSACCION"] . "</td>";
+                                                            echo "<td><button type='button' class='btn btn-outline-primary'>Primary</button></td>";
+                                                            echo "</tr>";
+                                                        }
+                                                    } else {
+                                                        echo "<tr><td colspan='4'>No hay datos</td></tr>";
+                                                    }
+                                                } else {
+                                                    echo "<tr><td colspan='4'>'Error en la consulta: ' . $conn->error</td></tr>";
+                                                }
+                                                ?>
                                             </thead>
                                             <tbody>
 
@@ -318,26 +295,17 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </main>
         </div>
     </div>
-
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
 
-        //FUNCIONES PARA CUENTAS
-        function Lista_Cuentas() {
+        function Lista_Transaccion() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             // Actualizar el valor predeterminado
-
-            var data = {
-                "ID_CUENTA": <?php echo $ID_CUENTA; ?>,
-            };
-
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=GetCuenta', {
-                    method: 'POST',
+            fetch('http://localhost:90/sistema_web_siaace/Vistas/MantenimientoPrestamos/HistorialCuenta.php?ID_CUENTA=24', {
+                    method: 'GET',
                     headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data) // Convierte la forma de pago en formato JSON
+                        'Accept': 'application/json'
+                    }
                 })
                 .then(function(response) {
                     if (response.ok) {
@@ -350,24 +318,32 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 })
                 .then(function(data) {
                     // Recorre los datos JSON y agrega filas a la tabla
-                    var tbody = document.querySelector('#Lista-Cuentas tbody');
+                    var tbody = document.querySelector('#Lista-Transacciones tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
-                    data.forEach(function(cuenta) {
+                    data.forEach(function(cargo) {
                         var row = '<tr>' +
-                            '<td style="display:none;">' + cuenta.ID_CUENTA + '</td>' +
-                            '<td>' + cuenta.NUMERO_CUENTA + '</td>' +
-                            '<td>' + cuenta.SALDO + '</td>' +
+                            '<td style="display:none;">' + cargo.ID_CARGO + '</td>' +
+                            '<td>' + cargo.CARGO + '</td>' +
+                            '<td>' + cargo.DESCRIPCION + '</td>' +
+                            '<td>' + cargo.ESTADO + '</td>' +
+
                             '<td>';
+
+                        // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
+
+                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
+                            row += '<button class="btn btn-primary" onclick="cargarCargo(' + cargo.ID_CARGO + ')">Anular</button>';
+                        }
 
                         row += '</td>' +
                             '</tr>';
-                        //Cambiar palabra null por vacio.
-                        newrow = row.replaceAll("null", " ");
-                        row = newrow;
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
-                    //habilitarPaginacion();
+                    habilitarPaginacion();
                 })
 
                 .catch(function(error) {
@@ -376,91 +352,19 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 });
 
         }
-
-        function CargarCuenta(id) {
-            var data = {
-                "ID_CUENTA": id
-            };
-
-            // Realiza una solicitud FETCH para obtener los detalles de la forma de pago por su ID
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=GetCuenta', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data) // Convierte la forma de pago en formato JSON
-
-                })
-
-                .then(function(response) {
-
-                    if (response.ok) {
-
-                        return response.json();
-                    } else {
-                        throw new Error('Error en la solicitud');
-                    }
-                })
-                .then(function(cuenta) {
-
-
-                    // Convertir el array a un objeto
-                    cuenta = Object.assign({}, cuenta[0]);
-
-                    // Llena los campos del modal con los datos de la forma de pago
-                    document.getElementById('id-cuenta-edit').value = cuenta.ID_CUENTA;
-                    document.getElementById('Numero-Cuenta').value = cuenta.NUMERO_CUENTA;
-                    document.getElementById('Saldo').value = cuenta.SALDO;
-                })
-                .catch(function(error) {
-                    // Manejar el error aquí
-                    alert('Error al cargar los datos de la forma de pago: ' + error.message);
-                });
-        }
-
-        $(document).ready(function() {
-            Lista_Cuentas();
-            CargarCuenta();
-            validarNombre();
-        });
-    </script>
-        
-    <script>
-        var TipoPrestamoPlazo = <?php echo json_encode($TipoPrestamoPlazo); ?>;
-        // Obtener referencias a los elementos select
-        const tipoPrestamoSelect1 = document.getElementById('agregar-tipoPrestamo');
-        const tipoPrestamoPlazoSelect = document.getElementById('agregar-tipoPrestamoPlazo');
-
-        // Evento que se dispara cuando se selecciona un tipo de préstamo
-        tipoPrestamoSelect1.addEventListener('change', function() {
-
-            console.log("Cambio detectado"); // Obtener el valor seleccionado
-            const selectedTipoPrestamo = tipoPrestamoSelect1.value;
-
-            // Limpiar el select de tasa
-            tipoPrestamoPlazoSelect.innerHTML = '';
-
-            // Recorrer el array $TipoPrestamoPlazo y agregar opciones al select de tasa
-            TipoPrestamoPlazo.forEach(plazo => {
-
-
-                if (plazo.id_tipo_prestamo === parseInt(selectedTipoPrestamo)) {
-
-                    console.log("tasa.id_tipo_prestamo:", plazo.id_tipo_prestamo);
-                    console.log("selectedTipoPrestamo:", selectedTipoPrestamo);
-
-                    // Crear un rango de números entre plazo_minimo y plazo_maximo
-                    for (let i = plazo.plazo_minimo; i <= plazo.plazo_maximo; i++) {
-                        const option = document.createElement('option');
-                        option.value = i;
-                        option.textContent = i;
-                        tipoPrestamoPlazoSelect.appendChild(option);
-                    }
+    /* Imprime los datos en la tabla
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . $row["fecha"] . "</td>";
+                    echo "<td>" . $row["monto"] . "</td>";
+                    echo "<td>" . $row["descripcion"] . "</td>";
+                    echo "<td>Acciones</td>";
+                    echo "</tr>";
                 }
-
-            });
-        });
+            } else {
+                echo "<tr><td colspan='4'>No hay datos</td></tr>";
+            }*/
     </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
