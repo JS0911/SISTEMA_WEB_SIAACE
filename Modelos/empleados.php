@@ -42,7 +42,7 @@ class Empleados extends Conectar
             $stmt->bindParam(':PRIMER_APELLIDO', $PRIMER_APELLIDO, PDO::PARAM_STR);
             $stmt->bindParam(':SEGUNDO_APELLIDO', $SEGUNDO_APELLIDO, PDO::PARAM_STR);
             $stmt->bindParam(':EMAIL', $EMAIL, PDO::PARAM_STR);
-            $stmt->bindParam(':SALARIO', $SALARIO, PDO::PARAM_INT);
+            $stmt->bindParam(':SALARIO', $SALARIO, PDO::PARAM_STR);
             $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);  // HACER EN SELECT 
             $stmt->bindParam(':TELEFONO', $TELEFONO, PDO::PARAM_INT);
             $stmt->bindParam(':DIRECCION1', $DIRECCION1, PDO::PARAM_STR);
@@ -113,7 +113,7 @@ class Empleados extends Conectar
             $stmt->bindParam(':PRIMER_APELLIDO', $PRIMER_APELLIDO, PDO::PARAM_STR);
             $stmt->bindParam(':SEGUNDO_APELLIDO', $SEGUNDO_APELLIDO, PDO::PARAM_STR);
             $stmt->bindParam(':EMAIL', $EMAIL, PDO::PARAM_STR);
-            $stmt->bindParam(':SALARIO', $SALARIO, PDO::PARAM_INT);
+            $stmt->bindParam(':SALARIO', $SALARIO, PDO::PARAM_STR);
             $stmt->bindParam(':TELEFONO', $TELEFONO, PDO::PARAM_INT);
             $stmt->bindParam(':DIRECCION1', $DIRECCION1, PDO::PARAM_STR);
             $stmt->bindParam(':DIRECCION2', $DIRECCION2, PDO::PARAM_STR);
