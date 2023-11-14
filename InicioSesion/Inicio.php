@@ -1,3 +1,34 @@
+<?php
+
+    session_start();
+
+    if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
+        if (isset($_SESSION['usuario'])) {
+            require_once "../Config/conexion.php";
+            $date = new DateTime(date("Y-m-d H:i:s"));
+            $dateMod = $date->modify("-7 hours");
+            $dateNew = $dateMod->format("Y-m-d H:i:s");
+            $conexion = new Conectar();
+            $conectar = $conexion->Conexion();
+            $conexion->set_names();
+
+            $id_usuario = isset($_SESSION['id_usuario']) ? $_SESSION['id_usuario'] : 0;
+            $usuario = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : 'Usuario Desconocido';
+
+            $sql = "INSERT INTO `siaace`.`tbl_ms_bitacora` (`FECHA`, `ACCION`, `DESCRIPCION`, `ID_USUARIO`, `ID_OBJETO`, `CREADO_POR`, `FECHA_CREACION`) VALUES ('$dateNew', 'CIERRE DE SESION', 'CERRO SESION EL USUARIO: $usuario', '$id_usuario', 2, '$usuario', '$dateNew')";
+            $stmt = $conectar->prepare($sql);
+            $stmt->execute();
+
+            session_destroy();
+
+        } else {
+            echo "No se puede salir, ya que el usuario no ha cerrado sesión.";
+            header("Location: index.php");
+            exit();
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

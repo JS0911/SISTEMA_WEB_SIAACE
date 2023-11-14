@@ -1,4 +1,5 @@
 <?php 
+
 session_start();
 
 require "../Config/conexion.php";
@@ -10,10 +11,6 @@ $conn = $conexion->Conexion();
 if ($_POST) {
     $usuario = $_POST['usuario'];
     $contrasena = $_POST['contrasena'];
-    //$id_usuario = $_POST['id_usuario'];
-    //$id_estado_usuario = $_POST['id_estado_usuario'];
-    //$id_rol = $_POST['id_rol'];
-    //$ID_ROL = $_SESSION ['ID_ROL'];
 
     if ($conn) {
         $sql = "SELECT id_usuario, usuario, contrasena, id_estado_usuario, id_rol, preguntas_contestadas FROM tbl_ms_usuario WHERE usuario = :usuario";
@@ -42,8 +39,7 @@ if ($_POST) {
                     $dateMod = $date->modify("-7 hours");
                     $dateNew = $dateMod->format("Y-m-d H:i:s"); 
                     $bitacora = new bitacora();
-                    $bitacora->insert_bitacora($dateNew, "INICIO DE SESION", "INGRESO EL USUARIO: " . $_SESSION['usuario'], $_SESSION['id_usuario'], 14, $_SESSION['usuario'], $dateNew);
-                    //$bitacora->insert_bitacora($dateNew, "INICIO DE SESION", "INGRESO EL USUARIO: " . $_SESSION['usuario'], $_SESSION['id_usuario'], 32, $_SESSION['usuario'], $dateNew);
+                    $bitacora->insert_bitacora($dateNew, "INICIO DE SESION", "INGRESO EL USUARIO: " . $_SESSION['usuario'], $_SESSION['id_usuario'], 2, $_SESSION['usuario'], $dateNew);
                     header("Location: index.php");
                     exit();
                 }
@@ -72,7 +68,7 @@ if ($_POST) {
                         $cantMaximaIntentos = $rowParametro['VALOR'];
 
                         if ($cantMaximaIntentos <= $_COOKIE['intentosFallidos']) {
-                            $contrasenaNoCoincide = "Su usuario ha sido bloqueado debido a que excedió la cantidad de intentos.";
+                            $contrasenaNoCoincide = "Bloqueado debido a que excedió la cantidad de intentos, contactar al Administrador.";
 
                             // Actualizar el estado del usuario en la base de datos
                             $sqlBloquearUsuario = "UPDATE tbl_ms_usuario SET id_estado_usuario = 4 WHERE usuario = :usuario";

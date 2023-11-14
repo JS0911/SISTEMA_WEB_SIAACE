@@ -1,18 +1,35 @@
 <?php
-    require_once "../Config/conexion.php";
-	session_start();
-    $date = new DateTime(date("Y-m-d H:i:s"));
-    $dateMod = $date->modify("-7 hours");
-    $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-
-	$conexion = new Conectar();
-	$conectar = $conexion->Conexion();
-    $conexion->set_names();
-    $sql = "INSERT INTO `siaace`.`tbl_ms_bitacora` (`FECHA`, `ACCION`, `DESCRIPCION`, `ID_USUARIO`, `ID_OBJETO`, `CREADO_POR`, `FECHA_CREACION`) VALUES ('$dateNew', 'CIERRE DE SESION', 'CERRO SESION EL USUARIO: " . $_SESSION['usuario'] ."', '" . $_SESSION['id_usuario'] . "', 14, '" . $_SESSION['usuario'] . "' , '$dateNew')";
-    //$sql = "INSERT INTO `siaace`.`tbl_ms_bitacora` (`FECHA`, `ACCION`, `DESCRIPCION`, `ID_USUARIO`, `ID_OBJETO`, `CREADO_POR`, `FECHA_CREACION`) VALUES ('$dateNew', 'CIERRE DE SESION', 'CERRO SESION EL USUARIO: " . $_SESSION['usuario'] ."', '" . $_SESSION['id_usuario'] . "', 33, '" . $_SESSION['usuario'] . "' , '$dateNew')";
-    $stmt = $conectar->prepare($sql);
-    $stmt->execute();
-	session_destroy();
-	header("Location: inicio.html");
+    session_start();
+    if (!isset($_SESSION['usuario'])) {
+    header("Location: inicio.php");
     exit();
+}
 ?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<script>
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: '¡No podrás revertir esto!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, cerrar sesión'
+    }).then((result) => {
+        if (result.value) {
+            console.log('El usuario ha decidido cerrar sesión. Redirigiendo a inicio.php...');
+            window.location.href = 'inicio.php?logout=true';
+        } else {
+            console.log('El usuario ha cancelado. Redirigiendo a index.php...');
+            window.location.href = 'index.php';
+        }
+    });
+</script>
+</body>
+</html>

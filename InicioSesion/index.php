@@ -3,28 +3,30 @@
 session_start();
 require "../Config/conexion.php";
 require_once '../Modelos/permisoUsuario.php';
+require_once '../Modelos/Usuarios.php';
 
 $permisosUsuarios = new PermisosUsuarios();
+$usuario_obj = new Usuario();
 
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
-//$id_estado_usuario = $_POST['id_estado_usuario'];
 $id_rol = $_SESSION['id_rol'];
-//   $ID_ROL = $_SESSION ['ID_ROL'];
 $id_objeto_Seguridad = "25";
 $id_objeto_Empleado = "27";
 $id_objeto_Cuentas = "28";
 $id_objeto_Prestamos = "29";
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
-    exit();
-}
-
 $permisos1 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
 $permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 $permisos3 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos);
+$datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
+$nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
+
+if (!isset($_SESSION['usuario'])) {
+    header("Location: inicio.php");
+    exit();
+}
 
 ?>
 
@@ -173,8 +175,8 @@ $permisos3 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Conectado a Sistema:</div>
-                    SIAACE - IDH Microfinanciera
+                    <div class="small">Usuario: <?php echo $nombre_usuario;?></div>
+                        Sesión activa: Conectado(a).
                 </div>
             </nav>
         </div>
