@@ -96,6 +96,11 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
             /* Borde más oscuro, en este caso, negro (#000) */
         }
 
+        #Lista-forma-pago_wrapper .buttons-html5:first-child {
+            margin-left: 25px;
+            /* Adjust the margin value as needed */
+        }
+
         /*BOTON DE CREAR NUEVO */
         .custom-button {
             background-color: #4CAF50;
@@ -254,11 +259,11 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     <th style="display: none;">Id Plan Pago</th>
                                     <th style="display: none;">Id Prestamo</th>
                                     <th>Numero Cuota</th>
-                                    <th>Fecha Vencimiento/Cuota</th>
+                                    <th >Fecha Vencimiento/Cuota</th>
                                     <th>Fecha Pago</th>
                                     <th>Valor Cuota</th>
-                                    <th>Monto Adeudado</th>
-                                    <th>Monto Pagado</th>
+                                    <th style="display: none;">Monto Adeudado</th>
+                                    <th style="display: none;">Monto Pagado</th>
                                     <th>Monto Adeudado Capital</th>
                                     <th>Monto Pagado Capital</th>
                                     <th>Monto Adeudado Interes</th>
@@ -319,33 +324,33 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
                     data.forEach(function(plan) {
-                            // Convertir el array a un objeto
-                           // plan = Object.assign({}, plan[0]);
-                            var row = '<tr>' +
-                                '<td style="display:none;">' + plan.ID_PLANP + '</td>' +
-                                '<td style="display:none;">' + plan.ID_PRESTAMO + '</td>' +
-                                '<td>' + plan.NUMERO_CUOTA + '</td>' +
-                                '<td>' + plan.FECHA_VENC_C + '</td>' +
-                                '<td>' + plan.FECHA_R_PAGO + '</td>' +
-                                '<td>' + plan.VALOR_CUOTA + '</td>' +
-                                '<td>' + plan.MONTO_ADEUDADO + '</td>' +
-                                '<td>' + plan.MONTO_PAGADO + '</td>' +
-                                '<td>' + plan.MONTO_ADEUDADO_CAP + '</td>' +
-                                '<td>' + plan.MONTO_PAGADO_CAP + '</td>' +
-                                '<td>' + plan.MONTO_ADEUDADO_ITS + '</td>' +
-                                '<td>' + plan.MONTO_PAGADO_ITS + '</td>' +
-                                '<td style="display:none;">' + plan.MONTO_ADEUDADO_MORA + '</td>' +
-                                '<td style="display:none;">' + plan.MONTO_PAGADO_MORA + '</td>' +
-                                '<td>' + plan.ESTADO + '</td>' +
-                                '<td>';
+                        // Convertir el array a un objeto
+                        // plan = Object.assign({}, plan[0]);
+                        var row = '<tr>' +
+                            '<td style="display:none;">' + plan.ID_PLANP + '</td>' +
+                            '<td style="display:none;">' + plan.ID_PRESTAMO + '</td>' +
+                            '<td>' + plan.NUMERO_CUOTA + '</td>' +
+                            '<td>' + plan.FECHA_VENC_C + '</td>' +
+                            '<td>' + plan.FECHA_R_PAGO + '</td>' +
+                            '<td>' + plan.VALOR_CUOTA + '</td>' +
+                            '<td style="display: none;">' + plan.MONTO_ADEUDADO + '</td>' +
+                            '<td style="display: none;">' + plan.MONTO_PAGADO + '</td>' +
+                            '<td>' + plan.MONTO_ADEUDADO_CAP + '</td>' +
+                            '<td>' + plan.MONTO_PAGADO_CAP + '</td>' +
+                            '<td>' + plan.MONTO_ADEUDADO_ITS + '</td>' +
+                            '<td>' + plan.MONTO_PAGADO_ITS + '</td>' +
+                            '<td style="display:none;">' + plan.MONTO_ADEUDADO_MORA + '</td>' +
+                            '<td style="display:none;">' + plan.MONTO_PAGADO_MORA + '</td>' +
+                            '<td>' + plan.ESTADO + '</td>' +
+                            '<td>';
 
-                            // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar los botones
-                            if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                                row += '<button class="btn btn-secondary" id="Pago_CapitalButton" onclick="PagoCapital(' + plan.ID_PLANP + ')">P Capital</button>';
-                                row += '<button class="btn btn-primary" id="Pago_InteresButton" onclick="PagoInteres(' + plan.ID_PLANP + ')">P Interes</button>';
-                                row += '<button class="btn btn-success" id="Pago_totalButton" onclick="PagoTotal(' + plan.ID_PLANP + ')">P Total</button>';
-                            }
-                       
+                        // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar los botones
+                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
+                            row += '<button class="btn btn-secondary" id="Pago_CapitalButton" onclick="PagoCapital(' + plan.ID_PLANP + ')">P Capital</button>';
+                            row += '<button class="btn btn-primary" id="Pago_InteresButton" onclick="PagoInteres(' + plan.ID_PLANP + ')">P Interes</button>';
+                            row += '<button class="btn btn-success" id="Pago_totalButton" onclick="PagoTotal(' + plan.ID_PLANP + ')">P Total</button>';
+                        }
+
 
                         console.log(plan);
                         row += '</td>' +
@@ -364,14 +369,197 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         }
 
 
+        function PagoCapital(ID_PLANP) {
+            // Verificar el estado del préstamo antes de aprobar
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoCapital', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_PPAGO": ID_PLANP
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // La solicitud se completó con éxito, mostrar la alerta SweetAlert
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pago Capital Realizado',
+                            text: 'El pago del capital se ha realizado correctamente.'
+                        }).then(function() {
+                            // El préstamo no ha sido aprobado, proceder con la aprobación
+                            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoPEstado', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        "ID_PPAGO": ID_PLANP
+                                    })
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        // Manejar la respuesta del segundo fetch, si es necesario
+                                        return response.json();
+                                    } else {
+                                        // Manejar otros casos (puede agregar más lógica aquí según sus necesidades)
+                                        console.error('Error en la solicitud');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
+
+                            location.reload();
+                        });
+                    } else {
+                        // Manejar otros casos (puede agregar más lógica aquí según sus necesidades)
+                        console.error('Error en la solicitud');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+        function PagoInteres(ID_PLANP) {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoInteres', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_PPAGO": ID_PLANP
+
+                    })
+
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // La solicitud se completó con éxito, mostrar la alerta SweetAlert
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pago Interes Realizado',
+                            text: 'El pago del Interes se ha realizado correctamente.'
+                        }).then(function() {
+                            // El préstamo no ha sido aprobado, proceder con la aprobación
+                            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoPEstado', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        "ID_PPAGO": ID_PLANP
+                                    })
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        // Manejar la respuesta del segundo fetch, si es necesario
+                                        return response.json();
+                                    } else {
+                                        // Manejar otros casos (puede agregar más lógica aquí según sus necesidades)
+                                        console.error('Error en la solicitud');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
+                            location.reload();
+                        });
+                    } else {
+                        // Manejar otros casos (puede agregar más lógica aquí según sus necesidades)
+                        console.error('Error en la solicitud');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function PagoTotal(ID_PLANP) {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoTotalCuota', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_PPAGO": ID_PLANP
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // La solicitud se completó con éxito, mostrar la alerta SweetAlert
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pago Realizado',
+                            text: 'El pago total de la cuota se ha realizado correctamente.'
+                        }).then(function() {
+                            // El préstamo no ha sido aprobado, proceder con la aprobación
+                            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoTEstado', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        "ID_PPAGO": ID_PLANP
+                                    })
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        // Manejar la respuesta del segundo fetch, si es necesario
+                                        return response.json();
+                                    } else {
+                                        // Manejar otros casos (puede agregar más lógica aquí según sus necesidades)
+                                        console.error('Error en la solicitud');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
+                            location.reload();
+                        });
+
+                    } else {
+                        // Manejar otros casos (puede agregar más lógica aquí según sus necesidades)
+                        console.error('Error en la solicitud');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
         function habilitarPaginacion() {
             $('#Lista-planpago').DataTable({
                 "paging": true,
                 "pageLength": 10,
+                dom: 'lBfrtip',
+                
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
+            });
+
+        }
+
+
+        function ocultarCampos() {
+            var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
+            celdasDireccion.forEach(function(celda) {
+                if (celda.style.display === 'none' || celda.style.display === '') {
+                    celda.style.display = 'table-cell';
+                } else {
+                    celda.style.display = 'none';
+                }
             });
         }
 

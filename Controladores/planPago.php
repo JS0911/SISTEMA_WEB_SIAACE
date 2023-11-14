@@ -38,4 +38,24 @@ switch ($_GET["op"]) {
         $datos = $com->calcularInteresCapital($body["TASA"], $body["SALDO"], $body["VALOR_CUOTA"]);
         echo json_encode($datos);
         break;
+    case "PagoTotalCuota":
+        $datos = $com->PagoTCuota($body["ID_PPAGO"]);
+        echo json_encode($datos);
+        break;
+    case "PagoCapital":
+        $datos = $com->PagoCapital($body["ID_PPAGO"]);
+        echo json_encode($datos);
+        break;
+    case "PagoInteres":
+        $datos = $com->PagoInteres($body["ID_PPAGO"]);
+        echo json_encode($datos);
+        break;
+    case "PagoTEstado":
+        $datos = $com->PAGOT_ESTADO($body["ID_PPAGO"]);
+        echo json_encode($datos);
+        break;
+        case "PagoPEstado":
+            $datos = $com->PAGOP_ESTADO($body["ID_PPAGO"]);
+            echo json_encode($datos);
+            break;
 }

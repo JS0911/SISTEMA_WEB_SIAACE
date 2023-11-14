@@ -187,4 +187,143 @@ class PlanPago extends Conectar
             return "Error al insertar registros: " . $e->getMessage();
         }
     }
+
+    public function PagoTCuota($ID_PPAGO)
+    {
+        // Conectar a la base de datos
+        $conectar = parent::conexion();
+        parent::set_names();
+
+        try {
+
+            $sql1 = "UPDATE tbl_mp_planp SET MONTO_PAGADO_CAP = MONTO_ADEUDADO_CAP , MONTO_ADEUDADO_CAP = 0, MONTO_PAGADO_ITS = MONTO_ADEUDADO_ITS, MONTO_ADEUDADO_ITS = 0
+            WHERE ID_PLANP = :ID_PLANP";
+
+
+            // // Preparar la consulta
+            $stmt1 = $conectar->prepare($sql1);
+            $stmt1->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
+           
+            $stmt1->execute(); // Ejecutar la consulta de actualización
+
+            //return "Registros insertados correctamente.";
+            return [
+                'message' => 'Pago De Cuota Total Realizado',
+                
+            ];
+        } catch (PDOException $e) {
+            return "Error al hacer pago total de la cuota: " . $e->getMessage();
+        }
+    }
+
+    public function PagoCapital($ID_PPAGO)
+    {
+        // Conectar a la base de datos
+        $conectar = parent::conexion();
+        parent::set_names();
+
+        try {
+
+            $sql1 = "UPDATE tbl_mp_planp SET MONTO_PAGADO_CAP = MONTO_ADEUDADO_CAP, MONTO_ADEUDADO_CAP = 0
+            WHERE ID_PLANP = :ID_PLANP;";
+
+
+            // // Preparar la consulta
+            $stmt1 = $conectar->prepare($sql1);
+            $stmt1->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
+           
+            $stmt1->execute(); // Ejecutar la consulta de actualización
+
+            //return "Registros insertados correctamente.";
+            return [
+                'message' => 'Pago De Capital Realizado',
+                
+            ];
+        } catch (PDOException $e) {
+            return "Error al hacer Pago De Capital: " . $e->getMessage();
+        }
+    }
+
+    public function PagoInteres($ID_PPAGO)
+    {
+        // Conectar a la base de datos
+        $conectar = parent::conexion();
+        parent::set_names();
+
+        try {
+
+            $sql1 = "UPDATE tbl_mp_planp SET MONTO_PAGADO_ITS = MONTO_ADEUDADO_ITS, MONTO_ADEUDADO_ITS = 0
+            WHERE ID_PLANP = :ID_PLANP";
+
+
+            // // Preparar la consulta
+            $stmt1 = $conectar->prepare($sql1);
+            $stmt1->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
+           
+            $stmt1->execute(); // Ejecutar la consulta de actualización
+
+            //return "Registros insertados correctamente.";
+            return [
+                'message' => 'Pago De Interes Realizado',
+                
+            ];
+        } catch (PDOException $e) {
+            return "Error al Pago De Interes: " . $e->getMessage();
+        }
+    }
+
+
+    public function PAGOT_ESTADO($ID_PPAGO)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+
+            $date = new DateTime(date("Y-m-d H:i:s"));
+            $dateMod = $date->modify("-7 hours");
+            $dateNew = $dateMod->format("Y-m-d H:i:s");
+
+            // Consulta SQL para actualizar el estado del préstamo a "Aprobado" y la fecha de aprobación
+            $sql = "UPDATE tbl_mp_planp SET ESTADO = 'PAGADO', FECHA_R_PAGO = :FECHA_R_PAGO WHERE ID_PLANP = :ID_PLANP";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
+            $stmt->bindParam(':FECHA_R_PAGO', $dateNew, PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                echo json_encode(array('message' => 'Préstamo aprobado correctamente'));
+            } else {
+                echo json_encode(array('message' => 'No se realizó ningun pago, o el pago no existe'));
+            }
+        } catch (PDOException $e) {
+            echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
+        }
+    }
+
+
+
+    public function PAGOP_ESTADO($ID_PPAGO)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+
+            $date = new DateTime(date("Y-m-d H:i:s"));
+            $dateMod = $date->modify("-7 hours");
+            $dateNew = $dateMod->format("Y-m-d H:i:s");
+
+            // Consulta SQL para actualizar el estado del préstamo a "Aprobado" y la fecha de aprobación
+            $sql = "UPDATE tbl_mp_planp SET ESTADO = 'PARCIAL', FECHA_R_PAGO = :FECHA_R_PAGO WHERE ID_PLANP = :ID_PLANP";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
+            $stmt->bindParam(':FECHA_R_PAGO', $dateNew, PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                echo json_encode(array('message' => 'Préstamo aprobado correctamente'));
+            } else {
+                echo json_encode(array('message' => 'No se realizó ningun pago, o el pago no existe'));
+            }
+        } catch (PDOException $e) {
+            echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
+        }
+    }
 }

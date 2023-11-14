@@ -259,10 +259,10 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     <th>Tasa</th>
                                     <th>Plazo</th>
                                     <th style="display: none;">Forma/Pago</th>
-                                    <th>Fecha/Solicitud</th>
-                                    <th>Fecha/Aprobacion</th>
-                                    <th>Fecha/Cancelacion</th>
-                                    <th>Fecha/Desembolso</th>
+                                    <th style="display: none;">Fecha/Solicitud</th>
+                                    <th style="display: none;">Fecha/Aprobacion</th>
+                                    <th style="display: none;">Fecha/Cancelacion</th>
+                                    <th style="display: none;">Fecha/Desembolso</th>
                                     <th>Monto/Solicitado</th>
                                     <th style="display: none;">Monto Desembolsado </th>
                                     <th style="display: none;">Monto Adeudado </th>
@@ -304,6 +304,10 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
 
+        const PENDIENTE = 'PENDIENTE';
+        const APROBADO = 'APROBADO';
+        const ANULADO = 'ANULADO';
+
         function Lista_Prestamo() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             // Actualizar el valor predeterminado
@@ -339,10 +343,10 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td style="display:none;">' + prestamo.FORMA_DE_PAGO + '</td>' +
                             '<td>' + prestamo.PLAZO + '</td>' +
                             '<td>' + prestamo.TASA + '</td>' +
-                            '<td>' + prestamo.FECHA_SOLICITUD + '</td>' +
-                            '<td>' + prestamo.FECHA_APROBACION + '</td>' +
-                            '<td>' + prestamo.FECHA_DE_CANCELACION + '</td>' +
-                            '<td>' + prestamo.FECHA_DE_DESEMBOLSO + '</td>' +
+                            '<td style="display:none;">' + prestamo.FECHA_SOLICITUD + '</td>' +
+                            '<td style="display:none;">' + prestamo.FECHA_APROBACION + '</td>' +
+                            '<td style="display:none;">' + prestamo.FECHA_DE_CANCELACION + '</td>' +
+                            '<td style="display:none;">' + prestamo.FECHA_DE_DESEMBOLSO + '</td>' +
                             '<td>' + prestamo.MONTO_SOLICITADO + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_DESEMBOLSO + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_ADEUDADO + '</td>' +
@@ -494,40 +498,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         }
 
         function AnularPrestamo(ID_PRESTAMO) {
-            // Realiza una solicitud FETCH al servidor para anular el préstamo
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=anularPrestamo', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "ID_PRESTAMO": ID_PRESTAMO
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // La solicitud se completó con éxito
-                        document.getElementById('AnularButton').classList.remove('btn-danger');
-                        document.getElementById('AnularButton').classList.add('btn-secondary');
-                        document.getElementById('AnularButton').disabled = true;
-                        // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
-                        location.reload();
 
-                    } else {
-                        console.error('Error en la solicitud');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        const PENDIENTE = 'PENDIENTE';
-        const APROBADO = 'APROBADO';
-        const ANULADO = 'ANULADO';
-       
-        function AprobarPrestamo(ID_PRESTAMO, MONTO_SOLICITADO, PLAZO, TASA, ESTADO_PRESTAMO) {
             // Verificar el estado del préstamo antes de aprobar
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=obtenerEstadoPrestamo', {
                     method: 'POST',
@@ -537,12 +508,82 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     },
                     body: JSON.stringify({
                         "ID_PRESTAMO": ID_PRESTAMO
+
                     })
+
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(ESTADO_PRESTAMO);
-                    if (data && data.ESTADO_PRESTAMO !== 'PENDIENTE') {
+                    console.log("estado:", data);
+                    if (data === PENDIENTE || data === APROBADO) {
+                        // Realiza una solicitud FETCH al servidor para anular el préstamo
+                        fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=anularPrestamo', {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    "ID_PRESTAMO": ID_PRESTAMO
+                                })
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    // La solicitud se completó con éxito
+                                    document.getElementById('AnularButton').classList.remove('btn-danger');
+                                    document.getElementById('AnularButton').classList.add('btn-secondary');
+                                    document.getElementById('AnularButton').disabled = true;
+                                    // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
+                                    location.reload();
+
+                                } else {
+                                    console.error('Error en la solicitud');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                    } else {
+
+                        if (data === ANULADO) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Préstamo Anulado',
+                                text: 'Este préstamo ya ha sido anulado anteriormente.'
+                            });
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+        }
+
+
+        function AprobarPrestamo(ID_PRESTAMO, MONTO_SOLICITADO, PLAZO, TASA, ESTADO_PRESTAMO) {
+
+
+            // Verificar el estado del préstamo antes de aprobar
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=obtenerEstadoPrestamo', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_PRESTAMO": ID_PRESTAMO
+
+                    })
+
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("estado:", data);
+                    // console.log(ESTADO_PRESTAMO);
+                    if (data === PENDIENTE) {
+
+
                         // El préstamo no ha sido aprobado, proceder con la aprobación
                         fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=aprobarPrestamo', {
                                 method: 'POST',
@@ -578,12 +619,21 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
 
 
                     } else {
-                        // El préstamo ya ha sido aprobado
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Préstamo Aprobado',
-                            text: 'Este préstamo ya ha sido aprobado anteriormente.'
-                        });
+
+                        if (data === APROBADO) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Préstamo Aprobado',
+                                text: 'Este préstamo ya ha sido aprobado anteriormente.'
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Préstamo Anulado',
+                                text: 'Este préstamo ya ha sido Anulado.'
+                            });
+                        }
+
                     }
                 })
                 .catch(error => {

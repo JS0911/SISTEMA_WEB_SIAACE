@@ -24,6 +24,25 @@ class Prestamo extends Conectar
         }
     }
 
+    public function SaldoTotal($ID_PRESTAMO)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT SUM((MONTO_ADEUDADO_ITS) + (MONTO_ADEUDADO_CAP)) AS SALDO_TOTAL
+                FROM siaace.tbl_mp_planp 
+                WHERE ID_PRESTAMO = :ID_PRESTAMO";
+    
+        $sql = $conectar->prepare($sql);
+        $sql->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+        $sql->execute();
+    
+        if ($sql->rowCount() > 0) {
+            return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            return array();
+        }
+    }
+    
     // //TRAE SOLO UN PRESTAMO
     public function get_Prestamo($ID_EMPLEADO)
     {

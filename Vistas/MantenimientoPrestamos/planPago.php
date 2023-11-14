@@ -9,10 +9,10 @@ if (isset($_GET['ID_PRESTAMOP'], $_GET['MONTO_SOLICITADO'], $_GET['PLAZO'], $_GE
     $MONTO_SOLICITADO = $_GET['MONTO_SOLICITADO'];
     $PLAZO = $_GET['PLAZO'];
     $TASA = $_GET['TASA'];
-    echo "ID_PRESTAMOP: " . $ID_PRESTAMOP;
-    echo "MONTO_SOLICITADO: " . $MONTO_SOLICITADO;
-    echo "PLAZO: " . $PLAZO;
-    echo "TASA: " . $TASA;
+    // echo "ID_PRESTAMOP: " . $ID_PRESTAMOP;
+    // echo "MONTO_SOLICITADO: " . $MONTO_SOLICITADO;
+    // echo "PLAZO: " . $PLAZO;
+    // echo "TASA: " . $TASA;
 } else {
     echo "No se proporcionó el ID_PRESTAMO en la URL.";
 }
@@ -25,11 +25,11 @@ if (isset($_GET['ID_PRESTAMOP'], $_GET['MONTO_SOLICITADO'], $_GET['PLAZO'], $_GE
 <head>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Plan de Pago</title>
+
 </head>
 
-<body class="sb-nav-fixed">
-    <div class="container">
+<body >
+    <!-- <div class="container">
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">Plan de Pago</h5>
@@ -49,7 +49,7 @@ if (isset($_GET['ID_PRESTAMOP'], $_GET['MONTO_SOLICITADO'], $_GET['PLAZO'], $_GE
                 </p>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
 

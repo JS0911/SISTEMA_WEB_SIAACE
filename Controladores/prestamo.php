@@ -59,5 +59,10 @@ switch ($_GET["op"]) {
         $datos = $com->obtenerEstadoPrestamo($ID_PRESTAMO);
         echo json_encode($datos);
     break;
+    case "SaldoTotal":
+        $ID_PRESTAMO = $body["ID_PRESTAMO"];
+        $datos = $com->SaldoTotal($ID_PRESTAMO);
+        echo json_encode($datos);
+    break;
 
 }

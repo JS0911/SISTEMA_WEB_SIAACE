@@ -20,7 +20,7 @@ if (!isset($_SESSION['usuario'])) {
 
 if (isset($_GET['ID_EMPLEADO'])) {
     $ID_EMPLEADO = $_GET['ID_EMPLEADO'];
-    $_SESSION['id_empleado']=$ID_EMPLEADO;
+    $_SESSION['id_empleado'] = $ID_EMPLEADO;
 } else {
     echo "No se proporcionó el ID_EMPLEADO en la URL.";
 }
@@ -153,7 +153,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </form>
-            <!-- Navbar-->
+        <!-- Navbar-->
         <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
@@ -164,7 +164,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </li>
         </ul>
-        
+
     </nav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
@@ -313,6 +313,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                     <th scope="col">Tipo Prestamo</th>
                                                     <th scope="col">Forma Pago</th>
                                                     <th scope="col">Monto</th>
+                                                    <th scope="col">Saldo Adeudado</th>
                                                     <th scope="col">Detalles</th>
                                                 </tr>
                                             </thead>
@@ -392,7 +393,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             </select>
 
                                             <!-- Segundo select para la plazo, inicialmente vacío -->
-                                            <label for="tipoPrestamoPlazo">Plazo (menor a mayor)</label>
+                                            <label for="tipoPrestamoPlazo">Plazo en Meses (menor a mayor)</label>
                                             <select class="form-control" id="agregar-tipoPrestamoPlazo" name="tipoPrestamoPlazo" required>
                                                 <option value="" disabled selected>Selecciona un tipo de préstamo primero</option>
                                             </select>
@@ -436,7 +437,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <?php foreach ($TiposCuentas as $TiposCuentas) : ?>
                                                     <option value="<?php echo $TiposCuentas['ID_TIPOCUENTA']; ?>"><?php echo $TiposCuentas['TIPO_CUENTA']; ?></option>
                                                 <?php endforeach; ?>
-                                                
+
                                             </select>
 
                                             <label for="Estado">Estado</label>
@@ -556,17 +557,20 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     }
                 })
                 .then(function(data) {
+
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-Prestamos tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
-                    data.forEach(function(prestamo) {
+                    data.forEach( async function(prestamo) {
+                        //SALDO_TOTAL = SaldoTotal(prestamo.ID_PRESTAMO);
                         var row = '<tr>' +
                             '<td style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
                             '<td>' + prestamo.TIPO_PRESTAMO + '</td>' +
                             '<td style="display:none;">' + prestamo.ID_FPAGO + '</td>' +
                             '<td>' + prestamo.FORMA_DE_PAGO + '</td>' +
                             '<td>' + prestamo.MONTO_SOLICITADO + '</td>' +
+                            '<td>' + await SaldoTotal(prestamo.ID_PRESTAMO) + '</td>' +
                             '<td>';
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         row += '<button class="btn btn-secondary ver-cuotas" data-id="' + prestamo.ID_PRESTAMO + '" onclick="redirectToPlanPago(' + prestamo.ID_PRESTAMO + ')">Cuotas</button>';
@@ -575,13 +579,13 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         //Cambiar palabra null por vacio.
                         newrow = row.replaceAll("null", " ");
                         row = newrow;
-                        tbody.innerHTML += row;
+                        tbody.innerHTML += row;;
                     });
 
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
-                   // alert('Error al cargar los datos: ' + error.message);
+                    // alert('Error al cargar los datos: ' + error.message);
                 });
         }
 
@@ -660,6 +664,30 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         });
                 }
             });
+        }
+
+        async function SaldoTotal(ID_PRESTAMO) {
+            // Verificar el estado del préstamo antes de aprobar
+            return fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=SaldoTotal', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_PRESTAMO": ID_PRESTAMO
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la solicitud');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Extraer el saldo total del objeto devuelto
+                    return data[0].SALDO_TOTAL;
+                });
         }
 
         //FUNCIONES PARA CUENTAS
@@ -1069,17 +1097,17 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
             var expresionValidadora1 = /^\d+(\.\d{2})?$/;
             var mensaje1 = document.getElementById("mensaje1");
             handleInputAndBlurEvents(agregarMSolicitado, expresionValidadora1, mensaje1, "Ingrese un monto válido (por ejemplo, 1000.00)");
-            
+
             var expresionValidadora2 = /^[0-9-]+/;
             var mensaje2 = document.getElementById("mensaje2");
             handleInputAndBlurEvents(NumeroCuenta, expresionValidadora2, mensaje2, "Ingrese un número de cuenta válido (solo números y -)");
-        
+
             var mensaje3 = document.getElementById("mensaje3");
-            handleInputAndBlurEvents(Monto-Deposito, expresionValidadora1, mensaje3, "Ingrese un deposito válido (por ejemplo, 1000.00)");
-        
+            handleInputAndBlurEvents(Monto - Deposito, expresionValidadora1, mensaje3, "Ingrese un deposito válido (por ejemplo, 1000.00)");
+
             var mensaje4 = document.getElementById("mensaje4");
-            handleInputAndBlurEvents(Monto-Reembolso, expresionValidadora1, mensaje4, "Ingrese un retiro válido (por ejemplo, 1000.00)");
-            
+            handleInputAndBlurEvents(Monto - Reembolso, expresionValidadora1, mensaje4, "Ingrese un retiro válido (por ejemplo, 1000.00)");
+
         }
 
         $(document).ready(function() {
@@ -1107,7 +1135,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = agregartipoPrestamo.value.trim() !== '' && agregarformaPago.value.trim() !== ''  && agregarTasa.value.trim() !== '' && agregarPlazo.value.trim() !== '' && agregarMSolicitadoInput.value.trim() !== '';
+            const isFormValid = agregartipoPrestamo.value.trim() !== '' && agregarformaPago.value.trim() !== '' && agregarTasa.value.trim() !== '' && agregarPlazo.value.trim() !== '' && agregarMSolicitadoInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid;
         }
 
@@ -1226,7 +1254,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('NumeroCuenta').value = "";
             document.getElementById('agregar-tipo-cuenta').value = "";
             document.getElementById('agregar-estado').value = "";
-        
+
             // Limpia los checkboxes
             document.getElementById('NumeroCuenta').checked = false;
             document.getElementById('agregar-tipo-cuenta').checked = false;
@@ -1239,7 +1267,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
         document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
             document.getElementById('Monto-Deposito').value = "";
-            
+
             // Limpia los checkboxes
             document.getElementById('Monto-Deposito').checked = false;
             location.reload();
@@ -1250,7 +1278,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
         document.getElementById('btn-cancelarEditar1').addEventListener('click', function() {
             document.getElementById('Monto-Reembolso').value = "";
-        
+
             // Limpia los checkboxes
             document.getElementById('Monto-Reembolso').checked = false;
             location.reload();
@@ -1312,8 +1340,8 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 if (plazo.id_tipo_prestamo === parseInt(selectedTipoPrestamo)) {
 
-                   // console.log("tasa.id_tipo_prestamo:", plazo.id_tipo_prestamo);
-                  //  console.log("selectedTipoPrestamo:", selectedTipoPrestamo);
+                    // console.log("tasa.id_tipo_prestamo:", plazo.id_tipo_prestamo);
+                    //  console.log("selectedTipoPrestamo:", selectedTipoPrestamo);
 
                     // Crear un rango de números entre plazo_minimo y plazo_maximo
                     for (let i = plazo.plazo_minimo; i <= plazo.plazo_maximo; i++) {
