@@ -261,10 +261,10 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                     <th>DNI</th>
                                     <th>Nombre</th>
                                     <th>Apellidos</th>
-                                    <th>Email</th>
+                                    <th class="direccion-column" style="display:none;">Email</th>
                                     <th >Salario</th>
                                     <th>Telefono</th>
-                                    <th>Direccion1</th>
+                                    <th  class="direccion-column" style="display:none;"> Direccion1</th>
                                     <th style="display: none;">Direccion2</th>
                                     <th style="display: none;">Id Sucursal</th>
                                     <th style="display: none;">Id Cargo</th>
@@ -273,7 +273,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 </tr>
                             </thead>
                             <tbody>
-
+                          
                             </tbody>
                         </table>
 
@@ -581,10 +581,10 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td>' + empleado.DNI + '</td>' +
                             '<td>' + nombreCompleto + '</td>' + // Concatenación de primer y segundo nombre
                             '<td>' + apellidoCompleto + '</td>' + //concatenacion de primer y segundo apellido  
-                            '<td>' + empleado.EMAIL + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + empleado.EMAIL + '</td>' +
                             '<td >' + empleado.SALARIO + '</td>' +
                             '<td>' + empleado.TELEFONO + '</td>' +
-                            '<td>' + empleado.DIRECCION1 + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + empleado.DIRECCION1 + '</td>' +
                             '<td style="display:none;">' + empleado.DIRECCION2 + '</td>' +
                             '<td style="display:none;">' + empleado.ID_SUCURSAL + '</td>' +
                             '<td style="display:none;">' + empleado.ID_CARGO + '</td>' +
@@ -592,7 +592,8 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
-
+                       
+                        
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargaEmpleado(' + empleado.ID_EMPLEADO + ')">Editar</button>';
                         }
@@ -604,6 +605,10 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
                             row += '<button class="btn btn-secondary crear-movimiento" data-id="' + empleado.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + empleado.ID_EMPLEADO + ')">Movimiento</button>';
                         }
+                        
+                      
+                       
+
                         row += '</td>' +
                             '</tr>';
                             //Cambiar palabra null por vacio.
@@ -726,14 +731,36 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                                 page: 'current'
                             },
                         },
-                    }       
+                    }  ,
+                    {
+                text: '<button class="btn btn-warning" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;" onclick="ocultarColumn()"><i class="fas fa-eye"></i></button>',
+                 action: function () {
+                   ocultarCampos();
+    }
+}
+                         
                 ],
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
             });
+          
+
         }
+
+function ocultarCampos() {
+    var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
+    celdasDireccion.forEach(function(celda) {
+        if (celda.style.display === 'none' || celda.style.display === '') {
+            celda.style.display = 'table-cell';
+        } else {
+            celda.style.display = 'none';
+        }
+    });
+}
+
+
 
         function Insertar_Empleado() {
             $("#btn-agregar").click(function() {
