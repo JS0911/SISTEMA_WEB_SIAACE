@@ -3,12 +3,10 @@
 session_start();
 require "../../Config/conexion.php";
 require_once '../../Modelos/permisoUsuario.php';
+require_once '../../Modelos/Usuarios.php';
 
 $permisosEmpleado = new PermisosUsuarios();
-
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
-}
+$usuario_obj = new Usuario();
 
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
@@ -20,7 +18,13 @@ $id_objeto_Seguridad = "25";
 $permisos1 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
 $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
+$nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../../InicioSesion/login.php");
+    exit();
+}
 
 ?>
 
@@ -45,6 +49,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantenimiento Empleados</title>
+    <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
@@ -52,6 +57,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    
     <style>
         /* Estilo para la tabla */
         #Lista-Empleados {
@@ -117,7 +123,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         <!-- Navbar-->
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+                <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
                 <div class="input-group-append">
                     <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
                 </div>
@@ -227,8 +233,8 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Conectado a Sistema:</div>
-                    SIAACE - IDH Microfinanciera
+                <div class="small">Usuario: <?php echo $nombre_usuario;?></div>
+                    Sesión activa: Conectado(a).
                 </div>
             </nav>
         </div>
@@ -754,9 +760,7 @@ $permisos2 = $permisosEmpleado->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                 }
             });
         }
-
-
-
+        
         function Insertar_Empleado() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario

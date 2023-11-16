@@ -50,9 +50,13 @@ if (!isset($_SESSION['usuario'])) {
     <meta name="author" content="" />
     <title>Index - Pagina Principal</title>
     <link rel="shortcut icon" href="../src/IconoIDH.ico">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../css/styles.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 </head>
 
 <body class="sb-nav-fixed">
@@ -60,7 +64,16 @@ if (!isset($_SESSION['usuario'])) {
         <a class="navbar-brand" href="index.php">
             <img src="../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar-->
-        <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
+        <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </form>
+        <!-- Navbar-->
+        <ul class="navbar-nav ml-auto ml-md-0">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
@@ -70,15 +83,6 @@ if (!isset($_SESSION['usuario'])) {
                 </div>
             </li>
         </ul>
-        <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline mr-0 my-2 my-md-0 order-2">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
-                </div>
-            </div>
-        </form>
     </nav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
@@ -175,8 +179,8 @@ if (!isset($_SESSION['usuario'])) {
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Usuario: <?php echo $nombre_usuario;?></div>
-                        Sesión activa: Conectado(a).
+                <div class="small">Usuario: <?php echo $nombre_usuario;?></div>
+                    Sesión activa: Conectado(a).
                 </div>
             </nav>
         </div>

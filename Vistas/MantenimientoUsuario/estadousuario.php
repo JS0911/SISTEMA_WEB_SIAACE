@@ -3,12 +3,10 @@
 session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
+require_once '../../Modelos/Usuarios.php';
 
 $permisosEstados = new PermisosUsuarios();
-
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
-}
+$usuario_obj = new Usuario();
 
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
@@ -20,8 +18,13 @@ $id_objeto_Cuentas = "28";
 $permisos1 = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Estados);
 $permisos2 = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
+$nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
-
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../../InicioSesion/login.php");
+    exit();
+}
 ?>
 
 <style>
@@ -118,7 +121,7 @@ $permisos2 = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas
         <!-- Navbar-->
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+                <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
                 <div class="input-group-append">
                     <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
                 </div>
@@ -234,8 +237,8 @@ $permisos2 = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Conectado a Sistema:</div>
-                    SIAACE - IDH Microfinanciera
+                <div class="small">Usuario: <?php echo $nombre_usuario;?><div>
+                        Sesión activa: Conectado(a).
                 </div>
             </nav>
         </div>
@@ -256,16 +259,6 @@ $permisos2 = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas
                                 echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
                             }
                             ?>
-                            <!--<div class="d-flex align-items-center w-50">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-search"></i>--> <!-- Puedes usar una fuente de iconos como Font Awesome -->
-                                        <!--</span>
-                                    </div>
-                                    <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
-                                </div>
-                            </div>-->
                         </div>
 
                         <!-- Tabla para mostrar los datos -->
@@ -282,24 +275,7 @@ $permisos2 = $permisosEstados->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas
 
                             </tbody>
                         </table>
-
-                        <!--<nav aria-label="Pagination" class="pagination-container">
-                            <ul class="pagination">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Atrás</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link">2</span>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Siguiente</a>
-                                </li>
-                            </ul>
-                        </nav>-->
                     </div>
-
                 </div>
 
                 <!-- Modal para crear un nuevo estado -->

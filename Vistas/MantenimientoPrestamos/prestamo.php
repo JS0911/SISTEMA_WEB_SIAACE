@@ -3,13 +3,10 @@
 session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
-
+require_once '../../Modelos/Usuarios.php';
 
 $permisosPrestamo = new PermisosUsuarios();
-
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
-}
+$usuario_obj = new Usuario();
 
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
@@ -22,8 +19,13 @@ $id_objeto_PrestamoMantenimiento = "30";
 $permisos1 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_PrestamoMantenimiento);
 $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
+$nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
-
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../../InicioSesion/login.php");
+    exit();
+}
 ?>
 <style>
     .logo {
@@ -120,7 +122,7 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
         <!-- Navbar-->
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+                <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
                 <div class="input-group-append">
                     <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
                 </div>
@@ -232,8 +234,8 @@ $permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuenta
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Conectado a Sistema:</div>
-                    SIAACE - IDH Microfinanciera
+                <div class="small">Usuario: <?php echo $nombre_usuario;?><div>
+                    Sesión activa: Conectado(a).
                 </div>
             </nav>
         </div>

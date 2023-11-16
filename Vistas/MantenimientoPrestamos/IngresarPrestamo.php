@@ -2,8 +2,11 @@
 session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
+require_once '../../Modelos/Usuarios.php';
 
 $permisosPrestamo1 = new PermisosUsuarios();
+$usuario_obj = new Usuario();
+
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_PrestamoMantenimiento = "30";
@@ -13,10 +16,8 @@ $id_objeto_Seguridad = "25";
 $permisos1 = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_PrestamoMantenimiento);
 $permisos2 =  $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_MantCuenta);
-
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
-}
+$datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
+$nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
 if (isset($_GET['ID_EMPLEADO'])) {
     $ID_EMPLEADO = $_GET['ID_EMPLEADO'];
@@ -99,6 +100,12 @@ $stmt->execute();
 
 // Obtener los resultados en un array asociativo
 $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../../InicioSesion/login.php");
+    exit();
+}
+
 //-----------------------------------------------------------------------------
 ?>
 <style>
@@ -258,8 +265,8 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Conectado a Sistema:</div>
-                    SIAACE - IDH Microfinanciera
+                <div class="small">Usuario: <?php echo $nombre_usuario;?></div>
+                    Sesión activa: Conectado(a).
                 </div>
             </nav>
         </div>
@@ -731,7 +738,7 @@ $TipoPrestamoPlazo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-primary" data-toggle="modal" data-target="#DepositoModal" onclick="CargarCuenta(' + cuenta.ID_CUENTA + ')">Deposito</button>';
-                            row += '<button class="btn btn-secondary crear-movimiento" data-toggle="modal" data-target="#ReembolsoModal" onclick="CargarCuentaR(' + cuenta.ID_CUENTA + ')">Reembolso</button>';
+                            row += '<button class="btn btn-secondary crear-movimiento" data-toggle="modal" data-target="#ReembolsoModal" onclick="CargarCuentaR(' + cuenta.ID_CUENTA + ')">Retiro</button>';
                             row += '<button class="btn btn-info crear-movimiento" data-id="' + cuenta.ID_CUENTA + '" onclick="redirectToHistorialCuenta(' + cuenta.ID_CUENTA + ')">Historial Transaccional</button>';
                         }
 
