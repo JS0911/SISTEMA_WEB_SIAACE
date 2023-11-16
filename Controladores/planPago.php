@@ -19,43 +19,46 @@ $com = new planPago();
 
 $body = json_decode(file_get_contents("php://input"), true);
 
-
 switch ($_GET["op"]) {
     case "GetPlanPago":
         $datos = $com->get_planPago($body["ID_PRESTAMO"]);
         echo json_encode($datos);
-        break;
-
+    break;
     case "calcularCuota":
         $datos = $com->calcularCuota($body["TASA"], $body["PLAZO"], $body["MONTO_SOLICITADO"], $body["PLAZOQUINCENAS"]);
         echo json_encode($datos);
-        break;
+    break;
     case "InsertarAmortizacion":
         $datos = $com->InsertarAmortizacion($body["ID_PRESTAMO"], $body["TASA"], $body["PLAZO"], $body["MONTO_SOLICITADO"], $body["PLAZOQUINCENAS"]);
         echo json_encode($datos);
-        break;
+    break;
     case "calcularInteresCapital":
         $datos = $com->calcularInteresCapital($body["TASA"], $body["SALDO"], $body["VALOR_CUOTA"]);
         echo json_encode($datos);
-        break;
+    break;
     case "PagoTotalCuota":
         $datos = $com->PagoTCuota($body["ID_PPAGO"]);
         echo json_encode($datos);
-        break;
+    break;
     case "PagoCapital":
         $datos = $com->PagoCapital($body["ID_PPAGO"]);
         echo json_encode($datos);
-        break;
+    break;
     case "PagoInteres":
         $datos = $com->PagoInteres($body["ID_PPAGO"]);
         echo json_encode($datos);
-        break;
+    break;
     case "PagoTEstado":
         $datos = $com->PAGOT_ESTADO($body["ID_PPAGO"]);
         echo json_encode($datos);
-        break;
-        case "PagoPEstado":
-            $datos = $com->PAGOP_ESTADO($body["ID_PPAGO"]);
-            echo json_encode($datos);
-            break;
+    break;
+    case "PagoPEstado":
+        $datos = $com->PAGOP_ESTADO($body["ID_PPAGO"]);
+        echo json_encode($datos);
+    break;
+    case "obtenerEstadoPago":
+        $ID_PPAGO = $body["ID_PPAGO"];
+        $datos = $com->obtenerEstadoPago($ID_PPAGO);
+        echo json_encode($datos);
+    break;
 }

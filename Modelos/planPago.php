@@ -1,10 +1,7 @@
 <?php
-
-
 class PlanPago extends Conectar
 
 {
-
     public function get_planPago($ID_PRESTAMO)
     {
         $conectar = parent::conexion();
@@ -299,8 +296,6 @@ class PlanPago extends Conectar
         }
     }
 
-
-
     public function PAGOP_ESTADO($ID_PPAGO)
     {
         try {
@@ -326,4 +321,32 @@ class PlanPago extends Conectar
             echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
         }
     }
+
+    public function obtenerEstadoPago($ID_PPAGO)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+
+            // Consulta SELECT para obtener el estado del préstamo
+            $select_sql = "SELECT `ESTADO` FROM `tbl_mp_planp` WHERE `ID_PLANP` = :ID_PPAGO";
+            $stmt_select = $conectar->prepare($select_sql);
+            $stmt_select->bindParam(':ID_PPAGO', $ID_PPAGO, PDO::PARAM_INT);
+            $stmt_select->execute();
+
+            // Obtener el resultado como un array asociativo
+            $resultado = $stmt_select->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado) {
+                // Devolver el estado del plan pago
+                return $resultado['ESTADO'];
+            } else {
+                // El plan de pago no se encontró o no existe
+                return "NO ENCONTRADO";
+            }
+        } catch (PDOException $e) {
+            return "Error al Consultar el Estado del Plan de Pago: " . $e->getMessage();
+        }
+    }
+
 }

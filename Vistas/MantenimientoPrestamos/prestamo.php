@@ -500,72 +500,71 @@ if (!isset($_SESSION['usuario'])) {
         }
 
         function AnularPrestamo(ID_PRESTAMO) {
-
             // Verificar el estado del préstamo antes de aprobar
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=obtenerEstadoPrestamo', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "ID_PRESTAMO": ID_PRESTAMO
-
-                    })
-
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "ID_PRESTAMO": ID_PRESTAMO
                 })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("estado:", data);
-                    if (data === PENDIENTE || data === APROBADO) {
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("estado:", data);
+                if (data === 'PENDIENTE' || data === 'APROBADO') {
+                    if (data === 'APROBADO') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'No se puede anular un préstamo ya aprobado.'
+                        });
+                    } else {
                         // Realiza una solicitud FETCH al servidor para anular el préstamo
                         fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=anularPrestamo', {
-                                method: 'POST',
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    "ID_PRESTAMO": ID_PRESTAMO
-                                })
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                "ID_PRESTAMO": ID_PRESTAMO
                             })
-                            .then(response => {
-                                if (response.ok) {
-                                    // La solicitud se completó con éxito
-                                    document.getElementById('AnularButton').classList.remove('btn-danger');
-                                    document.getElementById('AnularButton').classList.add('btn-secondary');
-                                    document.getElementById('AnularButton').disabled = true;
-                                    // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
-                                    location.reload();
-
-                                } else {
-                                    console.error('Error en la solicitud');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                            });
-                    } else {
-
-                        if (data === ANULADO) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Préstamo Anulado',
-                                text: 'Este préstamo ya ha sido anulado anteriormente.'
-                            });
-                        }
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                // La solicitud se completó con éxito
+                                document.getElementById('AnularButton').classList.remove('btn-danger');
+                                document.getElementById('AnularButton').classList.add('btn-secondary');
+                                document.getElementById('AnularButton').disabled = true;
+                                // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
+                                location.reload();
+                            } else {
+                                console.error('Error en la solicitud');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-
+                } else {
+                    if (data === 'ANULADO') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Préstamo Anulado',
+                            text: 'Este préstamo ya ha sido anulado anteriormente.'
+                        });
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
 
-
         function AprobarPrestamo(ID_PRESTAMO, MONTO_SOLICITADO, PLAZO, TASA, ESTADO_PRESTAMO) {
-
-
             // Verificar el estado del préstamo antes de aprobar
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=obtenerEstadoPrestamo', {
                     method: 'POST',
