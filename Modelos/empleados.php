@@ -74,12 +74,13 @@ class Empleados extends Conectar
         $SEGUNDO_APELLIDO,
         $EMAIL,
         $SALARIO,
+        $ESTADO,
         $TELEFONO,
         $DIRECCION1,
         $DIRECCION2,
         $ID_SUCURSAL,
-        $ID_CARGO,
-        $ESTADO
+        $ID_CARGO
+       
     ) {
         try {
             $conectar = parent::conexion();
@@ -92,14 +93,15 @@ class Empleados extends Conectar
                     `SEGUNDO_NOMBRE` = :SEGUNDO_NOMBRE, 
                     `PRIMER_APELLIDO` = :PRIMER_APELLIDO, 
                     `SEGUNDO_APELLIDO` = :SEGUNDO_APELLIDO, 
-                    `EMAIL` = :EMAIL ,
-                    `SALARIO` = :SALARIO , 
-                    `TELEFONO` = :TELEFONO ,
-                    `DIRECCION1` = :DIRECCION1 ,
+                    `EMAIL` = :EMAIL,
+                    `SALARIO` = :SALARIO, 
+                    `ESTADO` = :ESTADO,
+                    `TELEFONO` = :TELEFONO,
+                    `DIRECCION1` = :DIRECCION1,
                     `DIRECCION2` = :DIRECCION2,
-                    `ID_SUCURSAL` = :ID_SUCURSAL ,
-                    `ID_CARGO` = :ID_CARGO ,
-                    `ESTADO` = :ESTADO 
+                    `ID_SUCURSAL` = :ID_SUCURSAL,
+                    `ID_CARGO` = :ID_CARGO
+                    
                     
                 WHERE `ID_EMPLEADO` = :ID_EMPLEADO";
 
@@ -114,12 +116,15 @@ class Empleados extends Conectar
             $stmt->bindParam(':SEGUNDO_APELLIDO', $SEGUNDO_APELLIDO, PDO::PARAM_STR);
             $stmt->bindParam(':EMAIL', $EMAIL, PDO::PARAM_STR);
             $stmt->bindParam(':SALARIO', $SALARIO, PDO::PARAM_STR);
-            $stmt->bindParam(':TELEFONO', $TELEFONO, PDO::PARAM_INT);
+            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);  // HACER EN SELECT 
+            $stmt->bindParam(':TELEFONO', $TELEFONO, PDO::PARAM_STR);
             $stmt->bindParam(':DIRECCION1', $DIRECCION1, PDO::PARAM_STR);
             $stmt->bindParam(':DIRECCION2', $DIRECCION2, PDO::PARAM_STR);
             $stmt->bindParam(':ID_SUCURSAL', $ID_SUCURSAL, PDO::PARAM_INT);
             $stmt->bindParam(':ID_CARGO', $ID_CARGO, PDO::PARAM_INT);
-            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);  // HACER EN SELECT 
+           
+           // echo $stmt->queryString;
+
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {

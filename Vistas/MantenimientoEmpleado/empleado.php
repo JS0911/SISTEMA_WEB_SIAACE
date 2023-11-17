@@ -512,9 +512,9 @@ if (!isset($_SESSION['usuario'])) {
                                         <label for="Estado">Estado</label>
                                         <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="Activo">ACTIVO</option>
-                                            <option value="Inactivo">INACTIVO</option>
-                                            <option value="Nuevo">NUEVO</option>
+                                            <option value="ACTIVO">ACTIVO</option>
+                                            <option value="INACTIVO">INACTIVO</option>
+                                            <option value="NUEVO">NUEVO</option>
                                         </select>
                                     </div>
                                 </form>
@@ -882,12 +882,13 @@ if (!isset($_SESSION['usuario'])) {
                     document.getElementById('editar-Sapellido').value = empleado.SEGUNDO_APELLIDO;
                     document.getElementById('editar-email').value = empleado.EMAIL;
                     document.getElementById('editar-salario').value = empleado.SALARIO;
+                    document.getElementById('editar-estado').value = empleado.ESTADO;
                     document.getElementById('editar-telefono').value = empleado.TELEFONO;
                     document.getElementById('editar-direccion1').value = empleado.DIRECCION1;
                     document.getElementById('editar-direccion2').value = empleado.DIRECCION2;
                     document.getElementById('editar-sucursal').value = empleado.ID_SUCURSAL;
                     document.getElementById('editar-cargo').value = empleado.ID_CARGO;
-                    document.getElementById('editar-estado').value = empleado.ESTADO;
+                    
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
@@ -906,12 +907,13 @@ if (!isset($_SESSION['usuario'])) {
             var Sapellido = document.getElementById('editar-Sapellido').value;
             var email = document.getElementById('editar-email').value;
             var salario = document.getElementById('editar-salario').value;
+            var estado = document.getElementById('editar-estado').value;
             var telefono = document.getElementById('editar-telefono').value;
             var direccion1 = document.getElementById('editar-direccion1').value;
             var direccion2 = document.getElementById('editar-direccion2').value;
             var sucursal = document.getElementById('editar-sucursal').value;
             var cargo = document.getElementById('editar-cargo').value;
-            var estado = document.getElementById('editar-estado').value;
+           
 
             // Realiza una solicitud FETCH para actualizar los datos del usuario
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/empleados.php?op=updateEmpleado', {
@@ -929,12 +931,13 @@ if (!isset($_SESSION['usuario'])) {
                         "SEGUNDO_APELLIDO": Sapellido,
                         "EMAIL": email,
                         "SALARIO": salario,
+                        "ESTADO": estado,
                         "TELEFONO": telefono,
                         "DIRECCION1": direccion1,
                         "DIRECCION2": direccion2,
                         "ID_SUCURSAL": sucursal,
-                        "ID_CARGO": cargo,
-                        "ESTADO": estado
+                        "ID_CARGO": cargo
+                        
                     }) // Convierte los datos en formato JSON
                 })
                 .then(function(response) {

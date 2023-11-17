@@ -45,14 +45,15 @@ switch ($_GET["op"]) {
         $SEGUNDO_APELLIDO = $body["SEGUNDO_APELLIDO"];
         $EMAIL = $body["EMAIL"];
         $SALARIO = $body["SALARIO"];
+        $ESTADO = $body["ESTADO"];
         $TELEFONO = $body["TELEFONO"];
         $DIRECCION1 = $body["DIRECCION1"];
         $DIRECCION2 = $body["DIRECCION2"];
         $ID_SUCURSAL = $body["ID_SUCURSAL"];
         $ID_CARGO = $body["ID_CARGO"];
-        $ESTADO = $body["ESTADO"];
+       
 
-        $datos = $com->update_empleado($ID_EMPLEADO, $DNI, $PRIMER_NOMBRE, $SEGUNDO_NOMBRE, $PRIMER_APELLIDO, $SEGUNDO_APELLIDO, $EMAIL, $SALARIO, $ESTADO, $TELEFONO, $DIRECCION1, $DIRECCION2, $ID_SUCURSAL, $ID_CARGO, $ESTADO);
+        $datos = $com->update_empleado($ID_EMPLEADO,$DNI,$PRIMER_NOMBRE,$SEGUNDO_NOMBRE,$PRIMER_APELLIDO,$SEGUNDO_APELLIDO,$EMAIL,$SALARIO,$ESTADO,$TELEFONO,$DIRECCION1,$DIRECCION2,$ID_SUCURSAL,$ID_CARGO);
         echo json_encode($datos);
         break;
         
