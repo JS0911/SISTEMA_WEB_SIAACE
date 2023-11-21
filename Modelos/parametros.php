@@ -25,23 +25,20 @@ class Parametro extends Conectar
     }
     
     //INSERTA UN PARAMETRO
-    public function insert_parametros($PARAMETRO, $VALOR/* , $ID_USUARIO, $CREADO_POR, $MODIFICADO_POR  *//*, $FECHA_CREACION, $FECHA_MODIFICACION */) {
+    public function insert_parametros($PARAMETRO, $VALOR,$CREADO_POR, $FECHA_CREACION) {
     try {
-        // $contrasenaEncriptada = password_hash($CONTRASENA, PASSWORD_DEFAULT);
-        // //echo $contrasenaEncriptada;
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "INSERT INTO `siaace`.`tbl_ms_parametros` (`PARAMETRO`, `VALOR`/* , `ID_USUARIO`, `CREADO_POR`, `MODIFICADO_POR` *//* , `FECHA_CREACION`,  `FECHA_MODIFICACION` */) VALUES ( :PARAMETRO, :VALOR/* , :ID_USUARIO, :CREADO_POR, :MODIFICADO_POR *//* , :FECHA_CREACION,:FECHA_MODIFICACION */ )";
+        $sql = "INSERT INTO `siaace`.`tbl_ms_parametros` (`PARAMETRO`, `VALOR`, `CREADO_POR`,`FECHA_CREACION`) VALUES ( :PARAMETRO, :VALOR ,:CREADO_POR, :FECHA_CREACION)";
 
         $stmt = $conectar->prepare($sql);
       
         $stmt->bindParam(':PARAMETRO', $PARAMETRO, PDO::PARAM_STR);
         $stmt->bindParam(':VALOR', $VALOR, PDO::PARAM_STR);
         // $stmt->bindParam(':ID_USUARIO', $ID_USUARIO, PDO::PARAM_INT);
-        // $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
-        // $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR);
-        // $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
-        // $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR);
+        $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+        $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
+
         
         $stmt->execute();
 
@@ -57,7 +54,7 @@ class Parametro extends Conectar
     }
 
     //EDITA UN PARAMETRO
-    public function update_parametro($ID_PARAMETRO,$PARAMETRO, $VALOR/* , $ID_USUARIO, $CREADO_POR, $MODIFICADO_POR *//* , $FECHA_CREACION, $FECHA_MODIFICACION */) {
+    public function update_parametro($ID_PARAMETRO,$PARAMETRO, $VALOR, $MODIFICADO_POR, $FECHA_MODIFICACION) {
         try {
             $conectar = parent::conexion();
             parent::set_names();
@@ -65,13 +62,9 @@ class Parametro extends Conectar
             // Consulta SQL para actualizar los campos del parametro
             $sql = "UPDATE `tbl_ms_parametros` 
                     SET `PARAMETRO` = :PARAMETRO, 
-                        `VALOR` = :VALOR 
-/*                         `ID_USUARIO` = :ID_USUARIO, 
-                        `CREADO_POR` = :CREADO_POR, 
-                        `MODIFICADO_POR` = :MODIFICADO_POR  */
-/*                         `FECHA_CREACION` = :FECHA_CREACION, 
-                        `FECHA_MODIFICACION` = :FECHA_MODIFICACION,  */
-
+                        `VALOR` = :VALOR, 
+                        `MODIFICADO_POR` = :MODIFICADO_POR,  
+                        `FECHA_MODIFICACION` = :FECHA_MODIFICACION
                     WHERE `ID_PARAMETRO` = :ID_PARAMETRO";
     
             $stmt = $conectar->prepare($sql);
@@ -79,11 +72,8 @@ class Parametro extends Conectar
             $stmt->bindParam(':ID_PARAMETRO', $ID_PARAMETRO, PDO::PARAM_INT);
             $stmt->bindParam(':PARAMETRO', $PARAMETRO, PDO::PARAM_STR);
             $stmt->bindParam(':VALOR', $VALOR, PDO::PARAM_STR);
-/*             $stmt->bindParam(':ID_USUARIO', $ID_USUARIO, PDO::PARAM_INT);
-            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
-            $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR); */
-/*             $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
-            $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR); */
+            $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR);
     
             $stmt->execute();
     

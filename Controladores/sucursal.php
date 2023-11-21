@@ -1,4 +1,7 @@
+
 <?php
+session_start();
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, PATCH, OPTIONS');
@@ -13,9 +16,11 @@ header('Content-Type: application/json');
 
 require_once("../config/conexion.php");
 require_once("../Modelos/sucursal.php");
+require_once("../Modelos/bitacora.php");
 
 
 $com = new Sucursal();
+$bit = new bitacora();
 
 $body = json_decode(file_get_contents("php://input"), true);
 
@@ -41,8 +46,14 @@ switch ($_GET["op"]) {
              echo json_encode(["error" => "La Sucursal ya existe en la base de datos."]);
          } else {
              // Inserta una region en la base de datos
-             $datos = $com->insert_sucursal($SUCURSAL, $DESCRIPCION, $DIRECCION, $ID_REGION, $TELEFONO,$ESTADO );
+             $date = new DateTime(date("Y-m-d H:i:s"));
+             $dateMod = $date->modify("-8 hours");
+             $dateNew = $dateMod->format("Y-m-d H:i:s");
+
+             $datos = $com->insert_sucursal($SUCURSAL, $DESCRIPCION, $DIRECCION, $ID_REGION, $TELEFONO,$ESTADO);
              echo json_encode(["message" => "Sucursal insertada exitosamente."]);
+             $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO LA SUCURSAL: $SUCURSAL", $_SESSION['id_usuario'], 9, $_SESSION['usuario'], $dateNew);
+
          }
         break;
 
@@ -59,13 +70,24 @@ switch ($_GET["op"]) {
         $ID_REGION = $body["ID_REGION"];
         $TELEFONO = $body["TELEFONO"];
         $ESTADO = $body["ESTADO"];
-        $datos = $com->update_sucursal($ID_SUCURSAL, $SUCURSAL, $DESCRIPCION , $DIRECCION,$ID_REGION,$TELEFONO, $ESTADO);
+
+        $date = new DateTime(date("Y-m-d H:i:s"));
+        $dateMod = $date->modify("-8 hours");
+        $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+
+        $datos = $com->update_sucursal($ID_SUCURSAL, $SUCURSAL, $DESCRIPCION , $DIRECCION,$ID_REGION,$TELEFONO, $ESTADO, $_SESSION['usuario'],$dateNew);
         echo json_encode($datos);
+        $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO LA SUCURSAL # $ID_SUCURSAL", $_SESSION['id_usuario'], 9, $_SESSION['usuario'], $dateNew);
+
         break;
     case "eliminarSucursal":
         $ID_SUCURSAL = $body["ID_SUCURSAL"];
         $datos = $com->eliminar_sucursal($ID_SUCURSAL);
         echo json_encode("Sucursal eliminada");
+        $date = new DateTime(date("Y-m-d H:i:s"));
+        $dateMod = $date->modify("-8 hours");
+        $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+        $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO LA SUCURSAL # $ID_SUCURSAL", $_SESSION['id_usuario'], 26);
         break;
 }
 
