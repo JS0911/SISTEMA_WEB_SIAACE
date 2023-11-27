@@ -1,6 +1,47 @@
+<!-- -----------------------------------------------------------------------
+	Universidad Nacional Autonoma de Honduras (UNAH)
+		Facultad de Ciencias Economicas
+	Departamento de Informatica administrativa
+         Analisis, Programacion y Evaluacion de Sistemas
+                    Tercer Periodo 2023
+
+
+Equipo:
+Sahory Garcia          sahori.garcia@unah.hn
+Jairo Garcia           jairo.lagos@unah.hn
+Ashley Matamoros       Ashley.matamoros@unah.hn
+Lester Padilla         Lester.padilla@unah.hn
+Khaterine Ordoñez      khaterine.ordonez@unah.hn
+Yeniffer Velasquez     yeniffer.velasquez@unah.hn
+Kevin Zuniga           kgzuniga@unah.hn
+
+Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
+Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
+Catedratico evaluacion de sistemas: ???
+
+
+---------------------------------------------------------------------
+
+Programa:         Pantalla de Mentenimiento Tipo Prestamo
+Fecha:            
+Programador:     
+descripcion:      Pantalla que registra los tipos de prestamo que existen
+
+-----------------------------------------------------------------------
+
+                Historial de Cambio
+
+-----------------------------------------------------------------------
+
+Programador               Fecha                      Descripcion
+Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
+
+------------------------------------------------------------------------->
+
 <?php
 
 session_start();
+
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
 require_once '../../Modelos/Usuarios.php';
@@ -8,17 +49,12 @@ require_once '../../Modelos/Usuarios.php';
 $permisosTipoprestamo = new PermisosUsuarios();
 $usuario_obj = new Usuario();
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
-}
-
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_Tipoprestamo = "13"; // CAMBIO DEL NUMERO DEL OBJETO
 $id_objeto_Seguridad = "25";
 $id_objeto_Cuentas = "28";
-
 
 $permisos1 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Tipoprestamo);
@@ -55,6 +91,7 @@ if (!isset($_SESSION['usuario'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantenimiento Tipo de Prestamos</title>
+    <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
@@ -121,7 +158,7 @@ if (!isset($_SESSION['usuario'])) {
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand" href="index.php">
+        <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar-->
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -159,7 +196,7 @@ if (!isset($_SESSION['usuario'])) {
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
-                                    Modulo seguridad
+                                    Modulo Seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
@@ -173,10 +210,9 @@ if (!isset($_SESSION['usuario'])) {
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
                             }
-
-
-
                             echo '</nav>';
                             echo '</div>';
                         }
@@ -213,8 +249,8 @@ if (!isset($_SESSION['usuario'])) {
 
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuenta</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -232,7 +268,7 @@ if (!isset($_SESSION['usuario'])) {
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 echo '<a class="nav-link" href="tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
-                                echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamo</a>';
+                                echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -273,13 +309,17 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Tipo Prestamo</th>
                                     <th>Descripcion</th>
                                     <th>Aplica Seguro</th>
-                                    <th>Monto Máximo</th>
-                                    <th>Monto Minimo</th>
-                                    <th>Tasa Máxima</th>
-                                    <th>Tasa Minima</th>
-                                    <th>Plazo Máximo</th>
-                                    <th>Plazo Minimo</th>
+                                    <th style="display: none;">Monto Máximo</th>
+                                    <th style="display: none;">Monto Minimo</th>
+                                    <th style="display: none;">Tasa Máxima</th>
+                                    <th style="display: none;">Tasa Minima</th>
+                                    <th style="display: none;">Plazo Máximo</th>
+                                    <th style="display: none;">Plazo Minimo</th>
                                     <th>Estado </th>
+                                    <th>Creado por</th>
+                                    <th>Fecha Creacion</th>
+                                    <th>Modificado por</th>
+                                    <th>Fecha Modificacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -312,11 +352,9 @@ if (!isset($_SESSION['usuario'])) {
                                         <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
-
                                         <label for="nombre">Aplica seguro</label>
                                         <input type="text" maxlength="1" class="form-control" id="agregar-aplicaseguro" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje3"></div>
-
 
                                         <label for="nombre"> Monto Maximo</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-montomaximo" required pattern="[0-9]+" title="Solo se permiten números (1, 0)">
@@ -342,7 +380,6 @@ if (!isset($_SESSION['usuario'])) {
                                         <input type="text" maxlength="45" class="form-control" id="agregar-plazominimo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje9"></div>
 
-
                                         <label for="nombre">Estado</label>
                                         <select class="form-control" id="agregar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
@@ -350,7 +387,6 @@ if (!isset($_SESSION['usuario'])) {
                                             <option value="INACTIVO">INACTIVO</option>
                                         </select>
                                         <div id="mensaje10"></div>
-
 
                                     </div>
                                 </form>
@@ -390,11 +426,9 @@ if (!isset($_SESSION['usuario'])) {
                                         <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje12"></div>
 
-
                                         <label for="nombre">Aplica seguro</label>
                                         <input type="text" maxlength="1" class="form-control" id="editar-aplicaseguro" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje13"></div>
-
 
                                         <label for="nombre"> Monto Maximo</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-montomaximo" required pattern="[0-9]+" title="Solo se permiten números">
@@ -420,7 +454,6 @@ if (!isset($_SESSION['usuario'])) {
                                         <input type="text" maxlength="45" class="form-control" id="editar-plazominimo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje19"></div>
 
-
                                         <label for="nombre">Estado</label>
                                         <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
@@ -428,7 +461,6 @@ if (!isset($_SESSION['usuario'])) {
                                             <option value="INACTIVO">INACTIVO</option>
                                         </select>
                                         <div id="mensaje20"></div>
-
 
                                     </div>
                                 </form>
@@ -469,8 +501,6 @@ if (!isset($_SESSION['usuario'])) {
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-
-
         function Lista_Tipoprestamo() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
             // Actualizar el valor predeterminado
@@ -500,14 +530,17 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + tipoprestamo.TIPO_PRESTAMO + '</td>' +
                             '<td>' + tipoprestamo.DESCRIPCION + '</td>' +
                             '<td>' + tipoprestamo.APLICA_SEGUROS + '</td>' +
-                            '<td>' + tipoprestamo.MONTO_MAXIMO + '</td>' +
-                            '<td>' + tipoprestamo.MONTO_MINIMO + '</td>' +
-                            '<td>' + tipoprestamo.TASA_MAXIMA + '</td>' +
-                            '<td>' + tipoprestamo.TASA_MINIMA + '</td>' +
-                            '<td>' + tipoprestamo.PLAZO_MAXIMO + '</td>' +
-                            '<td>' + tipoprestamo.PLAZO_MINIMO + '</td>' +
+                            '<td style="display:none;">' + tipoprestamo.MONTO_MAXIMO + '</td>' +
+                            '<td style="display:none;">' + tipoprestamo.MONTO_MINIMO + '</td>' +
+                            '<td style="display:none;">' + tipoprestamo.TASA_MAXIMA + '</td>' +
+                            '<td style="display:none;">' + tipoprestamo.TASA_MINIMA + '</td>' +
+                            '<td style="display:none;">' + tipoprestamo.PLAZO_MAXIMO + '</td>' +
+                            '<td style="display:none;">' + tipoprestamo.PLAZO_MINIMO + '</td>' +
                             '<td>' + tipoprestamo.ESTADO + '</td>' +
-
+                            '<td>' + tipoprestamo.CREADO_POR + '</td>' +
+                            '<td>' + tipoprestamo.MODIFICADO_POR + '</td>' +
+                            '<td>' + tipoprestamo.FECHA_CREACION + '</td>' +
+                            '<td>' + tipoprestamo.FECHA_MODIFICACION + '</td>' + 
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -519,10 +552,11 @@ if (!isset($_SESSION['usuario'])) {
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
                             row += '<button class="btn btn-danger eliminar-tipoprestamo" data-id="' + tipoprestamo.ID_TIPO_PRESTAMO + '" onclick="eliminarTipoprestamo(' + tipoprestamo.ID_TIPO_PRESTAMO + ')">Eliminar</button>';
                         }
-
-
                         row += '</td>' +
                             '</tr>';
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -645,7 +679,6 @@ if (!isset($_SESSION['usuario'])) {
             });
         }
 
-
         function Insertar_Tipoprestamo() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
@@ -660,8 +693,6 @@ if (!isset($_SESSION['usuario'])) {
                 var plazomaximo = $("#agregar-plazomaximo").val();
                 var plazominimo = $("#agregar-plazominimo").val();
                 var estado = $("#agregar-estado").val();
-
-
 
                 if (tipoprestamo == "" || descripcion == "" || aplicaseguro == "" || montomaximo == "" || montominimo == "" ||
                     tasamaxima == "" || tasaminima == "" || plazomaximo == "" || plazominimo == "" || estado == "") {
@@ -741,8 +772,6 @@ if (!isset($_SESSION['usuario'])) {
                 }
             });
         }
-
-
 
         function cargarTipoprestamo(id) {
             // Crear un objeto con el ID de la sucursal
@@ -867,8 +896,8 @@ if (!isset($_SESSION['usuario'])) {
                 text: 'No podrás revertir esto.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#d33',  
+                cancelButtonColor: '#3085d6',
                 confirmButtonText: 'Eliminar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
@@ -905,7 +934,7 @@ if (!isset($_SESSION['usuario'])) {
             });
         }
 
-        //         // VALIDACIONES FUNCIONES    
+        //VALIDACIONES FUNCIONES    
         function validarNombre() {
             tipoprestamo = document.getElementById("agregar-tipoprestamo");
             descripcion = document.getElementById("agregar-descripcion");
@@ -970,7 +999,6 @@ if (!isset($_SESSION['usuario'])) {
                 });
             }
 
-
             var expresionValidadora2 = /^[A-Z0-9\s]+$/;
             var mensaje1 = document.getElementById("mensaje1");
             handleInputAndBlurEvents(tipoprestamo, expresionValidadora2, mensaje1, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
@@ -1023,7 +1051,6 @@ if (!isset($_SESSION['usuario'])) {
             var mensaje14 = document.getElementById("mensaje14");
             handleInputAndBlurEvents(montomaximoEditar, expresionValidadora1, mensaje14, "Solo se permiten números");
 
-
             var mensaje15 = document.getElementById("mensaje15");
             handleInputAndBlurEvents(montominimoEditar, expresionValidadora1, mensaje15, "Solo se permiten números");
 
@@ -1042,22 +1069,13 @@ if (!isset($_SESSION['usuario'])) {
             var mensaje20 = document.getElementById("mensaje20");
             handleInputAndBlurEvents(estadoEditar, expresionValidadora2, mensaje20, "Solo se permiten Letras Mayúsculas");
             handleDescriptionKeypressEvent(estadoEditar);
-
-
         }
-
-
-
-
-
         $(document).ready(function() {
             Lista_Tipoprestamo();
             Insertar_Tipoprestamo();
             validarNombre();
         });
     </script>
-
-
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar para insertar"
@@ -1134,7 +1152,7 @@ if (!isset($_SESSION['usuario'])) {
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-tipoprestamo, #agregar-descripcion, #agregar-aplicaseguro, #agregar-montomaximo, #agregar-montominimo,  #agregar-tasamaxima, #agregar-tasaminima,  #agregar-plazomaximo, #agregar-plazominimo,  #agregar-estado').on('input', function() {
+        $('#agregar-aplicaseguro, #agregar-montomaximo, #agregar-montominimo,  #agregar-tasamaxima, #agregar-tasaminima,  #agregar-plazomaximo, #agregar-plazominimo, #agregar-estado, #editar-aplicaseguro, #editar-montomaximo, #editar-montominimo,  #editar-tasamaxima, #editar-tasaminima, #editar-plazomaximo, #editar-plazominimo,  #editar-estado').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -1149,7 +1167,7 @@ if (!isset($_SESSION['usuario'])) {
         });
 
         // Escuchar eventos de cambio en los campos de entrada deshabilitados para eliminar espacios en blanco al principio y al final
-        $('#editar-tipoprestamo, #editar-descripcion, #editar-aplicaseguro, #editar-montomaximo, #editar-montominimo,  #editar-tasamaxima, #editar-tasaminima,  #editar-plazomaximo, #editar-plazominimo,  #editar-estado').on('input', function() {
+        $('#agregar-tipoprestamo, #agregar-descripcion, #editar-tipoprestamo, #editar-descripcion, ').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -1178,7 +1196,6 @@ if (!isset($_SESSION['usuario'])) {
             document.getElementById('agregar-plazominimo').value = "";
             document.getElementById('agregar-estado').value = "";
 
-
             // Limpia los checkboxes
             document.getElementById('agregar-tipoprestamo').checked = false;
             document.getElementById('agregar-descripcion').checked = false;
@@ -1190,6 +1207,7 @@ if (!isset($_SESSION['usuario'])) {
             document.getElementById('agregar-plazomaximo').checked = false;
             document.getElementById('agregar-plazominimo').checked = false;
             document.getElementById('agregar-estado').checked = false;
+            location.reload();
 
         });
 
@@ -1197,7 +1215,6 @@ if (!isset($_SESSION['usuario'])) {
         document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
 
             // Limpia los checkboxes
-
             document.getElementById('editar-tipoprestamo').checked = false;
             document.getElementById('editar-descripcion').checked = false;
             document.getElementById('editar-aplicaseguro').checked = false;
@@ -1208,10 +1225,10 @@ if (!isset($_SESSION['usuario'])) {
             document.getElementById('editar-plazomaximo').checked = false;
             document.getElementById('editar-plazominimo').checked = false;
             document.getElementById('editar-estado').checked = false;
+
+            location.reload();
         });
     </script>
-
-
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

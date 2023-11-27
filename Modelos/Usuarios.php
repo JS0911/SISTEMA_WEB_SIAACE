@@ -28,14 +28,14 @@ class Usuario extends Conectar
     }
 
     //INSERTA UN USUARIO
-    public function insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CONTRASENA, $CORREO_ELECTRONICO, $ID_ROL)
+    public function insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CONTRASENA, $CORREO_ELECTRONICO, $ID_ROL, $CREADO_POR, $FECHA_CREACION)
     {
         try {
             $contrasenaEncriptada = password_hash($CONTRASENA, PASSWORD_DEFAULT);
             //echo $contrasenaEncriptada;
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_usuario` (`USUARIO`, `NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CONTRASENA`, `CORREO_ELECTRONICO`, `ID_ROL`) VALUES ( :USUARIO, :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CONTRASENA, :CORREO_ELECTRONICO, :ID_ROL)";
+            $sql = "INSERT INTO `siaace`.`tbl_ms_usuario` (`USUARIO`, `NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CONTRASENA`, `CORREO_ELECTRONICO`, `ID_ROL`, `CREADO_POR`, `FECHA_CREACION`) VALUES ( :USUARIO, :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CONTRASENA, :CORREO_ELECTRONICO, :ID_ROL, :CREADO_POR, :FECHA_CREACION)";
 
             $stmt = $conectar->prepare($sql);
 
@@ -45,7 +45,8 @@ class Usuario extends Conectar
             $stmt->bindParam(':CONTRASENA', $contrasenaEncriptada, PDO::PARAM_STR);
             $stmt->bindParam(':CORREO_ELECTRONICO', $CORREO_ELECTRONICO, PDO::PARAM_STR);
             $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
-
+            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
@@ -60,7 +61,7 @@ class Usuario extends Conectar
     }
 
     //EDITA UN USUARIO
-    public function update_usuario($ID_USUARIO, $USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CORREO_ELECTRONICO, $ID_ROL)
+    public function update_usuario($ID_USUARIO, $USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CORREO_ELECTRONICO, $ID_ROL, $MODIFICADO_POR, $FECHA_MODIFICACION)
     {
         try {
             $conectar = parent::conexion();
@@ -72,7 +73,9 @@ class Usuario extends Conectar
                         `NOMBRE_USUARIO` = :NOMBRE_USUARIO, 
                         `ID_ESTADO_USUARIO` = :ID_ESTADO_USUARIO, 
                         `CORREO_ELECTRONICO` = :CORREO_ELECTRONICO, 
-                        `ID_ROL` = :ID_ROL 
+                        `ID_ROL` = :ID_ROL,
+                        `MODIFICADO_POR` = :MODIFICADO_POR, 
+                        `FECHA_MODIFICACION` = :FECHA_MODIFICACION
                     WHERE `ID_USUARIO` = :ID_USUARIO";
 
             $stmt = $conectar->prepare($sql);
@@ -83,7 +86,8 @@ class Usuario extends Conectar
             $stmt->bindParam(':ID_ESTADO_USUARIO', $ID_ESTADO_USUARIO, PDO::PARAM_INT);
             $stmt->bindParam(':CORREO_ELECTRONICO', $CORREO_ELECTRONICO, PDO::PARAM_STR);
             $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
-
+            $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR);
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {

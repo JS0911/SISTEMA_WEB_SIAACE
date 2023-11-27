@@ -1,10 +1,13 @@
 <?php
 
 session_start();
+
 require "../Config/conexion.php";
 require_once '../Modelos/permisoUsuario.php';
+require_once '../Modelos/Usuarios.php';
 
 $permisosUsuarios = new PermisosUsuarios();
+$usuario_obj = new Usuario();
 
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
@@ -17,6 +20,8 @@ $id_objeto_Cuentas = "28";
 $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario);
 $permisos1 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
+$nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 // $contrasenaActualError = "";
 // $nuevaContrasenaError = "";
 // $confirmarContrasenaError = "";
@@ -91,6 +96,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("refresh:1");
 }
 
+if (!isset($_SESSION['usuario'])) {
+    header("Location: login.php");
+    exit();
+}
+
 ?>
 
 <style>
@@ -121,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Cambio de Contraseña</title>
-    <link rel="shortcut icon" href="../../src/IconoIDH.ico">
+    <link rel="shortcut icon" href="../src/IconoIDH.ico">
     <link href="../css/styles.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
@@ -133,8 +143,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <a class="navbar-brand" href="index.php">
             <img src="../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+         <!-- Navbar Search-->
+         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </form>
         <!-- Navbar-->
-        <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
+        <ul class="navbar-nav ml-auto ml-md-0">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
@@ -144,15 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </li>
         </ul>
-        <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline mr-0 my-2 my-md-0 order-2">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
-                </div>
-            </div>
-        </form>
+       
     </nav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
@@ -168,7 +179,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                            if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
-                                    Modulo seguridad
+                                    Modulo Seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
@@ -182,6 +193,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
                                 echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i></i><span style="margin-left: 5px;"> Bitacora </a>';
+                                echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
+                                echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
                             }
 
 
@@ -221,8 +234,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../Vistas/MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
-                                echo '<a class="nav-link" href="../Vistas/MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
-                                echo '<a class="nav-link" href="../Vistas/MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
+                                echo '<a class="nav-link" href="../Vistas/MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
+                                echo '<a class="nav-link" href="../Vistas/MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -241,7 +254,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
-                                echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamo</a>';
+                                echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -250,8 +263,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Conectado a Sistema:</div>
-                    SIAACE - IDH Microfinanciera
+                    <div class="small">Usuario: <?php echo $nombre_usuario;?></div>
+                    Sesión activa: Conectado(a).
                 </div>
             </nav>
         </div>

@@ -12,16 +12,16 @@ class cuenta extends Conectar
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
-     //TRAE SOLO UNA CUENTA 
+    //TRAE SOLO UNA CUENTA 
      public function get_cuenta($ID_CUENTA)
      {
-         $conectar = parent::conexion();
-         parent::set_names();
-         $sql = "SELECT * FROM siaace.tbl_mc_cuenta where ID_CUENTA = :ID";
-         $stmt = $conectar->prepare($sql);
-         $stmt->bindParam(':ID', $ID_CUENTA, PDO::PARAM_INT);
-         $stmt->execute();
-         return $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT * FROM siaace.tbl_mc_cuenta where ID_CUENTA = :ID";
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID', $ID_CUENTA, PDO::PARAM_INT);
+        $stmt->execute();
+        return $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
      } 
 
     //TRAE SOLO LAS CUENTAS PERTENECIENTES A UN EMPLEADO
@@ -37,12 +37,12 @@ class cuenta extends Conectar
     }
 
     //INSERTA CUENTA
-    public function insert_cuenta($ID_EMPLEADO, $ID_TIPOCUENTA, $SALDO, $NUMERO_CUENTA, $ESTADO)
+    public function insert_cuenta($ID_EMPLEADO, $ID_TIPOCUENTA, $SALDO, $NUMERO_CUENTA, $ESTADO, $CREADO_POR, $FECHA_CREACION)
     {
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_mc_cuenta` (`ID_EMPLEADO`, `ID_TIPOCUENTA`, `SALDO`, `NUMERO_CUENTA`, `ESTADO`) VALUES ( :ID_EMPLEADO, :ID_TIPOCUENTA, :SALDO, :NUMERO_CUENTA, :ESTADO)";
+            $sql = "INSERT INTO `siaace`.`tbl_mc_cuenta` (`ID_EMPLEADO`, `ID_TIPOCUENTA`, `SALDO`, `NUMERO_CUENTA`, `ESTADO`, `CREADO_POR`, `FECHA_CREACION`) VALUES ( :ID_EMPLEADO, :ID_TIPOCUENTA, :SALDO, :NUMERO_CUENTA, :ESTADO, :CREADO_POR, :FECHA_CREACION)";
 
             $stmt = $conectar->prepare($sql);
 
@@ -51,7 +51,8 @@ class cuenta extends Conectar
             $stmt->bindParam(':SALDO', $SALDO, PDO::PARAM_INT);
             $stmt->bindParam(':NUMERO_CUENTA', $NUMERO_CUENTA, PDO::PARAM_INT);
             $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
-
+            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
@@ -98,20 +99,18 @@ class cuenta extends Conectar
     public function historial_cuenta($ID_CUENTA)
     {
          
-              $conectar = parent::conexion();
-              parent::set_names();
+        $conectar = parent::conexion();
+        parent::set_names();
   
-              // Consulta SQL para actualizar los campos del usuario
-              $sql = "SELECT  T.FECHA, T.MONTO, TT.TIPO_TRANSACCION FROM tbl_transacciones AS T
-              INNER JOIN tbl_tipo_transaccion AS TT ON T.ID_TIPO_TRANSACCION = TT.ID_TIPO_TRANSACCION
-              WHERE T.ID_CUENTA = :ID_CUENTA";
+        // Consulta SQL para actualizar los campos del usuario
+        $sql = "SELECT  T.FECHA, T.MONTO, TT.TIPO_TRANSACCION FROM tbl_transacciones AS T
+        INNER JOIN tbl_tipo_transaccion AS TT ON T.ID_TIPO_TRANSACCION = TT.ID_TIPO_TRANSACCION
+        WHERE T.ID_CUENTA = :ID_CUENTA";
   
-              $stmt = $conectar->prepare($sql);
-  
-              $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
-  
-              $stmt->execute();
-              return $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
+        $stmt->execute();
+        return $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
           
     }
     
@@ -123,7 +122,6 @@ class cuenta extends Conectar
         // Consulta SQL para actualizar los campos del usuario
         $sql = "UPDATE tbl_mc_cuenta SET SALDO = SALDO + :SALDO  WHERE ID_CUENTA = :ID_CUENTA";
         $sql2 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`) VALUES (:SALDO_D,:ID_CUENTA_D, 1, NOW())";
-
 
         $stmt = $conectar->prepare($sql);
         $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
@@ -140,7 +138,6 @@ class cuenta extends Conectar
         } else {
             return "Error al actualizar saldo";
         }
-
     }
 
     public function reembolso_cuenta($ID_CUENTA, $REEMBOLSO){
@@ -167,7 +164,5 @@ class cuenta extends Conectar
         } else {
             return "Error al actualizar saldo";
         }
-
-
     }
 }

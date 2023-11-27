@@ -1,12 +1,21 @@
 <?php
 
 session_start();
+
 require "../Config/conexion.php";
 require_once '../Modelos/permisoUsuario.php';
 require_once '../Modelos/Usuarios.php';
+require_once "../request.php";
 
 $permisosUsuarios = new PermisosUsuarios();
 $usuario_obj = new Usuario();
+
+// Si el usuario no tiene sesión activa, redirigir a login.php
+if (!isset($_SESSION['usuario'])) {
+    header("Location: login.php");
+    session_destroy();
+    exit();
+}
 
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
@@ -23,11 +32,18 @@ $permisos3 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Presta
 $datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
 $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: inicio.php");
-    exit();
-}
+$estadoUsuario = $_SESSION['id_estado_usuario'];
 
+// Verificar si el usuario está en estado 2 o 4 y redirigir
+if (isset($_SESSION['id_estado_usuario'])) {
+    $estadoUsuario = $_SESSION['id_estado_usuario'];
+    if ($estadoUsuario == 2 || $estadoUsuario == 4) {
+        $mensajeEstado = ($estadoUsuario == 2) ? 'Su usuario se encuentra inactivo' : 'Su usuario se encuentra bloqueado.';
+        echo $mensajeEstado; 
+        header("Location: login.php");
+        exit();
+    }
+}
 ?>
 
 <style>
@@ -111,12 +127,12 @@ if (!isset($_SESSION['usuario'])) {
                                     echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
                                     echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                     echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                                   echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
-                                   
+                                    echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                                    echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
+                                    echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
                                 }
                                 echo '</nav>';
-                                echo '</div>';
-                               
+                                echo '</div>';      
                             }
 
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
@@ -149,7 +165,7 @@ if (!isset($_SESSION['usuario'])) {
     
                                 if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../Vistas/MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
-                                    echo '<a class="nav-link" href="../Vistas/MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
+                                    echo '<a class="nav-link" href="../Vistas/MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                     echo '<a class="nav-link" href="../Vistas/MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Cuentas</a>';
                                 }                            
                                 echo '</nav>';
@@ -179,8 +195,8 @@ if (!isset($_SESSION['usuario'])) {
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                <div class="small">Usuario: <?php echo $nombre_usuario;?></div>
-                    Sesión activa: Conectado(a).
+                    <div class="small">Usuario: <?php echo $nombre_usuario;?></div>
+                        Sesión activa: Conectado(a).
                 </div>
             </nav>
         </div>

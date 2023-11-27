@@ -4,6 +4,7 @@ session_start();
 
 require "../Config/conexion.php";
 require "../Modelos/bitacora.php";
+require_once "../request.php";
 
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
@@ -26,26 +27,31 @@ if ($_POST) {
                 $_SESSION['id_usuario'] = $row['id_usuario'];
                 $_SESSION['usuario'] = $row['usuario'];
                 $_SESSION['id_estado_usuario'] = $row['id_estado_usuario'];
-                $_SESSION['id_rol'] = $row['id_rol'];
-
-                if ($row['id_estado_usuario'] == 2) {
-                    $mensajeEstado = 'Su usuario se encuentra inactivo';
-                } elseif ($row['id_estado_usuario'] == 3) {
-                    header("Location: ../Vistas/MantenimientoUsuario/Contestar_preguntas.php");
-                } elseif ($row['id_estado_usuario'] == 4) {
-                    $mensajeEstado = 'Su usuario se encuentra bloqueado.';
-                } else {
+                $_SESSION['id_rol'] = $row['id_rol']; 
+                
+                if ($row['id_estado_usuario'] == 1) {
                     $date = new DateTime(date("Y-m-d H:i:s"));
                     $dateMod = $date->modify("-7 hours");
                     $dateNew = $dateMod->format("Y-m-d H:i:s"); 
                     $bitacora = new bitacora();
-                    $bitacora->insert_bitacora($dateNew, "INICIO DE SESION", "INGRESO EL USUARIO: " . $_SESSION['usuario'], $_SESSION['id_usuario'], 2, $_SESSION['usuario'], $dateNew);
-                    header("Location: index.php");
-                    exit();
+                    $bitacora->insert_bitacora($dateNew, "INICIO DE SESION", "INGRESO EL USUARIO: " . $_SESSION['usuario'], $_SESSION['id_usuario'], 2, $_SESSION['usuario'], $dateNew);  
+                    if (isset($_SESSION['usuario'])) {
+                        header("Location: index.php");
+                        exit();
+                    } 
+                } elseif ($row['id_estado_usuario'] == 2) {
+                    $mensajeEstado = 'Su usuario se encuentra inactivo';
+                    header("refresh: 2; url=login.php");
+                } elseif ($row['id_estado_usuario'] == 3) {
+                    header("Location: ../Vistas/MantenimientoUsuario/Contestar_preguntas.php");
+                } elseif ($row['id_estado_usuario'] == 4) {
+                    $mensajeEstado = 'Su usuario se encuentra bloqueado.';
+                    header("refresh: 2; url=login.php");
                 }
             } else {
 
                 $contrasenaNoCoincide = "La contraseña no coincide";
+                header("refresh: 2; url=login.php");
 
                 if (!isset($_COOKIE['intentosFallidos'])) {
                     setcookie('intentosFallidos', 1, time() + 86400);
@@ -69,7 +75,7 @@ if ($_POST) {
 
                         if ($cantMaximaIntentos <= $_COOKIE['intentosFallidos']) {
                             $contrasenaNoCoincide = "Bloqueado debido a que excedió la cantidad de intentos, contactar al Administrador.";
-
+                            header("refresh: 2; url=login.php");
                             // Actualizar el estado del usuario en la base de datos
                             $sqlBloquearUsuario = "UPDATE tbl_ms_usuario SET id_estado_usuario = 4 WHERE usuario = :usuario";
                             $stmtBloquearUsuario = $conn->prepare($sqlBloquearUsuario);
@@ -85,16 +91,11 @@ if ($_POST) {
             }
         } else {
             $NoExisteUsuario = "No existe usuario";
+            header("refresh: 2; url=login.php");
         }
     } else {
         echo "Error al conectar a la base de datos.";
     }
-    header("refresh: 2; url=login.php");
-}
-
-if (isset($_SESSION['usuario'])) {
-    header("Location: index.php");
-    exit();
 }
 
 ?>

@@ -1,5 +1,47 @@
+<!-- -----------------------------------------------------------------------
+	Universidad Nacional Autonoma de Honduras (UNAH)
+		Facultad de Ciencias Economicas
+	Departamento de Informatica administrativa
+         Analisis, Programacion y Evaluacion de Sistemas
+                    Tercer Periodo 2023
+
+
+Equipo:
+Sahory Garcia          sahori.garcia@unah.hn
+Jairo Garcia           jairo.lagos@unah.hn
+Ashley Matamoros       Ashley.matamoros@unah.hn
+Lester Padilla         Lester.padilla@unah.hn
+Khaterine Ordoñez      khaterine.ordonez@unah.hn
+Yeniffer Velasquez     yeniffer.velasquez@unah.hn
+Kevin Zuniga           kgzuniga@unah.hn
+
+Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
+Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
+Catedratico evaluacion de sistemas: ???
+
+
+---------------------------------------------------------------------
+
+Programa:         Pantalla de Ingresar Prestamo
+Fecha:            
+Programador:     
+descripcion:      Pantalla que registra los prestamos para un empleado en especifico
+
+-----------------------------------------------------------------------
+
+                Historial de Cambio
+
+-----------------------------------------------------------------------
+
+Programador               Fecha                      Descripcion
+Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
+
+------------------------------------------------------------------------->
+
 <?php
+
 session_start();
+
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
 require_once '../../Modelos/Usuarios.php';
@@ -152,7 +194,7 @@ if (!isset($_SESSION['usuario'])) {
         <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline mr-0 my-2 my-md-0 order-2">
+        <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <div class="input-group">
                 <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
                 <div class="input-group-append">
@@ -161,7 +203,7 @@ if (!isset($_SESSION['usuario'])) {
             </div>
         </form>
         <!-- Navbar-->
-        <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
+        <ul class="navbar-nav ml-auto ml-md-0">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
@@ -188,7 +230,7 @@ if (!isset($_SESSION['usuario'])) {
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
-                                    Modulo seguridad
+                                    Modulo Seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
@@ -202,6 +244,8 @@ if (!isset($_SESSION['usuario'])) {
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -237,8 +281,8 @@ if (!isset($_SESSION['usuario'])) {
 
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -256,7 +300,7 @@ if (!isset($_SESSION['usuario'])) {
                             if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
-                                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -825,7 +869,7 @@ if (!isset($_SESSION['usuario'])) {
                                 }
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('Error en la solicitud');
+                                throw new Error('El registro ya existe en la Base de Datos.');
                             }
                         })
                         .catch(function(error) {

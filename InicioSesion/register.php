@@ -1,4 +1,5 @@
 <?php 
+
 session_start(); // Inicia la sesión
 
 require "../Config/conexion.php"; // Incluye el archivo de conexión a la base de datos
@@ -108,8 +109,9 @@ if (isset($_POST['submit'])) {
                                         value="<?php echo isset($_POST['usuario']) ? $_POST['usuario'] : ''; ?>"/></div>
 
                                         <div class="form-group"><label class="small mb-1" for="inputLastNameUser">Nombre Usuario</label><input class="form-control py-4" id="inputLastNameUser" name="nombre_usuario" type="text" maxlength="100" placeholder="Ingrese su nombre de usuario:" 
-                                        required pattern="^^(?=\S)[A-Za-z]+$" title="Ingrese solo letras (sin números ni caracteres especiales o espacios)" oninput="this.value = this.value.toUpperCase()" 
-                                        value="<?php echo isset($_POST['nombre_usuario']) ? $_POST['nombre_usuario'] : ''; ?>"/></div>
+                                        required pattern="^[A-Za-z]+(?:\s[A-Za-z]+)*$" title="Ingrese solo letras (sin números ni caracteres especiales al principio)" oninput="this.value = this.value.toUpperCase()" 
+                                        value="<?php echo isset($_POST['nombre_usuario']) ? $_POST['nombre_usuario'] : ''; ?>"/>
+                                        </div>
 
                                         <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" id="inputEmailAddress" name="correo_electronico" type="email" maxlength="50" aria-describedby="emailHelp" placeholder="Ingrese su correo electrónico:" 
                                         required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida" 

@@ -1,3 +1,43 @@
+<!-- -----------------------------------------------------------------------
+	Universidad Nacional Autonoma de Honduras (UNAH)
+		Facultad de Ciencias Economicas
+	Departamento de Informatica administrativa
+         Analisis, Programacion y Evaluacion de Sistemas
+                    Tercer Periodo 2023
+
+
+Equipo:
+Sahory Garcia          sahori.garcia@unah.hn
+Jairo Garcia           jairo.lagos@unah.hn
+Ashley Matamoros       Ashley.matamoros@unah.hn
+Lester Padilla         Lester.padilla@unah.hn
+Khaterine Ordoñez      khaterine.ordonez@unah.hn
+Yeniffer Velasquez     yeniffer.velasquez@unah.hn
+Kevin Zuniga           kgzuniga@unah.hn
+
+Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
+Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
+Catedratico evaluacion de sistemas: ???
+
+
+---------------------------------------------------------------------
+
+Programa:         Pantalla de Mentenimiento Tipo Transaccion
+Fecha:            09-ago-2023
+Programador:      Kevin Zuniga y Yeniffer Velasquez
+descripcion:      Pantalla que registra los tipos de transaccion que existen
+
+-----------------------------------------------------------------------
+
+                Historial de Cambio
+
+-----------------------------------------------------------------------
+
+Programador               Fecha                      Descripcion
+Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas, ademas algunos detalles esteticos
+
+------------------------------------------------------------------------->
+
 <?php
 
 session_start();
@@ -89,7 +129,7 @@ if (!isset($_SESSION['usuario'])) {
             /* Alineación del texto al centro */
         }
 
-        #Lista-forma-pago_wrapper .buttons-html5:first-child {
+        #Lista-transaccion_wrapper .buttons-html5:first-child {
             margin-left: 20px;
             /* Adjust the margin value as needed */
         }
@@ -118,7 +158,7 @@ if (!isset($_SESSION['usuario'])) {
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand" href="index.php">
+        <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar-->
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -157,7 +197,7 @@ if (!isset($_SESSION['usuario'])) {
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                         <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
-                                        Modulo seguridad
+                                        Modulo Seguridad
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                     </a>';
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
@@ -165,12 +205,15 @@ if (!isset($_SESSION['usuario'])) {
 
                             if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;"> Roles</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;"> Permisos</a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;"> Objetos</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
+                            
                             }
 
                             echo '</nav>';
@@ -208,8 +251,8 @@ if (!isset($_SESSION['usuario'])) {
 
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
-                                echo '<a class="nav-link" href="tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
-                                echo '<a class="nav-link" href="MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
+                                echo '<a class="nav-link" href="tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
+                                echo '<a class="nav-link" href="MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuentas</a>';
 
                             }
                             echo '</nav>';
@@ -229,7 +272,7 @@ if (!isset($_SESSION['usuario'])) {
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
-                                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -270,11 +313,11 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Tipo Transaccion</th>
                                     <th>Descripcion</th>
                                     <th>Signo Transaccion</th>
+                                    <th>Estado</th>
                                     <th>Creado por</th>
                                     <th>Fecha Creacion</th>
                                     <th>Modificado por</th>
                                     <th>Fecha Modificacion</th>
-                                    <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -432,11 +475,11 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + transaccion.TIPO_TRANSACCION + '</td>' +
                             '<td>' + transaccion.DESCRIPCION + '</td>' +
                             '<td>' + transaccion.SIGNO_TRANSACCION + '</td>' +
+                            '<td>' + transaccion.ESTADO + '</td>' +
                             '<td>' + transaccion.CREADO_POR + '</td>' +
                             '<td>' + transaccion.FECHA_CREACION + '</td>' +
                             '<td>' + transaccion.MODIFICADO_POR + '</td>' +
                             '<td>' + transaccion.FECHA_MODIFICACION + '</td>' +
-                            '<td>' + transaccion.ESTADO + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -753,8 +796,8 @@ if (!isset($_SESSION['usuario'])) {
                 text: 'No podrás revertir esto.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#d33',  
+                cancelButtonColor: '#3085d6',
                 confirmButtonText: 'Eliminar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
@@ -965,6 +1008,7 @@ if (!isset($_SESSION['usuario'])) {
             document.getElementById('editar-descripcion').checked = false;
             document.getElementById('editar-signo').checked = false;
             document.getElementById('editar-estado').checked = false;
+            location.reload();
         });
     </script>
 

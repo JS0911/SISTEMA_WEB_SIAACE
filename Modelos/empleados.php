@@ -25,14 +25,14 @@ class Empleados extends Conectar
     }
 
     //INSERTA UN EMPLEADO
-    public function insert_empleado($DNI, $PRIMER_NOMBRE, $SEGUNDO_NOMBRE, $PRIMER_APELLIDO, $SEGUNDO_APELLIDO, $EMAIL, $SALARIO, $ESTADO, $TELEFONO, $DIRECCION1, $DIRECCION2,$ID_SUCURSAL,$ID_CARGO)
+    public function insert_empleado($DNI, $PRIMER_NOMBRE, $SEGUNDO_NOMBRE, $PRIMER_APELLIDO, $SEGUNDO_APELLIDO, $EMAIL, $SALARIO, $ESTADO, $TELEFONO, $DIRECCION1, $DIRECCION2, $ID_SUCURSAL, $ID_CARGO, $CREADO_POR, $FECHA_CREACION)
     {
         try {
 
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_me_empleados` ( `DNI`, `PRIMER_NOMBRE`, `SEGUNDO_NOMBRE`, `PRIMER_APELLIDO`, `SEGUNDO_APELLIDO`, `EMAIL`,`SALARIO`,`ESTADO`,`TELEFONO`,`DIRECCION1`,`DIRECCION2`,`ID_SUCURSAL`,`ID_CARGO`) 
-            VALUES ( :DNI, :PRIMER_NOMBRE, :SEGUNDO_NOMBRE, :PRIMER_APELLIDO, :SEGUNDO_APELLIDO, :EMAIL, :SALARIO, :ESTADO, :TELEFONO, :DIRECCION1, :DIRECCION2 , :ID_SUCURSAL, :ID_CARGO)";
+            $sql = "INSERT INTO `siaace`.`tbl_me_empleados` (`DNI`, `PRIMER_NOMBRE`, `SEGUNDO_NOMBRE`, `PRIMER_APELLIDO`, `SEGUNDO_APELLIDO`, `EMAIL`, `SALARIO`, `ESTADO`, `TELEFONO`, `DIRECCION1`, `DIRECCION2`, `ID_SUCURSAL`, `ID_CARGO`, `CREADO_POR`, `FECHA_CREACION`) 
+            VALUES (:DNI, :PRIMER_NOMBRE, :SEGUNDO_NOMBRE, :PRIMER_APELLIDO, :SEGUNDO_APELLIDO, :EMAIL, :SALARIO, :ESTADO, :TELEFONO, :DIRECCION1, :DIRECCION2 , :ID_SUCURSAL, :ID_CARGO, :CREADO_POR, :FECHA_CREACION)";
 
             $stmt = $conectar->prepare($sql);
 
@@ -49,8 +49,8 @@ class Empleados extends Conectar
             $stmt->bindParam(':DIRECCION2', $DIRECCION2, PDO::PARAM_STR);
             $stmt->bindParam(':ID_SUCURSAL', $ID_SUCURSAL, PDO::PARAM_INT);
             $stmt->bindParam(':ID_CARGO', $ID_CARGO, PDO::PARAM_INT);
-
-
+            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
@@ -79,8 +79,9 @@ class Empleados extends Conectar
         $DIRECCION1,
         $DIRECCION2,
         $ID_SUCURSAL,
-        $ID_CARGO
-       
+        $ID_CARGO,
+        $MODIFICADO_POR, 
+        $FECHA_MODIFICACION
     ) {
         try {
             $conectar = parent::conexion();
@@ -100,9 +101,9 @@ class Empleados extends Conectar
                     `DIRECCION1` = :DIRECCION1,
                     `DIRECCION2` = :DIRECCION2,
                     `ID_SUCURSAL` = :ID_SUCURSAL,
-                    `ID_CARGO` = :ID_CARGO
-                    
-                    
+                    `ID_CARGO` = :ID_CARGO,
+                    `MODIFICADO_POR` = :MODIFICADO_POR, 
+                    `FECHA_MODIFICACION` = :FECHA_MODIFICACION
                 WHERE `ID_EMPLEADO` = :ID_EMPLEADO";
 
 
@@ -122,9 +123,9 @@ class Empleados extends Conectar
             $stmt->bindParam(':DIRECCION2', $DIRECCION2, PDO::PARAM_STR);
             $stmt->bindParam(':ID_SUCURSAL', $ID_SUCURSAL, PDO::PARAM_INT);
             $stmt->bindParam(':ID_CARGO', $ID_CARGO, PDO::PARAM_INT);
-           
+            $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR);
            // echo $stmt->queryString;
-
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {

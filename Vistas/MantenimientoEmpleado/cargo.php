@@ -16,8 +16,8 @@ Yeniffer Velasquez     yeniffer.velasquez@unah.hn
 Kevin Zuniga           kgzuniga@unah.hn
 
 Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
-catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
-catedratico evaluacion de sistemas:???
+Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
+Catedratico evaluacion de sistemas: ???
 
 
 ---------------------------------------------------------------------
@@ -34,7 +34,7 @@ descripcion:       Pantalla que que Registra todo los cargos que tiene la empres
 -----------------------------------------------------------------------
 
 Programador               Fecha                      Descripcion
-
+Kevin Zuniga              25-nov-2023                Rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
 
 ----------------------------------------------------------------------- -->
 <?php
@@ -46,9 +46,6 @@ require_once '../../Modelos/Usuarios.php';
 
 $permisosCargos = new PermisosUsuarios();
 $usuario_obj = new Usuario();
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
-}
 
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
@@ -159,7 +156,7 @@ if (!isset($_SESSION['usuario'])) {
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand" href="index.php">
+        <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar-->
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -196,7 +193,7 @@ if (!isset($_SESSION['usuario'])) {
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
-                                    Modulo seguridad
+                                    Modulo Seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
@@ -209,7 +206,9 @@ if (!isset($_SESSION['usuario'])) {
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                                 echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
+                                echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
                             }
 
 
@@ -250,8 +249,8 @@ if (!isset($_SESSION['usuario'])) {
 
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -270,7 +269,7 @@ if (!isset($_SESSION['usuario'])) {
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
-                                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -770,8 +769,8 @@ if (!isset($_SESSION['usuario'])) {
                 text: 'No podrás revertir esto.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#d33',  
+                cancelButtonColor: '#3085d6',
                 confirmButtonText: 'Eliminar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
@@ -887,7 +886,6 @@ if (!isset($_SESSION['usuario'])) {
     </script>
 
     <!-- VALIDACIONES SCRIPT -->
-    <!-- VALIDACIONES SCRIPT -->
     <script>
         // Obtén los campos de entrada y el botón "Guardar para insertar"
         const cargoInput = document.getElementById('agregar-cargo');
@@ -963,16 +961,14 @@ if (!isset($_SESSION['usuario'])) {
     <script>
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
         document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
-            document.getElementById('agregar-cuenta').value = "";
+            document.getElementById('agregar-cargo').value = "";
             document.getElementById('agregar-descripcion').value = "";
-          
             document.getElementById('agregar-estado').value = "";
 
-
             // Limpia los checkboxes
-            document.getElementById('agregar-cuenta').checked = false;
+            document.getElementById('agregar-cargo').checked = false;
             document.getElementById('agregar-descripcion').checked = false;
-        
+            document.getElementById('agregar-estado').checked = false;
             location.reload();  
         });
 
@@ -981,6 +977,8 @@ if (!isset($_SESSION['usuario'])) {
 
             // Limpia los checkboxes
             document.getElementById('editar-descripcion').checked = false;
+            document.getElementById('editar-estado').checked = false;
+            location.reload();
         });
     </script>
 

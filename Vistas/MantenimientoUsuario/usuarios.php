@@ -1,6 +1,47 @@
+<!-- -----------------------------------------------------------------------
+	Universidad Nacional Autonoma de Honduras (UNAH)
+		Facultad de Ciencias Economicas
+	Departamento de Informatica administrativa
+         Analisis, Programacion y Evaluacion de Sistemas
+                    Tercer Periodo 2023
+
+
+Equipo:
+Sahory Garcia          sahori.garcia@unah.hn
+Jairo Garcia           jairo.lagos@unah.hn
+Ashley Matamoros       Ashley.matamoros@unah.hn
+Lester Padilla         Lester.padilla@unah.hn
+Khaterine Ordoñez      khaterine.ordonez@unah.hn
+Yeniffer Velasquez     yeniffer.velasquez@unah.hn
+Kevin Zuniga           kgzuniga@unah.hn
+
+Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
+Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
+Catedratico evaluacion de sistemas: ???
+
+
+---------------------------------------------------------------------
+
+Programa:         Pantalla de Mentenimiento Usuarios
+Fecha:           
+Programador:      
+descripcion:      Pantalla que registra todos los posibles usuarios que vayan a manipular el sistema
+
+-----------------------------------------------------------------------
+
+                Historial de Cambio
+
+-----------------------------------------------------------------------
+
+Programador               Fecha                      Descripcion
+Kevin Zuniga              25-nov-2023                 Se agrego reporteria, validaciones y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
+
+------------------------------------------------------------------------->
+
 <?php
 
 session_start();
+
 require "../../Config/conexion.php";
 require_once '../../Modelos/permisoUsuario.php';
 require_once '../../Modelos/Usuarios.php';
@@ -11,13 +52,13 @@ $usuario_obj = new Usuario();
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Usuario = "2";
-$id_objeto_Seguridad = "25";
-$id_objeto_Cuentas = "28";
+$id_usuario_Usuario = "2";
+$id_usuario_Seguridad = "25";
+$id_usuario_Cuentas = "28";
 
-$permisos1 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
-$permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario);
-$permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos1 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_usuario_Seguridad);
+$permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_usuario_Usuario);
+$permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_usuario_Cuentas);
 $datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
 $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
@@ -66,6 +107,7 @@ if (!isset($_SESSION['usuario'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantenimiento Usuario</title>
+    <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="../../css/styles.css" rel="stylesheet" />
@@ -105,7 +147,7 @@ if (!isset($_SESSION['usuario'])) {
             /* Alineación del texto al centro */
         }
 
-        #Lista-forma-pago_wrapper .buttons-html5:first-child {
+        #Lista-Usuarios_wrapper .buttons-html5:first-child {
             margin-left: 20px;
             /* Adjust the margin value as needed */
         }
@@ -133,7 +175,7 @@ if (!isset($_SESSION['usuario'])) {
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand" href="index.php">
+        <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar-->
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -169,7 +211,7 @@ if (!isset($_SESSION['usuario'])) {
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
-                                    Modulo seguridad
+                                    Modulo Seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
@@ -183,9 +225,9 @@ if (!isset($_SESSION['usuario'])) {
                                 echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
                                 echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i></i><span style="margin-left: 5px;"> Bitacora </a>';
+                                echo '<a class="nav-link" href="error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
+                                echo '<a class="nav-link" href="historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
                             }
-
-
                             echo '</nav>';
                             echo '</div>';
                         }
@@ -222,8 +264,8 @@ if (!isset($_SESSION['usuario'])) {
 
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -242,7 +284,7 @@ if (!isset($_SESSION['usuario'])) {
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
-                                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -261,8 +303,6 @@ if (!isset($_SESSION['usuario'])) {
             <!-- DESDE AQUI COMIENZA EL MANTENIMIENTO DE USUARIO -->
             <main>
                 <div class="container-fluid">
-
-
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
@@ -289,6 +329,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th style="display: none;">Id Rol</th>
                                     <th>Rol</th>
                                     <th>Estado</th>
+                                    <th>Creado por</th>
+                                    <th>Modificado por</th>
+                                    <th>Fecha Creación</th>
+                                    <th>Fecha Modicación</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -320,7 +364,7 @@ if (!isset($_SESSION['usuario'])) {
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
                                         <label for="id-estado">Estado</label>
@@ -329,12 +373,11 @@ if (!isset($_SESSION['usuario'])) {
                                             <?php foreach ($Estados as $Estado) : ?>
                                                 <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
                                             <?php endforeach; ?>
-                                            <div id="mensaje3"></div>
                                         </select>
 
                                         <label for="agregar-correo">Correo Electrónico</label>
                                         <input type="email" maxlength="50" class="form-control" id="agregar-correo" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida" />
-                                        <div id="mensaje4"></div>
+                                        <div id="mensaje3"></div>
 
                                         <label for="id-rol">Rol</label>
                                         <select class="form-control" id="agregar-rol" name="IdRol" required>
@@ -342,18 +385,15 @@ if (!isset($_SESSION['usuario'])) {
                                             <?php foreach ($roles as $rol) : ?>
                                                 <option value="<?php echo $rol['id_rol']; ?>"><?php echo $rol['rol']; ?></option>
                                             <?php endforeach; ?>
-                                            <div id="mensaje5"></div>
                                         </select>
-
-
 
                                         <label for="estado">Contraseña</label>
                                         <input type="password" maxlength="100" class="form-control" id="agregar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" />
-                                        <div id="mensaje6"></div>
+                                        <div id="mensaje4"></div>
 
                                         <label for="estado">Confirmar Contraseña</label>
                                         <input type="password" maxlength="100" class="form-control" id="confirmar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" />
-                                        <div id="mensaje7"></div>
+                                        <div id="mensaje5"></div>
                                     </div>
                                 </form>
                             </div>
@@ -383,12 +423,10 @@ if (!isset($_SESSION['usuario'])) {
                                         <input type="text" class="form-control" id="editar-id-usuario" disabled>
                                         <label for="nombre">Usuario</label>
 
-                                        <input type="text" maxlength="15" class="form-control" id="editar-usuario" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje8"></div>
+                                        <input type="text" maxlength="15" class="form-control" id="editar-usuario" disabled required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
 
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje9"></div>
+                                        <input type="text" maxlength="100" class="form-control" id="editar-nombre" disabled required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
 
                                         <label for="estado">Estado</label>
                                         <select class="form-control" id="editar-estado" name="IdEstado" required>
@@ -396,26 +434,22 @@ if (!isset($_SESSION['usuario'])) {
                                             <?php foreach ($Estados as $Estado) : ?>
                                                 <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
                                             <?php endforeach; ?>
-                                            <div id="mensaje10"></div>
                                         </select>
                                         <label for="estado">Correo Electronico</label>
                                         <input type="text" maxlength="50" class="form-control" id="editar-correo" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida" />
-                                        <div id="mensaje11"></div>
+                                        <div id="mensaje6"></div>
                                         <?php
                                         //---------TRAER ROLES Y ESTADOS --------
                                         // Crear una instancia de la clase Conectar
                                         $conexion = new Conectar();
                                         $conn = $conexion->Conexion();
-
                                         // Consultar la contraseña actual del usuario desde la base de datos
                                         $sql = "SELECT id_rol ,rol FROM tbl_ms_roles";
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
-
                                         // Obtener los resultados en un array asociativo
                                         $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         ?>
-
                                         <!------- SELECT DE ROLES -------------->
                                         <label for="id-rol">Rol</label>
                                         <select class="form-control" id="editar-rol" name="IdRol" required>
@@ -423,11 +457,7 @@ if (!isset($_SESSION['usuario'])) {
                                             <?php foreach ($roles as $rol) : ?>
                                                 <option value="<?php echo $rol['id_rol']; ?>"><?php echo $rol['rol']; ?></option>
                                             <?php endforeach; ?>
-                                            <div id="mensaje12"></div>
                                         </select>
-
-
-
                                     </div>
                                 </form>
                             </div>
@@ -498,7 +528,11 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + usuario.CORREO_ELECTRONICO + '</td>' +
                             '<td style="display:none;">' + usuario.ID_ROL + '</td>' +
                             '<td>' + usuario.ROL + '</td>' +
-                            '<td>' + usuario.NOMBRE + '</td>' + //AQUI DEBERIA DE SER ESTADO 
+                            '<td>' + usuario.NOMBRE + '</td>' + //AQUI DEBERIA DE SER ESTADO
+                            '<td>' + usuario.CREADO_POR + '</td>' +
+                            '<td>' + usuario.MODIFICADO_POR + '</td>' +
+                            '<td>' + usuario.FECHA_CREACION + '</td>' +
+                            '<td>' + usuario.FECHA_MODIFICACION + '</td>' + 
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -511,11 +545,11 @@ if (!isset($_SESSION['usuario'])) {
                             row += '<button class="btn btn-danger eliminar-usuario" data-id="' + usuario.ID_USUARIO + '" onclick="eliminarUsuario(' + usuario.ID_USUARIO + ')">Eliminar</button>';
                         }
 
-
                         row += '</td>' +
                             '</tr>';
-                        //Cambiar palabra null por vacio.
-                        newrow = row.replaceAll("null", " ");
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -637,6 +671,18 @@ if (!isset($_SESSION['usuario'])) {
             });
         }
 
+        function validarContraseñas(contrasena, confirmarContrasena) {
+            if (contrasena !== confirmarContrasena) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Las contraseñas no coinciden.'
+                });
+                return false;
+            }
+            return true;
+        }
+
         function Insertar_Usuario() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
@@ -648,23 +694,20 @@ if (!isset($_SESSION['usuario'])) {
                 var contrasena = $("#agregar-contrasena").val();
                 var confirmarContrasena = $("#confirmar-contrasena").val();
 
+                // Verificar que las contraseñas coincidan
+                if (!validarContraseñas(contrasena, confirmarContrasena)) {
+                    return;
+                }
+
                 if (usuario == "" || nombre == "" || correo == "" || contrasena == "" || confirmarContrasena == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
                         text: 'No se pueden enviar Campos Vacios.'
                     })
-                }
-                // Verificar que las contraseñas coincidan
-                if (contrasena !== confirmarContrasena) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Las contraseñas no coinciden.'
-                    });
-                    return;
+                    
                 } else {
-                    // Crear un objeto con los datos a enviar al servidor
+                    // Crear un usuario con los datos a enviar al servidor
                     var datos = {
                         USUARIO: usuario,
                         NOMBRE_USUARIO: nombre,
@@ -672,10 +715,8 @@ if (!isset($_SESSION['usuario'])) {
                         CORREO_ELECTRONICO: correo,
                         ID_ROL: rol,
                         CONTRASENA: contrasena
-                    }
-                };
-
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=InsertUsuarios', {
+                    };
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=InsertUsuarios', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -684,45 +725,54 @@ if (!isset($_SESSION['usuario'])) {
                     })
                     .then(function(response) {
                         if (response.ok) {
-                            // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
-                            return response.json();
+                            if (response.status === 200) {
+                                    // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Cerrar la modal después de guardar
+                                        $('#crearModal').modal('hide');
+                                        // Mostrar SweetAlert de éxito
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Guardado exitoso',
+                                            text: data.message
+                                        }).then(function() {
+                                            // Recargar la página para mostrar los nuevos datos
+                                            location.reload();
+                                        });
+                                    });
+                                } else if (response.status === 409) {
+                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Mostrar SweetAlert de error
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: data.error // Acceder al mensaje de error
+                                        });
+                                    });
+                                }
                         } else {
                             // Si hubo un error en la solicitud, maneja el error aquí
-                            throw new Error('Error en la solicitud');
+                            throw new Error('El registro ya existe en la Base de Datos.');
                         }
                     })
-                    .then(function(data) {
-                        console.log(data);
-
-                        // Cerrar la modal después de guardar
-                        $('#crearModal').modal('hide');
-
-                        // Mostrar SweetAlert de éxito
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Guardado exitoso',
-                            text: 'Los datos se han guardado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
-                        });
-
-                    })
                     .catch(function(error) {
-                        console.log(error.message);
-
                         // Mostrar SweetAlert de error
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             text: 'Error al guardar los datos: ' + error.message
                         });
+                        console.log(error.message);
                     });
+                }
             });
         }
 
         function cargarUsuario(id) {
-            // Crear un objeto con el ID del usuario
+            // Crear un usuario con el ID del usuario
             var data = {
                 "ID_USUARIO": id
             };
@@ -734,7 +784,7 @@ if (!isset($_SESSION['usuario'])) {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data) // Convierte el objeto en formato JSON
+                    body: JSON.stringify(data) // Convierte el usuario en formato JSON
                 })
                 .then(function(response) {
                     if (response.ok) {
@@ -816,18 +866,17 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
-
         //FUNCION CON EL SWEETALERT
         function eliminarUsuario(idUsuario) {
             Swal.fire({
-                title: '¿Estás seguro?',
-                text: 'No podrás revertir esto.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'eliminar',
-                cancelButtonText: 'Cancelar'
+            title: '¿Estás seguro?',
+            text: 'No podrás revertir esto.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',  
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:90/SISTEMA1/Controladores/usuarios.php?op=eliminarUsuario', {
@@ -878,268 +927,77 @@ if (!isset($_SESSION['usuario'])) {
         }
 
         function validarNombre() {
-            // console.log("entra a ValidarNombre");
             usuario = document.getElementById("agregar-usuario");
             nombre = document.getElementById("agregar-nombre");
-            estado = document.getElementById("agregar-estado");
             correo = document.getElementById("agregar-correo");
-            rol = document.getElementById("agregar-rol");
             contrasena = document.getElementById("agregar-contrasena");
             confirmarContrasena = document.getElementById("confirmar-contrasena");
-
-            usuarioEditar = document.getElementById('editar-usuario');
-            nombreEditar = document.getElementById('editar-nombre');
-            estadoEditar = document.getElementById('editar-estado');
             correoEditar = document.getElementById('editar-correo');
-            rolEditar = document.getElementById('editar-rol');
 
+            function clearMessage(messageElement, inputElement) {
+                messageElement.innerHTML = ""; // Elimina el contenido del mensaje
+                inputElement.style.borderColor = ""; // Restablece el borde
+                inputElement.style.boxShadow = ""; // Restablece la sombra
+            }
 
-
-            usuario.addEventListener("keypress", function(e) {
-                expresionValidadora1 = /^[A-Z]+$/;
-
-                if (!expresionValidadora1.test(e.key)) {
-                    usuario.style.borderColor = "red";
-                    usuario.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                    document.getElementById("mensaje1").style.color = "red";
-                    e.preventDefault();
+            function validateInput(inputElement, expression, messageElement, message) {
+                if (inputElement.value === "") {
+                    clearMessage(messageElement, inputElement);
+                } else if (!expression.test(inputElement.value)) {
+                    inputElement.style.borderColor = "red";
+                    inputElement.style.boxShadow = "0 0 10px red";
+                    messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
+                    messageElement.style.color = "red";
                 } else {
-                    usuario.style.borderColor = "green";
-                    usuario.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje1").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje1").style.color = "green";
+                    clearMessage(messageElement, inputElement); // Restablece los estilos
+                    messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
+                    messageElement.style.color = "green";
                 }
-            });
+            }
 
-            nombre.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z\s]+$/;
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    nombre.style.borderColor = "red";
-                    nombre.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje2").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora2.test(e.key)) {
-                        nombre.style.borderColor = "red";
-                        nombre.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                        document.getElementById("mensaje2").style.color = "red";
+            function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
+                inputElement.addEventListener("input", function () {
+                    validateInput(inputElement, expression, messageElement, message);
+                });
+
+                inputElement.addEventListener("blur", function () {
+                    clearMessage(messageElement, inputElement);
+                });
+            }
+
+            function handleDescriptionKeypressEvent(inputElement) {
+                inputElement.addEventListener("keypress", function(e) {
+                    var currentDescription = inputElement.value;
+                    if (e.key === " " && currentDescription.endsWith(" ")) {
                         e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        nombre.style.borderColor = "green";
-                        nombre.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje2").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                        document.getElementById("mensaje2").style.color = "green";
                     }
-                }
-            });
+                });
+            }
 
-            estado.addEventListener("change", function() {
-                if (estado.value === "") {
-                    // Si no se ha seleccionado una opción (el valor es una cadena vacía), muestra un mensaje de error.
-                    estado.style.borderColor = "red";
-                    estado.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-times-circle'></i> Debes seleccionar un estado.";
-                    document.getElementById("mensaje3").style.color = "red";
-                } else {
-                    // Si se ha seleccionado una opción, marca el campo como válido.
-                    estado.style.borderColor = "green";
-                    estado.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje3").innerHTML = "<i class='fas fa-check-circle'></i> Estado seleccionado.";
-                    document.getElementById("mensaje3").style.color = "green";
-                }
-            });
+            var expresionValidadora1 = /^[A-Z]+$/;
+            var mensaje1 = document.getElementById("mensaje1");
+            handleInputAndBlurEvents(usuario, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayusculas");
 
-            correo.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Za-z0-9.!@#$%^&*]+$/;
+            var expresionValidadora2 = /^[A-Z0-9\s]+$/;
+            var mensaje2 = document.getElementById("mensaje2");
+            handleInputAndBlurEvents(nombre, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(nombre);
 
+            var expresionValidadora3 = /^[A-Za-z0-9.!@#$%^&*]+$/;
+            var mensaje3 = document.getElementById("mensaje3");
+            handleInputAndBlurEvents(correo, expresionValidadora3, mensaje3, "Ingrese una dirección de correo electrónico válida");
 
-                if (!expresionValidadora2.test(e.key)) {
-                    correo.style.borderColor = "red";
-                    correo.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permite email valido";
-                    document.getElementById("mensaje4").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    correo.style.borderColor = "green";
-                    correo.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje4").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje4").style.color = "green";
-                }
-            });
+            var expresionValidadora4 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
+            var mensaje4 = document.getElementById("mensaje4");
+            handleInputAndBlurEvents(contrasena, expresionValidadora4, mensaje4, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
 
-
-
-            rol.addEventListener("change", function() {
-                if (rol.value === "") {
-                    // Si no se ha seleccionado una opción (el valor es una cadena vacía), muestra un mensaje de error.
-                    rol.style.borderColor = "red";
-                    rol.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-times-circle'></i> Debes seleccionar un rol.";
-                    document.getElementById("mensaje5").style.color = "red";
-                } else {
-                    // Si se ha seleccionado una opción, marca el campo como válido.
-                    rol.style.borderColor = "green";
-                    rol.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje5").innerHTML = "<i class='fas fa-check-circle'></i> Rol seleccionado.";
-                    document.getElementById("mensaje5").style.color = "green";
-                }
-            });
-
-            contrasena.addEventListener("keypress", function(e) {
-                expresionValidadora3 = /^[A-Za-z0-9!@#$%^&*]+$/;
-
-
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    contrasena.style.borderColor = "red";
-                    contrasena.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje6").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje6").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora3.test(e.key)) {
-                        contrasena.style.borderColor = "red";
-                        contrasena.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje6").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                        document.getElementById("mensaje6").style.color = "red";
-                        e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        descripcion.style.borderColor = "green";
-                        descripcion.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje6").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                        document.getElementById("mensaje6").style.color = "green";
-                    }
-                }
-            });
-
-            confirmarContrasena.addEventListener("keypress", function(e) {
-                expresionValidadora3 = /^[A-Za-z0-9!@#$%^&*]+$/;
-
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    confirmarContrasena.style.borderColor = "red";
-                    confirmarContrasena.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje7").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje7").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora3.test(e.key)) {
-                        confirmarContrasena.style.borderColor = "red";
-                        confirmarContrasena.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje7").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayúsculas, números y ciertos caracteres especiales.";
-                        document.getElementById("mensaje7").style.color = "red";
-                        e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        confirmarContrasena.style.borderColor = "green";
-                        confirmarContrasena.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje7").innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
-                        document.getElementById("mensaje7").style.color = "green";
-                    }
-                }
-            });
-
-            //-------------------------MODAL DE EDITAR---------------------------------------
-
-            usuarioEditar.addEventListener("keypress", function(e) {
-                expresionValidadora1 = /^[A-Z]+$/;
-
-                if (!expresionValidadora1.test(e.key)) {
-                    usuarioEditar.style.borderColor = "red";
-                    usuarioEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje8").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                    document.getElementById("mensaje8").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    usuarioEditar.style.borderColor = "green";
-                    usuarioEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje8").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje8").style.color = "green";
-                }
-            });
-
-            nombreEditar.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Z\s]+$/;
-                if (localStorage.getItem("letraAnterior") == 32 && e.keyCode == 32) {
-                    nombreEditar.style.borderColor = "red";
-                    nombreEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje9").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten 1 espacio en blanco entre palabras.";
-                    document.getElementById("mensaje9").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    if (!expresionValidadora2.test(e.key)) {
-                        nombreEditar.style.borderColor = "red";
-                        nombreEditar.style.boxShadow = "0 0 10px red";
-                        document.getElementById("mensaje9").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permiten Letras Mayusculas";
-                        document.getElementById("mensaje9").style.color = "red";
-                        e.preventDefault();
-                    } else {
-                        localStorage.setItem("letraAnterior", e.keyCode);
-                        nombreEditar.style.borderColor = "green";
-                        nombreEditar.style.boxShadow = "0 0 10px green";
-                        document.getElementById("mensaje9").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                        document.getElementById("mensaje9").style.color = "green";
-                    }
-                }
-            });
-
-            estadoEditar.addEventListener("change", function() {
-                if (estadoEditar.value === "") {
-                    // Si no se ha seleccionado una opción (el valor es una cadena vacía), muestra un mensaje de error.
-                    estadoEditar.style.borderColor = "red";
-                    estadoEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje10").innerHTML = "<i class='fas fa-times-circle'></i> Debes seleccionar un estado.";
-                    document.getElementById("mensaje10").style.color = "red";
-                } else {
-                    // Si se ha seleccionado una opción, marca el campo como válido.
-                    estadoEditar.style.borderColor = "green";
-                    estadoEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje10").innerHTML = "<i class='fas fa-check-circle'></i> Estado seleccionado.";
-                    document.getElementById("mensaje10").style.color = "green";
-                }
-            });
-
-            correoEditar.addEventListener("keypress", function(e) {
-                expresionValidadora2 = /^[A-Za-z0-9.!@#$%^&*]+$/;
-
-
-                if (!expresionValidadora2.test(e.key)) {
-                    correoEditar.style.borderColor = "red";
-                    correoEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje11").innerHTML = "<i class='fas fa-times-circle'></i> Solo se permite email valido";
-                    document.getElementById("mensaje11").style.color = "red";
-                    e.preventDefault();
-                } else {
-                    correoEditar.style.borderColor = "green";
-                    correoEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje11").innerHTML = "<i class='fas fa-check-circle'></i> Campo Valido!";
-                    document.getElementById("mensaje11").style.color = "green";
-                }
-            });
-
-
-
-            rolEditar.addEventListener("change", function() {
-                if (rolEditar.value === "") {
-                    // Si no se ha seleccionado una opción (el valor es una cadena vacía), muestra un mensaje de error.
-                    rolEditar.style.borderColor = "red";
-                    rolEditar.style.boxShadow = "0 0 10px red";
-                    document.getElementById("mensaje12").innerHTML = "<i class='fas fa-times-circle'></i> Debes seleccionar un rol.";
-                    document.getElementById("mensaje12").style.color = "red";
-                } else {
-                    // Si se ha seleccionado una opción, marca el campo como válido.
-                    rolEditar.style.borderColor = "green";
-                    rolEditar.style.boxShadow = "0 0 10px green";
-                    document.getElementById("mensaje12").innerHTML = "<i class='fas fa-check-circle'></i> Rol seleccionado.";
-                    document.getElementById("mensaje12").style.color = "green";
-                }
-            });
+            var mensaje5 = document.getElementById("mensaje5");
+            handleInputAndBlurEvents(confirmarContrasena, expresionValidadora4, mensaje5, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
+        
+            var mensaje6 = document.getElementById("mensaje6");
+            handleInputAndBlurEvents(correoEditar, expresionValidadora3, mensaje6, "Ingrese una dirección de correo electrónico válida");
 
         }
-
         $(document).ready(function() {
             Lista_Usuarios();
             Insertar_Usuario();
@@ -1203,7 +1061,7 @@ if (!isset($_SESSION['usuario'])) {
     </script>
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#agregar-usuario, #agregar-correo, #agregar-contrasena,#agregar-contrasena').on('input', function() {
+        $('#agregar-usuario, #nombre-usuario, #agregar-correo, #agregar-contrasena, #confirmar-contrasena').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -1218,7 +1076,7 @@ if (!isset($_SESSION['usuario'])) {
         });
 
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#editar-usuario, #editar-correo').on('input', function() {
+        $('#editar-correo').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -1244,26 +1102,25 @@ if (!isset($_SESSION['usuario'])) {
             document.getElementById("agregar-contrasena").value = "";
             document.getElementById("confirmar-contrasena").value = "";
 
+            // Limpia los checkboxes
+            document.getElementById('agregar-usuario').checked = false;
+            document.getElementById('agregar-nombre').checked = false;
+            document.getElementById('agregar-estado').checked = false;
+            document.getElementById('agregar-correo').checked = false;
+            document.getElementById('agregar-rol').checked = false;
+            document.getElementById('agregar-contrasena').checked = false;
+            document.getElementById('confirmar-contrasena').checked = false;
             // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
             location.reload();
-
-
         });
 
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
         document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
-
-
-            document.getElementById("editar-usuario").value = "";
-            document.getElementById("editar-nombre").value = "";
             document.getElementById("editar-estado").value = "";
             document.getElementById("editar-correo").value = "";
             document.getElementById("editar-rol").value = "";
-
             // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
             location.reload();
-
-
         });
     </script>
 

@@ -34,6 +34,7 @@ descripcion:       Pantalla que que Registra el rol que tendra el usuario en  el
 -----------------------------------------------------------------------
 
 Programador               Fecha                      Descripcion
+Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
 
 
 ----------------------------------------------------------------------- -->
@@ -47,10 +48,6 @@ require_once '../../Modelos/Usuarios.php';
 
 $permisosRoles = new PermisosUsuarios();
 $usuario_obj = new Usuario();
-
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
-}
 
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
@@ -161,7 +158,7 @@ if (!isset($_SESSION['usuario'])) {
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand" href="index.php">
+        <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
        <!-- Navbar-->
        <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -199,7 +196,7 @@ if (!isset($_SESSION['usuario'])) {
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
-                                    Modulo seguridad
+                                    Modulo Seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
@@ -213,8 +210,8 @@ if (!isset($_SESSION['usuario'])) {
                                 echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
                                echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i></i><span style="margin-left: 5px;"> Bitacora </a>';
-    
-                                
+                               echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
+                               echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
                             }
 
                            echo '</nav>';
@@ -253,8 +250,8 @@ if (!isset($_SESSION['usuario'])) {
 
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de cuenta</a>';
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -273,7 +270,7 @@ if (!isset($_SESSION['usuario'])) {
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
-                                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -313,6 +310,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th style="display: none;">Id</th>
                                     <th>Rol</th>
                                     <th>Descripcion</th>
+                                    <th>Creado por</th>
+                                    <th>Fecha Creacion</th>
+                                    <th>Modificado por</th>
+                                    <th>Fecha Modificacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -337,8 +338,6 @@ if (!isset($_SESSION['usuario'])) {
                                 <!-- Formulario de creación -->
                                 <form>
                                     <div class="form-group">
-
-
                                         <label for="nombre">Rol</label>
                                         <input type="text" maxlength="100" class="form-control" id="agregar-rol" 
                                         required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
@@ -377,7 +376,6 @@ if (!isset($_SESSION['usuario'])) {
                             
                                         <label for="nombre">Rol</label>
                                         <input type="text" class="form-control" id="editar-rol" disabled>
-                        
                                         
                                         <label for="estado">Desripcion</label>
                                         <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
@@ -450,7 +448,10 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + rol.ID_ROL + '</td>' +
                             '<td>' + rol.ROL + '</td>' +
                             '<td>' + rol.DESCRIPCION + '</td>' +
-
+                            '<td>' + rol.CREADO_POR + '</td>' +
+                            '<td>' + rol.MODIFICADO_POR + '</td>' +
+                            '<td>' + rol.FECHA_CREACION + '</td>' +
+                            '<td>' + rol.FECHA_MODIFICACION + '</td>' + 
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -462,8 +463,6 @@ if (!isset($_SESSION['usuario'])) {
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
                             row += '<button class="btn btn-danger eliminar-rol" data-id="' + rol.ID_ROL + '" onclick="eliminarRol(' + rol.ID_ROL + ')">Eliminar</button>';
                         }
-
-
                         row += '</td>' +
                             '</tr>';
                             //Cambiar palabra null por vacio.
@@ -756,8 +755,8 @@ if (!isset($_SESSION['usuario'])) {
                 text: 'No podrás revertir esto.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                cconfirmButtonColor: '#d33',  
+                cancelButtonColor: '#3085d6',
                 confirmButtonText: 'eliminar',
                 cancelButtonText: 'Cancelar' 
             }).then((result) => {
@@ -800,7 +799,6 @@ if (!isset($_SESSION['usuario'])) {
             descripcion = document.getElementById("agregar-descripcion");
             descripcionEditar = document.getElementById("editar-descripcion");
 
-           
             function clearMessage(messageElement, inputElement) {
                 messageElement.innerHTML = ""; // Elimina el contenido del mensaje
                 inputElement.style.borderColor = ""; // Restablece el borde
@@ -850,11 +848,9 @@ if (!isset($_SESSION['usuario'])) {
             handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(descripcion);
 
-
             var mensaje3 = document.getElementById("mensaje3");
             handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje3, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(descripcionEditar);
-
 
         }
 
@@ -939,15 +935,13 @@ if (!isset($_SESSION['usuario'])) {
        document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
             document.getElementById('agregar-rol').value = "";
             document.getElementById('agregar-descripcion').value = "";
-          
-
-
             location.reload();
         });
 
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
         document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
-
+            document.getElementById('editar-descripcion').value = "";
+            location.reload();
         });
     </script>
 
