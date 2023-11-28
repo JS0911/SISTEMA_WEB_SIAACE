@@ -1,3 +1,13 @@
+<style>
+    .logo {
+        width: 100px;
+        /* Ancho deseado del logo */
+        margin: 0 auto;
+        /* Auto-centrar horizontalmente */
+        display: block;
+        /* Asegurarse de que sea un bloque para que el auto-centrado funcione */
+    }
+</style>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -19,7 +29,7 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Cambio de Contraseña</h3></div>
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Cambio de Contraseña</h3><img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"></div>
                                     <div class="card-body">
                                         <div class="small mb-3 text-muted">Ingrese su correo para enviar </div>
                                         <form id="formRecetPass" action= "../../Controladores/RecuperacionContrasenia/CambioContrasenia.php" name="formRecetPass" method="POST">

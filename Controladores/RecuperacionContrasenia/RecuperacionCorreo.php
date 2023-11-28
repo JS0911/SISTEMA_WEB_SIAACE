@@ -52,6 +52,7 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
             //<div><a href=http://localhost:90/sistema_web_siaace/Vistas/RecuperacionContrasenia/IngresoToken.php?token='$tokeng'&usuario='$id_usuario'>Recuperar</a></div>";
 
             $errors = $savetoken->enviarCorreo($email,$asunto,$mensaje);
+            If ($errors !="Ha ocurrido un error. Intentelo mas tarde."){
             echo "<script>
                 alert('$errors');
                 setTimeout(function() {
@@ -60,6 +61,16 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
             </script>";
             
             exit();
+            }else{
+                echo "<script>
+                alert('$errors');
+                setTimeout(function() {
+                    window.location.href = '../../Vistas/RecuperacionContrasenia/RecuperacionCorreo.php';
+                }, 0);
+            </script>";
+            
+            exit();
+            }
         } else {
             echo "<script>
                 alert('¡El Usuario o Correo electronico no son correctos.!');

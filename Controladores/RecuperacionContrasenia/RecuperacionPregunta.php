@@ -41,7 +41,7 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
                 exit;
             }else{
                 echo "<script type='text/javascript'>
-                alert('¡Respuestas correctas.!');
+                alert('¡Respuestas incorrectas.!');
                 setTimeout(function() {
                 window.location.href = '../../Vistas/RecuperacionContrasenia/RecuperacionPregunta.php';
                 }, 0);
