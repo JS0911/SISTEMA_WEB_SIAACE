@@ -91,4 +91,10 @@ switch ($_GET["op"]) {
         $datos = $com->SaldoTotal($ID_PRESTAMO);
         echo json_encode($datos);
     break;
+    case "ValidarMonto":
+        $ID_PRESTAMO = $body["ID_PRESTAMO"];
+        $MONTO_SOLICITADO = $body["MONTO_SOLICITADO"];
+        $datos = $com->validarMonto($ID_PRESTAMO,$MONTO_SOLICITADO);
+        echo json_encode($datos);
+    break;
 }

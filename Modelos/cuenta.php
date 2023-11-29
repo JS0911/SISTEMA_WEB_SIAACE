@@ -6,7 +6,10 @@ class cuenta extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_mc_cuenta;";
+        $sql = "SELECT C.*,E.PRIMER_NOMBRE, E.PRIMER_APELLIDO, T.TIPO_CUENTA
+        FROM siaace.tbl_mc_cuenta AS C
+        INNER JOIN siaace.tbl_me_empleados AS E ON C.ID_EMPLEADO = E.ID_EMPLEADO
+        INNER JOIN siaace.tbl_mc_tipocuenta AS T ON C.ID_TIPOCUENTA = T.ID_TIPOCUENTA;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

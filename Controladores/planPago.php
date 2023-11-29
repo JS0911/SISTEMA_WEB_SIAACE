@@ -61,4 +61,9 @@ switch ($_GET["op"]) {
         $datos = $com->obtenerEstadoPago($ID_PPAGO);
         echo json_encode($datos);
     break;
+    case "cuotaActual":
+        $ID_PPAGO = $body["ID_PPAGO"];
+        $datos = $com->get_cuotaActual($ID_PPAGO);
+        echo json_encode($datos);
+    break;
 }

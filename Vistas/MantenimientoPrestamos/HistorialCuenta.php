@@ -91,6 +91,7 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
+
 ?>
 <style>
     .logo {
@@ -107,6 +108,10 @@ if (!isset($_SESSION['usuario'])) {
         /* Change the color to your preferred color */
         font-weight: bold;
         /* Optionally make the text bold */
+    }
+
+    .texto-derecha {
+        text-align: right;
     }
 </style>
 
@@ -317,7 +322,7 @@ if (!isset($_SESSION['usuario'])) {
                                                         foreach ($result as $row) {
                                                             echo "<tr>";
                                                             echo "<td>" . $row["FECHA"] . "</td>";
-                                                            echo "<td>" . $row["MONTO"] . "</td>";
+                                                            echo "<td class='texto-derecha'>" . formatoNumero($row["MONTO"]) . "</td>";
                                                             echo "<td>" . $row["TIPO_TRANSACCION"] . "</td>";
                                                             echo "<td><button type='button' class='btn btn-outline-primary'>Primary</button></td>";
                                                             echo "</tr>";
@@ -327,6 +332,11 @@ if (!isset($_SESSION['usuario'])) {
                                                     }
                                                 } else {
                                                     echo "<tr><td colspan='4'>'Error en la consulta: ' . $conn->error</td></tr>";
+                                                }
+
+
+                                                function formatoNumero($numero) {
+                                                    return number_format($numero, 2, '.', ',');
                                                 }
                                                 ?>
                                             </thead>
@@ -400,6 +410,8 @@ if (!isset($_SESSION['usuario'])) {
                 });
 
         }
+
+        
     /* Imprime los datos en la tabla
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {

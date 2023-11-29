@@ -12,46 +12,19 @@ class PlanPago extends Conectar
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
 
-    /* public function get_planPago()
+
+    public function get_cuotaActual($ID_PRESTAMO)
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "        SELECT
-        planp.ID_PLANP,
-        planp.ID_PRESTAMO,
-        tipo_prestamo.TIPO_PRESTAMO,
-        prestamo.TASA,
-        prestamo.PLAZO,
-        planp.FECHA_VENC_C,
-        planp.NUMERO_CUOTA,
-        planp.FECHA_R_PAGO,
-        planp.VALOR_CUOTA,
-        planp.MONTO_ADEUDADO,
-        planp.MONTO_PAGADO,
-        planp.MONTO_ADEUDADO_CAP,
-        planp.MONTO_PAGADO_CAP,
-        planp.MONTO_ADEUDADO_ITS,
-        planp.MONTO_PAGADO_ITS,
-        planp.MONTO_ADEUDADO_MORA,
-        planp.MONTO_PAGADO_MORA,
-        planp.ESTADO
-       
-    FROM
-        tbl_mp_planp AS planp
-    INNER JOIN
-        tbl_mp_prestamos AS prestamo ON planp.ID_PRESTAMO = prestamo.ID_PRESTAMO
-    INNER JOIN
-        tbl_mp_tipo_prestamo AS tipo_prestamo ON prestamo.ID_TIPO_PRESTAMO = tipo_prestamo.ID_TIPO_PRESTAMO;
+        $sql = "SELECT * FROM tbl_mp_planp WHERE ID_PRESTAMO = :ID_PRESTAMO AND ESTADO = 'PENDIENTE' ORDER BY FECHA_VENC_C ASC LIMIT 1";
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(":ID_PRESTAMO", $ID_PRESTAMO, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     
-          ";
-        $sql = $conectar->prepare($sql);
-        $sql->execute();
-        return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-    } */
-
-
     public function calcularCuota($TASA, $PLAZO, $MONTO_SOLICITADO, $PLAZOQUINCENAS)
     {
         try {
@@ -141,13 +114,25 @@ class PlanPago extends Conectar
             $stmt1->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
             $stmt1->execute(); // Ejecutar la consulta de actualización
 
-
+            $fechaActual = date('Y-m-d');  // Obtener la fecha actual
             $MONTO_ADEUDADO_CAP = $MONTO_SOLICITADO; //VALOR INICIAL  DE SALDO CAPITAL O MONTO SOLICITADO            
             $totalInteresesPagados = 0; // Inicializa el total de intereses pagados en 0            
             // Loop para insertar según plazoQuincenas
             for ($i = 1; $i <= $PLAZOQUINCENAS; $i++) {
                 // Calcular la fecha según la lógica
-                $fechaVencimiento = date('Y-m-d ', strtotime('+' . ($i * 14) . ' days')); // Sumar 15 días por cuincena
+                // Calcular la fecha según la lógica
+                $diasParaSumar = ($i * 15);  // Sumar 15 días por quincena
+                $fechaVencimiento = date('Y-m-d', strtotime($fechaActual . ' +' . $diasParaSumar . ' days'));
+
+                // Verificar si la fecha de vencimiento es antes o después del día 15 del mes
+                $dia = date('j', strtotime($fechaVencimiento));
+                if ($dia <= 15) {
+                    // Si es antes del día 15, establecer la fecha al 10 del mismo mes
+                    $fechaVencimiento = date('Y-m-10', strtotime($fechaVencimiento));
+                } else {
+                    // Si es después del día 15, establecer la fecha al 25 del próximo mes
+                    $fechaVencimiento = date('Y-m-25', strtotime($fechaVencimiento));
+                }
                 $ESTADO = "PENDIENTE";
                 // Setear los valores para cada iteración
                 // Calcular el valor de la cuota
@@ -200,13 +185,13 @@ class PlanPago extends Conectar
             // // Preparar la consulta
             $stmt1 = $conectar->prepare($sql1);
             $stmt1->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
-           
+
             $stmt1->execute(); // Ejecutar la consulta de actualización
 
             //return "Registros insertados correctamente.";
             return [
                 'message' => 'Pago De Cuota Total Realizado',
-                
+
             ];
         } catch (PDOException $e) {
             return "Error al hacer pago total de la cuota: " . $e->getMessage();
@@ -228,13 +213,13 @@ class PlanPago extends Conectar
             // // Preparar la consulta
             $stmt1 = $conectar->prepare($sql1);
             $stmt1->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
-           
+
             $stmt1->execute(); // Ejecutar la consulta de actualización
 
             //return "Registros insertados correctamente.";
             return [
                 'message' => 'Pago De Capital Realizado',
-                
+
             ];
         } catch (PDOException $e) {
             return "Error al hacer Pago De Capital: " . $e->getMessage();
@@ -256,13 +241,13 @@ class PlanPago extends Conectar
             // // Preparar la consulta
             $stmt1 = $conectar->prepare($sql1);
             $stmt1->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
-           
+
             $stmt1->execute(); // Ejecutar la consulta de actualización
 
             //return "Registros insertados correctamente.";
             return [
                 'message' => 'Pago De Interes Realizado',
-                
+
             ];
         } catch (PDOException $e) {
             return "Error al Pago De Interes: " . $e->getMessage();
@@ -348,5 +333,4 @@ class PlanPago extends Conectar
             return "Error al Consultar el Estado del Plan de Pago: " . $e->getMessage();
         }
     }
-
 }

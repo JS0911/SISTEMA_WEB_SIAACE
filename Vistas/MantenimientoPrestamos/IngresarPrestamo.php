@@ -166,6 +166,10 @@ if (!isset($_SESSION['usuario'])) {
         font-weight: bold;
         /* Optionally make the text bold */
     }
+
+    .texto-derecha {
+        text-align: right;
+    }
 </style>
 
 <!DOCTYPE html>
@@ -309,7 +313,7 @@ if (!isset($_SESSION['usuario'])) {
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                <div class="small">Usuario: <?php echo $nombre_usuario;?></div>
+                    <div class="small">Usuario: <?php echo $nombre_usuario; ?></div>
                     Sesión activa: Conectado(a).
                 </div>
             </nav>
@@ -365,6 +369,7 @@ if (!isset($_SESSION['usuario'])) {
                                                     <th scope="col">Forma Pago</th>
                                                     <th scope="col">Monto</th>
                                                     <th scope="col">Saldo Adeudado</th>
+                                                    <th scope="col">Fecha Aprobado</th>
                                                     <th scope="col">Detalles</th>
                                                 </tr>
                                             </thead>
@@ -613,15 +618,16 @@ if (!isset($_SESSION['usuario'])) {
                     var tbody = document.querySelector('#Lista-Prestamos tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
-                    data.forEach( async function(prestamo) {
+                    data.forEach(async function(prestamo) {
                         //SALDO_TOTAL = SaldoTotal(prestamo.ID_PRESTAMO);
                         var row = '<tr>' +
                             '<td style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
                             '<td>' + prestamo.TIPO_PRESTAMO + '</td>' +
                             '<td style="display:none;">' + prestamo.ID_FPAGO + '</td>' +
                             '<td>' + prestamo.FORMA_DE_PAGO + '</td>' +
-                            '<td>' + prestamo.MONTO_SOLICITADO + '</td>' +
-                            '<td>' + await SaldoTotal(prestamo.ID_PRESTAMO) + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(prestamo.MONTO_SOLICITADO)) + '</td>' +
+                            '<td class="texto-derecha">' + (isNaN(await SaldoTotal(prestamo.ID_PRESTAMO)) ? '' : formatoNumero(parseFloat(await SaldoTotal(prestamo.ID_PRESTAMO)))) + '</td>' +
+                            '<td>' + prestamo.FECHA_APROBACION + '</td>' +
                             '<td>';
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         row += '<button class="btn btn-secondary ver-cuotas" data-id="' + prestamo.ID_PRESTAMO + '" onclick="redirectToPlanPago(' + prestamo.ID_PRESTAMO + ')">Cuotas</button>';
@@ -718,8 +724,8 @@ if (!isset($_SESSION['usuario'])) {
         }
 
         async function SaldoTotal(ID_PRESTAMO) {
-            // Verificar el estado del préstamo antes de aprobar
-            return fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=SaldoTotal', {
+            try {
+                const response = await fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=SaldoTotal', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -728,18 +734,25 @@ if (!isset($_SESSION['usuario'])) {
                     body: JSON.stringify({
                         "ID_PRESTAMO": ID_PRESTAMO
                     })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error en la solicitud');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Extraer el saldo total del objeto devuelto
-                    return data[0].SALDO_TOTAL;
                 });
+
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud');
+                }
+
+                const data = await response.json();
+
+                // Verificar si SALDO_TOTAL es un número
+                const saldoTotal = parseFloat(data[0]?.SALDO_TOTAL);
+
+                // Verificar si es NaN o indefinido
+                return isNaN(saldoTotal) ? 0 : saldoTotal;
+            } catch (error) {
+                console.error('Error en la solicitud:', error.message);
+                return 0; // o podrías devolver NaN o cualquier otro valor predeterminado
+            }
         }
+
 
         //FUNCIONES PARA CUENTAS
         function Lista_Cuentas() {
@@ -776,7 +789,7 @@ if (!isset($_SESSION['usuario'])) {
                         var row = '<tr>' +
                             '<td style="display:none;">' + cuenta.ID_CUENTA + '</td>' +
                             '<td>' + cuenta.NUMERO_CUENTA + '</td>' +
-                            '<td>' + cuenta.SALDO + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(cuenta.SALDO)) + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -886,9 +899,11 @@ if (!isset($_SESSION['usuario'])) {
         }
 
         // REDIRIGIR A HISTORIAL 
-        function redirectToPlanPago(ID_PRESTAMO) {
+        function redirectToPlanPago(ID_PRESTAMO, ID_EMPLEADO) {
             // Redirigir a la página Plan_pago con el parametro ID_PRESTAMO
-            window.location.href = 'plan_pago.php?ID_PRESTAMO=' + ID_PRESTAMO;
+            // window.location.href = 'plan_pago.php?ID_PRESTAMO=' + ID_PRESTAMO;
+            window.location.href = 'cuota.php?ID_PRESTAMO=' + ID_PRESTAMO;
+
         }
         // REDIRIGIR A HISTORIAL 
         function redirectToHistorialCuenta(ID_CUENTA) {
@@ -1161,6 +1176,10 @@ if (!isset($_SESSION['usuario'])) {
 
         }
 
+        function formatoNumero(numero) {
+            return numero.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+
         $(document).ready(function() {
             Lista_Prestamos();
             Insertar_Prestamo();
@@ -1169,11 +1188,14 @@ if (!isset($_SESSION['usuario'])) {
             Insertar_Cuenta();
             Deposito();
             Reembolso();
-
+            //validarMonto();
             validarNombre();
         });
     </script>
 
+    <script>
+
+    </script>
     <!-- VALIDACIONES SCRIPT -->
     <script>
         // Obtén los campos de entrada y el botón "Guardar para insertar"

@@ -31,18 +31,18 @@ class Prestamo extends Conectar
         $sql = "SELECT SUM((MONTO_ADEUDADO_ITS) + (MONTO_ADEUDADO_CAP)) AS SALDO_TOTAL
                 FROM siaace.tbl_mp_planp 
                 WHERE ID_PRESTAMO = :ID_PRESTAMO";
-    
+
         $sql = $conectar->prepare($sql);
         $sql->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
         $sql->execute();
-    
+
         if ($sql->rowCount() > 0) {
             return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
         } else {
             return array();
         }
     }
-    
+
     // //TRAE SOLO UN PRESTAMO
     public function get_Prestamo($ID_EMPLEADO)
     {
@@ -203,4 +203,48 @@ class Prestamo extends Conectar
             return "Error al Consultar el Estado de Prestamo: " . $e->getMessage();
         }
     }
+
+
+    public function validarMonto($ID_EMPLEADO, $MONTO_SOLICITADO)
+{
+    try {
+        $conectar = parent::conexion();
+        parent::set_names();
+
+        // Obtener el salario
+        $sql = "SELECT `SALARIO` FROM `tbl_me_empleados` WHERE `ID_EMPLEADO` = :ID_EMPLEADO";
+        $sql2 = "SELECT `SALDO` FROM `tbl_mc_cuenta` WHERE `ID_EMPLEADO` = :ID_EMPLEADO";
+
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
+        //$stmt->bindParam(':MONTO_SOLICITADO', $MONTO_SOLICITADO, PDO::PARAM_STR);
+        $stmt->execute();
+       // $resultSalario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $stmt2 = $conectar->prepare($sql2);
+        $stmt2->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
+       // $stmt2->bindParam(':MONTO_SOLICITADO', $MONTO_SOLICITADO, PDO::PARAM_STR);
+        $stmt2->execute();
+        //$resultAhorro = $stmt2->fetch(PDO::FETCH_ASSOC);
+
+       // return "Saldo:" . $resultAhorro ;
+        if (!$stmt || !$stmt2) {
+            return "No se encontró el salario o el saldo del empleado.";
+        }
+
+        $salario = $stmt['SALARIO'];
+        $ahorro = $stmt2['SALDO'];
+
+        $montoMinimo = ($ahorro * 3) + ($salario / 2);
+
+        if ($MONTO_SOLICITADO <= $montoMinimo) {
+            return "MONTO CALCULADO: " . $montoMinimo . "\nMONTO SOLICITADO: " . $MONTO_SOLICITADO;
+        } else {
+            return "El monto solicitado no debe exceder de " . $montoMinimo;
+        }
+    } catch (PDOException $e) {
+        return "Error al Consultar: " . $e->getMessage();
+    }
+}
+
 }
