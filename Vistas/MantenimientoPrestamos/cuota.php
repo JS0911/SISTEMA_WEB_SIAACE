@@ -441,13 +441,13 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + data.NUMERO_CUOTA + '</td>' +
                             '<td>' + data.FECHA_VENC_C + '</td>' +
                             '<td style="display: none;">' + data.FECHA_R_PAGO + '</td>' +
-                            '<td class="texto-derecha">' + data.VALOR_CUOTA + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(data.VALOR_CUOTA)) + '</td>' +
                             '<td style="display: none;">' + data.MONTO_ADEUDADO + '</td>' +
                             '<td style="display: none;">' + data.MONTO_PAGADO + '</td>' +
-                            '<td class="texto-derecha">' + data.MONTO_ADEUDADO_CAP + '</td>' +
-                            '<td class="texto-derecha">' + data.MONTO_PAGADO_CAP + '</td>' +
-                            '<td class="texto-derecha">' + data.MONTO_ADEUDADO_ITS + '</td>' +
-                            '<td class="texto-derecha">' + data.MONTO_PAGADO_ITS + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(data.MONTO_ADEUDADO_CAP)) + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(data.MONTO_PAGADO_CAP)) + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(data.MONTO_ADEUDADO_ITS)) + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(data.MONTO_PAGADO_ITS)) + '</td>' +
                             '<td style="display:none;">' + data.MONTO_ADEUDADO_MORA + '</td>' +
                             '<td style="display:none;">' + data.MONTO_PAGADO_MORA + '</td>' +
                             '<td>' + data.ESTADO + '</td>' +
@@ -519,13 +519,13 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + plan.NUMERO_CUOTA + '</td>' +
                             '<td>' + plan.FECHA_VENC_C + '</td>' +
                             '<td>' + plan.FECHA_R_PAGO + '</td>' +
-                            '<td class="texto-derecha">' + plan.VALOR_CUOTA + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.VALOR_CUOTA)) + '</td>' +
                             '<td style="display: none;">' + plan.MONTO_ADEUDADO + '</td>' +
                             '<td style="display: none;">' + plan.MONTO_PAGADO + '</td>' +
-                            '<td class="texto-derecha">' + plan.MONTO_ADEUDADO_CAP + '</td>' +
-                            '<td class="texto-derecha">' + plan.MONTO_PAGADO_CAP + '</td>' +
-                            '<td class="texto-derecha">' + plan.MONTO_ADEUDADO_ITS + '</td>' +
-                            '<td class="texto-derecha">' + plan.MONTO_PAGADO_ITS + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_ADEUDADO_CAP)) + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_PAGADO_CAP)) + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_ADEUDADO_ITS)) + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_PAGADO_ITS)) + '</td>' +
                             '<td style="display:none;">' + plan.MONTO_ADEUDADO_MORA + '</td>' +
                             '<td style="display:none;">' + plan.MONTO_PAGADO_MORA + '</td>' +
                             '<td>' + plan.ESTADO + '</td>' +
@@ -830,6 +830,11 @@ if (!isset($_SESSION['usuario'])) {
                 console.log("Entra Total");
             }
         }
+
+        function formatoNumero(numero) {
+            return numero.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+
         $(document).ready(function() {
             Lista_CuotaActual();
             Lista_Cuotas();

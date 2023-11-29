@@ -83,6 +83,10 @@ if (!isset($_SESSION['usuario'])) {
         margin-right: 10px;
         /* Espacio a la derecha del logo para separarlo del texto */
     }
+
+    .texto-derecha {
+        text-align: right;
+    }
 </style>
 
 <!DOCTYPE html>
@@ -130,6 +134,7 @@ if (!isset($_SESSION['usuario'])) {
         #Lista-cuentas td.texto-derecha {
             text-align: right;
         }
+
         /* Estilo para las celdas de datos (td) */
         #Lista-cuentas td {
             border: 1px solid grey;
@@ -474,11 +479,11 @@ if (!isset($_SESSION['usuario'])) {
                     data.forEach(function(cuenta) {
                         var nombre = cuenta.PRIMER_NOMBRE + ' ' + cuenta.PRIMER_APELLIDO;
                         var row = '<tr>' +
-                        '<td style="display:none;">' + cuenta.ID_CUENTA + '</td>' +
+                            '<td style="display:none;">' + cuenta.ID_CUENTA + '</td>' +
                             '<td style="display:none;">' + cuenta.ID_EMPLEADO + '</td>' +
                             '<td>' + nombre + '</td>' +
                             '<td>' + cuenta.NUMERO_CUENTA + '</td>' +
-                            '<td class="texto-derecha">' + cuenta.SALDO + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(cuenta.SALDO)) + '</td>' +
                             '<td style="display:none;">' + cuenta.ID_TIPOCUENTA + '</td>' +
                             '<td>' + cuenta.TIPO_CUENTA + '</td>' +
                             '<td>' + cuenta.ESTADO + '</td>' +
@@ -698,193 +703,196 @@ if (!isset($_SESSION['usuario'])) {
                 }
             });
         }
+        //FUNCION SEPARADOR DE MILES Y DECIMALES
+        function formatoNumero(numero) {
+            return numero.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+            // function updateTipoCuenta() {
+            //     var id_cuenta = document.getElementById('editar-id-cuenta').value;
 
-        // function updateTipoCuenta() {
-        //     var id_cuenta = document.getElementById('editar-id-cuenta').value;
+            //     var estado = document.getElementById('editar-estado').value;
 
-        //     var estado = document.getElementById('editar-estado').value;
+            //     if (cuenta == "" || descripcion == "" || tasa == "" || estado == "") {
+            //         Swal.fire({
+            //             icon: 'error',
+            //             title: 'Error!',
+            //             text: 'No se pueden enviar Campos Vacios.'
+            //         })
+            //     } else {
+            //         // Realiza una solicitud FETCH para actualizar los datos del tipo cuenta
+            //         fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoCuenta.php?op=UpdateTipoCuenta', {
+            //                 method: 'POST',
+            //                 headers: {
+            //                     'Accept': 'application/json',
+            //                     'Content-Type': 'application/json'
+            //                 },
+            //                 body: JSON.stringify({
+            //                     "ID_TIPOCUENTA": id_cuenta,
+            //                     "TIPO_CUENTA": cuenta,
+            //                     "DESCRIPCION": descripcion,
+            //                     "TASA": tasa,
+            //                     "ESTADO": estado
+            //                 }) // Convierte los datos en formato JSON
+            //             })
+            //             .then(function(response) {
+            //                 if (response.ok) {
+            //                     // Cerrar la modal después de guardar
+            //                     $('#editarModal').modal('hide');
+            //                     Swal.fire({
+            //                         icon: 'success',
+            //                         title: 'Actualización exitosa',
+            //                         text: 'Los datos se han actualizado correctamente.'
+            //                     }).then(function() {
+            //                         // Recargar la página para mostrar los nuevos datos
+            //                         location.reload();
+            //                     });
 
-        //     if (cuenta == "" || descripcion == "" || tasa == "" || estado == "") {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Error!',
-        //             text: 'No se pueden enviar Campos Vacios.'
-        //         })
-        //     } else {
-        //         // Realiza una solicitud FETCH para actualizar los datos del tipo cuenta
-        //         fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoCuenta.php?op=UpdateTipoCuenta', {
-        //                 method: 'POST',
-        //                 headers: {
-        //                     'Accept': 'application/json',
-        //                     'Content-Type': 'application/json'
-        //                 },
-        //                 body: JSON.stringify({
-        //                     "ID_TIPOCUENTA": id_cuenta,
-        //                     "TIPO_CUENTA": cuenta,
-        //                     "DESCRIPCION": descripcion,
-        //                     "TASA": tasa,
-        //                     "ESTADO": estado
-        //                 }) // Convierte los datos en formato JSON
-        //             })
-        //             .then(function(response) {
-        //                 if (response.ok) {
-        //                     // Cerrar la modal después de guardar
-        //                     $('#editarModal').modal('hide');
-        //                     Swal.fire({
-        //                         icon: 'success',
-        //                         title: 'Actualización exitosa',
-        //                         text: 'Los datos se han actualizado correctamente.'
-        //                     }).then(function() {
-        //                         // Recargar la página para mostrar los nuevos datos
-        //                         location.reload();
-        //                     });
+            //                 } else {
+            //                     throw new Error('Error en la solicitud de actualización');
+            //                 }
+            //             })
+            //             .catch(function(error) {
+            //                 // Manejar el error aquí
+            //                 Swal.fire({
+            //                     icon: 'error',
+            //                     title: 'Error',
+            //                     text: 'Error al actualizar los datos de la Tipo de Cuenta: ' + error.message
+            //                 });
+            //             });
+            //     }
+            // }
 
-        //                 } else {
-        //                     throw new Error('Error en la solicitud de actualización');
-        //                 }
-        //             })
-        //             .catch(function(error) {
-        //                 // Manejar el error aquí
-        //                 Swal.fire({
-        //                     icon: 'error',
-        //                     title: 'Error',
-        //                     text: 'Error al actualizar los datos de la Tipo de Cuenta: ' + error.message
-        //                 });
-        //             });
-        //     }
-        // }
+            //FUNCION CON EL SWEETALERT
+            // function eliminarTipoCuenta(id_tipocuenta) {
+            //     Swal.fire({
+            //         title: '¿Estás seguro?',
+            //         text: 'No podrás revertir esto.',
+            //         icon: 'warning',
+            //         showCancelButton: true,
+            //         confirmButtonColor: '#3085d6',
+            //         cancelButtonColor: '#d33',
+            //         confirmButtonText: 'Eliminar',
+            //         cancelButtonText: 'Cancelar'
+            //     }).then((result) => {
+            //         if (result.isConfirmed) {
+            //             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoCuenta.php?op=EliminarTipoCuenta', {
+            //                     method: 'POST',
+            //                     headers: {
+            //                         'Accept': 'application/json',
+            //                         'Content-Type': 'application/json'
+            //                     },
+            //                     body: JSON.stringify({
+            //                         "ID_TIPOCUENTA": id_tipocuenta
+            //                     })
+            //                 })
+            //                 .then(function(response) {
+            //                     if (response.ok) {
+            //                         // Eliminación exitosa, puedes hacer algo aquí si es necesario
+            //                         Swal.fire('Tipo de Cuenta eliminada', '', 'success')
+            //                             .then(() => {
+            //                                 // Recargar la página para mostrar los nuevos datos
+            //                                 location.reload();
+            //                                 // Recargar la lista de TIPO CUENTA después de eliminar
+            //                                 //Lista_Tipo_Cuenta();
+            //                             });
+            //                     } else {
+            //                         throw new Error('Error en la solicitud de eliminación');
+            //                     }
+            //                 })
+            //                 .catch(function(error) {
+            //                     // Manejar el error aquí
+            //                     Swal.fire('Error', 'Error al eliminar la Tipo de Cuenta: ' + error.message, 'error');
+            //                 });
+            //         }
+            //     });
+            // }
 
-        //FUNCION CON EL SWEETALERT
-        // function eliminarTipoCuenta(id_tipocuenta) {
-        //     Swal.fire({
-        //         title: '¿Estás seguro?',
-        //         text: 'No podrás revertir esto.',
-        //         icon: 'warning',
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#d33',
-        //         confirmButtonText: 'Eliminar',
-        //         cancelButtonText: 'Cancelar'
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/tipoCuenta.php?op=EliminarTipoCuenta', {
-        //                     method: 'POST',
-        //                     headers: {
-        //                         'Accept': 'application/json',
-        //                         'Content-Type': 'application/json'
-        //                     },
-        //                     body: JSON.stringify({
-        //                         "ID_TIPOCUENTA": id_tipocuenta
-        //                     })
-        //                 })
-        //                 .then(function(response) {
-        //                     if (response.ok) {
-        //                         // Eliminación exitosa, puedes hacer algo aquí si es necesario
-        //                         Swal.fire('Tipo de Cuenta eliminada', '', 'success')
-        //                             .then(() => {
-        //                                 // Recargar la página para mostrar los nuevos datos
-        //                                 location.reload();
-        //                                 // Recargar la lista de TIPO CUENTA después de eliminar
-        //                                 //Lista_Tipo_Cuenta();
-        //                             });
-        //                     } else {
-        //                         throw new Error('Error en la solicitud de eliminación');
-        //                     }
-        //                 })
-        //                 .catch(function(error) {
-        //                     // Manejar el error aquí
-        //                     Swal.fire('Error', 'Error al eliminar la Tipo de Cuenta: ' + error.message, 'error');
-        //                 });
-        //         }
-        //     });
-        // }
+            // // VALIDACIONES FUNCIONES    
+            // function validarNombre() {
+            //     var nombreTipoCuenta = document.getElementById("agregar-cuenta");
+            //     var descripcion = document.getElementById("agregar-descripcion");
+            //     var tasa = document.getElementById("agregar-tasa");
+            //     var estado = document.getElementById("agregar-estado");
+            //     var descripcionEditar = document.getElementById("editar-descripcion");
+            //     var tasaEditar = document.getElementById("editar-tasa");
+            //     var estadoEditar = document.getElementById("editar-estado");
 
-        // // VALIDACIONES FUNCIONES    
-        // function validarNombre() {
-        //     var nombreTipoCuenta = document.getElementById("agregar-cuenta");
-        //     var descripcion = document.getElementById("agregar-descripcion");
-        //     var tasa = document.getElementById("agregar-tasa");
-        //     var estado = document.getElementById("agregar-estado");
-        //     var descripcionEditar = document.getElementById("editar-descripcion");
-        //     var tasaEditar = document.getElementById("editar-tasa");
-        //     var estadoEditar = document.getElementById("editar-estado");
+            //     function clearMessage(messageElement, inputElement) {
+            //         messageElement.innerHTML = ""; // Elimina el contenido del mensaje
+            //         inputElement.style.borderColor = ""; // Restablece el borde
+            //         inputElement.style.boxShadow = ""; // Restablece la sombra
+            //     }
 
-        //     function clearMessage(messageElement, inputElement) {
-        //         messageElement.innerHTML = ""; // Elimina el contenido del mensaje
-        //         inputElement.style.borderColor = ""; // Restablece el borde
-        //         inputElement.style.boxShadow = ""; // Restablece la sombra
-        //     }
+            //     function validateInput(inputElement, expression, messageElement, message) {
+            //         if (inputElement.value === "") {
+            //             clearMessage(messageElement, inputElement);
+            //         } else if (!expression.test(inputElement.value)) {
+            //             inputElement.style.borderColor = "red";
+            //             inputElement.style.boxShadow = "0 0 10px red";
+            //             messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
+            //             messageElement.style.color = "red";
+            //         } else {
+            //             clearMessage(messageElement, inputElement); // Restablece los estilos
+            //             messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
+            //             messageElement.style.color = "green";
+            //         }
+            //     }
 
-        //     function validateInput(inputElement, expression, messageElement, message) {
-        //         if (inputElement.value === "") {
-        //             clearMessage(messageElement, inputElement);
-        //         } else if (!expression.test(inputElement.value)) {
-        //             inputElement.style.borderColor = "red";
-        //             inputElement.style.boxShadow = "0 0 10px red";
-        //             messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
-        //             messageElement.style.color = "red";
-        //         } else {
-        //             clearMessage(messageElement, inputElement); // Restablece los estilos
-        //             messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
-        //             messageElement.style.color = "green";
-        //         }
-        //     }
+            //     function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
+            //         inputElement.addEventListener("input", function() {
+            //             validateInput(inputElement, expression, messageElement, message);
+            //         });
 
-        //     function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
-        //         inputElement.addEventListener("input", function() {
-        //             validateInput(inputElement, expression, messageElement, message);
-        //         });
+            //         inputElement.addEventListener("blur", function() {
+            //             clearMessage(messageElement, inputElement);
+            //         });
+            //     }
 
-        //         inputElement.addEventListener("blur", function() {
-        //             clearMessage(messageElement, inputElement);
-        //         });
-        //     }
+            //     function handleDescriptionKeypressEvent(inputElement) {
+            //         inputElement.addEventListener("keypress", function(e) {
+            //             var currentDescription = inputElement.value;
+            //             if (e.key === " " && currentDescription.endsWith(" ")) {
+            //                 e.preventDefault();
+            //             }
+            //         });
+            //     }
 
-        //     function handleDescriptionKeypressEvent(inputElement) {
-        //         inputElement.addEventListener("keypress", function(e) {
-        //             var currentDescription = inputElement.value;
-        //             if (e.key === " " && currentDescription.endsWith(" ")) {
-        //                 e.preventDefault();
-        //             }
-        //         });
-        //     }
+            //     var expresionValidadora1 = /^[A-Z]+$/;
+            //     var mensaje1 = document.getElementById("mensaje1");
+            //     handleInputAndBlurEvents(nombreTipoCuenta, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
 
-        //     var expresionValidadora1 = /^[A-Z]+$/;
-        //     var mensaje1 = document.getElementById("mensaje1");
-        //     handleInputAndBlurEvents(nombreTipoCuenta, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
+            //     var expresionValidadora2 = /^[A-Z0-9\s]+$/;
+            //     var mensaje2 = document.getElementById("mensaje2");
+            //     handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            //     handleDescriptionKeypressEvent(descripcion);
 
-        //     var expresionValidadora2 = /^[A-Z0-9\s]+$/;
-        //     var mensaje2 = document.getElementById("mensaje2");
-        //     handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-        //     handleDescriptionKeypressEvent(descripcion);
+            //     var expresionValidadora3 = /^\d+(\.\d+)?/;
+            //     var mensaje3 = document.getElementById("mensaje3");
+            //     handleInputAndBlurEvents(tasa, expresionValidadora3, mensaje3, "Solo se permiten Datos Numericos");
+            //     handleDescriptionKeypressEvent(tasa);
 
-        //     var expresionValidadora3 = /^\d+(\.\d+)?/;
-        //     var mensaje3 = document.getElementById("mensaje3");
-        //     handleInputAndBlurEvents(tasa, expresionValidadora3, mensaje3, "Solo se permiten Datos Numericos");
-        //     handleDescriptionKeypressEvent(tasa);
-
-        //     var mensaje4 = document.getElementById("mensaje4");
-        //     handleInputAndBlurEvents(estado, expresionValidadora1, mensaje4, "Solo se permiten Letras Mayúsculas");
-
-
-        //     var mensaje5 = document.getElementById("mensaje5");
-        //     handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje5, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-        //     handleDescriptionKeypressEvent(descripcionEditar);
+            //     var mensaje4 = document.getElementById("mensaje4");
+            //     handleInputAndBlurEvents(estado, expresionValidadora1, mensaje4, "Solo se permiten Letras Mayúsculas");
 
 
-        //     var mensaje6 = document.getElementById("mensaje6");
-        //     handleInputAndBlurEvents(tasaEditar, expresionValidadora3, mensaje6, "Solo se permiten Datos Numericos");
-        //     handleDescriptionKeypressEvent(tasaEditar);
+            //     var mensaje5 = document.getElementById("mensaje5");
+            //     handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje5, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            //     handleDescriptionKeypressEvent(descripcionEditar);
 
-        //     var mensaje7 = document.getElementById("mensaje7");
-        //     handleInputAndBlurEvents(estado, expresionValidadora1, mensaje7, "Solo se permiten Letras Mayúsculas");
 
-        // }
+            //     var mensaje6 = document.getElementById("mensaje6");
+            //     handleInputAndBlurEvents(tasaEditar, expresionValidadora3, mensaje6, "Solo se permiten Datos Numericos");
+            //     handleDescriptionKeypressEvent(tasaEditar);
 
-        $(document).ready(function() {
-            Lista_Cuentas();
-            Insertar_Cuenta();
-        });
+            //     var mensaje7 = document.getElementById("mensaje7");
+            //     handleInputAndBlurEvents(estado, expresionValidadora1, mensaje7, "Solo se permiten Letras Mayúsculas");
+
+            // }
+
+            $(document).ready(function() {
+                Lista_Cuentas();
+                Insertar_Cuenta();
+            });
     </script>
 
     <!-- VALIDACIONES SCRIPT -->

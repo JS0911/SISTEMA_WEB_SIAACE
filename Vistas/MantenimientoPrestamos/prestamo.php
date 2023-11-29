@@ -151,6 +151,10 @@ if (!isset($_SESSION['usuario'])) {
             margin-top: 1px;
 
         }
+
+        .texto-derecha {
+            text-align: right;
+        }
     </style>
 
     </style>
@@ -232,7 +236,6 @@ if (!isset($_SESSION['usuario'])) {
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
-                                
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -277,9 +280,9 @@ if (!isset($_SESSION['usuario'])) {
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                <div class="small">Usuario: <?php echo $nombre_usuario;?><div>
-                    Sesión activa: Conectado(a).
-                </div>
+                    <div class="small">Usuario: <?php echo $nombre_usuario; ?><div>
+                            Sesión activa: Conectado(a).
+                        </div>
             </nav>
         </div>
         <div id="layoutSidenav_content">
@@ -392,7 +395,7 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + prestamo.FECHA_APROBACION + '</td>' +
                             '<td style="display:none;">' + prestamo.FECHA_DE_CANCELACION + '</td>' +
                             '<td style="display:none;">' + prestamo.FECHA_DE_DESEMBOLSO + '</td>' +
-                            '<td>' + prestamo.MONTO_SOLICITADO + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(prestamo.MONTO_SOLICITADO)) + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_DESEMBOLSO + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_ADEUDADO + '</td>' +
                             '<td>' + prestamo.ESTADO_PRESTAMO + '</td>' +
@@ -545,75 +548,75 @@ if (!isset($_SESSION['usuario'])) {
         function AnularPrestamo(ID_PRESTAMO) {
             // Verificar el estado del préstamo antes de aprobar
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=obtenerEstadoPrestamo', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "ID_PRESTAMO": ID_PRESTAMO
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_PRESTAMO": ID_PRESTAMO
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("estado:", data);
-                if (data === 'PENDIENTE' || data === 'APROBADO') {
-                    if (data === 'APROBADO') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'No se puede anular un préstamo ya aprobado.'
-                        });
-                    } else {
-                        // Realiza una solicitud FETCH al servidor para anular el préstamo
-                        fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=anularPrestamo', {
-                            method: 'POST',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                "ID_PRESTAMO": ID_PRESTAMO
-                            })
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                // La solicitud se completó con éxito
-                                document.getElementById('AnularButton').classList.remove('btn-danger');
-                                document.getElementById('AnularButton').classList.add('btn-secondary');
-                                document.getElementById('AnularButton').disabled = true;
-                                // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
-                                // Mostrar mensaje de éxito con SweetAlert
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Préstamo Anulado',
-                                    text: 'El préstamo ha sido anulado exitosamente.'
+                .then(response => response.json())
+                .then(data => {
+                    console.log("estado:", data);
+                    if (data === 'PENDIENTE' || data === 'APROBADO') {
+                        if (data === 'APROBADO') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'No se puede anular un préstamo ya aprobado.'
+                            });
+                        } else {
+                            // Realiza una solicitud FETCH al servidor para anular el préstamo
+                            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=anularPrestamo', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        "ID_PRESTAMO": ID_PRESTAMO
+                                    })
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        // La solicitud se completó con éxito
+                                        document.getElementById('AnularButton').classList.remove('btn-danger');
+                                        document.getElementById('AnularButton').classList.add('btn-secondary');
+                                        document.getElementById('AnularButton').disabled = true;
+                                        // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
+                                        // Mostrar mensaje de éxito con SweetAlert
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Préstamo Anulado',
+                                            text: 'El préstamo ha sido anulado exitosamente.'
+                                        });
+                                        //location.reload();
+                                        setTimeout(function() {
+                                            location.reload();
+                                        }, 5000);
+                                    } else {
+                                        console.error('Error en la solicitud');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
                                 });
-                                //location.reload();
-                                setTimeout(function() {
-                                    location.reload();
-                                }, 5000);
-                            } else {
-                                console.error('Error en la solicitud');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
+                        }
+                    } else {
+                        if (data === 'ANULADO') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Préstamo Anulado',
+                                text: 'Este préstamo ya ha sido anulado anteriormente.'
+                            });
+                        }
                     }
-                } else {
-                    if (data === 'ANULADO') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Préstamo Anulado',
-                            text: 'Este préstamo ya ha sido anulado anteriormente.'
-                        });
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
 
         function AprobarPrestamo(ID_PRESTAMO, MONTO_SOLICITADO, PLAZO, TASA, ESTADO_PRESTAMO) {
@@ -739,6 +742,10 @@ if (!isset($_SESSION['usuario'])) {
                 '&TASA=' + TASA;
         }
 
+        //FUNCION SEPARADOR DE MILES Y DECIMALES
+        function formatoNumero(numero) {
+            return numero.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
         $(document).ready(function() {
             Lista_Prestamo();
             //Insertar_Tipoprestamo();

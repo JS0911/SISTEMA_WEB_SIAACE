@@ -365,7 +365,7 @@ if (!isset($_SESSION['usuario'])) {
                                         <table class="table table-bordered mx-auto" id="Lista-Prestamos" style="margin-top: 20px; margin-bottom: 20px">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col">Tipo Prestamo</th>
+                                                    <th scope="col">Plazo Prestamo</th>
                                                     <th scope="col">Forma Pago</th>
                                                     <th scope="col">Monto</th>
                                                     <th scope="col">Saldo Adeudado</th>
@@ -622,7 +622,7 @@ if (!isset($_SESSION['usuario'])) {
                         //SALDO_TOTAL = SaldoTotal(prestamo.ID_PRESTAMO);
                         var row = '<tr>' +
                             '<td style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
-                            '<td>' + prestamo.TIPO_PRESTAMO + '</td>' +
+                            '<td>' + prestamo.PLAZO + ' meses</td>'+
                             '<td style="display:none;">' + prestamo.ID_FPAGO + '</td>' +
                             '<td>' + prestamo.FORMA_DE_PAGO + '</td>' +
                             '<td class="texto-derecha">' + formatoNumero(parseFloat(prestamo.MONTO_SOLICITADO)) + '</td>' +
@@ -1175,7 +1175,7 @@ if (!isset($_SESSION['usuario'])) {
             handleInputAndBlurEvents(Monto - Reembolso, expresionValidadora1, mensaje4, "Ingrese un retiro válido (por ejemplo, 1000.00)");
 
         }
-
+        //FUNCION SEPARADOR DE MILES Y DECIMALES
         function formatoNumero(numero) {
             return numero.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }

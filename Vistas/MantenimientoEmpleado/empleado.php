@@ -74,6 +74,10 @@ if (!isset($_SESSION['usuario'])) {
         margin-right: 10px;
         /* Espacio a la derecha del logo para separarlo del texto */
     }
+
+    .texto-derecha {
+        text-align: right;
+    }
 </style>
 
 <!DOCTYPE html>
@@ -628,7 +632,7 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + nombreCompleto + '</td>' + // Concatenación de primer y segundo nombre
                             '<td>' + apellidoCompleto + '</td>' + //concatenacion de primer y segundo apellido  
                             '<td class="direccion-column" style="display:none;">' + empleado.EMAIL + '</td>' +
-                            '<td class="direccion-column" style="display:none;">' + empleado.SALARIO + '</td>' +
+                            '<td class="direccion-column" style="display:none;" class="texto-derecha">' + formatoNumero(parseFloat(empleado.SALARIO)) + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + empleado.TELEFONO + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + empleado.DIRECCION1 + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + empleado.DIRECCION2 + '</td>' +
@@ -1209,6 +1213,12 @@ if (!isset($_SESSION['usuario'])) {
             handleDescriptionKeypressEvent(direccion2Editar);
         }
 
+
+          //FUNCION SEPARADOR DE MILES Y DECIMALES
+          function formatoNumero(numero) {
+            return numero.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+        
         $(document).ready(function() {
             Lista_Empleados();
             Insertar_Empleado();
