@@ -316,10 +316,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th style="display: none;">Id Sucursal</th>
                                     <th style="display: none;">Id Cargo</th>
                                     <th>Estado</th>
-                                    <th>Creado por</th>
-                                    <th>Modificado por</th>
-                                    <th>Fecha Creación</th>
-                                    <th>Fecha Modicación</th>
+                                    <th class="direccion-column" style="display: none;">Creado por</th>
+                                    <th class="direccion-column" style="display: none;">Fecha Creación</th>
+                                    <th class="direccion-column" style="display: none;">Modificado por</th>
+                                    <th class="direccion-column" style="display: none;">Fecha Modicación</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -639,10 +639,10 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + empleado.ID_SUCURSAL + '</td>' +
                             '<td style="display:none;">' + empleado.ID_CARGO + '</td>' +
                             '<td>' + empleado.ESTADO + '</td>' +
-                            '<td>' + empleado.CREADO_POR + '</td>' +
-                            '<td>' + empleado.MODIFICADO_POR + '</td>' +
-                            '<td>' + empleado.FECHA_CREACION + '</td>' +
-                            '<td>' + empleado.FECHA_MODIFICACION + '</td>' + 
+                            '<td class="direccion-column" style="display:none;">' + empleado.CREADO_POR + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + empleado.FECHA_CREACION + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + empleado.MODIFICADO_POR + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + empleado.FECHA_MODIFICACION + '</td>' + 
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar

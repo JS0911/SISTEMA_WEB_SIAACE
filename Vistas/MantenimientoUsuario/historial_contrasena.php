@@ -293,8 +293,8 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Contraseña</th>
                                     <th>Usuario</th>
                                     <th>Creado por</th>
-                                    <th>Fecha Creacion</th>
                                     <th>Modificado por</th>
+                                    <th>Fecha Creacion</th>
                                     <th>Fecha Modificacion</th>
                                 </tr>
                             </thead>

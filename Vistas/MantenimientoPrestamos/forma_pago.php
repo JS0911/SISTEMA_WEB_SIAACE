@@ -307,10 +307,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th style="display: none;">Id</th>
                                     <th>Forma de Pago</th>
                                     <th>Descripción</th>
-                                    <th>Creado por</th>
-                                    <th>Fecha creacion</th>
-                                    <th>Modificado por</th>
-                                    <th>Fecha modificacion</th>
+                                    <th style="display: none;">Creado por</th>
+                                    <th style="display: none;">Fecha creacion</th>
+                                    <th style="display: none;">Modificado por</th>
+                                    <th style="display: none;">Fecha Modificacion</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -459,10 +459,10 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + pago.ID_FPAGO + '</td>' +
                             '<td>' + pago.FORMA_DE_PAGO + '</td>' +
                             '<td>' + pago.DESCRIPCION + '</td>' +
-                            '<td>' + pago.CREADO_POR + '</td>' +
-                            '<td>' + pago.FECHA_CREACION + '</td>' +
-                            '<td>' + pago.MODIFICADO_POR + '</td>' +
-                            '<td>' + pago.FECHA_MODIFICACION + '</td>' +
+                            '<td style="display:none;">' + pago.CREADO_POR + '</td>' +
+                            '<td style="display:none;">' + pago.FECHA_CREACION + '</td>' +
+                            '<td style="display:none;">' + pago.MODIFICADO_POR + '</td>' +
+                            '<td style="display:none;">' + pago.FECHA_MODIFICACION + '</td>' +
                             '<td>' + pago.ESTADO + '</td>' +
                             '<td>';
 

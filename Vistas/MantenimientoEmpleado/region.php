@@ -309,11 +309,11 @@ if (!isset($_SESSION['usuario'])) {
                                     <th style="display: none;">Id</th>
                                     <th>Region</th>
                                     <th>Descripcion</th>
-                                    <th>Creado por</th>
-                                    <th>Fecha Creación</th>
-                                    <th>Modificado por</th>
-                                    <th>Fecha Modificación</th>
+                                    <th style="display: none;">Fecha Creación</th>
+                                    <th style="display: none;">Modificado por</th>
+                                    <th style="display: none;">Fecha Modificación</th>
                                     <th>Estado</th>
+                                    <th style="display: none;">Creado por</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -461,11 +461,11 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + region.ID_REGION + '</td>' +
                             '<td>' + region.REGION + '</td>' +
                             '<td>' + region.DESCRIPCION + '</td>' +
-                            '<td>' + region.CREADO_POR + '</td>' +
-                            '<td>' + region.FECHA_CREACION + '</td>' +
-                            '<td>' + region.MODIFICADO_POR + '</td>' +
-                            '<td>' + region.FECHA_MODIFICACION + '</td>' +
+                            '<td style="display:none;">' + region.FECHA_CREACION + '</td>' +
+                            '<td style="display:none;">' + region.MODIFICADO_POR + '</td>' +
+                            '<td style="display:none;">' + region.FECHA_MODIFICACION + '</td>' +
                             '<td>' + region.ESTADO + '</td>' +
+                            '<td style="display:none;">' + region.CREADO_POR + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar

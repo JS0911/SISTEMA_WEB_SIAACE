@@ -369,10 +369,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Permisos Eliminación</th>
                                     <th>Permisos Actualización</th>
                                     <th>Permisos Consultar</th>
-                                    <th>Creado por</th>
-                                    <th>Fecha Creacion</th>
-                                    <th>Modificado por</th>
-                                    <th>Fecha Modificacion</th>
+                                    <th style="display: none;">Creado por</th>
+                                    <th style="display: none;">Modificado por</th>
+                                    <th style="display: none;">Fecha Creacion</th>
+                                    <th style="display: none;">Fecha Modificacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -648,10 +648,10 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + (permiso.PERMISOS_ELIMINACION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
                             '<td>' + (permiso.PERMISOS_ACTUALIZACION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
                             '<td>' + (permiso.PERMISOS_CONSULTAR === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
-                            '<td>' + permiso.CREADO_POR + '</td>' +
-                            '<td>' + permiso.MODIFICADO_POR + '</td>' +
-                            '<td>' + permiso.FECHA_CREACION + '</td>' +
-                            '<td>' + permiso.FECHA_MODIFICACION + '</td>' + 
+                            '<td style="display: none;">' + permiso.CREADO_POR + '</td>' +
+                            '<td style="display: none;">' + permiso.MODIFICADO_POR + '</td>' +
+                            '<td style="display: none;">' + permiso.FECHA_CREACION + '</td>' +
+                            '<td style="display: none;">' + permiso.FECHA_MODIFICACION + '</td>' + 
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -664,6 +664,9 @@ if (!isset($_SESSION['usuario'])) {
                         }
                         row += '</td>' +
                             '</tr>';
+                            //Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("undefined", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();

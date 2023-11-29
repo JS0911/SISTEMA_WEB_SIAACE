@@ -309,6 +309,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Cargo</th>
                                     <th>Descripcion</th>
                                     <th>Estado</th>
+                                    <th style="display: none;">Fecha Creacion</th>
+                                    <th style="display: none;">Fecha Modificacion</th>
+                                    <th style="display: none;">Creado por</th>
+                                    <th style="display: none;">Modificado por</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -457,7 +461,10 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + cargo.CARGO + '</td>' +
                             '<td>' + cargo.DESCRIPCION + '</td>' +
                             '<td>' + cargo.ESTADO + '</td>' +
-
+                            '<td style="display:none;">' + cargo.FECHA_CREACION + '</td>' +
+                            '<td style="display:none;">' + cargo.FECHA_MODIFICACION + '</td>' + 
+                            '<td style="display:none;">' + cargo.CREADO_POR + '</td>' +
+                            '<td style="display:none;">' + cargo.MODIFICADO_POR + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar

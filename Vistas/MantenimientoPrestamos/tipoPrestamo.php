@@ -316,10 +316,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th style="display: none;">Plazo Máximo</th>
                                     <th style="display: none;">Plazo Minimo</th>
                                     <th>Estado </th>
-                                    <th>Creado por</th>
-                                    <th>Fecha Creacion</th>
-                                    <th>Modificado por</th>
-                                    <th>Fecha Modificacion</th>
+                                    <th style="display: none;">Creado por</th>
+                                    <th style="display: none;">Fecha Creacion</th>
+                                    <th style="display: none;">Modificado por</th>
+                                    <th style="display: none;">Fecha Modificacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -537,10 +537,10 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + tipoprestamo.PLAZO_MAXIMO + '</td>' +
                             '<td style="display:none;">' + tipoprestamo.PLAZO_MINIMO + '</td>' +
                             '<td>' + tipoprestamo.ESTADO + '</td>' +
-                            '<td>' + tipoprestamo.CREADO_POR + '</td>' +
-                            '<td>' + tipoprestamo.MODIFICADO_POR + '</td>' +
-                            '<td>' + tipoprestamo.FECHA_CREACION + '</td>' +
-                            '<td>' + tipoprestamo.FECHA_MODIFICACION + '</td>' + 
+                            '<td style="display:none;">' + tipoprestamo.CREADO_POR + '</td>' +
+                            '<td style="display:none;">' + tipoprestamo.FECHA_CREACION + '</td>' +
+                            '<td style="display:none;">' + tipoprestamo.MODIFICADO_POR + '</td>' +
+                            '<td style="display:none;">' + tipoprestamo.FECHA_MODIFICACION + '</td>' + 
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar

@@ -314,10 +314,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Descripcion</th>
                                     <th>Signo Transaccion</th>
                                     <th>Estado</th>
-                                    <th>Creado por</th>
-                                    <th>Fecha Creacion</th>
-                                    <th>Modificado por</th>
-                                    <th>Fecha Modificacion</th>
+                                    <th style="display: none;">Creado por</th>
+                                    <th style="display: none;">Fecha Creacion</th>
+                                    <th style="display: none;">Modificado por</th>
+                                    <th style="display: none;">Fecha Modificacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -476,10 +476,10 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + transaccion.DESCRIPCION + '</td>' +
                             '<td>' + transaccion.SIGNO_TRANSACCION + '</td>' +
                             '<td>' + transaccion.ESTADO + '</td>' +
-                            '<td>' + transaccion.CREADO_POR + '</td>' +
-                            '<td>' + transaccion.FECHA_CREACION + '</td>' +
-                            '<td>' + transaccion.MODIFICADO_POR + '</td>' +
-                            '<td>' + transaccion.FECHA_MODIFICACION + '</td>' +
+                            '<td style="display:none;">' + transaccion.CREADO_POR + '</td>' +
+                            '<td style="display:none;">' + transaccion.FECHA_CREACION + '</td>' +
+                            '<td style="display:none;">' + transaccion.MODIFICADO_POR + '</td>' +
+                            '<td style="display:none;">' + transaccion.FECHA_MODIFICACION + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar

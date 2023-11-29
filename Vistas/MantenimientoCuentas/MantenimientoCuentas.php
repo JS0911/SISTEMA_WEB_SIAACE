@@ -330,8 +330,6 @@ if (!isset($_SESSION['usuario'])) {
                                     <th style="display: none;">Id Tipo De Cuenta</th>
                                     <th>Tipo De Cuenta</th>
                                     <th>Estado</th>
-                                    <!-- <th>Creado por</th>
-                                    <th>Fecha Creación</th> -->
                                     <th>Acciones</th>
                                 </tr>
                             </thead>

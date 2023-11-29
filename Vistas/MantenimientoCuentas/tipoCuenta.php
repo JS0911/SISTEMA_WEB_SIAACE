@@ -308,11 +308,11 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Tipo de Cuenta</th>
                                     <th>Descripcion</th>
                                     <th>Tasa</th>
+                                    <th style="display: none;">Creado por</th>
+                                    <th style="display: none;">Fecha Creacion</th>
+                                    <th style="display: none;">Modificado por</th>
+                                    <th style="display: none;">Fecha Modificacion</th>
                                     <th>Estado</th>
-                                    <th>Creado por</th>
-                                    <th>Fecha Creacion</th>
-                                    <th>Modificado por</th>
-                                    <th>Fecha Modificacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -470,11 +470,11 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + cuenta.TIPO_CUENTA + '</td>' +
                             '<td>' + cuenta.DESCRIPCION + '</td>' +
                             '<td>' + cuenta.TASA + '</td>' +
+                            '<td style="display:none;">' + cuenta.CREADO_POR + '</td>' +
+                            '<td style="display:none;">' + cuenta.FECHA_CREACION + '</td>' +
+                            '<td style="display:none;">' + cuenta.MODIFICADO_POR + '</td>' +
+                            '<td style="display:none;">' + cuenta.FECHA_MODIFICACION + '</td>' + 
                             '<td>' + cuenta.ESTADO + '</td>' +
-                            '<td>' + cuenta.CREADO_POR + '</td>' +
-                            '<td>' + cuenta.MODIFICADO_POR + '</td>' +
-                            '<td>' + cuenta.FECHA_CREACION + '</td>' +
-                            '<td>' + cuenta.FECHA_MODIFICACION + '</td>' + 
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar

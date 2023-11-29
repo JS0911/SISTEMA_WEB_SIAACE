@@ -322,12 +322,8 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Direccion</th>
                                     <th style="display: none;">Id Region</th>
                                     <th>Region</th>
-                                    <th>Telefono</th>
                                     <th>Estado</th>
-                                    <th>Creado por</th>
-                                    <th>Modificado por</th>
-                                    <th>Fecha Creación</th>
-                                    <th>Fecha modicación</th>
+                                    <th>Telefono</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -541,12 +537,8 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + sucursal.DIRECCION + '</td>' +
                             '<td style="display:none;">' + sucursal.ID_REGION + '</td>' +
                             '<td>' + sucursal.REGION + '</td>' +
-                            '<td>' + sucursal.TELEFONO + '</td>' +
                             '<td>' + sucursal.ESTADO + '</td>' +
-                            '<td>' + sucursal.CREADO_POR + '</td>' +
-                            '<td>' + sucursal.MODIFICADO_POR + '</td>' +
-                            '<td>' + sucursal.FECHA_CREACION + '</td>' +
-                            '<td>' + sucursal.FECHA_MODIFICACION + '</td>' +
+                            '<td>' + sucursal.TELEFONO + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar

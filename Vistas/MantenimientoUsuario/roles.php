@@ -311,8 +311,8 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Rol</th>
                                     <th>Descripcion</th>
                                     <th>Creado por</th>
-                                    <th>Fecha Creacion</th>
                                     <th>Modificado por</th>
+                                    <th>Fecha Creacion</th>
                                     <th>Fecha Modificacion</th>
                                     <th>Acciones</th>
                                 </tr>
