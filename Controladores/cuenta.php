@@ -80,7 +80,14 @@ switch ($_GET["op"]) {
         echo json_encode($datos);
     break;
 
+    case "Anulacion_Dep_Ret":
+        $datos = $com->anular($body["ID_CUENTA"],$body["ID_TRANSACCION"]);
+        echo json_encode($datos);
+    break;
+
 }
+
+
 function verificarExistenciaCuenta($cuenta) {
     // Realiza una consulta en la base de datos para verificar si el objeto ya existe
     $sql = "SELECT COUNT(*) as count FROM tbl_mc_cuenta WHERE NUMERO_CUENTA = :cuenta";

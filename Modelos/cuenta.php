@@ -152,7 +152,6 @@ class cuenta extends Conectar
         $sql2 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`) VALUES (:SALDO_R,:ID_CUENTA_R, 2, NOW())";
 
         $stmt = $conectar->prepare($sql);
-        
         $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
         $stmt->bindParam(':SALDO', $REEMBOLSO, PDO::PARAM_INT);
         $stmt->execute();
@@ -168,4 +167,39 @@ class cuenta extends Conectar
             return "Error al actualizar saldo";
         }
     }
+
+
+    public function anular($ID_CUENTA,$ID_TRANSACCION){
+        $conectar = parent::conexion();
+        parent::set_names();
+
+        // Consulta SQL para actualizar los campos del usuario
+        $sql = "SELECT ID_TIPO_TRANSACCION, MONTO FROM TBL_TRANSACCIONES WHERE ID_TRANSACCION = $ID_TRANSACCION";
+        $stmt = $conectar->prepare($sql);
+        $stmt->execute();
+        $TIPO_TRANSACCION = $stmt->fetchColumn(0-0);
+        $MONTO = $stmt->fetchColumn(0-1);
+
+        if ($TIPO_TRANSACCION == 1) {
+            $sql2 = "UPDATE tbl_mc_cuenta SET SALDO = SALDO - $MONTO  WHERE ID_CUENTA = :ID_CUENTA";
+            $stmt2 = $conectar->prepare($sql2);
+            $stmt2->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
+            $stmt2->execute();
+
+            $sql3 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`) VALUES (:SALDO_R,:ID_CUENTA_R, 3, NOW())";
+            $stmt3 = $conectar->prepare($sql3);
+            $stmt3->bindParam(':ID_CUENTA_R', $ID_CUENTA, PDO::PARAM_INT);
+            $stmt3->bindParam(':SALDO_R', $SALDO, PDO::PARAM_INT);
+            $stmt3->execute();
+        } else {
+            # code...
+        }    
+      
+        if ($stmt->rowCount() > 0) {
+            return "ANULACION DE DEPOSITO REALIZADA  $TIPO_TRANSACCION";
+        } else {
+            return "ERRRRRRRRORR";
+        }
+    }
 }
+

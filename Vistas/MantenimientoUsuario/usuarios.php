@@ -35,7 +35,8 @@ descripcion:      Pantalla que registra todos los posibles usuarios que vayan a 
 
 Programador               Fecha                      Descripcion
 Kevin Zuniga              25-nov-2023                 Se agrego reporteria, validaciones y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
-
+Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
+Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 ------------------------------------------------------------------------->
 
 <?php
@@ -53,12 +54,16 @@ $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_usuario_Usuario = "2";
-$id_usuario_Seguridad = "25";
-$id_usuario_Cuentas = "28";
+$id_objeto_Seguridad = "25";
+$id_objeto_Empleado = "27";
+$id_objeto_Cuentas = "36";
+$id_objeto_Prestamos = "35";
 
-$permisos1 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_usuario_Seguridad);
 $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_usuario_Usuario);
-$permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_usuario_Cuentas);
+$permisos1 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
+$permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
+$permisos3 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos4 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos);
 $datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
 $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
@@ -170,6 +175,17 @@ if (!isset($_SESSION['usuario'])) {
             margin-top: 1px;
 
         }
+
+        .icono {
+            font-size: 18px;
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .icono:hover {
+            color: #4CAF50;
+        }
     </style>
 </head>
 
@@ -178,6 +194,10 @@ if (!isset($_SESSION['usuario'])) {
         <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar-->
+        <!-- Icono de Atras -->
+        <a href="javascript:history.back()" class="icono"><i class="fas fa-chevron-circle-left"></i></a>
+        <!-- Icono de Adelante -->
+        <a href="javascript:history.forward()" class="icono"><i class="fas fa-chevron-circle-right"></i></a>
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <div class="input-group">
                 <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
@@ -208,6 +228,7 @@ if (!isset($_SESSION['usuario'])) {
                         </a>
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
                         <?php
+                        //--------MODULO DE SEGURIDAD---------------------------------------------------
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
@@ -233,7 +254,7 @@ if (!isset($_SESSION['usuario'])) {
                         }
 
                         //-------------------------MODULO DE EMPLEADO---------------------------------------------
-                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     Modulo Empleado
@@ -242,7 +263,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
@@ -253,7 +274,7 @@ if (!isset($_SESSION['usuario'])) {
                         }
 
                         //----------------------------MODULO DE CUENTAS------------------------------------
-                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
                             <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
                             Modulo Cuenta
@@ -262,7 +283,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
@@ -272,7 +293,7 @@ if (!isset($_SESSION['usuario'])) {
                         }
 
                         //----------------------------MODULO DE PRESTAMOS------------------------------------
-                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
                             <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
                             Modulo Prestamo
@@ -281,7 +302,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoPrestamo" aria-labelledby="headingMantenimientoPrestamo" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
@@ -293,7 +314,7 @@ if (!isset($_SESSION['usuario'])) {
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                <div class="small">Usuario: <?php echo $nombre_usuario;?></div>
+                    <div class="small">Usuario: <?php echo $nombre_usuario; ?></div>
                     Sesión activa: Conectado(a).
                 </div>
             </nav>
@@ -532,7 +553,7 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + usuario.CREADO_POR + '</td>' +
                             '<td>' + usuario.MODIFICADO_POR + '</td>' +
                             '<td>' + usuario.FECHA_CREACION + '</td>' +
-                            '<td>' + usuario.FECHA_MODIFICACION + '</td>' + 
+                            '<td>' + usuario.FECHA_MODIFICACION + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -547,9 +568,9 @@ if (!isset($_SESSION['usuario'])) {
 
                         row += '</td>' +
                             '</tr>';
-                            //Cambiar palabra null por vacio.
-                            newrow = row.replaceAll("null", " ");
-                            row = newrow;
+                        //Cambiar palabra null por vacio.
+                        newrow = row.replaceAll("null", " ");
+                        row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -592,9 +613,9 @@ if (!isset($_SESSION['usuario'])) {
                                 page: 'current'
                             }
                         },
-                        customize: function (doc) {
-                            doc.pageOrientation = 'portrait'; 
-                            doc.pageSize = 'LETTER'; 
+                        customize: function(doc) {
+                            doc.pageOrientation = 'portrait';
+                            doc.pageSize = 'LETTER';
 
                             var now = new Date();
                             var date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
@@ -621,33 +642,28 @@ if (!isset($_SESSION['usuario'])) {
                                 image: LogoBase64,
                                 width: 70,
                                 height: 70,
-                            },{
+                            }, {
                                 margin: [0, -20, 0, 20],
                                 alignment: 'left',
                                 text: 'Fecha: ' + date + '\nHora: ' + horas,
                                 fontSize: 10,
                                 bold: true
                             });
-                            doc.footer = function (currentPage, pageCount) {
+                            doc.footer = function(currentPage, pageCount) {
                                 return {
                                     margin: 10,
-                                    columns: [
-                                        {
-                                            fontSize: 10,
-                                            text: [
-                                                {
-                                                    text:
-                                                        "Página " +
-                                                        currentPage.toString() +
-                                                        " de " +
-                                                        pageCount,
-                                                    alignment: "center",
-                                                    bold: true
-                                                },
-                                            ],
+                                    columns: [{
+                                        fontSize: 10,
+                                        text: [{
+                                            text: "Página " +
+                                                currentPage.toString() +
+                                                " de " +
+                                                pageCount,
                                             alignment: "center",
-                                        },
-                                    ],
+                                            bold: true
+                                        }, ],
+                                        alignment: "center",
+                                    }, ],
                                 };
                             };
                         }
@@ -705,7 +721,7 @@ if (!isset($_SESSION['usuario'])) {
                         title: 'Error!',
                         text: 'No se pueden enviar Campos Vacios.'
                     })
-                    
+
                 } else {
                     // Crear un usuario con los datos a enviar al servidor
                     var datos = {
@@ -717,15 +733,15 @@ if (!isset($_SESSION['usuario'])) {
                         CONTRASENA: contrasena
                     };
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=InsertUsuarios', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(datos)
-                    })
-                    .then(function(response) {
-                        if (response.ok) {
-                            if (response.status === 200) {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(datos)
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                if (response.status === 200) {
                                     // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
                                     return response.json().then(function(data) {
                                         console.log(data);
@@ -753,20 +769,20 @@ if (!isset($_SESSION['usuario'])) {
                                         });
                                     });
                                 }
-                        } else {
-                            // Si hubo un error en la solicitud, maneja el error aquí
-                            throw new Error('El registro ya existe en la Base de Datos.');
-                        }
-                    })
-                    .catch(function(error) {
-                        // Mostrar SweetAlert de error
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error al guardar los datos: ' + error.message
+                            } else {
+                                // Si hubo un error en la solicitud, maneja el error aquí
+                                throw new Error('El registro ya existe en la Base de Datos.');
+                            }
+                        })
+                        .catch(function(error) {
+                            // Mostrar SweetAlert de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al guardar los datos: ' + error.message
+                            });
+                            console.log(error.message);
                         });
-                        console.log(error.message);
-                    });
                 }
             });
         }
@@ -869,14 +885,14 @@ if (!isset($_SESSION['usuario'])) {
         //FUNCION CON EL SWEETALERT
         function eliminarUsuario(idUsuario) {
             Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'No podrás revertir esto.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',  
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Eliminar',
-            cancelButtonText: 'Cancelar'
+                title: '¿Estás seguro?',
+                text: 'No podrás revertir esto.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:90/SISTEMA1/Controladores/usuarios.php?op=eliminarUsuario', {
@@ -956,11 +972,11 @@ if (!isset($_SESSION['usuario'])) {
             }
 
             function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
-                inputElement.addEventListener("input", function () {
+                inputElement.addEventListener("input", function() {
                     validateInput(inputElement, expression, messageElement, message);
                 });
 
-                inputElement.addEventListener("blur", function () {
+                inputElement.addEventListener("blur", function() {
                     clearMessage(messageElement, inputElement);
                 });
             }
@@ -993,7 +1009,7 @@ if (!isset($_SESSION['usuario'])) {
 
             var mensaje5 = document.getElementById("mensaje5");
             handleInputAndBlurEvents(confirmarContrasena, expresionValidadora4, mensaje5, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
-        
+
             var mensaje6 = document.getElementById("mensaje6");
             handleInputAndBlurEvents(correoEditar, expresionValidadora3, mensaje6, "Ingrese una dirección de correo electrónico válida");
 

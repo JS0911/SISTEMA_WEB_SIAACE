@@ -35,7 +35,8 @@ descripcion:      Pantalla que registra los objetos vinculados a vistas, botones
 
 Programador               Fecha                      Descripcion
 Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
-
+Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
+Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 ------------------------------------------------------------------------->
 
 
@@ -55,11 +56,15 @@ $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_Objetos = "5";
 $id_objeto_Seguridad = "25";
-$id_objeto_Cuentas = "28";
+$id_objeto_Empleado = "27";
+$id_objeto_Cuentas = "36";
+$id_objeto_Prestamos = "35";
 
-$permisos1 = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos);
-$permisos2 = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos1 = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
+$permisos2 = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
+$permisos3 = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos4 = $permisosObjetos->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos);
 $datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
 $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
@@ -135,6 +140,7 @@ if (!isset($_SESSION['usuario'])) {
             margin-left: 20px;
             /* Adjust the margin value as needed */
         }
+
         /* Estilo personalizado para el placeholder */
         #myInput {
             border: 1px solid #000;
@@ -152,6 +158,17 @@ if (!isset($_SESSION['usuario'])) {
             margin-top: 1px;
 
         }
+
+        .icono {
+            font-size: 18px;
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .icono:hover {
+            color: #4CAF50;
+        }
     </style>
 
     </style>
@@ -162,6 +179,10 @@ if (!isset($_SESSION['usuario'])) {
         <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar-->
+        <!-- Icono de Atras -->
+        <a href="javascript:history.back()" class="icono"><i class="fas fa-chevron-circle-left"></i></a>
+        <!-- Icono de Adelante -->
+        <a href="javascript:history.forward()" class="icono"><i class="fas fa-chevron-circle-right"></i></a>
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <div class="input-group">
                 <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
@@ -194,6 +215,7 @@ if (!isset($_SESSION['usuario'])) {
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
 
                         <?php
+                        //-----------------------MODULO DE SEGURIDAD----------------------------------------
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
@@ -213,13 +235,12 @@ if (!isset($_SESSION['usuario'])) {
                                 echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
-    
                             }
                             echo '</nav>';
                             echo '</div>';
                         }
-                         //-------------------------MODULO DE EMPLEADO---------------------------------------------
-                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                        //-------------------------MODULO DE EMPLEADO---------------------------------------------
+                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     Modulo Empleado
@@ -228,19 +249,18 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
-                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
-
-                                }
+                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+                            }
                             echo '</nav>';
                             echo '</div>';
                         }
 
                         //----------------------------MODULO DE CUENTAS------------------------------------
-                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
                             <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
                             Modulo Cuenta
@@ -249,7 +269,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
@@ -259,7 +279,7 @@ if (!isset($_SESSION['usuario'])) {
                         }
 
                         //----------------------------MODULO DE PRESTAMOS------------------------------------
-                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
                             <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
                             Modulo Prestamo
@@ -268,7 +288,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoPrestamo" aria-labelledby="headingMantenimientoPrestamo" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
@@ -281,9 +301,9 @@ if (!isset($_SESSION['usuario'])) {
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                <div class="small">Usuario: <?php echo $nombre_usuario;?><div>
-                    Sesión activa: Conectado(a).
-                </div>
+                    <div class="small">Usuario: <?php echo $nombre_usuario; ?><div>
+                            Sesión activa: Conectado(a).
+                        </div>
             </nav>
         </div>
         <div id="layoutSidenav_content">
@@ -474,9 +494,9 @@ if (!isset($_SESSION['usuario'])) {
 
                         row += '</td>' +
                             '</tr>';
-                            //Cambiar palabra null por vacio.
-                            newrow = row.replaceAll("null", " ");
-                            row = newrow;
+                        //Cambiar palabra null por vacio.
+                        newrow = row.replaceAll("null", " ");
+                        row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -516,11 +536,11 @@ if (!isset($_SESSION['usuario'])) {
                             columns: [1, 2, 3, 4, 5, 6, 7],
                             modifier: {
                                 page: 'current'
-                            },  
+                            },
                         },
-                        customize: function (doc) {
-                            doc.pageOrientation = 'portrait'; 
-                            doc.pageSize = 'LETTER'; 
+                        customize: function(doc) {
+                            doc.pageOrientation = 'portrait';
+                            doc.pageSize = 'LETTER';
 
                             var now = new Date();
                             var date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
@@ -547,33 +567,28 @@ if (!isset($_SESSION['usuario'])) {
                                 image: LogoBase64,
                                 width: 70,
                                 height: 70,
-                            },{
+                            }, {
                                 margin: [0, -20, 0, 20],
                                 alignment: 'left',
                                 text: 'Fecha: ' + date + '\nHora: ' + horas,
                                 fontSize: 10,
                                 bold: true
                             });
-                            doc.footer = function (currentPage, pageCount) {
+                            doc.footer = function(currentPage, pageCount) {
                                 return {
                                     margin: 10,
-                                    columns: [
-                                        {
-                                            fontSize: 10,
-                                            text: [
-                                                {
-                                                    text:
-                                                        "Página " +
-                                                        currentPage.toString() +
-                                                        " de " +
-                                                        pageCount,
-                                                    alignment: "center",
-                                                    bold: true
-                                                },
-                                            ],
+                                    columns: [{
+                                        fontSize: 10,
+                                        text: [{
+                                            text: "Página " +
+                                                currentPage.toString() +
+                                                " de " +
+                                                pageCount,
                                             alignment: "center",
-                                        },
-                                    ],
+                                            bold: true
+                                        }, ],
+                                        alignment: "center",
+                                    }, ],
                                 };
                             };
                         }
@@ -598,7 +613,7 @@ if (!isset($_SESSION['usuario'])) {
         }
 
         function Insertar_Objeto() {
-            $("#btn-agregar").click(function () {
+            $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
                 var objeto = $("#agregar-objeto").val();
                 var descripcion = $("#agregar-descripcion").val();
@@ -618,13 +633,13 @@ if (!isset($_SESSION['usuario'])) {
                         TIPO_OBJETO: tipo_objeto,
                     };
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/objetos.php?op=InsertObjeto', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(datos)
-                    })
-                    .then(function(response) {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(datos)
+                        })
+                        .then(function(response) {
                             if (response.ok) {
                                 if (response.status === 200) {
                                     // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
@@ -658,15 +673,15 @@ if (!isset($_SESSION['usuario'])) {
                                 // Si hubo un error en la solicitud, maneja el error aquí
                                 throw new Error('El registro ya existe en la Base de Datos.');
                             }
-                    })
-                    .catch(function (error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error al guardar los datos: ' + error.message
+                        })
+                        .catch(function(error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al guardar los datos: ' + error.message
+                            });
+                            console.log(error.message);
                         });
-                        console.log(error.message);
-                    });
                 }
             });
         }
@@ -768,7 +783,7 @@ if (!isset($_SESSION['usuario'])) {
                 text: 'No podrás revertir esto.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',  
+                confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
                 confirmButtonText: 'Eliminar',
                 cancelButtonText: 'Cancelar'
@@ -836,11 +851,11 @@ if (!isset($_SESSION['usuario'])) {
             }
 
             function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
-                inputElement.addEventListener("input", function () {
+                inputElement.addEventListener("input", function() {
                     validateInput(inputElement, expression, messageElement, message);
                 });
 
-                inputElement.addEventListener("blur", function () {
+                inputElement.addEventListener("blur", function() {
                     clearMessage(messageElement, inputElement);
                 });
             }
@@ -862,10 +877,10 @@ if (!isset($_SESSION['usuario'])) {
             var mensaje2 = document.getElementById("mensaje2");
             handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(descripcion);
-    
+
             var mensaje3 = document.getElementById("mensaje3");
             handleInputAndBlurEvents(tipoObjeto, expresionValidadora1, mensaje3, "Solo se permiten Letras Mayúsculas");
-            
+
             var mensaje4 = document.getElementById("mensaje4");
             handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje4, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(descripcionEditar);
@@ -954,25 +969,25 @@ if (!isset($_SESSION['usuario'])) {
     <script>
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
         document.getElementById('btn-cancelarAgregar').addEventListener('click', function() {
-        document.getElementById('agregar-objeto').value = "";
-        document.getElementById('agregar-descripcion').value = "";
-        document.getElementById('agregar-tipoObjeto').value = "";
+            document.getElementById('agregar-objeto').value = "";
+            document.getElementById('agregar-descripcion').value = "";
+            document.getElementById('agregar-tipoObjeto').value = "";
 
-        // Limpia los checkboxes
-        document.getElementById('agregar-objeto').checked = false;
-        document.getElementById('agregar-descripcion').checked = false;
-        document.getElementById('agregar-tipoObjeto').checked = false;
-        location.reload();
+            // Limpia los checkboxes
+            document.getElementById('agregar-objeto').checked = false;
+            document.getElementById('agregar-descripcion').checked = false;
+            document.getElementById('agregar-tipoObjeto').checked = false;
+            location.reload();
         });
 
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
         document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
-       
-        // Limpia los checkboxes
-        document.getElementById('editar-objeto').checked = false;
-        document.getElementById('editar-descripcion').checked = false;
-        document.getElementById('editar-tipoObjeto').checked = false;
-        location.reload();
+
+            // Limpia los checkboxes
+            document.getElementById('editar-objeto').checked = false;
+            document.getElementById('editar-descripcion').checked = false;
+            document.getElementById('editar-tipoObjeto').checked = false;
+            location.reload();
         });
     </script>
 
@@ -981,7 +996,7 @@ if (!isset($_SESSION['usuario'])) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
 
-    
+
 </body>
 
 </html>

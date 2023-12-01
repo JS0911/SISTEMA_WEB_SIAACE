@@ -35,7 +35,9 @@ descripcion:      Pantalla que muestra las cuentas que existen
 
 Programador               Fecha                      Descripcion
 Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
-
+Sahori Garcia             29-11-2023                   Se agrego separador de miles y decimales, alineacion a la derecha valores monetarios
+Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
+Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 ------------------------------------------------------------------------->
 
 <?php
@@ -52,13 +54,17 @@ $usuario_obj = new Usuario();
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_empleado = $_SESSION['id_empleado'];
-$id_objeto_PrestamoMantenimiento = "30";
-$id_objeto_MantCuenta = "29";
+$id_objeto_H_Cuenta = "31";
 $id_objeto_Seguridad = "25";
+$id_objeto_Empleado = "27";
+$id_objeto_Cuentas = "36";
+$id_objeto_Prestamos = "35";
 
+$permisos = $permisosHistorial->get_Permisos_Usuarios($id_rol, $id_objeto_H_Cuenta);
 $permisos1 = $permisosHistorial->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
-$permisos = $permisosHistorial->get_Permisos_Usuarios($id_rol, $id_objeto_PrestamoMantenimiento);
-$permisos2 =  $permisosHistorial->get_Permisos_Usuarios($id_rol, $id_objeto_MantCuenta);
+$permisos2 = $permisosHistorial->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
+$permisos3 = $permisosHistorial->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos4 = $permisosHistorial->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos);
 $datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
 $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
@@ -113,6 +119,26 @@ if (!isset($_SESSION['usuario'])) {
     .texto-derecha {
         text-align: right;
     }
+
+    .icono {
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .icono:hover {
+        color: #4CAF50;
+    }
+
+    .bel-typography {
+        font-family: Arial;
+    }
+
+    .btn.btn-link.collapsed {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 600;
+    }
 </style>
 
 <!DOCTYPE html>
@@ -141,6 +167,10 @@ if (!isset($_SESSION['usuario'])) {
         <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar-->
+        <!-- Icono de Atras -->
+        <a href="javascript:history.back()" class="icono"><i class="fas fa-chevron-circle-left"></i></a>
+        <!-- Icono de Adelante -->
+        <a href="javascript:history.forward()" class="icono"><i class="fas fa-chevron-circle-right"></i></a>
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <div class="input-group">
                 <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
@@ -198,7 +228,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '</div>';
                         }
                         //------------------------MODULO DE EMPLEADO--------------------------------
-                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     Modulo Empleado
@@ -207,7 +237,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
@@ -217,7 +247,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '</div>';
                         }
                         //----------------------------MODULO DE CUENTAS------------------------------------
-                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
                             <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
                             Modulo Cuenta
@@ -226,7 +256,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
@@ -235,7 +265,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '</div>';
                         }
                         //----------------------------MODULO DE PRESTAMOS------------------------------------
-                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
                             <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
                             Modulo Prestamo
@@ -244,7 +274,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoPrestamo" aria-labelledby="headingMantenimientoPrestamo" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
@@ -274,7 +304,7 @@ if (!isset($_SESSION['usuario'])) {
                                 <div class="card-body">
                                     <div class="grid-row align-items-center">
                                         <div class="col-9 bel-padding-reset">
-                                            <div class="display-flex flex-direction-column">
+                                            <div class="display-flex flex-direction-column"  style="font-family: sans-serif;">
                                                 <h2 >Cuenta Bancaria</h2>
                                                 <h6 class="bel-typography bel-typography-h2">
                                                 <?php echo $nombre_empleado_unido; ?>
@@ -324,7 +354,7 @@ if (!isset($_SESSION['usuario'])) {
                                                             echo "<td>" . $row["FECHA"] . "</td>";
                                                             echo "<td class='texto-derecha'>" . formatoNumero($row["MONTO"]) . "</td>";
                                                             echo "<td>" . $row["TIPO_TRANSACCION"] . "</td>";
-                                                            echo "<td><button type='button' class='btn btn-outline-primary'>Primary</button></td>";
+                                                            echo "<td><button type='button' class='btn btn-outline-danger'>Anular</button></td>";
                                                             echo "</tr>";
                                                         }
                                                     } else {

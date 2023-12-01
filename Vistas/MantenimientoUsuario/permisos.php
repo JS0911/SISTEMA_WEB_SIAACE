@@ -35,7 +35,8 @@ descripcion:      Pantalla que registra todos los permisos sobre a objetos depen
 
 Programador               Fecha                      Descripcion
 Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
-
+Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
+Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 ------------------------------------------------------------------------->
 
 <?php
@@ -54,12 +55,16 @@ $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
 $id_objeto_Permisos = "3";
 $id_objeto_Seguridad = "25";
-$id_objeto_Cuentas = "28";
+$id_objeto_Empleado = "27";
+$id_objeto_Cuentas = "36";
+$id_objeto_Prestamos = "35";
 
-$permisos1 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos);
 $permiso = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos);
-$permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos1 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
+$permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
+$permisos3 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos4 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos);
 $datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
 $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
@@ -168,14 +173,15 @@ if (!isset($_SESSION['usuario'])) {
         }
 
 
-         /* Estilo para el botón "Nuevo" con color verde más claro */
-         .btn-success.custom-button {
+        /* Estilo para el botón "Nuevo" con color verde más claro */
+        .btn-success.custom-button {
             background-color: #4CAF50;
             /* Verde claro */
             border-color: #4CAF50;
             color: #fff;
             /* Texto en blanco */
         }
+
         /* Estilo personalizado para el placeholder */
         #myInput {
             border: 2px solid #000;
@@ -207,6 +213,17 @@ if (!isset($_SESSION['usuario'])) {
 
 
         }
+
+        .icono {
+            font-size: 18px;
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .icono:hover {
+            color: #4CAF50;
+        }
     </style>
 </head>
 
@@ -215,6 +232,10 @@ if (!isset($_SESSION['usuario'])) {
         <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar-->
+        <!-- Icono de Atras -->
+        <a href="javascript:history.back()" class="icono"><i class="fas fa-chevron-circle-left"></i></a>
+        <!-- Icono de Adelante -->
+        <a href="javascript:history.forward()" class="icono"><i class="fas fa-chevron-circle-right"></i></a>
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <div class="input-group">
                 <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
@@ -246,6 +267,7 @@ if (!isset($_SESSION['usuario'])) {
 
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
                         <?php
+                        //-------------------MOSULO DE SEGURIDAD----------------------------------------
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
@@ -271,7 +293,7 @@ if (!isset($_SESSION['usuario'])) {
                         }
 
                         //-------------------------MODULO DE EMPLEADO---------------------------------------------
-                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     Modulo Empleado
@@ -280,7 +302,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
@@ -291,7 +313,7 @@ if (!isset($_SESSION['usuario'])) {
                         }
 
                         //----------------------------MODULO DE CUENTAS------------------------------------
-                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
                             <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
                             Modulo Cuenta
@@ -300,7 +322,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
@@ -310,7 +332,7 @@ if (!isset($_SESSION['usuario'])) {
                         }
 
                         //----------------------------MODULO DE PRESTAMOS------------------------------------
-                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
                             <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
                             Modulo Prestamo
@@ -319,7 +341,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoPrestamo" aria-labelledby="headingMantenimientoPrestamo" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
@@ -331,9 +353,9 @@ if (!isset($_SESSION['usuario'])) {
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Usuario: <?php echo $nombre_usuario;?><div>
-                    Sesión activa: Conectado(a).
-                </div>
+                    <div class="small">Usuario: <?php echo $nombre_usuario; ?><div>
+                            Sesión activa: Conectado(a).
+                        </div>
             </nav>
         </div>
         <div id="layoutSidenav_content">
@@ -651,7 +673,7 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display: none;">' + permiso.CREADO_POR + '</td>' +
                             '<td style="display: none;">' + permiso.MODIFICADO_POR + '</td>' +
                             '<td style="display: none;">' + permiso.FECHA_CREACION + '</td>' +
-                            '<td style="display: none;">' + permiso.FECHA_MODIFICACION + '</td>' + 
+                            '<td style="display: none;">' + permiso.FECHA_MODIFICACION + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -664,9 +686,9 @@ if (!isset($_SESSION['usuario'])) {
                         }
                         row += '</td>' +
                             '</tr>';
-                            //Cambiar palabra null por vacio.
-                            newrow = row.replaceAll("undefined", " ");
-                            row = newrow;
+                        //Cambiar palabra null por vacio.
+                        newrow = row.replaceAll("undefined", " ");
+                        row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
@@ -694,7 +716,7 @@ if (!isset($_SESSION['usuario'])) {
                         extend: 'excel',
                         text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
                         exportOptions: {
-                            columns: [1, 3, 4, 5, 6, 7 ],
+                            columns: [1, 3, 4, 5, 6, 7],
                             modifier: {
                                 page: 'current'
                             },
@@ -704,14 +726,14 @@ if (!isset($_SESSION['usuario'])) {
                         extend: 'pdfHtml5',
                         text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
                         exportOptions: {
-                            columns: [1, 3, 4, 5, 6, 7 ],
+                            columns: [1, 3, 4, 5, 6, 7],
                             modifier: {
                                 page: 'current'
                             }
                         },
-                        customize: function (doc) {
-                            doc.pageOrientation = 'portrait'; 
-                            doc.pageSize = 'LETTER'; 
+                        customize: function(doc) {
+                            doc.pageOrientation = 'portrait';
+                            doc.pageSize = 'LETTER';
 
                             var now = new Date();
                             var date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
@@ -738,36 +760,31 @@ if (!isset($_SESSION['usuario'])) {
                                 image: LogoBase64,
                                 width: 70,
                                 height: 70,
-                            },{
+                            }, {
                                 margin: [0, -20, 0, 20],
                                 alignment: 'left',
                                 text: 'Fecha: ' + date + '\nHora: ' + horas,
                                 fontSize: 10,
                                 bold: true
                             });
-                            doc.footer = function (currentPage, pageCount) {
+                            doc.footer = function(currentPage, pageCount) {
                                 return {
                                     margin: 10,
-                                    columns: [
-                                        {
-                                            fontSize: 10,
-                                            text: [
-                                                {
-                                                    text:
-                                                        "Página " +
-                                                        currentPage.toString() +
-                                                        " de " +
-                                                        pageCount,
-                                                    alignment: "center",
-                                                    bold: true
-                                                },
-                                            ],
+                                    columns: [{
+                                        fontSize: 10,
+                                        text: [{
+                                            text: "Página " +
+                                                currentPage.toString() +
+                                                " de " +
+                                                pageCount,
                                             alignment: "center",
-                                        },
-                                    ],
+                                            bold: true
+                                        }, ],
+                                        alignment: "center",
+                                    }, ],
                                 };
                             };
-                        }    
+                        }
                     },
                     {
                         extend: 'print',
@@ -778,7 +795,7 @@ if (!isset($_SESSION['usuario'])) {
                             modifier: {
                                 page: 'current'
                             },
-                        }  
+                        }
                     }
                 ],
                 "lengthMenu": [10, 20, 30, 50, 100],
@@ -1013,7 +1030,7 @@ if (!isset($_SESSION['usuario'])) {
                 cancelButtonText: 'Cancelar',
                 cancelButtonColor: '#3085d6',
                 confirmButtonText: 'Eliminar',
-                confirmButtonColor: '#d33'  
+                confirmButtonColor: '#d33'
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=deletePermiso', {

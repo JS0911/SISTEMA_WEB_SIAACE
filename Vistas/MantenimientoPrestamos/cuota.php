@@ -1,3 +1,45 @@
+<!-- -----------------------------------------------------------------------
+	Universidad Nacional Autonoma de Honduras (UNAH)
+		Facultad de Ciencias Economicas
+	Departamento de Informatica administrativa
+         Analisis, Programacion y Evaluacion de Sistemas
+                    Tercer Periodo 2023
+
+
+Equipo:
+Sahory Garcia          sahori.garcia@unah.hn
+Jairo Garcia           jairo.lagos@unah.hn
+Ashley Matamoros       Ashley.matamoros@unah.hn
+Lester Padilla         Lester.padilla@unah.hn
+Khaterine Ordoñez      khaterine.ordonez@unah.hn
+Yeniffer Velasquez     yeniffer.velasquez@unah.hn
+Kevin Zuniga           kgzuniga@unah.hn
+
+Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
+Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
+Catedratico evaluacion de sistemas: ???
+
+
+---------------------------------------------------------------------
+
+Programa:         Pantalla de Ingresar Prestamo
+Fecha:            
+Programador:     
+descripcion:      Pantalla que registra los prestamos para un empleado en especifico
+
+-----------------------------------------------------------------------
+
+                Historial de Cambio
+
+-----------------------------------------------------------------------
+
+Programador               Fecha                      Descripcion
+Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
+Sahori Garcia             29-11-2023                   Se agrego separador de miles y decimales, alineacion a la derecha valores monetarios
+Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
+Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
+------------------------------------------------------------------------->
+
 <?php
 
 session_start();
@@ -23,14 +65,19 @@ if (isset($_GET['ID_PRESTAMO'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Prestamo = "29";
-$id_objeto_Seguridad = "25";
-$id_objeto_Cuentas = "28";
+$id_empleado = $_SESSION['id_empleado'];
 $id_objeto_MantenimientoPlanPago = "32";
+$id_objeto_Seguridad = "25";
+$id_objeto_Empleado = "27";
+$id_objeto_Cuentas = "36";
+$id_objeto_Prestamos = "35";
 
-$permisos1 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
+
 $permisos = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_MantenimientoPlanPago);
-$permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos1 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
+$permisos2 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
+$permisos3 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos4 = $permisosPrestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos);
 $datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
 $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
@@ -41,23 +88,23 @@ if (!isset($_SESSION['usuario'])) {
 
 // //---------CONEXION A LA TABLA EMPLEADOS --------
 // // Crear una instancia de la clase Conectar
-// $conexion = new Conectar();
-// $conn = $conexion->Conexion();
+$conexion = new Conectar();
+$conn = $conexion->Conexion();
 
-// $sql = "SELECT PRIMER_NOMBRE, PRIMER_APELLIDO FROM tbl_me_empleados WHERE ID_EMPLEADO= ID_EMPLEADO ";
-// $stmt = $conn->prepare($sql);
-// $stmt->execute();
+$sql = "SELECT PRIMER_NOMBRE, PRIMER_APELLIDO FROM tbl_me_empleados WHERE ID_EMPLEADO= $id_empleado";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
 
-// // Obtener los resultados en un array asociativo
-// $nombre_empleado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Obtener los resultados en un array asociativo
+$nombre_empleado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// // Unir el primer nombre y apellido
-// $nombre_empleado_unido = implode(" ", $nombre_empleado[0]);
+// Unir el primer nombre y apellido
+$nombre_empleado_unido = implode(" ", $nombre_empleado[0]);
 
-// if (!isset($_SESSION['usuario'])) {
-//     header("Location: ../../InicioSesion/login.php");
-//     exit();
-// }
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../../InicioSesion/login.php");
+    exit();
+}
 
 //-----------------------------------------------------------------------------
 ?>
@@ -87,6 +134,26 @@ if (!isset($_SESSION['usuario'])) {
     .texto-derecha {
         text-align: right;
     }
+
+    .icono {
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .icono:hover {
+        color: #4CAF50;
+    }
+
+    .bel-typography {
+        font-family: Arial;
+    }
+
+    .btn.btn-link.collapsed {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 600;
+    }
 </style>
 
 <!DOCTYPE html>
@@ -115,6 +182,11 @@ if (!isset($_SESSION['usuario'])) {
         <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
+        <!-- Icono de Atrás -->
+        <a href="javascript:history.back()" class="icono"><i class="fas fa-chevron-circle-left"></i></a>
+        <!-- Icono de Adelante -->
+        <a href="javascript:history.forward()" class="icono"><i class="fas fa-chevron-circle-right"></i></a>
+
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <div class="input-group">
                 <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
@@ -147,6 +219,7 @@ if (!isset($_SESSION['usuario'])) {
                         <div class="sb-sidenav-menu-heading">Pestañas</div>
 
                         <?php
+                        //----------------------MODULO DE SEGURIDAD---------------------------------------------
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
@@ -172,7 +245,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '</div>';
                         }
                         //-------------------------------------MODULO DE EMPLEADO--------------------------------
-                        if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     Modulo Empleado
@@ -181,7 +254,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
@@ -191,7 +264,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '</div>';
                         }
                         //----------------------------MODULO DE CUENTAS------------------------------------
-                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
                             <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
                             Modulo Cuenta
@@ -200,7 +273,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
@@ -209,7 +282,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '</div>';
                         }
                         //----------------------------MODULO DE PRESTAMOS------------------------------------
-                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
                             <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
                             Modulo Prestamo
@@ -218,7 +291,7 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoPrestamo" aria-labelledby="headingMantenimientoPrestamo" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
                                 echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 echo '<a class="nav-link" href="tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
@@ -249,8 +322,8 @@ if (!isset($_SESSION['usuario'])) {
                                     <div class="grid-row align-items-center">
                                         <div class="col-9 bel-padding-reset">
                                             <div class="display-flex flex-direction-column">
-                                                <h2 class="bel-typography bel-typography-h2">Cuota Actual</h2>
-                                                <span class="bel-typography bel-typography-h5"><?php echo $usuario; ?></span>
+                                                <h2 class="bel-typography bel-typography-h2" style="font-family: sans-serif;">Cuota</h2>
+                                                <span class="bel-typography bel-typography-h5"><?php echo $nombre_empleado_unido; ?></span>
                                             </div>
                                         </div>
                                         <div class="col-6 bel-padding-reset">
@@ -319,7 +392,7 @@ if (!isset($_SESSION['usuario'])) {
                                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
-
+                                        <div class="ml-3 card" style="max-height: 400px; overflow-y: auto;">
                                             <table class="table table-bordered mx-auto" id="Lista-Cuotas" style="margin-top: 20px; margin-bottom: 20px">
                                                 <thead>
                                                     <tr>
@@ -341,7 +414,6 @@ if (!isset($_SESSION['usuario'])) {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-
                                                 </tbody>
                                             </table>
                                         </div>
@@ -400,7 +472,7 @@ if (!isset($_SESSION['usuario'])) {
 
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-                                       
+
         //FUNCION DE CUOTA ACTUAL                                       
         function Lista_CuotaActual() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
@@ -434,7 +506,7 @@ if (!isset($_SESSION['usuario'])) {
                     console.log(data);
 
                     // Validar si hay datos para mostrar
-                    if (data.ID_PLANP !== 0) {
+                    if (data && data.ID_PLANP !== 0) {
                         var row = '<tr>' +
                             '<td style="display:none;">' + data.ID_PLANP + '</td>' +
                             '<td style="display:none;">' + data.ID_PRESTAMO + '</td>' +
@@ -455,19 +527,20 @@ if (!isset($_SESSION['usuario'])) {
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar los botones
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#pagoModal" onclick="idplanp = ' + data.ID_PLANP + '">Pago</button>';
+                            row += '<button class="btn btn-outline-primary" data-toggle="modal" data-target="#pagoModal" onclick="idplanp = ' + data.ID_PLANP + '">Pago</button>';
                         }
                         row += '</td>' +
                             '</tr>';
-                        // Cambiar palabra undefined o NaN por vacío.
-                        newrow = row.replaceAll(/undefined|NaN/g, " ");
+                        //Cambiar palabra null por vacio.
+                        newrow = row.replaceAll("null", " ");
                         row = newrow;
                         tbody.innerHTML += row;
                     } else {
+                        // No hay datos, mostrar mensaje y ocultar el botón
                         Swal.fire({
-                            icon: 'warning',
-                            title: 'Atención',
-                            text: 'El préstamo no ha sido aprobado o no se encuentra.',
+                            icon: 'info',
+                            title: 'Información',
+                            text: 'No hay datos disponibles O el prestamo no a sido Aprobado.',
                             confirmButtonText: 'OK'
                         });
 
@@ -481,6 +554,7 @@ if (!isset($_SESSION['usuario'])) {
                     console.log('Error al cargar los datos: ' + error.message);
                 });
         }
+
 
 
         function Lista_Cuotas() {
@@ -528,8 +602,7 @@ if (!isset($_SESSION['usuario'])) {
                             '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_PAGADO_ITS)) + '</td>' +
                             '<td style="display:none;">' + plan.MONTO_ADEUDADO_MORA + '</td>' +
                             '<td style="display:none;">' + plan.MONTO_PAGADO_MORA + '</td>' +
-                            '<td>' + plan.ESTADO + '</td>' +
-                            '<td>';
+                            '<td>' + plan.ESTADO + '</td>';
                         '</tr>';
                         //Cambiar palabra null por vacio.
                         newrow = row.replaceAll("null", " ");
