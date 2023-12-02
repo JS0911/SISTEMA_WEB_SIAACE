@@ -10,19 +10,20 @@ class Errores extends Conectar
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function insert_error($ERROR, $CODIGO, $MENSAJE)
+    public function insert_error($ERROR, $CODIGO, $MENSAJE, $FECHA)
     {
         try
         {
             $conectar = parent::Conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_error` (`ERROR`, `CODIGO`, `MENSAJE`) VALUES (:ERROR, :CODIGO, :MENSAJE)";
+            $sql = "INSERT INTO `siaace`.`tbl_ms_error` (`ERROR`, `CODIGO`, `MENSAJE`, `FECHA`) VALUES (:ERROR, :CODIGO, :MENSAJE, :FECHA)";
 
             $stmt = $conectar->prepare($sql);
 
             $stmt->bindParam(':ERROR', $ERROR, PDO::PARAM_STR);
             $stmt->bindParam(':CODIGO', $CODIGO, PDO::PARAM_STR);
             $stmt->bindParam(':MENSAJE', $MENSAJE, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA', $FECHA, PDO::PARAM_STR);
             $stmt->execute();
 
             if($stmt->rowCount() > 0)

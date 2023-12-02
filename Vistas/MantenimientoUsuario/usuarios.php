@@ -46,6 +46,7 @@ session_start();
 require "../../Config/conexion.php";
 require_once '../../Modelos/permisoUsuario.php';
 require_once '../../Modelos/Usuarios.php';
+require_once "../../Modelos/error.php";
 
 $permisosUsuarios = new PermisosUsuarios();
 $usuario_obj = new Usuario();
@@ -772,6 +773,10 @@ if (!isset($_SESSION['usuario'])) {
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
                                 throw new Error('El registro ya existe en la Base de Datos.');
+                                <?php 
+                                    $error = new Errores();
+                                    $error->insert_error('Error al Insertar', 'ERROR SQL: [1062] Duplicate entry: USUARIO for key Primary ID.', 'El registro ya existe en la Base de Datos.', date('Y-m-d H:i:s'));
+                                ?>
                             }
                         })
                         .catch(function(error) {

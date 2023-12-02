@@ -131,7 +131,7 @@ if (isset($_POST['submit'])) {
                                         </div>
 
                                         <div class="form-group mt-4 mb-0 d-flex justify-content-center">
-                                            <button type="submit" name="submit" class="btn btn-primary">Crear Usuario</button>
+                                            <button type="submit" id="click" name="submit" class="btn btn-primary">Crear Usuario</button>
                                         </div>
                                     </form>
                                     <div class="card-footer mt-4 mb-0 d-flex justify-content-center">
@@ -191,6 +191,25 @@ if (isset($_POST['submit'])) {
             ?>
         });
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Lógica para mostrar alerta si un campo está vacío
+            $('#inputUser, #inputLastNameUser, #inputEmailAddress, #inputPassword, #inputConfirmPassword').on('input', function() {
+                var input = $(this);
+                var trimmedValue = input.val().trim();
+
+                if (trimmedValue === '') {
+                    Swal.fire({
+                        title: 'Advertencia',
+                        text: 'El campo no puede estar vacío',
+                        icon: 'warning',
+                    });
+                }
+            });
+        });
+    </script>
+
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

@@ -3,11 +3,10 @@ session_start();
 // Conectar a la base de datos
 require ("../../Config/conexion.php");
 require ("../../Modelos/Recuperacion.php");
-require_once ("../../Modelos/historial_contrasena.php");
 
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
-$bit = new Historial();
+
 $idusuario = $_SESSION['id_usuario'];
 
 if (!empty($_POST)) { //verificar si se recibio el metodo post
@@ -25,12 +24,14 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
                 if ($stmt = $conn->prepare($sql)) {
                     $stmt->bindParam(1, $hash_contrasena, PDO::PARAM_STR);
                     $stmt->bindParam(2, $idusuario, PDO::PARAM_INT);
-                    $date = new DateTime(date("Y-m-d H:i:s"));
-                    $dateMod = $date->modify("-7 hours");
-                    $dateNew = $dateMod->format("Y-m-d H:i:s");
 
                     if ($stmt->execute()) {
-                        $bit->insert_historial($hash_contrasena, $idusuario, $dateNew);
+                        $date = new DateTime(date("Y-m-d H:i:s"));
+                        $dateMod = $date->modify("-7 hours");
+                        $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+                        $sql2 = "INSERT INTO tbl_ms_historial_contrasena(CONTRASENA, ID_USUARIO, FECHA_MODIFICACION) VALUES ('$hash_contrasena', '$idusuario', '$dateNew');";
+                        $stmt2 = $conn->prepare($sql2);
+                        $stmt2->execute();
                         echo "<script type='text/javascript'>
                             alert('¡Contraseña Cambiada con exito.!');
                             setTimeout(function() {
@@ -50,7 +51,7 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
                 window.location.href = '../../Vistas/RecuperacionContrasenia/CambioContrasenia.php';
                 }, 0);
                 </script>";
-                exit;
+            exit;
         }
     }else {
         echo "<script type='text/javascript'>

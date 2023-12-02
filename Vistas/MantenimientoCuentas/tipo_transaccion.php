@@ -45,6 +45,7 @@ session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
 require_once '../../Modelos/Usuarios.php';
+require_once "../../Modelos/error.php";
 
 $permisosTransaccion = new PermisosUsuarios();
 $usuario_obj = new Usuario();
@@ -316,12 +317,13 @@ if (!isset($_SESSION['usuario'])) {
                             <h1 class="mt-4 mb-4">Mantenimiento Tipo Transacción</h1>
                         </center>
 
-                        <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
                                 echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
                             }
                             ?>
+                            <button style="margin-left: 10px;" class="btn btn-info mb-3" data-toggle="modal" data-target="#importarModal">Importar</button>
                         </div>
                         <!-- Tabla para mostrar los datos -->
                         <table class="table table-bordered mx-auto" id="Lista-transaccion" style="margin-top: 20px; margin-bottom: 20px">
@@ -388,6 +390,34 @@ if (!isset($_SESSION['usuario'])) {
                                 <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                             </div>
                         </div>
+                    </div>
+                </div>
+                
+                <!-- Modal para importar datos -->
+                <div class="modal fade" id="importarModal" tabindex="-1" role="dialog" aria-labelledby="importarModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color:#343a40; color:white;">
+                                <h5 class="modal-title" id="importarModalLabel">Importar Datos</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                    <span aria-hidden="true" style="color:white;">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Crear Form para recibir el archivo de excel -->
+                                <form action="../../Controladores/tipo_transaccion.php?op=ImportarTransaccion" method="POST" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="archivo" class="file-upload"><i class="fas fa-upload"></i> Seleccionar Archivo</label> <span id="nombre-archivo"></span>
+                                        <i class="fas fa-info-circle" style="color: #17a2b8;" data-toggle="tooltip" data-placement="top" title="El archivo debe ser de extensión .xlsx o csv y debe contener las columnas TIPO_TRANSACCION, DESCRIPCION, SIGNO_TRANSACCION y ESTADO."></i>
+                                        <input type="file" class="form-control-file" id="archivo" name="file" accept=".xlsx" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-danger" id="btn-cancelarImportar" data-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-primary" id="btn-importar" disabled>Importar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>    
                     </div>
                 </div>
 
@@ -539,7 +569,7 @@ if (!isset($_SESSION['usuario'])) {
                         text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
                     },
                     {
-                        extend: 'excel',
+                        extend: 'csv',
                         text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6, 7, 8],
@@ -694,6 +724,10 @@ if (!isset($_SESSION['usuario'])) {
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
                                 throw new Error('El registro ya existe en la Base de Datos.');
+                                <?php 
+                                    $error = new Errores();
+                                    $error->insert_error('Error al Insertar', 'ERROR SQL: [1062] Duplicate entry: TIPO TRANSACCION for key Primary ID.', 'El registro ya existe en la Base de Datos.', date('Y-m-d H:i:s'));
+                                ?>
                             }
                         })
                         .catch(function(data) {
@@ -701,7 +735,7 @@ if (!isset($_SESSION['usuario'])) {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: 'Error al guardar los datos: ' + data.error
+                                text: 'Error al guardar los datos: ' + data.message
                             });
                             console.log(data.error);
                         });
@@ -966,6 +1000,16 @@ if (!isset($_SESSION['usuario'])) {
     </script>
 
     <script>
+        const importarButton1 = document.getElementById('btn-importar');
+        const archivo = document.getElementById('archivo');
+        function checkForm() {
+            const isFormValid = archivo.value.trim() !== '' 
+            importarButton1.disabled = !isFormValid;
+        }
+        archivo.addEventListener('input', checkForm);
+    </script>
+
+    <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
         $('#agregar-transaccion, #editar-transaccion, #agregar-estado, #editar-estado').on('input', function() {
             var input = $(this);
@@ -1024,7 +1068,16 @@ if (!isset($_SESSION['usuario'])) {
             location.reload();
         });
     </script>
+    <script>
+        //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL AGREGAR--------------------
+        document.getElementById('btn-cancelarImportar').addEventListener('click', function() {
+            document.getElementById('archivo').value = "";
 
+            // Limpia los checkboxes
+            document.getElementById('archivo').checked = false;
+            location.reload();
+        });
+    </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>

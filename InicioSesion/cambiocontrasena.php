@@ -74,10 +74,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($stmt->execute()) {
                         //$contrasenaCambiadaExito = "Contraseña Cambiada con exito";
                         //echo $contrasenaCambiada;
-                        echo "Contraseña cambiada con éxito.";
+                        //echo "Contraseña cambiada con éxito.";
                         // $conn = null;
-                        header("refresh: 2; url=login.php");
-                        exit;
+                        $date = new DateTime(date("Y-m-d H:i:s"));
+                        $dateMod = $date->modify("-7 hours");
+                        $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+                        $sql2 = "INSERT INTO tbl_ms_historial_contrasena(CONTRASENA, ID_USUARIO, FECHA_MODIFICACION) VALUES ('$hashedPassword', '$id_usuario', '$dateNew');";
+                        $stmt2 = $conn->prepare($sql2);
+                        $stmt2->execute();
+                        $_SESSION['cambio_contrasena'] = true;
+                        //header("refresh: 2; url=login.php");
+                        //exit;
                     } else {
 
                         echo "Error al cambiar la contraseña: " . $stmt->errorInfo()[2];
@@ -91,18 +98,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
 
             $contrasenaActualError = "La contraseña actual no es válida. Por favor, inténtalo de nuevo.";
-            // echo $contrasenaActualError;
+            //echo $contrasenaActualError;
         }
     } else {
         echo "Error al obtener la contraseña actual desde la base de datos.";
     }
     // Cierra la conexión
     $conn = null;
-    header("refresh:1");
+    //header("refresh:1");
 }
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
+    session_destroy();
     exit();
 }
 
@@ -334,7 +342,7 @@ if (!isset($_SESSION['usuario'])) {
                                             <!-- <i class="form-control__validacion-estado fas fa-times-circle"></i> -->
                                             <p class="mensaje"></p>
                                             <button type="button" class="btn btn-danger" name="cancelar" id="clickCancelar">Cancelar</button>
-                                            <button type="submit" class="btn btn-primary" name="submit" id="click">Guardar</button>
+                                            <button type="submit" class="btn btn-primary" name="submit" id="click" disabled>Guardar</button>
                                             
                                             <script>
                                                 document.getElementById("clickCancelar").addEventListener("click", function() {
@@ -367,6 +375,64 @@ if (!isset($_SESSION['usuario'])) {
             </main>
         </div>
     </div>
+
+    <!-- VALIDACIONES SCRIPT -->
+    <script>
+        // Obtén los campos de entrada y el botón "Guardar para insertar"
+        const contrasenaActual = document.getElementById('passwordActual');
+        const contrasena = document.getElementById('password');
+        const contrasena2 = document.getElementById('password2');
+        const guardarButton = document.getElementById('click');
+
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isFormValid = contrasenaActual.value.trim() !== '' && contrasena.value.trim() !== '' && contrasena2.value.trim() !== '';
+            guardarButton.disabled = !isFormValid;
+        }
+        // Agrega un evento input a cada campo de entrada
+        contrasenaActual.addEventListener('input', checkForm);
+        contrasena.addEventListener('input', checkForm);
+        contrasena2.addEventListener('input', checkForm);
+        guardarButton.addEventListener('input', checkForm);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            <?php
+                if (isset($_SESSION['cambio_contrasena'])) {
+                    echo "
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: 'Cambio de contraseña realizado exitosamente. Tiene 10 seg. Para confirmar, pronto se cerrará la sesión...',
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                        timer: 10000
+                    }).then(() => {
+                        window.location.href = 'login.php';
+                    });";
+                    unset($_SESSION['cambio_contrasena']);
+                }
+            ?>
+        });
+    </script>
+     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            $('#passwordActual, #password, #password2').on('input', function() {
+                var input = $(this);
+                var trimmedValue = input.val().trim();
+
+                if (trimmedValue === '') {
+                    Swal.fire({
+                        title: 'Advertencia',
+                        text: 'El campo no puede estar vacío',
+                        icon: 'warning',
+                    });
+                }
+            });
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>

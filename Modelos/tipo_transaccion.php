@@ -110,5 +110,42 @@ class tipoTransaccion extends Conectar
             return "Error al eliminar la transaccion: " . $e->getMessage();
         }
     }
+
+    public function modificarRegistroImportado($TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION , $CREADO_POR, $FECHA_CREACION, $MODIFICADO_POR, $FECHA_MODIFICACION, $ESTADO)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+            $sql = "UPDATE `tbl_tipo_transaccion`
+            SET `DESCRIPCION` = :DESCRIPCION, 
+                `SIGNO_TRANSACCION` = :SIGNO_TRANSACCION, 
+                `CREADO_POR` = :CREADO_POR, 
+                `FECHA_CREACION` = :FECHA_CREACION,
+                `MODIFICADO_POR` = :MODIFICADO_POR,
+                `FECHA_MODIFICACION` = :FECHA_MODIFICACION,
+                `ESTADO` = :ESTADO
+            WHERE `TIPO_TRANSACCION` = :TIPO_TRANSACCION";
+            
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindParam(':TIPO_TRANSACCION', $TIPO_TRANSACCION, PDO::PARAM_STR);
+            $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
+            $stmt->bindParam(':SIGNO_TRANSACCION', $SIGNO_TRANSACCION, PDO::PARAM_STR);
+            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
+            $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR);
+            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                return "Forma de pago actualizada.";
+            } else {
+                return "No se realizó ninguna actualización, o la forma de pago no existe.";
+            }
+        } catch (PDOException $e) {
+            return "Error al actualizar la forma de pago: " . $e->getMessage();
+        }
+    }
+
 }
 ?>

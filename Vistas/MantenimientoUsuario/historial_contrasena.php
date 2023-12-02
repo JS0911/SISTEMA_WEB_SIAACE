@@ -312,14 +312,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th style="display: none;">Id Historial</th>
                                     <th>Contraseña</th>
                                     <th>Usuario</th>
-                                    <th>Creado por</th>
-                                    <th>Modificado por</th>
-                                    <th>Fecha Creacion</th>
                                     <th>Fecha Modificacion</th>
                                 </tr>
                             </thead>
                             <tbody>
-
                             </tbody>
                         </table>
                     </div>
@@ -379,12 +375,14 @@ if (!isset($_SESSION['usuario'])) {
                         var row = '<tr>' +
                             '<td style="display:none;">' + historial.ID_HISTORIAL + '</td>' +
                             '<td>' + historial.CONTRASENA + '</td>' +
-                            '<td>' + historial.ID_USUARIO + '</td>' +
-                            '<td>' + cuenta.CREADO_POR + '</td>' +
-                            '<td>' + cuenta.MODIFICADO_POR + '</td>' +
-                            '<td>' + cuenta.FECHA_CREACION + '</td>' +
-                            '<td>' + cuenta.FECHA_MODIFICACION + '</td>' +
+                            '<td>' + historial.USUARIO + '</td>' +
+                            '<td>' + historial.FECHA_MODIFICACION + '</td>' +
                             '</tr>';
+                            row += '</td>' +
+                            '</tr>';
+                            // Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();

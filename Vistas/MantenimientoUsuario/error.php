@@ -312,6 +312,7 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Error</th>
                                     <th>Codigo</th>
                                     <th>Mensaje</th>
+                                    <th>Fecha</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -377,17 +378,21 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + error.ERROR + '</td>' +
                             '<td>' + error.CODIGO + '</td>' +
                             '<td>' + error.MENSAJE + '</td>' +
+                            '<td>' + error.FECHA + '</td>' +
                             '</tr>';
+                            row += '</td>' +
+                            '</tr>';
+                            // Cambiar palabra null por vacio.
+                            newrow = row.replaceAll("null", " ");
+                            row = newrow;
                         tbody.innerHTML += row;
                     });
                     habilitarPaginacion();
                 })
-
                 .catch(function(error) {
                     // Manejar el error aquí
                     alert('Error al cargar los datos: ' + error.message);
                 });
-
         }
 
         function habilitarPaginacion() {

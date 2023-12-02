@@ -91,6 +91,72 @@ switch ($_GET["op"]) {
         $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL TIPO DE TRANSACCION # $ID_TIPO_TRANSACCION", $_SESSION['id_usuario'], 11);
 
     break;
+
+    case "ImportarTransaccion":
+        // Obtén el archivo csv enviado en un metodo POST desde el cliente
+        $archivo = $_FILES["file"]["tmp_name"];
+        $lineas = file($archivo);
+        $i = 0;
+    
+        // Recorre cada línea del archivo csv
+        foreach ($lineas as $linea_num => $linea) {
+            // Salta la primera línea del archivo csv
+            if ($linea_num > 0) {
+                // Divide cada línea en celdas (columnas) separadas por tabulaciones
+                $datos = explode(";", $linea);
+    
+                //Convertir a array
+                $datos = str_replace('"', '', $datos);
+                $arreglo = explode(",", $datos[0]);
+    
+                //Asigna los datos a variables
+                $TIPO_TRANSACCION = $arreglo[1];
+                $DESCRIPCION = $arreglo[2];
+                $SIGNO_TRANSACCION = $arreglo[3];
+                $CREADO_POR = $arreglo[4];
+                if($arreglo[5] != "")
+                {
+                    $FECHA_CREACION = date("Y-m-d H:i:s", strtotime($arreglo[5]));
+                }
+                else
+                {
+                    $FECHA_CREACION = null;
+                }
+                
+                $MODIFICADO_POR = $arreglo[6];
+    
+                if($arreglo[7] != "")
+                {
+                    $FECHA_MODIFICACION = date("Y-m-d H:i:s", strtotime($arreglo[7]));
+                }
+                else
+                {
+                    $FECHA_MODIFICACION = null;
+                }
+                
+                $ESTADO = $arreglo[8];
+    
+                //verificar si existe el registro
+                if (verificarExistenciaTransaccion($TIPO_TRANSACCION) > 0) {
+                    // Envía una respuesta de conflicto (409) si tipo de transaccion ya existe
+                    http_response_code(409);
+                    echo json_encode(["error" => "El Tipo de Transaccion ya existe en la base de datos."]);
+                    $com->modificarRegistroImportado($TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION ,$CREADO_POR, $FECHA_CREACION, $MODIFICADO_POR, $FECHA_MODIFICACION, $ESTADO);
+                } else {
+                    // Inserta un Tipo de Transaccion en la base de datos
+                    $date = new DateTime(date("Y-m-d H:i:s"));
+                    $dateMod = $date->modify("-7 hours");
+                    $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+                    $datos = $com->insert_tipoTransaccion($TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION ,$_SESSION['usuario'], $dateNew, $MODIFICADO_POR, $FECHA_MODIFICACION, $ESTADO);
+                    echo json_encode(["message" => "Tipo de Transaccion insertada exitosamente."]);
+                }
+            }
+        }
+    
+        //redireccionar a la vista de tipo transaccion
+        header("Location: ../vistas/MantenimientoCuentas/tipo_transaccion.php");
+    
+    break;
 }
 
 function verificarExistenciaTransaccion($TIPO_TRANSACCION)

@@ -45,6 +45,7 @@ session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/permisoUsuario.php";
 require_once '../../Modelos/Usuarios.php';
+require_once "../../Modelos/error.php";
 
 $permisosRegion = new PermisosUsuarios();
 $usuario_obj = new Usuario();
@@ -674,12 +675,19 @@ if (!isset($_SESSION['usuario'])) {
                                             icon: 'error',
                                             title: 'Error',
                                             text: data.error // Acceder al mensaje de error
+                                        }).then(function() {
+                                            // Recargar la página para mostrar los nuevos datos
+                                            location.reload();
                                         });
                                     });
                                 }
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
                                 throw new Error('El registro ya existe en la Base de Datos.');
+                                <?php 
+                                    $error = new Errores();
+                                    $error->insert_error('Error al Insertar', 'ERROR SQL: [1062] Duplicate entry: REGION for key Primary ID.', 'El registro ya existe en la Base de Datos.', date('Y-m-d H:i:s'));
+                                ?>
                             }
                         })
                         .catch(function(error) {
@@ -688,6 +696,9 @@ if (!isset($_SESSION['usuario'])) {
                                 icon: 'error',
                                 title: 'Error',
                                 text: 'Error al guardar los datos: ' + error.message
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
                             });
                             console.log(error.message);
                         });
