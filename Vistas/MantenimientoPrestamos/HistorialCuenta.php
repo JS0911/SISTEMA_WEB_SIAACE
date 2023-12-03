@@ -222,7 +222,6 @@ if (!isset($_SESSION['usuario'])) {
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
                                 echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
-                           
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -286,9 +285,9 @@ if (!isset($_SESSION['usuario'])) {
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                <div class="small">Usuario: <?php echo $nombre_usuario;?><div>
-                    Sesión activa: Conectado(a).
-                </div>
+                    <div class="small">Usuario: <?php echo $nombre_usuario; ?><div>
+                            Sesión activa: Conectado(a).
+                        </div>
             </nav>
         </div>
     </div>
@@ -304,11 +303,11 @@ if (!isset($_SESSION['usuario'])) {
                                 <div class="card-body">
                                     <div class="grid-row align-items-center">
                                         <div class="col-9 bel-padding-reset">
-                                            <div class="display-flex flex-direction-column"  style="font-family: sans-serif;">
-                                                <h2 >Cuenta Bancaria</h2>
+                                            <div class="display-flex flex-direction-column" style="font-family: sans-serif;">
+                                                <h2>Cuenta Bancaria</h2>
                                                 <h6 class="bel-typography bel-typography-h2">
-                                                <?php echo $nombre_empleado_unido; ?>
-                                                <small class="text-muted"><?php echo $ID_CUENTA; ?></small>
+                                                    <?php echo $nombre_empleado_unido; ?>
+                                                    <small class="text-muted"><?php echo $ID_CUENTA; ?></small>
                                                 </h6>
                                             </div>
                                         </div>
@@ -345,10 +344,10 @@ if (!isset($_SESSION['usuario'])) {
                                                     <th scope="col">Acciones</th>
                                                 </tr>
                                                 <?php
-                                               $consulta = new cuenta();
-                                               $result = $consulta->historial_cuenta($ID_CUENTA);
-                                              
-                                               
+                                                $consulta = new cuenta();
+                                                $result = $consulta->historial_cuenta($ID_CUENTA);
+
+
 
                                                 if ($result !== false) {
                                                     if (is_array($result) && count($result) > 0) {
@@ -357,7 +356,7 @@ if (!isset($_SESSION['usuario'])) {
                                                             echo "<td>" . $row["FECHA"] . "</td>";
                                                             echo "<td class='texto-derecha'>" . formatoNumero($row["MONTO"]) . "</td>";
                                                             echo "<td>" . $row["TIPO_TRANSACCION"] . "</td>";
-                                                            echo "<td><button type='button' id='btn-anular' class='btn btn-outline-danger' onclick='Anular({$ID_CUENTA}, {$row["ID_TRANSACCION"]})'>Anular</button></td>";    
+                                                            echo "<td><button type='button' id='btn-anular' class='btn btn-outline-danger' onclick='Anular({$ID_CUENTA}, {$row["ID_TRANSACCION"]})'>Anular</button></td>";
                                                             echo "</tr>";
                                                         }
                                                     } else {
@@ -368,7 +367,8 @@ if (!isset($_SESSION['usuario'])) {
                                                 }
 
 
-                                                function formatoNumero($numero) {
+                                                function formatoNumero($numero)
+                                                {
                                                     return number_format($numero, 2, '.', ',');
                                                 }
                                                 ?>
@@ -389,56 +389,54 @@ if (!isset($_SESSION['usuario'])) {
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
 
-        function Anular(id_cuenta,id_transaccion){
+        function Anular(id_cuenta, id_transaccion) {
+            var datos = {
+                "ID_CUENTA": id_cuenta,
+                "ID_TRANSACCION": id_transaccion,
+            };
 
-                var datos = {
-                    "ID_CUENTA": id_cuenta,
-                    "ID_TRANSACCION": id_transaccion,
-                    };
-                    
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=Anulacion_Dep_Ret', {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=Anulacion_Dep_Ret', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(datos) // Convierte el objeto en formato JSON
-
                 })
                 .then(response => response.json()) // Parsea la respuesta como JSON
-                .catch(error => {
-                    console.error('Error al anular la transaccion: ', error);
-                });
-            
-        }
+                .then(data => {
+                    console.log('Anulación realizada con éxito:', data);
 
-        <?php
-                if (isset($_SESSION['Anulacion'])) {
-                    echo "
+                    // Mostrar el SweetAlert después de una anulación exitosa
                     Swal.fire({
                         title: 'Éxito',
-                        text: 'Anulacion Realizada Con Exito',
+                        text: 'Anulación Realizada Con Éxito',
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
-                    });";
-                    unset($_SESSION['Anulacion']);
-                }
-            ?>
-        
-    /* Imprime los datos en la tabla
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row["fecha"] . "</td>";
-                    echo "<td>" . $row["monto"] . "</td>";
-                    echo "<td>" . $row["descripcion"] . "</td>";
-                    echo "<td>Acciones</td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='4'>No hay datos</td></tr>";
-            }*/
+                    }).then(function() {
+                        location.reload();
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al anular la transacción:', error);
+                    // Aquí puedes manejar errores si la anulación falla
+                });
+        }
+
+        /* Imprime los datos en la tabla
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row["fecha"] . "</td>";
+                        echo "<td>" . $row["monto"] . "</td>";
+                        echo "<td>" . $row["descripcion"] . "</td>";
+                        echo "<td>Acciones</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='4'>No hay datos</td></tr>";
+                }*/
     </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

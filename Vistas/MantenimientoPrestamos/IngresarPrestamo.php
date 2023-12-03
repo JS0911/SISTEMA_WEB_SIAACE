@@ -684,7 +684,7 @@ if (!isset($_SESSION['usuario'])) {
         }
 
         function Insertar_Prestamo() {
-          
+
             $("#btn-agregarP").click(function() {
                 var tipoPrestamo = document.getElementById("agregar-tipoPrestamo").value;
                 var formaPago = document.getElementById("agregar-formaPago").value;
@@ -724,7 +724,10 @@ if (!isset($_SESSION['usuario'])) {
                             }
                         })
                         .then(function(data) {
-                            if (data ==='VALIDO') {
+                            console.log(data);
+                            var responseData = JSON.parse(data);
+                            var isValid = responseData.valido === true || responseData.valido === 'true'; // Comparar con booleano o string 'true'
+                            if (isValid) {
                                 // Si el monto es válido, procede a insertar el préstamo
                                 fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=InsertPrestamo', {
                                         method: 'POST',
@@ -759,10 +762,15 @@ if (!isset($_SESSION['usuario'])) {
                                         });
                                     });
                             } else {
+                                // Suponiendo que estás llamando a validarMonto y recibiendo la respuesta en 'data'
+                                var responseData = JSON.parse(data);
+
+                                console.log('Monto Mínimo Permitido:', responseData.montoMaximo);
+                                montoMaximo = responseData.montoMaximo;
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error!',
-                                    text: 'El monto solicitado excede el límite permitido.'
+                                    text: 'El monto solicitado excede el límite permitido de : ' + montoMaximo
                                 });
                             }
                         })
