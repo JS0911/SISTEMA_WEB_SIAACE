@@ -1,47 +1,5 @@
-<!-- -----------------------------------------------------------------------
-	Universidad Nacional Autonoma de Honduras (UNAH)
-		Facultad de Ciencias Economicas
-	Departamento de Informatica administrativa
-         Analisis, Programacion y Evaluacion de Sistemas
-                    Tercer Periodo 2023
-
-
-Equipo:
-Sahory Garcia          sahori.garcia@unah.hn
-Jairo Garcia           jairo.lagos@unah.hn
-Ashley Matamoros       Ashley.matamoros@unah.hn
-Lester Padilla         Lester.padilla@unah.hn
-Khaterine Ordoñez      khaterine.ordonez@unah.hn
-Yeniffer Velasquez     yeniffer.velasquez@unah.hn
-Kevin Zuniga           kgzuniga@unah.hn
-
-Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
-Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
-Catedratico evaluacion de sistemas: ???
-
-
----------------------------------------------------------------------
-
-Programa:         Pantalla de Contestar Preguntas
-Fecha:            
-Programador:      
-descripcion:      Pantalla que registra las preguntas de seguridad establecidas por los usuarios
-
------------------------------------------------------------------------
-
-                Historial de Cambio
-
------------------------------------------------------------------------
-
-Programador               Fecha                      Descripcion
-Kevin Zuniga              25-nov-2023                Algunos detalles esteticos
-
-------------------------------------------------------------------------->
-
 <?php
-
 session_start();
-
 require "../../Config/conexion.php";
 
 
@@ -90,7 +48,6 @@ echo $PregunContes;
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Formulario de Preguntas de Seguridad</title>
-    <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <link href="../css/styles.css" rel="stylesheet" />
     <!-- Agrega los enlaces a los archivos CSS de Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">

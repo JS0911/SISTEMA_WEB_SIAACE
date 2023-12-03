@@ -722,6 +722,10 @@ if (!isset($_SESSION['usuario'])) {
                 }
             });
         }
+
+        
+
+
         //FUNCION SEPARADOR DE MILES Y DECIMALES
         function formatoNumero(numero) {
             return numero.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');

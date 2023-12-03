@@ -500,6 +500,11 @@ $permisos4 = $permisosHistorialCuenta->get_Permisos_Usuarios($id_rol, $id_objeto
             });
         }
 
+        function Anular(){
+            
+        }
+
+
         // VALIDACIONES FUNCIONES    
         function validarNombre() {
             var nombreTipoCuenta = document.getElementById("agregar-cuenta");

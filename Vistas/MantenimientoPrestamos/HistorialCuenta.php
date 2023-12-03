@@ -345,8 +345,11 @@ if (!isset($_SESSION['usuario'])) {
                                                     <th scope="col">Acciones</th>
                                                 </tr>
                                                 <?php
-                                                $consulta = new cuenta();
-                                                $result = $consulta->historial_cuenta($ID_CUENTA);
+                                               $consulta = new cuenta();
+                                               $result = $consulta->historial_cuenta($ID_CUENTA);
+                                              
+                                               
+
                                                 if ($result !== false) {
                                                     if (is_array($result) && count($result) > 0) {
                                                         foreach ($result as $row) {
@@ -354,14 +357,14 @@ if (!isset($_SESSION['usuario'])) {
                                                             echo "<td>" . $row["FECHA"] . "</td>";
                                                             echo "<td class='texto-derecha'>" . formatoNumero($row["MONTO"]) . "</td>";
                                                             echo "<td>" . $row["TIPO_TRANSACCION"] . "</td>";
-                                                            echo "<td><button type='button' class='btn btn-outline-danger'>Anular</button></td>";
+                                                            echo "<td><button type='button' id='btn-anular' class='btn btn-outline-danger' onclick='Anular({$ID_CUENTA}, {$row["ID_TRANSACCION"]})'>Anular</button></td>";    
                                                             echo "</tr>";
                                                         }
                                                     } else {
                                                         echo "<tr><td colspan='4'>No hay datos</td></tr>";
                                                     }
                                                 } else {
-                                                    echo "<tr><td colspan='4'>'Error en la consulta: ' . $conn->error</td></tr>";
+                                                    echo "<tr><td colspan='4'>'Error en la consulta: ' . $conn->$error</td></tr>";
                                                 }
 
 
@@ -386,61 +389,42 @@ if (!isset($_SESSION['usuario'])) {
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
 
-        function Lista_Transaccion() {
-            // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
-            // Actualizar el valor predeterminado
-            fetch('http://localhost:90/sistema_web_siaace/Vistas/MantenimientoPrestamos/HistorialCuenta.php?ID_CUENTA=24', {
-                    method: 'GET',
+        function Anular(id_cuenta,id_transaccion){
+
+                var datos = {
+                    "ID_CUENTA": id_cuenta,
+                    "ID_TRANSACCION": id_transaccion,
+                    };
+                    
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=Anulacion_Dep_Ret', {
+                    method: 'POST',
                     headers: {
-                        'Accept': 'application/json'
-                    }
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos) // Convierte el objeto en formato JSON
+
                 })
-                .then(function(response) {
-                    if (response.ok) {
-                        // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
-                        return response.json();
-                    } else {
-                        // Si hubo un error en la solicitud, maneja el error aquí
-                        throw new Error('Error en la solicitud');
-                    }
-                })
-                .then(function(data) {
-                    // Recorre los datos JSON y agrega filas a la tabla
-                    var tbody = document.querySelector('#Lista-Transacciones tbody');
-                    tbody.innerHTML = ''; // Limpia el contenido anterior
-
-                    data.forEach(function(cargo) {
-                        var row = '<tr>' +
-                            '<td style="display:none;">' + cargo.ID_CARGO + '</td>' +
-                            '<td>' + cargo.CARGO + '</td>' +
-                            '<td>' + cargo.DESCRIPCION + '</td>' +
-                            '<td>' + cargo.ESTADO + '</td>' +
-
-                            '<td>';
-
-                        // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
-
-                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" onclick="cargarCargo(' + cargo.ID_CARGO + ')">Anular</button>';
-                        }
-
-                        row += '</td>' +
-                            '</tr>';
-                            //Cambiar palabra null por vacio.
-                            newrow = row.replaceAll("null", " ");
-                            row = newrow;
-                        tbody.innerHTML += row;
-                    });
-                    habilitarPaginacion();
-                })
-
-                .catch(function(error) {
-                    // Manejar el error aquí
-                    alert('Error al cargar los datos: ' + error.message);
+                .then(response => response.json()) // Parsea la respuesta como JSON
+                .catch(error => {
+                    console.error('Error al anular la transaccion: ', error);
                 });
-
+            
         }
 
+        <?php
+                if (isset($_SESSION['Anulacion'])) {
+                    echo "
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: 'Anulacion Realizada Con Exito',
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });";
+                    unset($_SESSION['Anulacion']);
+                }
+            ?>
         
     /* Imprime los datos en la tabla
             if ($result->num_rows > 0) {

@@ -92,9 +92,9 @@ switch ($_GET["op"]) {
         echo json_encode($datos);
     break;
     case "ValidarMonto":
-        $ID_PRESTAMO = $body["ID_PRESTAMO"];
+        $ID_EMPLEADO = $body["ID_EMPLEADO"];
         $MONTO_SOLICITADO = $body["MONTO_SOLICITADO"];
-        $datos = $com->validarMonto($ID_PRESTAMO,$MONTO_SOLICITADO);
+        $datos = $com->validarMonto($ID_EMPLEADO,$MONTO_SOLICITADO);
         echo json_encode($datos);
     break;
 }

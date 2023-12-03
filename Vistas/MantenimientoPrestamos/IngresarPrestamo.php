@@ -228,7 +228,7 @@ if (!isset($_SESSION['usuario'])) {
         <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
-         <!-- Icono de Atras -->
+        <!-- Icono de Atras -->
         <a href="javascript:history.back()" class="icono"><i class="fas fa-chevron-circle-left"></i></a>
         <!-- Icono de Adelante -->
         <a href="javascript:history.forward()" class="icono"><i class="fas fa-chevron-circle-right"></i></a>
@@ -491,6 +491,8 @@ if (!isset($_SESSION['usuario'])) {
                                             <label for="MSolicitado">Monto Solicitado</label>
                                             <input type="text" class="form-control" id="agregar-MSolicitado" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un monto válido (hasta 8 dígitos enteros y 2 decimales)">
                                             <div id="mensaje1"></div>
+
+
                                         </div>
                                     </form>
                                 </div>
@@ -682,15 +684,13 @@ if (!isset($_SESSION['usuario'])) {
         }
 
         function Insertar_Prestamo() {
+          
             $("#btn-agregarP").click(function() {
-                // Obtener los valores de los campos del formulario
-
-                var tipoPrestamo = document.getElementById("agregar-tipoPrestamo").value; // Obtener el valor del select
-                var formaPago = document.getElementById("agregar-formaPago").value; // Obtener el valor del select
+                var tipoPrestamo = document.getElementById("agregar-tipoPrestamo").value;
+                var formaPago = document.getElementById("agregar-formaPago").value;
                 var montoSolicitado = $("#agregar-MSolicitado").val();
                 var plazo = $("#agregar-tipoPrestamoPlazo").val();
                 var tasa = $("#agregar-tipoPrestamoTasa").val();
-
 
                 if (tipoPrestamo == "" || formaPago == "" || montoSolicitado == "" || tasa == "" || plazo == "") {
                     Swal.fire({
@@ -699,7 +699,6 @@ if (!isset($_SESSION['usuario'])) {
                         text: 'No se pueden enviar Campos Vacios.'
                     });
                 } else {
-                    // Crear un objeto con los datos a enviar al servidor
                     var datos = {
                         ID_EMPLEADO: <?php echo $ID_EMPLEADO; ?>,
                         ID_TIPO_PRESTAMO: tipoPrestamo,
@@ -710,7 +709,7 @@ if (!isset($_SESSION['usuario'])) {
                         ESTADO_PRESTAMO: "PENDIENTE"
                     };
 
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=InsertPrestamo', {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=ValidarMonto', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -719,35 +718,56 @@ if (!isset($_SESSION['usuario'])) {
                         })
                         .then(function(response) {
                             if (response.ok) {
-                                // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
                                 return response.json();
                             } else {
-                                // Si hubo un error en la solicitud, maneja el error aquí
                                 throw new Error('Error en la solicitud');
                             }
                         })
                         .then(function(data) {
-                            console.log(data);
-
-                            // Cerrar la modal después de guardar
-                            $('#crearModalP').modal('hide');
-
-                            // Mostrar SweetAlert de éxito
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Guardado exitoso',
-                                text: 'Los datos se han guardado correctamente.'
-                            }).then(function() {
-                                // Recargar la página para mostrar los nuevos datos
-                                //location.reload();
-                                window.location.href = 'prestamo.php';
-                            });
-
+                            if (data ==='VALIDO') {
+                                // Si el monto es válido, procede a insertar el préstamo
+                                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=InsertPrestamo', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(datos)
+                                    })
+                                    .then(function(response) {
+                                        if (response.ok) {
+                                            return response.json();
+                                        } else {
+                                            throw new Error('Error en la solicitud de inserción');
+                                        }
+                                    })
+                                    .then(function(data) {
+                                        console.log(data);
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Guardado exitoso',
+                                            text: 'Los datos se han guardado correctamente.'
+                                        }).then(function() {
+                                            window.location.href = 'prestamo.php';
+                                        });
+                                    })
+                                    .catch(function(error) {
+                                        console.log(error.message);
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: 'Error al guardar los datos: ' + error.message
+                                        });
+                                    });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: 'El monto solicitado excede el límite permitido.'
+                                });
+                            }
                         })
                         .catch(function(error) {
                             console.log(error.message);
-
-                            // Mostrar SweetAlert de error
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
@@ -757,6 +777,9 @@ if (!isset($_SESSION['usuario'])) {
                 }
             });
         }
+
+
+
 
         async function SaldoTotal(ID_PRESTAMO) {
             try {
@@ -1146,6 +1169,43 @@ if (!isset($_SESSION['usuario'])) {
                     });
 
             });
+        }
+
+
+        function validarMonto(ID_EMPLEADO) {
+            // Obtener el valor ingresado en el campo de texto
+            var montoSolicitado = $("#agregar-MSolicitado").val();
+            // Realiza una solicitud FETCH al servidor para anular el préstamo
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=ValidarMonto', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_EMPLEADO": ID_EMPLEADO,
+                        "MONTO_SOLICITADO": monto
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Desembolso Realizado',
+                            text: 'El Desembolso ha sido realizado exitosamente.'
+                        });
+                        setTimeout(function() {
+                            location.reload();
+                        }, 5000)
+                    } else {
+                        console.error('Error en la solicitud');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
         }
 
         // VALIDACIONES FUNCIONES    

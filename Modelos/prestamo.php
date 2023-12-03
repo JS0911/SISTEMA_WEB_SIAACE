@@ -206,45 +206,62 @@ class Prestamo extends Conectar
 
 
     public function validarMonto($ID_EMPLEADO, $MONTO_SOLICITADO)
-{
-    try {
-        $conectar = parent::conexion();
-        parent::set_names();
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
 
-        // Obtener el salario
-        $sql = "SELECT `SALARIO` FROM `tbl_me_empleados` WHERE `ID_EMPLEADO` = :ID_EMPLEADO";
-        $sql2 = "SELECT `SALDO` FROM `tbl_mc_cuenta` WHERE `ID_EMPLEADO` = :ID_EMPLEADO";
 
-        $stmt = $conectar->prepare($sql);
-        $stmt->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
-        //$stmt->bindParam(':MONTO_SOLICITADO', $MONTO_SOLICITADO, PDO::PARAM_STR);
-        $stmt->execute();
-       // $resultSalario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $stmt2 = $conectar->prepare($sql2);
-        $stmt2->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
-       // $stmt2->bindParam(':MONTO_SOLICITADO', $MONTO_SOLICITADO, PDO::PARAM_STR);
-        $stmt2->execute();
-        //$resultAhorro = $stmt2->fetch(PDO::FETCH_ASSOC);
+            // Obtener el salario
+            $sql = "SELECT `SALARIO` FROM `tbl_me_empleados` WHERE `ID_EMPLEADO` = :ID_EMPLEADO";
+            $sql2 = "SELECT `SALDO` FROM `tbl_mc_cuenta` WHERE `ID_EMPLEADO` = :ID_EMPLEADO";
 
-       // return "Saldo:" . $resultAhorro ;
-        if (!$stmt || !$stmt2) {
-            return "No se encontró el salario o el saldo del empleado.";
+
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
+            $stmt->execute();
+            $resultSalario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $stmt2 = $conectar->prepare($sql2);
+            $stmt2->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
+            $stmt2->execute();
+            $resultAhorro = $stmt2->fetch(PDO::FETCH_ASSOC);
+
+        
+
+            if (!$resultSalario) {
+                return "No se encontró el salario del empleado.";
+            }
+
+            if (!$resultAhorro) {
+                return "No se encontró el saldo del empleado.";
+            }
+
+            if (!$resultSalario || !$resultAhorro) {
+
+                return "No se encontró el salario o el saldo del empleado.";
+            }
+
+            $salario = $resultSalario['SALARIO'];
+            $ahorro = $resultAhorro['SALDO'];
+
+            // Ajusta el factor según tus necesidades
+            $montoMinimo = ($ahorro * 3) + ($salario / 2);
+
+            if ($MONTO_SOLICITADO <= $montoMinimo) {
+                $response = "VALIDO";
+            } else {
+                //return "El monto solicitado no debe exceder de " . $montoMinimo;
+                $response = "INVALIDO";
+            }
+
+          //  $response = array("valido" => ($MONTO_SOLICITADO <= $montoMinimo));
+            echo json_encode($response); // Devolver la respuesta en formato JSON
+        } catch (PDOException $e) {
+            // Manejo de errores
+            $response = array("error" => "Error al Consultar: " . $e->getMessage());
+            echo json_encode($response); // Devolver la respuesta de error en formato JSON
         }
-
-        $salario = $stmt['SALARIO'];
-        $ahorro = $stmt2['SALDO'];
-
-        $montoMinimo = ($ahorro * 3) + ($salario / 2);
-
-        if ($MONTO_SOLICITADO <= $montoMinimo) {
-            return "MONTO CALCULADO: " . $montoMinimo . "\nMONTO SOLICITADO: " . $MONTO_SOLICITADO;
-        } else {
-            return "El monto solicitado no debe exceder de " . $montoMinimo;
-        }
-    } catch (PDOException $e) {
-        return "Error al Consultar: " . $e->getMessage();
     }
-}
-
 }
