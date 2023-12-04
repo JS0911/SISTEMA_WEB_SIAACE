@@ -1,13 +1,17 @@
 <?php
+
 session_start();
-// Conectar a la base de datos
 require ("../../Config/conexion.php");
 require ("../../Modelos/Recuperacion.php");
+
+
+// Conectar a la base de datos
+
 
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
-$idusuario = $_SESSION['id_usuario'];
+$idusuario = $_SESSION['user'];
 
 if (!empty($_POST)) { //verificar si se recibio el metodo post
     $nuevaContraseña = $_POST['inputPassword'];
@@ -64,3 +68,4 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
     };
 }
 ?>
+

@@ -27,7 +27,7 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
         $id_usuario = $row['ID_USUARIO'];
 
         $_SESSION['usuario'] = $usuario;
-        $_SESSION['id_usuario']= $id_usuario;
+        $_SESSION['user']= $id_usuario;
 
         $sql = "SELECT RESPUESTAS FROM tbl_ms_preguntas_Usuario where ID_PREGUNTA = '$pregunta' AND ID_USUARIO = '$id_usuario';";
         $stmt = $conn->query($sql);
