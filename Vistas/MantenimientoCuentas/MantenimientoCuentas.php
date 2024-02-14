@@ -37,6 +37,7 @@ Programador               Fecha                      Descripcion
 Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas
 Sahori Garcia              29-11-2023                  Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
+Sahori Garcia             09/02/2024                   Modificaciones en permisos 
 ------------------------------------------------------------------------->
 
 <?php
