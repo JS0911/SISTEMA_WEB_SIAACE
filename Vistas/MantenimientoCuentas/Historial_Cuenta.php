@@ -166,7 +166,7 @@ $permisos4 = $permisosHistorialCuenta->get_Permisos_Usuarios($id_rol, $id_objeto
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="../../InicioSesion/cambiocontrasena.php">Cambiar Contraseña</a>
+                    <a class="dropdown-item" href="../MantenimientoUsuario_perfil.php">Perfil</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="../../InicioSesion/logout.php">Salir</a>
                 </div>
@@ -189,7 +189,7 @@ $permisos4 = $permisosHistorialCuenta->get_Permisos_Usuarios($id_rol, $id_objeto
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
-                                    Modulo seguridad
+                                    Seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
@@ -212,7 +212,7 @@ $permisos4 = $permisosHistorialCuenta->get_Permisos_Usuarios($id_rol, $id_objeto
                         if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                                    Modulo Empleado
+                                    Empleados
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
                             echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
@@ -232,7 +232,7 @@ $permisos4 = $permisosHistorialCuenta->get_Permisos_Usuarios($id_rol, $id_objeto
                         if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
                             <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
-                            Modulo Cuenta
+                            Cuentas
                          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                           </a>';
                             echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
@@ -252,7 +252,7 @@ $permisos4 = $permisosHistorialCuenta->get_Permisos_Usuarios($id_rol, $id_objeto
                         if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
                             <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
-                            Modulo Prestamo
+                            Prestamos
                          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                           </a>';
                             echo '<div class="collapse" id="collapseMantenimientoPrestamo" aria-labelledby="headingMantenimientoPrestamo" data-parent="#sidenavAccordion">';
