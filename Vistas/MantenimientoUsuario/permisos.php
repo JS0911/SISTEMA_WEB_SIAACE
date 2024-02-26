@@ -335,33 +335,33 @@ if (!isset($_SESSION['usuario'])) {
 
                             if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                                 if (!empty($permisosUsuario) && $permisosUsuario[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                    echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                }
+                                if (!empty($permisosRoles) && $permisosRoles[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                                }
+                                if (!empty($permisosEstados) && $permisosEstados[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                                }
+                                if (!empty($permisosPermiso) && $permisosPermiso[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                                }
+                                if (!empty($permisosObjetos) && $permisosObjetos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                                }
+                                if (!empty($permisosParametro) && $permisosParametro[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                                }
+                                if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                                }
+                                if (!empty($permisosError) && $permisosError[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
+                                }
+                                if (!empty($permisosHistorial) && $permisosHistorial[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
+                                }
                             }
-                            if (!empty($permisosRoles) && $permisosRoles[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                            }
-                            if (!empty($permisosEstados) && $permisosEstados[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
-                            }
-                            if (!empty($permisosPermiso) && $permisosPermiso[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                            }
-                            if (!empty($permisosObjetos) && $permisosObjetos[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
-                            }
-                            if (!empty($permisosParametro) && $permisosParametro[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                            }
-                            if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
-                            }
-                            if (!empty($permisosError) && $permisosError[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
-                            }
-                            if (!empty($permisosHistorial) && $permisosHistorial[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
-                            }
-                        }
 
 
 
@@ -385,7 +385,7 @@ if (!isset($_SESSION['usuario'])) {
                                 if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 }
-                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
                                 }
                                 if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {
@@ -407,13 +407,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 }
-                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 }
-                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
                                 }
                             }
@@ -483,10 +483,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th> Rol</th>
                                     <th style="display: none;">Id Objeto</th>
                                     <th>Objeto</th>
-                                    <th>Permisos Inserción</th>
-                                    <th>Permisos Eliminación</th>
+                                    <th>Permisos Consultar </th>
+                                    <th>Permisos Inserción </th>
                                     <th>Permisos Actualización</th>
-                                    <th>Permisos Consultar</th>
+                                    <th>Permisos Eliminación</th>
                                     <th style="display: none;">Creado Por</th>
                                     <th style="display: none;">Modificado Por</th>
                                     <th style="display: none;">Fecha Creación</th>
@@ -567,29 +567,26 @@ if (!isset($_SESSION['usuario'])) {
                                             <?php endforeach; ?>
                                         </select>
                                         <label>Permisos</label>
-
+                                        <!-- Checkbox para Consultar -->
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="agregar-pConsultar" name="permisos_cons" value="1">
+                                            <label class="form-check-label" for="agregar-pConsultar">Consultar</label>
+                                        </div>
                                         <!-- Checkbox para Insertar -->
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="agregar-pInsercion" name="permisos_Inser" value="1">
                                             <label class="form-check-label" for="agregar-pInsercion">Insertar</label>
                                         </div>
-
-                                        <!-- Checkbox para Eliminar -->
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="agregar-pEliminacion" name="permisos_elim" value="1">
-                                            <label class="form-check-label" for="agregar-pEliminacion">Eliminar</label>
-                                        </div>
-
                                         <!-- Checkbox para Actualizar -->
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="agregar-pActualizacion" name="permisos_actu" value="1">
                                             <label class="form-check-label" for="agregar-pActualizacion">Actualizar</label>
                                         </div>
 
-                                        <!-- Checkbox para Consultar -->
+                                        <!-- Checkbox para Eliminar -->
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="agregar-pConsultar" name="permisos_cons" value="1">
-                                            <label class="form-check-label" for="agregar-pConsultar">Consultar</label>
+                                            <input class="form-check-input" type="checkbox" id="agregar-pEliminacion" name="permisos_elim" value="1">
+                                            <label class="form-check-label" for="agregar-pEliminacion">Eliminar</label>
                                         </div>
 
                                     </div>
@@ -671,16 +668,16 @@ if (!isset($_SESSION['usuario'])) {
 
                                         <label>Permisos</label>
 
+                                             <!-- Checkbox para Consultar -->
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="editar-pConsultar" name="permisos_cons" value="1">
+                                            <label class="form-check-label" for="editar-pConsultar">Consultar</label>
+                                        </div>
+
                                         <!-- Checkbox para Insertar -->
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="editar-pInsercion" name="permisos_Inser" value="1">
                                             <label class="form-check-label" for="editar-pInsercion">Insertar</label>
-                                        </div>
-
-                                        <!-- Checkbox para Eliminar -->
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="editar-pEliminacion" name="permisos_elim" value="1">
-                                            <label class="form-check-label" for="editar-pEliminacion">Eliminar</label>
                                         </div>
 
                                         <!-- Checkbox para Actualizar -->
@@ -689,10 +686,10 @@ if (!isset($_SESSION['usuario'])) {
                                             <label class="form-check-label" for="editar-pActualizacion">Actualizar</label>
                                         </div>
 
-                                        <!-- Checkbox para Consultar -->
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="editar-pConsultar" name="permisos_cons" value="1">
-                                            <label class="form-check-label" for="editar-pConsultar">Consultar</label>
+                                   <!-- Checkbox para Eliminar -->
+                                   <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="editar-pEliminacion" name="permisos_elim" value="1">
+                                            <label class="form-check-label" for="editar-pEliminacion">Eliminar</label>
                                         </div>
 
                                     </div>
@@ -762,10 +759,10 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + permiso.ROL + '</td>' +
                             '<td style="display:none;">' + permiso.ID_OBJETO + '</td>' +
                             '<td>' + permiso.OBJETO + '</td>' +
-                            '<td>' + (permiso.PERMISOS_INSERCION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
-                            '<td>' + (permiso.PERMISOS_ELIMINACION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
-                            '<td>' + (permiso.PERMISOS_ACTUALIZACION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
                             '<td>' + (permiso.PERMISOS_CONSULTAR === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
+                            '<td>' + (permiso.PERMISOS_INSERCION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
+                            '<td>' + (permiso.PERMISOS_ACTUALIZACION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
+                            '<td>' + (permiso.PERMISOS_ELIMINACION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
                             '<td style="display: none;">' + permiso.CREADO_POR + '</td>' +
                             '<td style="display: none;">' + permiso.MODIFICADO_POR + '</td>' +
                             '<td style="display: none;">' + permiso.FECHA_CREACION + '</td>' +

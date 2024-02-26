@@ -7,7 +7,7 @@ class PermisosUsuarios extends Conectar
         $conectar = parent::conexion();
         parent::set_names();
         $sql = "SELECT PERMISOS_INSERCION, PERMISOS_ELIMINACION, PERMISOS_ACTUALIZACION, PERMISOS_CONSULTAR 
-                FROM siaace.tbl_ms_permisos 
+                FROM tbl_ms_permisos 
                 WHERE id_rol = :id_rol AND id_objeto = :id_objeto";
         $sql = $conectar->prepare($sql);
         $sql->bindParam(':id_rol', $id_rol, PDO::PARAM_INT);
@@ -39,7 +39,7 @@ class PermisosUsuarios extends Conectar
                     CASE WHEN P.PERMISOS_ELIMINACION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_ELIMINACION,
                     CASE WHEN P.PERMISOS_ACTUALIZACION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_ACTUALIZACION,
                     CASE WHEN P.PERMISOS_CONSULTAR = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_CONSULTAR
-                FROM siaace.tbl_ms_permisos P
+                FROM tbl_ms_permisos P
                 INNER JOIN siaace.tbl_ms_roles R ON P.ID_ROL = R.ID_ROL
                 INNER JOIN siaace.tbl_ms_objetos O ON P.ID_OBJETO = O.ID_OBJETO";
 
@@ -59,7 +59,7 @@ class PermisosUsuarios extends Conectar
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_permisos` (`ID_ROL`, `ID_OBJETO`, `PERMISOS_INSERCION`, `PERMISOS_ELIMINACION`, `PERMISOS_ACTUALIZACION`, `PERMISOS_CONSULTAR`) VALUES ( :ID_ROL, :ID_OBJETO, :PERMISOS_INSERCION, :PERMISOS_ELIMINACION, :PERMISOS_ACTUALIZACION, :PERMISOS_CONSULTAR)";
+            $sql = "INSERT INTO `tbl_ms_permisos` (`ID_ROL`, `ID_OBJETO`, `PERMISOS_INSERCION`, `PERMISOS_ELIMINACION`, `PERMISOS_ACTUALIZACION`, `PERMISOS_CONSULTAR`) VALUES ( :ID_ROL, :ID_OBJETO, :PERMISOS_INSERCION, :PERMISOS_ELIMINACION, :PERMISOS_ACTUALIZACION, :PERMISOS_CONSULTAR)";
 
             $stmt = $conectar->prepare($sql);
             $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);

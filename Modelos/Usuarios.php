@@ -7,9 +7,9 @@ class Usuario extends Conectar
         $conectar = parent::conexion();
         parent::set_names();
         $sql = "SELECT U.*, R.ROL, E.NOMBRE
-        FROM siaace.tbl_ms_usuario U
-        INNER JOIN siaace.tbl_ms_roles R ON U.ID_ROL = R.ID_ROL
-        INNER JOIN siaace.tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO";
+        FROM tbl_ms_usuario U
+        INNER JOIN tbl_ms_roles R ON U.ID_ROL = R.ID_ROL
+        INNER JOIN tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -35,7 +35,7 @@ class Usuario extends Conectar
             //echo $contrasenaEncriptada;
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_usuario` (`USUARIO`, `NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CONTRASENA`, `CORREO_ELECTRONICO`, `ID_ROL`, `CREADO_POR`, `FECHA_CREACION`) VALUES ( :USUARIO, :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CONTRASENA, :CORREO_ELECTRONICO, :ID_ROL, :CREADO_POR, :FECHA_CREACION)";
+            $sql = "INSERT INTO `tbl_ms_usuario` (`USUARIO`, `NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CONTRASENA`, `CORREO_ELECTRONICO`, `ID_ROL`, `CREADO_POR`, `FECHA_CREACION`) VALUES ( :USUARIO, :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CONTRASENA, :CORREO_ELECTRONICO, :ID_ROL, :CREADO_POR, :FECHA_CREACION)";
 
             $stmt = $conectar->prepare($sql);
 

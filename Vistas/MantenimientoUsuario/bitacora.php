@@ -271,6 +271,11 @@ if (!isset($_SESSION['usuario'])) {
                                 }
                                 if (!empty($permisosEstados) && $permisosEstados[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                                }else {
+                                    echo '<script>';
+                                    echo 'alert("No tiene permiso para este mantenimiento");';
+                                    echo 'window.location.href = window.location.href;';  // Recargar la página
+                                    echo '</script>';
                                 }
                                 if (!empty($permisosPermiso) && $permisosPermiso[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';

@@ -118,6 +118,20 @@ $permisos4 = $permisosRoles->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos
 $datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
 $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
+
+//---------CONEXION A LA TABLA ESTADO USUARIO --------
+// Crear una instancia de la clase Conectar
+$conexion = new Conectar();
+$conn = $conexion->Conexion();
+// Consultar la contraseña actual del usuario desde la base de datos
+
+$sql1 = "SELECT ID_ESTADO_USUARIO, NOMBRE FROM tbl_ms_estadousuario";
+$stmt1 = $conn->prepare($sql1);
+$stmt1->execute();
+
+// Obtener los resultados en un array asociativo
+$Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
 if (!isset($_SESSION['usuario'])) {
     header("Location: ../../InicioSesion/login.php");
     exit();
@@ -419,8 +433,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th style="display: none;">Id</th>
                                     <th>Rol</th>
                                     <th>Descripcion</th>
+                                    <th style="display: none;">Id Estado Usuario</th>
+                                    <th>Estado</th>
                                     <th>Creado por</th>
-                                    <th>Modificado por</th>
+                                    <th>Modificado Por</th>
                                     <th>Fecha Creacion</th>
                                     <th>Fecha Modificacion</th>
                                     <th>Acciones</th>
@@ -454,6 +470,14 @@ if (!isset($_SESSION['usuario'])) {
                                         <label for="estado">Descripcion</label>
                                         <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
+
+                                        <label for="id-estado">Estado</label>
+                                        <select class="form-control" id="agregar-estado" name="IdEstado" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <?php foreach ($Estados as $Estado) : ?>
+                                                <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                     </div>
                                 </form>
                             </div>
@@ -488,6 +512,14 @@ if (!isset($_SESSION['usuario'])) {
                                         <label for="estado">Desripcion</label>
                                         <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje3"></div>
+
+                                        <label for="id-estado">Estado</label>
+                                        <select class="form-control" id="editar-estado" name="IdEstadoEditar" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <?php foreach ($Estados as $Estado) : ?>
+                                                <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                     </div>
                                 </form>
                             </div>
@@ -556,6 +588,8 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + rol.ID_ROL + '</td>' +
                             '<td>' + rol.ROL + '</td>' +
                             '<td>' + rol.DESCRIPCION + '</td>' +
+                            '<td style="display:none;">' + rol.ID_ESTADO_USUARIO + '</td>' +
+                            '<td>' + rol.NOMBRE + '</td>' + //ES EL NOMBRE DEL ESTADO
                             '<td>' + rol.CREADO_POR + '</td>' +
                             '<td>' + rol.MODIFICADO_POR + '</td>' +
                             '<td>' + rol.FECHA_CREACION + '</td>' +
@@ -696,7 +730,7 @@ if (!isset($_SESSION['usuario'])) {
                 // Obtener los valores de los campos del formulario
                 var rol = $("#agregar-rol").val();
                 var descripcion = $("#agregar-descripcion").val();
-
+                var estado = $("#agregar-estado").val();
                 if (rol == "" || descripcion == "") {
                     Swal.fire({
                         icon: 'error',
@@ -708,6 +742,7 @@ if (!isset($_SESSION['usuario'])) {
                     var datos = {
                         ROL: rol,
                         DESCRIPCION: descripcion,
+                        ID_ESTADO_USUARIO: estado
 
                     };
 
@@ -791,6 +826,7 @@ if (!isset($_SESSION['usuario'])) {
                     // Llena los campos del modal con los datos del rol
                     document.getElementById('editar-id-rol').value = rol.ID_ROL;
                     document.getElementById('editar-rol').value = rol.ROL;
+                    document.getElementById('editar-estado').value = rol.ID_ESTADO_USUARIO;
                     document.getElementById('editar-descripcion').value = rol.DESCRIPCION;
                 })
                 .catch(function(error) {
@@ -803,7 +839,7 @@ if (!isset($_SESSION['usuario'])) {
             var id_rol = document.getElementById('editar-id-rol').value;
             var rol = document.getElementById('editar-rol').value;
             var descripcion = document.getElementById('editar-descripcion').value;
-
+            var estado = document.getElementById('editar-estado').value;
             if (rol == "" || descripcion == "") {
                 Swal.fire({
                     icon: 'error',
@@ -821,7 +857,8 @@ if (!isset($_SESSION['usuario'])) {
                         body: JSON.stringify({
                             "ID_ROL": id_rol,
                             "ROL": rol,
-                            "DESCRIPCION": descripcion
+                            "DESCRIPCION": descripcion,
+                            "ID_ESTADO_USUARIO": estado
                         }) // Convierte los datos en formato JSON
                     })
                     .then(function(response) {

@@ -65,6 +65,7 @@ switch ($_GET["op"]) {
         $ID_ESTADO_USUARIO = $body["ID_ESTADO_USUARIO"];
         $CORREO_ELECTRONICO = $body["CORREO_ELECTRONICO"];
         $ID_ROL = $body["ID_ROL"];
+        $CONTRASENA = $body["CONTRASENA"];
 
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
@@ -77,6 +78,7 @@ switch ($_GET["op"]) {
             $CORREO_ELECTRONICO, 
             $ID_ROL,
             $_SESSION['usuario'],
+            $CONTRASENA,
             $dateNew
         );
         echo json_encode($datos);

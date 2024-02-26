@@ -13,10 +13,10 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 require_once("../config/conexion.php");
-require_once("../modelos/roles.php"); 
+require_once("../modelos/roles.php");
 require_once("../Modelos/bitacora.php");
 
-$com = new Roles(); 
+$com = new Roles();
 $bit = new bitacora();
 
 $body = json_decode(file_get_contents("php://input"), true);
@@ -29,24 +29,26 @@ switch ($_GET["op"]) {
 
     case "InsertRol":
 
- // Obtén los datos del ROL
- $ROL = $body["ROL"];
- $DESCRIPCION = $body["DESCRIPCION"];
- 
- if (verificarExistenciaRol($ROL) > 0) {
-     // Envía una respuesta de conflicto (409) si el ROL ya existe
-     http_response_code(409);
-     echo json_encode(["error" => "El rol ya existe en la base de datos."]);
- } else {
-     // Inserta el ROL en la base de datos
-     $date = new DateTime(date("Y-m-d H:i:s"));
-     $dateMod = $date->modify("-7 hours");
-     $dateNew = $dateMod->format("Y-m-d H:i:s");
-     $datos = $com->insert_rol($ROL, $DESCRIPCION, $_SESSION['usuario'], $dateNew);
-     echo json_encode(["message" => "Rol insertado exitosamente."]);
-     $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL ROL: $ROL", $_SESSION['id_usuario'], 1, $_SESSION['usuario'], $dateNew);
+        // Obtén los datos del ROL
+        $ROL = $body["ROL"];
+        $DESCRIPCION = $body["DESCRIPCION"];
+        $ID_ESTADO_USUARIO = $body["ID_ESTADO_USUARIO"];
 
- }
+        if (verificarExistenciaRol($ROL) > 0) {
+            // Envía una respuesta de conflicto (409) si el ROL ya existe
+            http_response_code(409);
+            echo json_encode(["error" => "El rol ya existe en la base de datos."]);
+        } else {
+            // Inserta el ROL en la base de datos
+            $date = new DateTime(date("Y-m-d H:i:s"));
+            $dateMod = $date->modify("-7 hours");
+            $dateNew = $dateMod->format("Y-m-d H:i:s");
+            $datos = $com->insert_rol($ROL, $DESCRIPCION, $ID_ESTADO_USUARIO, $_SESSION['usuario'], $dateNew);
+            echo json_encode(["message" => "Rol insertado exitosamente."]);
+            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL ROL: $ROL", $_SESSION['id_usuario'], 1, $_SESSION['usuario'], $dateNew);
+            echo json_encode($datos);  
+        }
+
 
         break;
 
@@ -59,18 +61,20 @@ switch ($_GET["op"]) {
         $ID_ROL = $body["ID_ROL"];
         $ROL = $body["ROL"];
         $DESCRIPCION = $body["DESCRIPCION"];
-      
+        $ID_ESTADO_USUARIO = $body["ID_ESTADO_USUARIO"];
+
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
-        $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+        $dateNew = $dateMod->format("Y-m-d H:i:s");
 
         $datos = $com->update_rol(
             $ID_ROL,
             $ROL,
             $DESCRIPCION,
+            $ID_ESTADO_USUARIO,
             $_SESSION['usuario'],
             $dateNew
-    
+
         );
         echo json_encode($datos);
         $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL ROL # $ID_ROL", $_SESSION['id_usuario'], 1, $_SESSION['usuario'], $dateNew);
@@ -78,18 +82,19 @@ switch ($_GET["op"]) {
         break;
 
     case "EliminarRol":
-        $ID_ROL= $body["ID_ROL"];
+        $ID_ROL = $body["ID_ROL"];
         $datos = $com->eliminar_ROL($ID_ROL);
         echo json_encode("Rol eliminado");
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
-        $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+        $dateNew = $dateMod->format("Y-m-d H:i:s");
         $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL ROL # $ID_ROL", $_SESSION['id_usuario'], 1);
-    
+
         break;
 }
 
-function verificarExistenciaRol($rol) {
+function verificarExistenciaRol($rol)
+{
     // Realiza una consulta en la base de datos para verificar si el ROL ya existe
     $sql = "SELECT COUNT(*) as count FROM tbl_ms_roles WHERE ROL = :rol";
 
@@ -104,4 +109,3 @@ function verificarExistenciaRol($rol) {
     // Devuelve el número de resultados encontrados
     return $row['count'];
 }
-?>

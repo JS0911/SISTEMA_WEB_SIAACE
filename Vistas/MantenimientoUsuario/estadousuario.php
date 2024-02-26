@@ -326,8 +326,10 @@ if (!isset($_SESSION['usuario'])) {
                                 if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 }
-                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                } else {
+                                    ;
                                 }
                                 if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
@@ -349,13 +351,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 }
-                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 }
-                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
                                 }
                             }
@@ -747,9 +749,9 @@ if (!isset($_SESSION['usuario'])) {
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
                                 throw new Error('El registro ya existe en la Base de Datos.');
-                                <?php 
-                                    $error = new Errores();
-                                    $error->insert_error('Error al Insertar', 'ERROR SQL: [1062] Duplicate entry: ESTADO USUARIO for key Primary ID.', 'El registro ya existe en la Base de Datos.', date('Y-m-d H:i:s'));
+                                <?php
+                                $error = new Errores();
+                                $error->insert_error('Error al Insertar', 'ERROR SQL: [1062] Duplicate entry: ESTADO USUARIO for key Primary ID.', 'El registro ya existe en la Base de Datos.', date('Y-m-d H:i:s'));
                                 ?>
                             }
                         })

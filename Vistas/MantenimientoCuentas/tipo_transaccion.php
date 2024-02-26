@@ -56,7 +56,7 @@ $id_rol = $_SESSION['id_rol'];
 $id_objeto_Transaccion = "11";
 $id_objeto_Seguridad = "25";
 $id_objeto_Empleado = "27";
-$id_objeto_Cuentas = "36";
+$id_objeto_Cuentas = "36";  
 $id_objeto_Prestamos = "35";
 
 

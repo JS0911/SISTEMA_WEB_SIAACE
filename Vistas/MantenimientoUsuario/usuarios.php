@@ -538,10 +538,10 @@ if (!isset($_SESSION['usuario'])) {
                                         <input type="text" class="form-control" id="editar-id-usuario" disabled>
                                         <label for="nombre">Usuario</label>
 
-                                        <input type="text" maxlength="15" class="form-control" id="editar-usuario" disabled required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="15" class="form-control" id="editar-usuario" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
 
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-nombre" disabled required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="editar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
 
                                         <label for="estado">Estado</label>
                                         <select class="form-control" id="editar-estado" name="IdEstado" required>
@@ -573,6 +573,14 @@ if (!isset($_SESSION['usuario'])) {
                                                 <option value="<?php echo $rol['id_rol']; ?>"><?php echo $rol['rol']; ?></option>
                                             <?php endforeach; ?>
                                         </select>
+
+                                        <label for="estado">Contraseña</label>
+                                        <input type="password" maxlength="100" class="form-control" id="editar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" />
+                                        <div id="mensaje4"></div>
+
+                                        <label for="estado">Confirmar Contraseña</label>
+                                        <input type="password" maxlength="100" class="form-control" id="editar-contrasenaC" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" />
+                                        <div id="mensaje5"></div>
                                     </div>
                                 </form>
                             </div>
@@ -924,13 +932,19 @@ if (!isset($_SESSION['usuario'])) {
 
         function updateUsuario() {
             // Obtén el ID del usuario 
-            var idUsuario = document.getElementById('editar-id-usuario').value;
-            // Obtén los valores de los campos de edición
-            var usuario = document.getElementById('editar-usuario').value;
-            var nombre = document.getElementById('editar-nombre').value;
-            var estado = document.getElementById('editar-estado').value;
-            var correo = document.getElementById('editar-correo').value;
-            var rol = document.getElementById('editar-rol').value;
+                var idUsuario = document.getElementById('editar-id-usuario').value;
+                // Obtén los valores de los campos de edición
+                var usuario = document.getElementById('editar-usuario').value;
+                var nombre = document.getElementById('editar-nombre').value;
+                var estado = document.getElementById('editar-estado').value;
+                var correo = document.getElementById('editar-correo').value;
+                var rol = document.getElementById('editar-rol').value;
+                var contrasena = document.getElementById('editar-contrasena').value;
+                var contrasenac = document.getElementById('editar-contrasenaC').value;
+
+                if (!validarContraseñas(contrasena, contrasenac)) {
+                        return;
+                    }
 
             // Realiza una solicitud FETCH para actualizar los datos del usuario
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=updateUsuario', {
@@ -945,7 +959,9 @@ if (!isset($_SESSION['usuario'])) {
                         "NOMBRE_USUARIO": nombre,
                         "ID_ESTADO_USUARIO": estado,
                         "CORREO_ELECTRONICO": correo,
-                        "ID_ROL": rol
+                        "ID_ROL": rol,
+                        "CONTRASENA": contrasena
+
                     }) // Convierte los datos en formato JSON
                 })
                 .then(function(response) {
