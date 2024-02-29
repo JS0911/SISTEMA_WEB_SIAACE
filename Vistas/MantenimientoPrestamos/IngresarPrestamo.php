@@ -561,8 +561,9 @@ if (!isset($_SESSION['usuario'])) {
                                             <label for="saldo">Saldo</label>
                                             <input type="text" class="form-control" id="Saldo" disabled>
                                             <label for="Deposito">Monto De Deposito</label>
-                                            <input type="text" class="form-control" id="Monto-Deposito" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un deposito válido (hasta 8 dígitos enteros y 2 decimales)">
-                                            <div id="mensaje3"></div>
+                                           
+                                            <input type="text" class="form-control" id="Monto_Deposito " required pattern="[0-9]{1,8}(\.[0-9]{0,2})?" title="Ingrese un depósito válido (hasta 8 dígitos enteros y 2 decimales)" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 46 && this.value.indexOf('.') === -1)">
+                                         <div id="mensaje3"></div>
                                         </div>
                                     </form>
                                 </div>
@@ -594,7 +595,7 @@ if (!isset($_SESSION['usuario'])) {
                                             <label for="saldo">Saldo</label>
                                             <input type="text" class="form-control" id="SaldoR" disabled>
                                             <label for="Deposito">Monto De Reembolso</label>
-                                            <input type="text" class="form-control" id="Monto-Reembolso" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un retiro válido (hasta 8 dígitos enteros y 2 decimales)">
+                                            <input type="text" class="form-control" id="Monto_Reembolso" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un retiro válido (hasta 8 dígitos enteros y 2 decimales)" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 46 && this.value.indexOf('.') === -1)">
                                             <div id="mensaje4"></div>
                                         </div>
                                     </form>
@@ -1058,7 +1059,7 @@ if (!isset($_SESSION['usuario'])) {
                 // Obtener los valores de los campos del formulario
 
                 var id_cuenta = document.getElementById("id-cuenta-edit").value; // Obtener el valor del select
-                var deposito = document.getElementById("Monto-Deposito").value; // Obtener el valor del select
+                var deposito = document.getElementById("Monto_Deposito ").value; // Obtener el valor del select
                 // Crear un objeto con los datos a enviar al servidor
                 var datos = {
                     ID_CUENTA: id_cuenta,
@@ -1117,7 +1118,7 @@ if (!isset($_SESSION['usuario'])) {
                 // Obtener los valores de los campos del formulario
 
                 var id_cuenta = document.getElementById("id-cuenta-editR").value; // Obtener el valor del select
-                var reembolso = document.getElementById("Monto-Reembolso").value; // Obtener el valor del select
+                var reembolso = document.getElementById("Monto_Reembolso").value; // Obtener el valor del select
                 // Crear un objeto con los datos a enviar al servidor
                 var datos = {
                     ID_CUENTA: id_cuenta,
@@ -1212,8 +1213,8 @@ if (!isset($_SESSION['usuario'])) {
         function validarNombre() {
             var agregarMSolicitado = document.getElementById("agregar-MSolicitado");
             var agregarNumeroCuenta = document.getElementById("NumeroCuenta");
-            var agregarDeposito = document.getElementById("Monto-Deposito");
-            var agregarRetiro = document.getElementById("Monto-Reembolso");
+            var agregarDeposito = document.getElementById("Monto_Deposito ");
+            var agregarRetiro = document.getElementById("Monto_Reembolso");
 
             function clearMessage(messageElement, inputElement) {
                 messageElement.innerHTML = ""; // Elimina el contenido del mensaje
@@ -1264,10 +1265,10 @@ if (!isset($_SESSION['usuario'])) {
             handleInputAndBlurEvents(NumeroCuenta, expresionValidadora2, mensaje2, "Ingrese un número de cuenta válido (solo números y -)");
 
             var mensaje3 = document.getElementById("mensaje3");
-            handleInputAndBlurEvents(Monto - Deposito, expresionValidadora1, mensaje3, "Ingrese un deposito válido (por ejemplo, 1000.00)");
+            handleInputAndBlurEvents(Monto_Deposito , expresionValidadora1, mensaje3, "Ingrese un deposito válido (por ejemplo, 1000.00)");
 
             var mensaje4 = document.getElementById("mensaje4");
-            handleInputAndBlurEvents(Monto - Reembolso, expresionValidadora1, mensaje4, "Ingrese un retiro válido (por ejemplo, 1000.00)");
+            handleInputAndBlurEvents(Monto_Reembolso, expresionValidadora1, mensaje4, "Ingrese un retiro válido (por ejemplo, 1000.00)");
 
         }
         //FUNCION SEPARADOR DE MILES Y DECIMALES
@@ -1353,7 +1354,7 @@ if (!isset($_SESSION['usuario'])) {
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
-        const agregarDeposito = document.getElementById("Monto-Deposito");
+        const agregarDeposito = document.getElementById("Monto_Deposito ");
         const guardarButton2 = document.getElementById('btn-enviar-deposito');
 
         // Función para verificar si todos los campos están llenos
@@ -1368,7 +1369,7 @@ if (!isset($_SESSION['usuario'])) {
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
-        const agregarRetiro = document.getElementById("Monto-Reembolso");
+        const agregarRetiro = document.getElementById("Monto_Reembolso");
         const guardarButton3 = document.getElementById('btn-enviar-reembolso');
 
         // Función para verificar si todos los campos están llenos
@@ -1383,7 +1384,7 @@ if (!isset($_SESSION['usuario'])) {
 
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#NumeroCuenta, #agregar-tipo-cuenta, #agregar-estado, #Monto-Deposito, #Monto-Reembolso').on('input', function() {
+        $('#NumeroCuenta, #agregar-tipo-cuenta, #agregar-estado, #Monto_Deposito , #Monto_Reembolso').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);
@@ -1434,10 +1435,10 @@ if (!isset($_SESSION['usuario'])) {
     <script>
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
         document.getElementById('btn-cancelarEditar').addEventListener('click', function() {
-            document.getElementById('Monto-Deposito').value = "";
+            document.getElementById('Monto_Deposito ').value = "";
 
             // Limpia los checkboxes
-            document.getElementById('Monto-Deposito').checked = false;
+            document.getElementById('Monto_Deposito ').checked = false;
             location.reload();
         });
     </script>
@@ -1445,10 +1446,10 @@ if (!isset($_SESSION['usuario'])) {
     <script>
         //--------LIMPIAR MODALES DESPUES DEL BOTON CANCELAR MODAL EDITAR--------------------
         document.getElementById('btn-cancelarEditar1').addEventListener('click', function() {
-            document.getElementById('Monto-Reembolso').value = "";
+            document.getElementById('Monto_Reembolso').value = "";
 
             // Limpia los checkboxes
-            document.getElementById('Monto-Reembolso').checked = false;
+            document.getElementById('Monto_Reembolso').checked = false;
             location.reload();
         });
     </script>
