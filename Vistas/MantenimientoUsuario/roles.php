@@ -499,7 +499,7 @@ if (!isset($_SESSION['usuario'])) {
                                         <input type="text" class="form-control" id="editar-id-rol" disabled>
 
                                         <label for="nombre">Rol</label>
-                                        <input type="text" class="form-control" id="editar-rol" disabled>
+                                        <input type="text" class="form-control" id="editar-rol">
 
                                         <label for="estado">Desripcion</label>
                                         <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
@@ -718,79 +718,84 @@ if (!isset($_SESSION['usuario'])) {
         }
 
         function Insertar_Rol() {
-            $("#btn-agregar").click(function() {
-                // Obtener los valores de los campos del formulario
-                var rol = $("#agregar-rol").val();
-                var descripcion = $("#agregar-descripcion").val();
-                var estado = $("#agregar-estado").val();
-                if (rol == "" || descripcion == "") {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'No se pueden enviar Campos Vacios.'
-                    })
-                } else {
-                    // Crear un rol con los datos a enviar al servidor
-                    var datos = {
-                        ROL: rol,
-                        DESCRIPCION: descripcion,
-                        ID_ESTADO_USUARIO: estado
+    $("#btn-agregar").click(function() {
+        // Obtener los valores de los campos del formulario
+        var rol = $("#agregar-rol").val();
+        var descripcion = $("#agregar-descripcion").val();
+        var estado = $("#agregar-estado").val();
 
-                    };
+        if (rol == "" || descripcion == "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'No se pueden enviar Campos Vacios.'
+            });
+        } else {
+            // Crear un rol con los datos a enviar al servidor
+            var datos = {
+                ROL: rol,
+                DESCRIPCION: descripcion,
+                ID_ESTADO_USUARIO: estado
+            };
 
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=InsertRol', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(datos)
-                        })
-                        .then(function(response) {
-                            if (response.ok) {
-                                if (response.status === 200) {
-                                    // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
-                                    return response.json().then(function(data) {
-                                        console.log(data);
-                                        // Cerrar la modal después de guardar
-                                        $('#crearModal').modal('hide');
-                                        // Mostrar SweetAlert de éxito
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Guardado exitoso',
-                                            text: data.message
-                                        }).then(function() {
-                                            // Recargar la página para mostrar los nuevos datos
-                                            location.reload();
-                                        });
-                                    });
-                                } else if (response.status === 409) {
-                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
-                                    return response.json().then(function(data) {
-                                        console.log(data);
-                                        // Mostrar SweetAlert de error
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Error',
-                                            text: data.error // Acceder al mensaje de error
-                                        });
-                                    });
-                                }
-                            } else {
-                                // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('El registro ya existe en la Base de Datos.');
-                            }
-                        })
-                        .catch(function(error) {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=InsertRol', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos)
+            })
+            .then(function(response) {
+                if (response.ok) {
+                    if (response.status === 200) {
+                        // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
+                        return response.json().then(function(data) {
+                            console.log(data);
+                            // Cerrar la modal después de guardar
+                            $('#crearModal').modal('hide');
+                            // Mostrar SweetAlert de éxito
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Guardado exitoso',
+                                text: data.message
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                            });
+                        });
+                    } else if (response.status === 409) {
+                        // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
+                        return response.json().then(function(data) {
+                            console.log(data);
+                            // Mostrar SweetAlert de error
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: 'Error al guardar los datos: ' + error.message
+                                text: data.error // Acceder al mensaje de error
                             });
-                            console.log(error.message);
                         });
+                    } else {
+                        // Manejar otras respuestas aquí (códigos de respuesta diferentes a 200 o 409)
+                        throw new Error('Error inesperado');
+                    }
+                } else {
+                    // Si hubo un error en la solicitud, maneja el error aquí
+                    throw new Error('Error en la solicitud: ' + response.status);
                 }
+            })
+            .catch(function(error) {
+                // Mostrar SweetAlert de error genérico
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al guardar los datos: ' + error.message
+                });
+                console.log(error.message);
             });
         }
+    });
+}
+
 
         function cargarRol(id) {
             // Crear un rol con el ID del rol

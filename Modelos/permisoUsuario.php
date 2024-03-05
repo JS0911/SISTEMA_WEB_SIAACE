@@ -19,7 +19,7 @@ class PermisosUsuarios extends Conectar
             // echo "Si se obtuvieron resultados";
             return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
         } else {
-            return array(); // Devuelve un array vacío o un valor que indique la ausencia de resultados
+            return array(); // Devuelve un array vacÃ­o o un valor que indique la ausencia de resultados
         }
     }
 
@@ -35,13 +35,13 @@ class PermisosUsuarios extends Conectar
                     R.ROL,
                     P.ID_OBJETO,
                     O.OBJETO,
-                    CASE WHEN P.PERMISOS_INSERCION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_INSERCION,
-                    CASE WHEN P.PERMISOS_ELIMINACION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_ELIMINACION,
-                    CASE WHEN P.PERMISOS_ACTUALIZACION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_ACTUALIZACION,
-                    CASE WHEN P.PERMISOS_CONSULTAR = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_CONSULTAR
+                    CASE WHEN P.PERMISOS_INSERCION = 1 THEN 'Sí­' ELSE 'No' END AS PERMISOS_INSERCION,
+                    CASE WHEN P.PERMISOS_ELIMINACION = 1 THEN 'Sí­' ELSE 'No' END AS PERMISOS_ELIMINACION,
+                    CASE WHEN P.PERMISOS_ACTUALIZACION = 1 THEN 'Sí­' ELSE 'No' END AS PERMISOS_ACTUALIZACION,
+                    CASE WHEN P.PERMISOS_CONSULTAR = 1 THEN 'Sí­' ELSE 'No' END AS PERMISOS_CONSULTAR
                 FROM tbl_ms_permisos P
-                INNER JOIN siaace.tbl_ms_roles R ON P.ID_ROL = R.ID_ROL
-                INNER JOIN siaace.tbl_ms_objetos O ON P.ID_OBJETO = O.ID_OBJETO";
+                INNER JOIN tbl_ms_roles R ON P.ID_ROL = R.ID_ROL
+                INNER JOIN tbl_ms_objetos O ON P.ID_OBJETO = O.ID_OBJETO";
 
         $sql = $conectar->prepare($sql);
 
@@ -76,7 +76,7 @@ class PermisosUsuarios extends Conectar
                 return "Error al insertar el permiso";
             }
         } catch (PDOException $e) {
-            // Captura el código de error de la excepción
+            // Captura el cÃ³digo de error de la excepciÃ³n
             return $e->getCode();
         }
         
@@ -113,7 +113,7 @@ class PermisosUsuarios extends Conectar
             if ($stmt->rowCount() > 0) {
                 return "Permiso actualizado correctamente";
             } else {
-                return "No se realizó ninguna actualización, o el rol u objeto no existe";
+                return "No se realizÃ³ ninguna actualizaciÃ³n, o el rol u objeto no existe";
             }
         } catch (PDOException $e) {
             return "Error al actualizar el permiso: " . $e->getMessage();
@@ -134,9 +134,9 @@ class PermisosUsuarios extends Conectar
             $stmt_select->bindParam(':ID_OBJETO', $ID_OBJETO, PDO::PARAM_INT);
             $stmt_select->execute();
 
-            // Verificar si se encontró el permiso
+            // Verificar si se encontrÃ³ el permiso
             if ($stmt_select->rowCount() > 0) {
-                // El permiso existe, proceder con la eliminación
+                // El permiso existe, proceder con la eliminaciÃ³n
                 $delete_sql = "DELETE FROM `tbl_ms_permisos` WHERE `ID_ROL` = :ID_ROL AND `ID_OBJETO` = :ID_OBJETO";
                 $stmt_delete = $conectar->prepare($delete_sql);
                 $stmt_delete->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
@@ -146,7 +146,7 @@ class PermisosUsuarios extends Conectar
                 if ($stmt_delete->rowCount() > 0) {
                     return "Permiso eliminado correctamente";
                 } else {
-                    return "No se realizó ninguna eliminación, o el rol u objeto no existe";
+                    return "No se realizÃ³ ninguna eliminaciÃ³n, o el rol u objeto no existe";
                 }
             } else {
                 return "El permiso no existe";
@@ -170,14 +170,14 @@ class PermisosUsuarios extends Conectar
             $stmt_select->bindParam(':ID_OBJETO', $ID_OBJETO, PDO::PARAM_INT);
             $stmt_select->execute();
 
-            // Verificar si se encontró el permiso
+            // Verificar si se encontrÃ³ el permiso
             if ($stmt_select->rowCount() > 0) {
                 // Realizar una consulta SQL para verificar si existe un permiso con el mismo ID_ROL e ID_OBJETO
                 $sql = "SELECT COUNT(*) as count FROM `tbl_ms_permisos` WHERE `ID_ROL` = :ID_ROL AND `ID_OBJETO` = :ID_OBJETO";
                 // Preparar la consulta
                 $stmt = $conectar->prepare($sql);
 
-                // Vincular los parámetros
+                // Vincular los parÃ¡metros
                 $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
                 $stmt->bindParam(':ID_OBJETO', $ID_OBJETO, PDO::PARAM_INT);
                 $stmt->execute();

@@ -38,6 +38,7 @@ switch ($_GET["op"]) {
             // Envía una respuesta de conflicto (409) si el ROL ya existe
             http_response_code(409);
             echo json_encode(["error" => "El rol ya existe en la base de datos."]);
+            exit; // Detener la ejecución del script
         } else {
             // Inserta el ROL en la base de datos
             $date = new DateTime(date("Y-m-d H:i:s"));
@@ -46,8 +47,9 @@ switch ($_GET["op"]) {
             $datos = $com->insert_rol($ROL, $DESCRIPCION, $ID_ESTADO_USUARIO, $_SESSION['usuario'], $dateNew);
             echo json_encode(["message" => "Rol insertado exitosamente."]);
             $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL ROL: $ROL", $_SESSION['id_usuario'], 1, $_SESSION['usuario'], $dateNew);
-            echo json_encode($datos);  
+            exit; // Detener la ejecución del script después de enviar la respuesta exitosa
         }
+
 
 
         break;

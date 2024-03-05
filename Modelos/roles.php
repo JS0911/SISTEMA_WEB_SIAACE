@@ -6,10 +6,10 @@ class Roles extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        //$sql = "SELECT * FROM siaace.tbl_ms_roles;"
+        //$sql = "SELECT * tbl_ms_roles;"
         $sql = "SELECT U.*, E.NOMBRE
-        FROM siaace.tbl_ms_roles U
-        INNER JOIN siaace.tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO";
+        FROM tbl_ms_roles U
+        INNER JOIN tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO";
        
         $sql = $conectar->prepare($sql);
         $sql->execute();
@@ -35,7 +35,7 @@ class Roles extends Conectar
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_roles` ( `ROL`, `DESCRIPCION`,`ID_ESTADO_USUARIO`,`CREADO_POR`,`FECHA_CREACION`) VALUES ( :ROL, :DESCRIPCION, :ID_ESTADO_USUARIO, :CREADO_POR,:FECHA_CREACION)";
+            $sql = "INSERT INTO `tbl_ms_roles` ( `ROL`, `DESCRIPCION`,`ID_ESTADO_USUARIO`,`CREADO_POR`,`FECHA_CREACION`) VALUES ( :ROL, :DESCRIPCION, :ID_ESTADO_USUARIO, :CREADO_POR,:FECHA_CREACION)";
 
             $stmt = $conectar->prepare($sql);
 
@@ -79,7 +79,7 @@ class Roles extends Conectar
             $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
             $stmt->bindParam(':ROL', $ROL, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
-            $stmt->bindParam(':ID_ESTADO_USUARIO', $ID_ESTADO_USUARIO, PDO::PARAM_INPUT_OUTPUT);
+            $stmt->bindParam(':ID_ESTADO_USUARIO', $ID_ESTADO_USUARIO, PDO::PARAM_INT);
             $stmt->bindParam(':MODIFICADO_POR', $MODIFICADO_POR, PDO::PARAM_STR);
             $stmt->bindParam(':FECHA_MODIFICACION', $FECHA_MODIFICACION, PDO::PARAM_STR);
 

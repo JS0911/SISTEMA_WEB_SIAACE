@@ -11,11 +11,11 @@ Sahory Garcia          sahori.garcia@unah.hn
 Jairo Garcia           jairo.lagos@unah.hn
 Ashley Matamoros       Ashley.matamoros@unah.hn
 Lester Padilla         Lester.padilla@unah.hn
-Khaterine Ordoñez      khaterine.ordonez@unah.hn
+Khaterine OrdoÃ±ez      khaterine.ordonez@unah.hn
 Yeniffer Velasquez     yeniffer.velasquez@unah.hn
 Kevin Zuniga           kgzuniga@unah.hn
 
-Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
+Catedratico analisis y diseÃ±o: Lic. Giancarlos Martini Scalici Aguilar
 Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
 Catedratico evaluacion de sistemas: ???
 
@@ -37,11 +37,9 @@ Programador               Fecha                      Descripcion
 Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
 Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
-Sahori Garcia             09/02/2024                   Modificaciones en permisos 
 ------------------------------------------------------------------------->
 
 <?php
-
 session_start();
 
 require "../../Config/conexion.php";
@@ -54,7 +52,6 @@ $usuario_obj = new Usuario();
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-
 //---------------------PERMISOS DE LOS MANTENIMIENTOS----------------------
 $id_objeto_Usuario = "2";
 $id_objeto_Bitacora = "14";
@@ -79,7 +76,7 @@ $id_objeto_Tipoprestamo = "13";
 $id_objeto_Transaccion = "11";
 $id_objeto_Tipo_cuenta = "28";
 $id_objeto_MantCuenta = "29";
-//------------------PERMISOS DE LAS PESTAÑAS-------------------------------------
+//------------------PERMISOS DE LAS PESTAÃ‘AS-------------------------------------
 $id_objeto_Seguridad = "25";
 $id_objeto_PestaniaEmpleado = "27";
 $id_objeto_Cuentas = "36";
@@ -183,16 +180,13 @@ if (!isset($_SESSION['usuario'])) {
 
         /* Estilo para el encabezado (th) */
         #Lista-Permiso th {
-            border: 2px solid white;
-            /* Bordes negros para las celdas del encabezado */
             background-color: #333;
+            /* Fondo gris claro para el encabezado */
             color: white;
-            font-family: Arial, sans-serif;
-            /* Cambia el tipo de letra */
+            /* Texto en blanco para el encabezado */
+            border: 2px solid white;
             padding: 8px;
-            /* Espaciado interno para las celdas */
             text-align: center;
-            /* Alineación del texto al centro */
         }
 
         /* Estilo para las celdas de datos (td) */
@@ -210,7 +204,7 @@ if (!isset($_SESSION['usuario'])) {
             /* Adjust the margin value as needed */
         }
 
-        /* Estilo para el botón "Editar" con color azul suave */
+        /* Estilo para el botÃ³n "Editar" con color azul suave */
         .btn-primary {
             background-color: #3498db;
             /* Azul suave */
@@ -219,7 +213,7 @@ if (!isset($_SESSION['usuario'])) {
             /* Texto en blanco */
         }
 
-        /* Estilo para el botón "Eliminar" con color rojo suave */
+        /* Estilo para el botÃ³n "Eliminar" con color rojo suave */
         .btn-danger {
             background-color: #e74c3c;
             /* Rojo suave */
@@ -229,7 +223,7 @@ if (!isset($_SESSION['usuario'])) {
         }
 
 
-        /* Estilo para el botón "Nuevo" con color verde más claro */
+        /* Estilo para el botÃ³n "Nuevo" con color verde mÃ¡s claro */
         .btn-success.custom-button {
             background-color: #4CAF50;
             /* Verde claro */
@@ -241,7 +235,7 @@ if (!isset($_SESSION['usuario'])) {
         /* Estilo personalizado para el placeholder */
         #myInput {
             border: 2px solid #000;
-            /* Borde más oscuro, en este caso, negro (#000) */
+            /* Borde mÃ¡s oscuro, en este caso, negro (#000) */
 
         }
 
@@ -292,12 +286,20 @@ if (!isset($_SESSION['usuario'])) {
         <a href="javascript:history.back()" class="icono"><i class="fas fa-chevron-circle-left"></i></a>
         <!-- Icono de Adelante -->
         <a href="javascript:history.forward()" class="icono"><i class="fas fa-chevron-circle-right"></i></a>
+        <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </form>
         <!-- Navbar-->
-        <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
+        <ul class="navbar-nav ml-auto ml-md-0">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="perfil.php">Perfil</a>
+                    <a class="dropdown-item" href="../../InicioSesion/cambiocontrasena.php">Cambiar ContraseÃ±a</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="../../InicioSesion/logout.php">Salir</a>
                 </div>
@@ -313,13 +315,13 @@ if (!isset($_SESSION['usuario'])) {
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div> Inicio
                         </a>
 
-                        <div class="sb-sidenav-menu-heading">Pestañas</div>
+                        <div class="sb-sidenav-menu-heading">PestaÃ±as</div>
                         <?php
                         //--------------------------------MODULO DE SEGURIDAD------------------------------
                         if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
-                                    Seguridad
+                                    Modulo Seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
                             echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
@@ -342,7 +344,7 @@ if (!isset($_SESSION['usuario'])) {
                                     echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 }
                                 if (!empty($permisosParametro) && $permisosParametro[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                                    echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> ParÃ¡metros</a>';
                                 }
                                 if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
@@ -351,7 +353,7 @@ if (!isset($_SESSION['usuario'])) {
                                     echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
                                 }
                                 if (!empty($permisosHistorial) && $permisosHistorial[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. ContraseÃ±a </a>';
                                 }
                             }
 
@@ -364,7 +366,7 @@ if (!isset($_SESSION['usuario'])) {
                         if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                                    Empleados
+                                    Modulo Empleado
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
                             echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
@@ -392,7 +394,7 @@ if (!isset($_SESSION['usuario'])) {
                         if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
                             <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
-                            Cuentas
+                            Modulo Cuenta
                          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                           </a>';
                             echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
@@ -417,7 +419,7 @@ if (!isset($_SESSION['usuario'])) {
                         if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
                             <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
-                            Prestamos
+                            Modulo Prestamo
                          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                           </a>';
                             echo '<div class="collapse" id="collapseMantenimientoPrestamo" aria-labelledby="headingMantenimientoPrestamo" data-parent="#sidenavAccordion">';
@@ -428,7 +430,7 @@ if (!isset($_SESSION['usuario'])) {
                                     echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 }
                                 if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
+                                    echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoPrestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 }
                                 if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
@@ -442,7 +444,7 @@ if (!isset($_SESSION['usuario'])) {
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Usuario: <?php echo $nombre_usuario; ?><div>
-                            Sesión activa: Conectado(a).
+                            SesiÃ³n activa: Conectado(a).
                         </div>
             </nav>
         </div>
@@ -452,7 +454,7 @@ if (!isset($_SESSION['usuario'])) {
             <main>
                 <div class="container-fluid">
 
-                    <!-- Botón para abrir el formulario de creación -->
+                    <!-- BotÃ³n para abrir el formulario de creaciÃ³n -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
                             <h1 class="mt-4 mb-4">Mantenimiento Permisos</h1>
@@ -479,10 +481,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Permisos Inserción </th>
                                     <th>Permisos Actualización</th>
                                     <th>Permisos Eliminación</th>
-                                    <th style="display: none;">Creado Por</th>
-                                    <th style="display: none;">Modificado Por</th>
-                                    <th style="display: none;">Fecha Creación</th>
-                                    <th style="display: none;">Fecha Modificación</th>
+                                    <th style="display: none;">Creado por</th>
+                                    <th style="display: none;">Modificado por</th>
+                                    <th style="display: none;">Fecha Creacion</th>
+                                    <th style="display: none;">Fecha Modificacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -505,7 +507,7 @@ if (!isset($_SESSION['usuario'])) {
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <!-- Formulario de creación -->
+                                <!-- Formulario de creaciÃ³n -->
                                 <form>
                                     <div class="form-group">
 
@@ -515,7 +517,7 @@ if (!isset($_SESSION['usuario'])) {
                                         $conexion = new Conectar();
                                         $conn = $conexion->Conexion();
 
-                                        // Consultar la contraseña actual del usuario desde la base de datos
+                                        // Consultar la contraseÃ±a actual del usuario desde la base de datos
                                         $sql = "SELECT id_rol ,rol FROM tbl_ms_roles";
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
@@ -540,7 +542,7 @@ if (!isset($_SESSION['usuario'])) {
                                         $conexion = new Conectar();
                                         $conn = $conexion->Conexion();
 
-                                        // Consultar la contraseña actual del usuario desde la base de datos
+                                        // Consultar la contraseÃ±a actual del usuario desde la base de datos
                                         $sql = "SELECT id_objeto ,objeto FROM tbl_ms_objetos";
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
@@ -559,6 +561,7 @@ if (!isset($_SESSION['usuario'])) {
                                             <?php endforeach; ?>
                                         </select>
                                         <label>Permisos</label>
+
                                         <!-- Checkbox para Consultar -->
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="agregar-pConsultar" name="permisos_cons" value="1">
@@ -580,6 +583,7 @@ if (!isset($_SESSION['usuario'])) {
                                             <input class="form-check-input" type="checkbox" id="agregar-pEliminacion" name="permisos_elim" value="1">
                                             <label class="form-check-label" for="agregar-pEliminacion">Eliminar</label>
                                         </div>
+
 
                                     </div>
 
@@ -604,7 +608,7 @@ if (!isset($_SESSION['usuario'])) {
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <!-- Formulario de Edición -->
+                                <!-- Formulario de EdiciÃ³n -->
                                 <form>
                                     <div class="form-group">
 
@@ -614,7 +618,7 @@ if (!isset($_SESSION['usuario'])) {
                                         $conexion = new Conectar();
                                         $conn = $conexion->Conexion();
 
-                                        // Consultar la contraseña actual del usuario desde la base de datos
+                                        // Consultar la contraseÃ±a actual del usuario desde la base de datos
                                         $sql = "SELECT id_rol ,rol FROM tbl_ms_roles";
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
@@ -639,7 +643,7 @@ if (!isset($_SESSION['usuario'])) {
                                         $conexion = new Conectar();
                                         $conn = $conexion->Conexion();
 
-                                        // Consultar la contraseña actual del usuario desde la base de datos
+                                        // Consultar la contraseÃ±a actual del usuario desde la base de datos
                                         $sql = "SELECT id_objeto ,objeto FROM tbl_ms_objetos";
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
@@ -660,7 +664,7 @@ if (!isset($_SESSION['usuario'])) {
 
                                         <label>Permisos</label>
 
-                                             <!-- Checkbox para Consultar -->
+                                        <!-- Checkbox para Consultar -->
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="editar-pConsultar" name="permisos_cons" value="1">
                                             <label class="form-check-label" for="editar-pConsultar">Consultar</label>
@@ -678,11 +682,12 @@ if (!isset($_SESSION['usuario'])) {
                                             <label class="form-check-label" for="editar-pActualizacion">Actualizar</label>
                                         </div>
 
-                                   <!-- Checkbox para Eliminar -->
-                                   <div class="form-check">
+                                        <!-- Checkbox para Eliminar -->
+                                        <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="editar-pEliminacion" name="permisos_elim" value="1">
                                             <label class="form-check-label" for="editar-pEliminacion">Eliminar</label>
                                         </div>
+
 
                                     </div>
                                 </form>
@@ -720,12 +725,13 @@ if (!isset($_SESSION['usuario'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+    <script src="../../Config/constantes.js"></script>
     <script>
         var permisos = <?php echo json_encode($permiso); ?>;
 
         function Lista_Permisos() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=Get_Permisos', {
+            fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=Get_Permisos`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
@@ -733,10 +739,10 @@ if (!isset($_SESSION['usuario'])) {
                 })
                 .then(function(response) {
                     if (response.ok) {
-                        // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+                        // Si la solicitud fue exitosa, puedes manejar la respuesta aquÃ­
                         return response.json();
                     } else {
-                        // Si hubo un error en la solicitud, maneja el error aquí
+                        // Si hubo un error en la solicitud, maneja el error aquÃ­
                         throw new Error('Error en la solicitud');
                     }
                 })
@@ -755,13 +761,14 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + (permiso.PERMISOS_INSERCION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
                             '<td>' + (permiso.PERMISOS_ACTUALIZACION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
                             '<td>' + (permiso.PERMISOS_ELIMINACION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
+
                             '<td style="display: none;">' + permiso.CREADO_POR + '</td>' +
                             '<td style="display: none;">' + permiso.MODIFICADO_POR + '</td>' +
                             '<td style="display: none;">' + permiso.FECHA_CREACION + '</td>' +
                             '<td style="display: none;">' + permiso.FECHA_MODIFICACION + '</td>' +
                             '<td>';
 
-                        // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
+                        // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botÃ³n de editar
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarPermiso(' + permiso.ID_ROL + ',' + permiso.ID_OBJETO + ')">Editar</button>';
                         }
@@ -781,7 +788,7 @@ if (!isset($_SESSION['usuario'])) {
                 })
 
                 .catch(function(error) {
-                    // Manejar el error aquí
+                    // Manejar el error aquÃ­
                     alert('Error al cargar los datos: ' + error.message);
                 });
 
@@ -858,7 +865,7 @@ if (!isset($_SESSION['usuario'])) {
                                     columns: [{
                                         fontSize: 10,
                                         text: [{
-                                            text: "Página " +
+                                            text: "PÃ¡gina " +
                                                 currentPage.toString() +
                                                 " de " +
                                                 pageCount,
@@ -902,7 +909,7 @@ if (!isset($_SESSION['usuario'])) {
                 };
 
                 // Hacer una solicitud para verificar si el permiso ya existe
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=verificarPermisoExistente', {
+                fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=verificarPermisoExistente`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -913,7 +920,7 @@ if (!isset($_SESSION['usuario'])) {
                         if (response.ok) {
                             return response.json();
                         } else {
-                            throw new Error('Error en la solicitud de verificación');
+                            throw new Error('Error en la solicitud de verificaciÃ³n');
                         }
                     })
                     .then(function(data) {
@@ -942,8 +949,8 @@ if (!isset($_SESSION['usuario'])) {
                                 PERMISOS_CONSULTAR: pConsultar
                             };
 
-                            // Realizar la solicitud de inserción después de verificar
-                            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=InsertPermiso', {
+                            // Realizar la solicitud de inserciÃ³n despuÃ©s de verificar
+                            fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=InsertPermiso`, {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -952,30 +959,30 @@ if (!isset($_SESSION['usuario'])) {
                                 })
                                 .then(function(response) {
                                     if (response.ok) {
-                                        // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+                                        // Si la solicitud fue exitosa, puedes manejar la respuesta aquÃ­
                                         return response.json();
                                     } else {
-                                        // Si hubo un error en la solicitud, maneja el error aquí
-                                        throw new Error('Error en la solicitud de inserción');
+                                        // Si hubo un error en la solicitud, maneja el error aquÃ­
+                                        throw new Error('Error en la solicitud de inserciÃ³n');
                                     }
                                 })
                                 .then(function(data) {
                                     console.log(data);
-                                    // Cerrar la modal después de guardar
+                                    // Cerrar la modal despuÃ©s de guardar
                                     $('#crearModalPermisos').modal('hide');
 
-                                    // Mostrar SweetAlert de éxito
+                                    // Mostrar SweetAlert de Ã©xito
                                     Swal.fire({
                                         icon: 'success',
                                         title: 'Guardado exitoso',
                                         text: 'Los datos se han guardado correctamente.'
                                     }).then(function() {
-                                        // Recargar la página para mostrar los nuevos datos
+                                        // Recargar la pÃ¡gina para mostrar los nuevos datos
                                         location.reload();
                                     });
                                 })
                                 .catch(function(error) {
-                                    // Manejar el error aquí
+                                    // Manejar el error aquÃ­
                                     console.log(error.message);
 
                                     // Mostrar SweetAlert de error
@@ -988,7 +995,7 @@ if (!isset($_SESSION['usuario'])) {
                         }
                     })
                     .catch(function(error) {
-                        // Manejar el error de verificación aquí
+                        // Manejar el error de verificaciÃ³n aquÃ­
                         console.log(error.message);
                         // Mostrar SweetAlert de error
                         Swal.fire({
@@ -1009,7 +1016,7 @@ if (!isset($_SESSION['usuario'])) {
             };
 
             // Realiza una solicitud FETCH para obtener los detalles del permio por su ID OBJETO Y ID ROL
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=GetPermisoUsuario', {
+            fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=GetPermisoUsuario`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -1033,7 +1040,7 @@ if (!isset($_SESSION['usuario'])) {
                         // Convertir el array a un objeto
                         permiso = Object.assign({}, permiso[0]);
 
-                        // Establecer el estado de los checks en la modal de edición
+                        // Establecer el estado de los checks en la modal de ediciÃ³n
                         document.getElementById('editar-pInsercion').checked = (permiso.PERMISOS_INSERCION === '1');
                         document.getElementById('editar-pEliminacion').checked = (permiso.PERMISOS_ELIMINACION === '1');
                         document.getElementById('editar-pActualizacion').checked = (permiso.PERMISOS_ACTUALIZACION === '1');
@@ -1041,11 +1048,11 @@ if (!isset($_SESSION['usuario'])) {
 
 
                     } else {
-                        console.log('La respuesta JSON está vacía o no válida.');
+                        console.log('La respuesta JSON estÃ¡ vacÃ­a o no vÃ¡lida.');
                     }
                 })
                 .catch(function(error) {
-                    // Manejar el error aquí  
+                    // Manejar el error aquÃ­  
 
                     alert('Error al cargar los datos del permiso: ' + error.message);
                 });
@@ -1053,9 +1060,9 @@ if (!isset($_SESSION['usuario'])) {
         }
 
         function updatePermiso() {
-            // Obtén el ID del usuario 
+            // ObtÃ©n el ID del usuario 
             var idRol = parseInt(document.getElementById('editar-IdRol').value);
-            // Obtén los valores de los campos de edición
+            // ObtÃ©n los valores de los campos de ediciÃ³n
             var idObjeto = parseInt(document.getElementById('editar-IdObjeto').value);
             var insercion = document.getElementById('editar-pInsercion').checked ? 1 : 0;
             var eliminacion = document.getElementById('editar-pEliminacion').checked ? 1 : 0;
@@ -1063,7 +1070,7 @@ if (!isset($_SESSION['usuario'])) {
             var consultar = document.getElementById('editar-pConsultar').checked ? 1 : 0;
 
             // Realiza una solicitud FETCH para actualizar los datos del usuario
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=updatePermiso', {
+            fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=updatePermiso`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -1080,15 +1087,15 @@ if (!isset($_SESSION['usuario'])) {
                 })
                 .then(function(response) {
                     if (response.ok) {
-                        // Cerrar la modal después de guardar
+                        // Cerrar la modal despuÃ©s de guardar
                         $('#editarModal').modal('hide');
-                        // Actualización exitosa
+                        // ActualizaciÃ³n exitosa
                         Swal.fire({
                             icon: 'success',
                             title: 'Actualización exitosa',
                             text: 'Los datos se han actualizado correctamente.'
                         }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
+                            // Recargar la pÃ¡gina para mostrar los nuevos datos
                             location.reload();
                         });
                     } else {
@@ -1096,7 +1103,7 @@ if (!isset($_SESSION['usuario'])) {
                     }
                 })
                 .catch(function(error) {
-                    // Manejar el error aquí
+                    // Manejar el error aquÃ­
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -1118,7 +1125,7 @@ if (!isset($_SESSION['usuario'])) {
                 confirmButtonColor: '#d33'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=deletePermiso', {
+                    fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=deletePermiso`, {
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',
@@ -1131,20 +1138,20 @@ if (!isset($_SESSION['usuario'])) {
                         })
                         .then(function(response) {
                             if (response.ok) {
-                                // Eliminación exitosa, puedes hacer algo aquí si es necesario
+                                // EliminaciÃ³n exitosa, puedes hacer algo aquÃ­ si es necesario
                                 Swal.fire('permiso eliminado', '', 'success')
                                     .then(() => {
-                                        // Recargar la página para mostrar los nuevos datos
+                                        // Recargar la pÃ¡gina para mostrar los nuevos datos
                                         location.reload();
-                                        // Recargar la lista de usuarios después de eliminar
+                                        // Recargar la lista de usuarios despuÃ©s de eliminar
                                         Lista_Usuarios();
                                     });
                             } else {
-                                throw new Error('Error en la solicitud de eliminación');
+                                throw new Error('Error en la solicitud de eliminaciÃ³n');
                             }
                         })
                         .catch(function(error) {
-                            // Manejar el error aquí
+                            // Manejar el error aquÃ­
                             Swal.fire('Error', 'Error al eliminar el permiso: ' + error.message, 'error');
                         });
                 }
@@ -1159,18 +1166,18 @@ if (!isset($_SESSION['usuario'])) {
 
     <!-- VALIDACIONES SCRIPT -->
     <script>
-        // Obtén los elementos select y el botón de guardar
+        // ObtÃ©n los elementos select y el botÃ³n de guardar
         var selectRol = document.getElementById("agregar-IdRol");
         var selectObjeto = document.getElementById("agregar-IdObjeto");
         var btnGuardar = document.getElementById("btn-guardarAgregar");
 
-        // Función para verificar y habilitar o deshabilitar el botón
+        // FunciÃ³n para verificar y habilitar o deshabilitar el botÃ³n
         function verificarSeleccion() {
             if (selectRol.value && selectObjeto.value) {
-                // Ambos selects tienen valores seleccionados, habilitar el botón
+                // Ambos selects tienen valores seleccionados, habilitar el botÃ³n
                 btnGuardar.disabled = false;
             } else {
-                // Al menos uno de los selects no tiene un valor seleccionado, deshabilitar el botón
+                // Al menos uno de los selects no tiene un valor seleccionado, deshabilitar el botÃ³n
                 btnGuardar.disabled = true;
             }
         }
@@ -1192,7 +1199,7 @@ if (!isset($_SESSION['usuario'])) {
             if (selectedValue === '') {
                 Swal.fire({
                     title: 'Advertencia',
-                    text: 'Debes seleccionar una opción',
+                    text: 'Debes seleccionar una opciÃ³n',
                     icon: 'warning',
                 });
             }
@@ -1206,7 +1213,7 @@ if (!isset($_SESSION['usuario'])) {
             if (selectedValue === '') {
                 Swal.fire({
                     title: 'Advertencia',
-                    text: 'Debes seleccionar una opción',
+                    text: 'Debes seleccionar una opciÃ³n',
                     icon: 'warning',
                 });
             }
@@ -1225,7 +1232,7 @@ if (!isset($_SESSION['usuario'])) {
             document.getElementById('agregar-pActualizacion').checked = false;
             document.getElementById('agregar-pConsultar').checked = false;
 
-            // Desactivar el botón "Guardar" en el modal Agregar
+            // Desactivar el botÃ³n "Guardar" en el modal Agregar
             document.getElementById('btn-guardarAgregar').disabled = true;
             location.reload();
         });
@@ -1238,7 +1245,7 @@ if (!isset($_SESSION['usuario'])) {
             document.getElementById('editar-pEliminacion').checked = false;
             document.getElementById('editar-pActualizacion').checked = false;
             document.getElementById('editar-pConsultar').checked = false;
-            // Desactivar el botón "Guardar" en el modal Editar
+            // Desactivar el botÃ³n "Guardar" en el modal Editar
             document.getElementById('btn-guardarEditar').disabled = true;
             location.reload();
         });

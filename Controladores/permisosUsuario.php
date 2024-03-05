@@ -12,7 +12,7 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 require_once("../Config/conexion.php");
-require_once("../modelos/permisoUsuario.php");
+require_once("../Modelos/permisoUsuario.php");
 
 
 $com = new PermisosUsuarios();
@@ -29,7 +29,7 @@ switch ($_GET["op"]) {
 
         case "InsertPermiso":
             $datos = $com->insert_permiso($body["ID_ROL"], $body["ID_OBJETO"], $body["PERMISOS_INSERCION"], $body["PERMISOS_ELIMINACION"], $body["PERMISOS_ACTUALIZACION"], $body["PERMISOS_CONSULTAR"]);
-            echo json_encode($datos); // Envía la respuesta de la función insert_permiso
+            echo json_encode($datos); // EnvÃ­a la respuesta de la funciÃ³n insert_permiso
             break;
         
 
