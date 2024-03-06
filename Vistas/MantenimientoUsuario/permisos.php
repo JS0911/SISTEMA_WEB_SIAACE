@@ -725,7 +725,8 @@ if (!isset($_SESSION['usuario'])) {
 
         function Lista_Permisos() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
-            fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=Get_Permisos`, {
+           // fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=Get_Permisos`, {
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=Get_Permisos', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
@@ -1010,7 +1011,8 @@ if (!isset($_SESSION['usuario'])) {
             };
 
             // Realiza una solicitud FETCH para obtener los detalles del permio por su ID OBJETO Y ID ROL
-            fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=GetPermisoUsuario`, {
+           // fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=GetPermisoUsuario`, {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=GetPermisoUsuario', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -1064,7 +1066,8 @@ if (!isset($_SESSION['usuario'])) {
             var consultar = document.getElementById('editar-pConsultar').checked ? 1 : 0;
 
             // Realiza una solicitud FETCH para actualizar los datos del usuario
-            fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=updatePermiso`, {
+            //fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=updatePermiso`, {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=updatePermiso', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -1119,7 +1122,8 @@ if (!isset($_SESSION['usuario'])) {
                 confirmButtonColor: '#d33'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=deletePermiso`, {
+                    //fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=deletePermiso`, {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=deletePermiso', {
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',

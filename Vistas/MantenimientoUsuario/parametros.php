@@ -712,7 +712,7 @@ if (!isset($_SESSION['usuario'])) {
                         VALOR: valor
                     };
 
-                    fetch('http://localhost:90//SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=InsertParametros', {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/parametros.php?op=InsertParametros', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'

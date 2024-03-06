@@ -766,7 +766,8 @@ if (!isset($_SESSION['usuario'])) {
                         ID_ESTADO_USUARIO: estado
                     };
 
-                    fetch(`${constants.HOST}/Controladores/roles.php?op=InsertRol`, {
+                    //fetch(`${constants.HOST}/Controladores/roles.php?op=InsertRol`, {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=InsertRol', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -832,7 +833,8 @@ if (!isset($_SESSION['usuario'])) {
             };
 
             // Realiza una solicitud FETCH para obtener los detalles del rol por su ID
-            fetch(`${constants.HOST}/Controladores/roles.php?op=GetRol`, {
+           // fetch(`${constants.HOST}/Controladores/roles.php?op=GetRol`, {
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=GetRol', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -873,7 +875,8 @@ if (!isset($_SESSION['usuario'])) {
                 })
             } else {
                 // Realiza una solicitud FETCH para actualizar los datos del rol
-                fetch(`${constants.HOST}/Controladores/roles.php?op=UpdateRol`, {
+                //fetch(`${constants.HOST}/Controladores/roles.php?op=UpdateRol`, {
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=UpdateRol', {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
@@ -927,7 +930,8 @@ if (!isset($_SESSION['usuario'])) {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch(`${constants.HOST}/Controladores/roles.php?op=EliminarRol`, {
+                   // fetch(`${constants.HOST}/Controladores/roles.php?op=EliminarRol`, {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/roles.php?op=EliminarRol', {
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',

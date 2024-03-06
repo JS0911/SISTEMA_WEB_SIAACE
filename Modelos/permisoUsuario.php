@@ -29,19 +29,19 @@ class PermisosUsuarios extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-
         $sql = "SELECT 
-                    P.ID_ROL,
-                    R.ROL,
-                    P.ID_OBJETO,
-                    O.OBJETO,
-                    CASE WHEN P.PERMISOS_INSERCION = 1 THEN 'Sí­' ELSE 'No' END AS PERMISOS_INSERCION,
-                    CASE WHEN P.PERMISOS_ELIMINACION = 1 THEN 'Sí­' ELSE 'No' END AS PERMISOS_ELIMINACION,
-                    CASE WHEN P.PERMISOS_ACTUALIZACION = 1 THEN 'Sí­' ELSE 'No' END AS PERMISOS_ACTUALIZACION,
-                    CASE WHEN P.PERMISOS_CONSULTAR = 1 THEN 'Sí­' ELSE 'No' END AS PERMISOS_CONSULTAR
-                FROM tbl_ms_permisos P
-                INNER JOIN tbl_ms_roles R ON P.ID_ROL = R.ID_ROL
-                INNER JOIN tbl_ms_objetos O ON P.ID_OBJETO = O.ID_OBJETO";
+        P.ID_ROL,
+        R.ROL,
+        P.ID_OBJETO,
+        O.OBJETO,
+        CASE WHEN P.PERMISOS_INSERCION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_INSERCION,
+        CASE WHEN P.PERMISOS_ELIMINACION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_ELIMINACION,
+        CASE WHEN P.PERMISOS_ACTUALIZACION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_ACTUALIZACION,
+        CASE WHEN P.PERMISOS_CONSULTAR = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_CONSULTAR
+    FROM tbl_ms_permisos P
+    INNER JOIN tbl_ms_roles R ON P.ID_ROL = R.ID_ROL
+    INNER JOIN tbl_ms_objetos O ON P.ID_OBJETO = O.ID_OBJETO";
+
 
         $sql = $conectar->prepare($sql);
 
@@ -79,7 +79,6 @@ class PermisosUsuarios extends Conectar
             // Captura el cÃ³digo de error de la excepciÃ³n
             return $e->getCode();
         }
-        
     }
 
 
