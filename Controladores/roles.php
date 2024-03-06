@@ -93,6 +93,21 @@ switch ($_GET["op"]) {
         $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL ROL # $ID_ROL", $_SESSION['id_usuario'], 1);
 
         break;
+        case "get_permisos_por_rol":
+            $ID_ROL = $body["ID_ROL"];
+        
+            // Obtener la lista de permisos para el rol
+            $permisos = $com->get_permisos_por_rol($ID_ROL);
+        
+            // Combinar la información del rol y la lista de permisos en un solo arreglo
+            $datos = array(
+                
+                "permisos" => $permisos
+            );
+        
+            echo json_encode($datos);
+            break;
+          
 }
 
 function verificarExistenciaRol($rol)

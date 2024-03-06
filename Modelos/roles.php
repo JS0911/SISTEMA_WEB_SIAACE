@@ -10,7 +10,7 @@ class Roles extends Conectar
         $sql = "SELECT U.*, E.NOMBRE
         FROM tbl_ms_roles U
         INNER JOIN tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO";
-       
+
         $sql = $conectar->prepare($sql);
         $sql->execute();
 
@@ -115,4 +115,31 @@ class Roles extends Conectar
             return "Error al eliminar el rol: " . $e->getMessage();
         }
     }
+
+    // Agrega esta función a tu clase
+    public function get_permisos_por_rol($ID_ROL)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+
+        $sql = "SELECT 
+        P.ID_ROL,
+        R.ROL,
+        P.ID_OBJETO,
+        O.OBJETO,
+        CASE WHEN P.PERMISOS_INSERCION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_INSERCION,
+        CASE WHEN P.PERMISOS_ELIMINACION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_ELIMINACION,
+        CASE WHEN P.PERMISOS_ACTUALIZACION = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_ACTUALIZACION,
+        CASE WHEN P.PERMISOS_CONSULTAR = 1 THEN 'Sí' ELSE 'No' END AS PERMISOS_CONSULTAR
+    FROM tbl_ms_permisos P 
+    INNER JOIN tbl_ms_roles R ON P.ID_ROL = R.ID_ROL
+    INNER JOIN tbl_ms_objetos O ON P.ID_OBJETO = O.ID_OBJETO
+    WHERE P.ID_ROL = :ID";
+
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID', $ID_ROL, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+   
 }

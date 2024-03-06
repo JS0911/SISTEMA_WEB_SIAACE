@@ -6,7 +6,10 @@ class Empleados extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_me_empleados";
+        $sql = "SELECT * FROM tbl_me_empleados";
+       /* $sql = "SELECT U.*, E.NOMBRE
+        FROM tbl_me_empleados U
+        INNER JOIN tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO"; */
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

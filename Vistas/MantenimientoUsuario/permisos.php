@@ -136,8 +136,6 @@ if (!isset($_SESSION['usuario'])) {
 }
 ?>
 
-?>
-
 <style>
     .logo {
         width: 50px;
@@ -288,10 +286,6 @@ if (!isset($_SESSION['usuario'])) {
         <a href="javascript:history.forward()" class="icono"><i class="fas fa-chevron-circle-right"></i></a>
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
             <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
-                </div>
             </div>
         </form>
         <!-- Navbar-->
@@ -299,7 +293,7 @@ if (!isset($_SESSION['usuario'])) {
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="../../InicioSesion/cambiocontrasena.php">Cambiar ContraseÃ±a</a>
+                    <a class="dropdown-item" href="../../InicioSesion/cambiocontrasena.php">Cambiar Contraseña</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="../../InicioSesion/logout.php">Salir</a>
                 </div>
@@ -344,7 +338,7 @@ if (!isset($_SESSION['usuario'])) {
                                     echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 }
                                 if (!empty($permisosParametro) && $permisosParametro[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> ParÃ¡metros</a>';
+                                    echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
                                 }
                                 if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
@@ -353,7 +347,7 @@ if (!isset($_SESSION['usuario'])) {
                                     echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
                                 }
                                 if (!empty($permisosHistorial) && $permisosHistorial[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. ContraseÃ±a </a>';
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
                                 }
                             }
 
@@ -444,7 +438,7 @@ if (!isset($_SESSION['usuario'])) {
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Usuario: <?php echo $nombre_usuario; ?><div>
-                            SesiÃ³n activa: Conectado(a).
+                            Sesión activa: Conectado(a).
                         </div>
             </nav>
         </div>
@@ -1048,7 +1042,7 @@ if (!isset($_SESSION['usuario'])) {
 
 
                     } else {
-                        console.log('La respuesta JSON estÃ¡ vacÃ­a o no vÃ¡lida.');
+                        console.log('La respuesta JSON esta vacia o no valida.');
                     }
                 })
                 .catch(function(error) {
