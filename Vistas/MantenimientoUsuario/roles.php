@@ -1064,34 +1064,42 @@ if (!isset($_SESSION['usuario'])) {
 
         const rolInput = document.getElementById('agregar-rol');
         const descripcionInput = document.getElementById('agregar-descripcion');
+        const estadoInput = document.getElementById('agregar-estado');
         const guardarButton = document.getElementById('btn-agregar');
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
             const isFormValid = rolInput.value.trim() !== '' && descripcionInput.value.trim() !== '';
+            estadoInput.value.trim() !== ''; 
             guardarButton.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
         rolInput.addEventListener('input', checkForm);
         descripcionInput.addEventListener('input', checkForm);
+        estadoInput.addEventListener('input', checkForm);
         guardarButton.addEventListener('input', checkForm);
     </script>
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
+        const rolInput1 = document.getElementById('editar-rol');
         const descripcionInput1 = document.getElementById('editar-descripcion');
-
+        const estadoInput1 = document.getElementById('editar-estado');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = descripcionInput1.value.trim() !== '';
+            const isFormValid = rolInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '';
+            estadoInput1.value.trim() !== ''; 
             guardarButton1.disabled = !isFormValid;
         }
 
         // Agrega un evento input a cada campo de entrada
+        rolInput1.addEventListener('input', checkForm);
         descripcionInput1.addEventListener('input', checkForm);
+        estadoInput1.addEventListener('input', checkForm);
+        guardarButton1.addEventListener('input', checkForm);
     </script>
 
     <script>
