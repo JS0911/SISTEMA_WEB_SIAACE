@@ -53,11 +53,61 @@ $usuario_obj = new Usuario();
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
 $id_rol = $_SESSION['id_rol'];
-$id_objeto_Tipoprestamo = "13"; // CAMBIO DEL NUMERO DEL OBJETO
+//---------------------PERMISOS DE LOS MANTENIMIENTOS----------------------
+$id_objeto_Usuario = "2";
+$id_objeto_Bitacora = "14";
+$id_objeto_Error = "33";
+$id_objeto_Estados = "6";
+$id_objeto_Historial = "34";
+$id_objeto_Objetos = "5";
+$id_objeto_Parametro = "4";
+$id_objeto_Permisos = "3";
+$id_objeto_Roles = "1";
+//------OBJETOS DE MANT.EMPLEADOS-------------
+$id_objeto_Sucursal = "9";
+$id_objeto_Region = "8";
+$id_objeto_Empleado = "7";
+$id_objeto_Cargos = "26";
+
+//------OBJETOS DE MANT.PRESTAMO-----------------------
+$id_objeto_Forma_Pago = "12";
+$id_objeto_PrestamoMantenimiento = "30"; 
+$id_objeto_Tipoprestamo = "13"; 
+
+//------------OBJETOS DE MANT.CUENTAS------------------
+$id_objeto_Transaccion = "11";
+$id_objeto_Tipo_cuenta = "28";
+$id_objeto_MantCuenta = "29";
+//------------------PERMISOS DE LAS PESTAÑAS-------------------------------------
 $id_objeto_Seguridad = "25";
 $id_objeto_Empleado = "27";
 $id_objeto_Cuentas = "36";
 $id_objeto_Prestamos = "35";
+//------------------------------------------------------------------------------
+$permisosUsuario = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario);
+$permisosBitacora = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacora);
+$permisosError = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Error);
+$permisosEstados = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Estados);
+$permisosHistorial = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Historial);
+$permisosObjetos = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos);
+$permisosParametro = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Parametro);
+$permisosRoles = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
+$permisosPermiso = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos);
+
+//-------------------------Mant.Empleado----------
+$permisosSucursal = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Sucursal);
+$permisosRegion = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Region);
+$permisosEmpleado = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
+$permisosCargo = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
+
+//---------------------Mant.Prestamo----------------------
+$permisosFormaPago = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Forma_Pago);
+$permisosPresMantenimiento = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_PrestamoMantenimiento);
+$permisosTipoPrestamos = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Tipoprestamo);
+//---------------------Mant.Cuentas----------------------
+$permisosTransaccion = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Transaccion);
+$permisosTipoCuenta = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_cuenta);
+$permisosMantCuenta = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_MantCuenta);
 
 $permisos = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Tipoprestamo);
 $permisos1 = $permisosTipoprestamo->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
@@ -218,15 +268,33 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
-                                echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
+                                if (!empty($permisosUsuario) && $permisosUsuario[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                                }
+                                if (!empty($permisosRoles) && $permisosRoles[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                                }
+                                if (!empty($permisosEstados) && $permisosEstados[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                                }
+                                if (!empty($permisosPermiso) && $permisosPermiso[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                                }
+                                if (!empty($permisosObjetos) && $permisosObjetos[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                                }
+                                if (!empty($permisosParametro) && $permisosParametro[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                                }
+                                if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                                }
+                                if (!empty($permisosError) && $permisosError[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
+                                }
+                                if (!empty($permisosHistorial) && $permisosHistorial[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
+                                }
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -242,10 +310,19 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
-                                echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
-                                echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
-                                echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+
+                                if (!empty($permisosEmpleado) && $permisosEmpleado[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                }
+                                if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                }
+                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {    
+                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                }
+                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                    echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+                                }
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -262,9 +339,15 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
+                                 if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) { 
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
+                            }
+                            if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
                                 echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuenta</a>';
+                            }
+                            if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Cuentas</a>';
+                            }
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -280,9 +363,15 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
-                                echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
-                                echo '<a class="nav-link" href="tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
-                                echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
+                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                    echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
+                                }
+                                if (!empty($permisosTipoPrestamos) && $permisosTipoPrestamos[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                    echo '<a class="nav-link" href="tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
+                                }
+                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                    echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Prestamos</a>';
+                                }
                             }
                             echo '</nav>';
                             echo '</div>';
