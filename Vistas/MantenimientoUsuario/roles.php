@@ -238,6 +238,12 @@ if (!isset($_SESSION['usuario'])) {
             /* Ajusta el tamaño según tus necesidades */
             margin-right: 10px;
             /* Ajusta el margen derecho según tus necesidades */
+            cursor: pointer;
+        }
+
+        .custom-large-icon {
+            font-size: 2em;
+            /* Ajusta e tamaño según tus necesidades */
         }
     </style>
 
@@ -421,8 +427,10 @@ if (!isset($_SESSION['usuario'])) {
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
+                                echo '<i class="fas fa-plus-circle text-success cursor-pointer icon-lg custom-large-icon" data-toggle="modal" data-target="#crearModal" onclick="abrirCrearModal()" title="Nuevo"></i>';
                             }
+
+
                             ?>
                         </div>
                         <!-- Tabla para mostrar los datos -->
@@ -599,15 +607,15 @@ if (!isset($_SESSION['usuario'])) {
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargarRol(' + rol.ID_ROL + ')"></i>';
+                            row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargarRol(' + rol.ID_ROL + ') " title="Editar"></i>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="' + rol.ID_ROL + '" onclick="eliminarRol(' + rol.ID_ROL + ')"></i>';
+                            row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="' + rol.ID_ROL + '" onclick="eliminarRol(' + rol.ID_ROL + ')" title="Eliminar"></i>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
-                            row += '<i class="fas fa-plus-circle text-secondary cursor-pointer icon-lg mas" data-id="' + rol.ID_ROL + '" onclick="redirectToRolPermiso(' + rol.ID_ROL + ')"></i>';
+                            row += '<i class="fas fa-plus-circle text-secondary cursor-pointer icon-lg mas" data-id="' + rol.ID_ROL + '" onclick="redirectToRolPermiso(' + rol.ID_ROL + ')" title="Más"></i>';
                         }
 
 
@@ -642,11 +650,13 @@ if (!isset($_SESSION['usuario'])) {
                 dom: 'lBfrtip',
                 buttons: [{
                         extend: 'copy',
-                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
+                        text: '<i class="fas fa-copy text-secondary cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Copiar"></i>',
+
                     },
                     {
                         extend: 'excel',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
+                      text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
+
                         exportOptions: {
                             columns: [1, 2],
                             modifier: {
@@ -656,7 +666,8 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
+                          text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
+
                         exportOptions: {
                             columns: [1, 2],
                             modifier: {
@@ -720,7 +731,8 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>',
+                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
+
                         autoPrint: true,
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6, 7],
@@ -731,7 +743,9 @@ if (!isset($_SESSION['usuario'])) {
                     },
 
                     {
-                        text: '<button class="btn btn-warning" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;" onclick="ocultarColumn()"><i class="fas fa-eye"></i></button>',
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+
+
                         action: function() {
                             ocultarCampos();
                         }

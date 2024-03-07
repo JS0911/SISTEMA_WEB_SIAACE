@@ -37,7 +37,7 @@ switch ($_GET["op"]) {
         $SEGUNDO_APELLIDO = $body["SEGUNDO_APELLIDO"];
         $EMAIL = $body["EMAIL"];
         $SALARIO = $body["SALARIO"];
-        $ESTADO = $body["ESTADO"];
+        $ID_ESTADO_USUARIO = $body["ID_ESTADO_USUARIO"];
         $TELEFONO = $body["TELEFONO"];
         $DIRECCION1 = $body["DIRECCION1"];
         $DIRECCION2 = $body["DIRECCION2"];
@@ -47,7 +47,7 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s");
-        $datos = $com->insert_empleado($DNI, $PRIMER_NOMBRE, $SEGUNDO_NOMBRE, $PRIMER_APELLIDO, $SEGUNDO_APELLIDO, $EMAIL, $SALARIO, $ESTADO, $TELEFONO, $DIRECCION1, $DIRECCION2, $ID_SUCURSAL, $ID_CARGO, $_SESSION['usuario'], $dateNew);
+        $datos = $com->insert_empleado($DNI, $PRIMER_NOMBRE, $SEGUNDO_NOMBRE, $PRIMER_APELLIDO, $SEGUNDO_APELLIDO, $EMAIL, $SALARIO, $ID_ESTADO_USUARIO, $TELEFONO, $DIRECCION1, $DIRECCION2, $ID_SUCURSAL, $ID_CARGO, $_SESSION['usuario'], $dateNew);
         echo json_encode(["message" => "Empleado insertado Exitosamente."]);
         $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL EMPLEADO: $PRIMER_NOMBRE $SEGUNDO_NOMBRE $PRIMER_APELLIDO $SEGUNDO_APELLIDO", $_SESSION['id_usuario'], 7, $_SESSION['usuario'], $dateNew);
     break;
@@ -66,7 +66,7 @@ switch ($_GET["op"]) {
         $SEGUNDO_APELLIDO = $body["SEGUNDO_APELLIDO"];
         $EMAIL = $body["EMAIL"];
         $SALARIO = $body["SALARIO"];
-        $ESTADO = $body["ESTADO"];
+        $ID_ESTADO_USUARIO = $body["ID_ESTADO_USUARIO"];
         $TELEFONO = $body["TELEFONO"];
         $DIRECCION1 = $body["DIRECCION1"];
         $DIRECCION2 = $body["DIRECCION2"];
@@ -85,7 +85,7 @@ switch ($_GET["op"]) {
         $SEGUNDO_APELLIDO, 
         $EMAIL, 
         $SALARIO, 
-        $ESTADO, 
+        $ID_ESTADO_USUARIO, 
         $TELEFONO, 
         $DIRECCION1, 
         $DIRECCION2, 

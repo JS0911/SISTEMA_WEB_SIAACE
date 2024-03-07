@@ -158,6 +158,13 @@ if (!isset($_SESSION['usuario'])) {
         color: #4CAF50;
     }
 
+    .icon-lg {
+        font-size: 24px;
+        /* Ajusta el tamaño según tus necesidades */
+        margin-right: 10px;
+        /* Ajusta el margen derecho según tus necesidades */
+        cursor: pointer;
+    }
 </style>
 
 <!DOCTYPE html>
@@ -180,7 +187,7 @@ if (!isset($_SESSION['usuario'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    
+
     <style>
         /* Estilo para la tabla */
         #Lista-Empleados {
@@ -244,8 +251,8 @@ if (!isset($_SESSION['usuario'])) {
         <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar-->
-              <!-- Icono de Atras -->
-              <a href="javascript:history.back()" class="icono"><i class="fas fa-chevron-circle-left"></i></a>
+        <!-- Icono de Atras -->
+        <a href="javascript:history.back()" class="icono"><i class="fas fa-chevron-circle-left"></i></a>
         <!-- Icono de Adelante -->
         <a href="javascript:history.forward()" class="icono"><i class="fas fa-chevron-circle-right"></i></a>
         <!-- Navbar-->
@@ -287,26 +294,26 @@ if (!isset($_SESSION['usuario'])) {
                                 if (!empty($permisosRoles) && $permisosRoles[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoUsuario/roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
                                 }
-                                if (!empty($permisosEstados) && $permisosEstados[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosEstados) && $permisosEstados[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoUsuario/estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
                                 }
-                                if (!empty($permisosPermiso) && $permisosPermiso[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosPermiso) && $permisosPermiso[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoUsuario/permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
                                 }
-                                if (!empty($permisosObjetos) && $permisosObjetos[0]['PERMISOS_CONSULTAR'] == 1) {   
+                                if (!empty($permisosObjetos) && $permisosObjetos[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoUsuario/objetos.php"><i class="fas 
                                     fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
                                 }
-                                if (!empty($permisosParametro) && $permisosParametro[0]['PERMISOS_CONSULTAR'] == 1) {   
+                                if (!empty($permisosParametro) && $permisosParametro[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoUsuario/parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
                                 }
-                                if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
                                 }
-                                if (!empty($permisosError) && $permisosError[0]['PERMISOS_CONSULTAR'] == 1) {   
+                                if (!empty($permisosError) && $permisosError[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
                                 }
-                                if (!empty($permisosHContrasenia) && $permisosHContrasenia[0]['PERMISOS_CONSULTAR'] == 1) {   
+                                if (!empty($permisosHContrasenia) && $permisosHContrasenia[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
                                 }
                             }
@@ -324,19 +331,18 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosEmp) && $permisosEmp[0]['PERMISOS_CONSULTAR'] == 1) { 
-                                echo '<a class="nav-link" href="empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
-                            }
-                            if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) { 
-                                echo '<a class="nav-link" href="cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
-                            }
-                            if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {  
-                                echo '<a class="nav-link" href="region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
-                               
-                            }
-                            if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {   
-                                echo '<a class="nav-link" href="sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
-                            }
+                                if (!empty($permisosEmp) && $permisosEmp[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+                                }
+                                if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+                                }
+                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+                                }
+                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+                                }
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -352,14 +358,14 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
-                               
-                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) { 
+
+                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 }
-                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 }
-                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {   
+                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
                                 }
                             }
@@ -377,13 +383,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 }
                                 if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 }
-                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) {   
+                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
                                 }
                             }
@@ -394,7 +400,7 @@ if (!isset($_SESSION['usuario'])) {
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                <div class="small">Usuario: <?php echo $nombre_usuario;?></div>
+                    <div class="small">Usuario: <?php echo $nombre_usuario; ?></div>
                     Sesión activa: Conectado(a).
                 </div>
             </nav>
@@ -433,6 +439,7 @@ if (!isset($_SESSION['usuario'])) {
                                     <th class="direccion-column" style="display: none;">Direccion2</th>
                                     <th style="display: none;">Id Sucursal</th>
                                     <th style="display: none;">Id Cargo</th>
+                                    <th style="display: none;">Id Estado</th>
                                     <th>Estado</th>
                                     <th class="direccion-column" style="display: none;">Creado por</th>
                                     <th class="direccion-column" style="display: none;">Fecha Creación</th>
@@ -755,25 +762,31 @@ if (!isset($_SESSION['usuario'])) {
                             '<td class="direccion-column" style="display:none;">' + empleado.DIRECCION2 + '</td>' +
                             '<td style="display:none;">' + empleado.ID_SUCURSAL + '</td>' +
                             '<td style="display:none;">' + empleado.ID_CARGO + '</td>' +
-                            '<td>' + empleado.ESTADO + '</td>' +
+                            '<td style="display:none;">' + empleado.ID_ESTADO_USUARIO + '</td>' +
+                            '<td>' + empleado.NOMBRE + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + empleado.CREADO_POR + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + empleado.FECHA_CREACION + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + empleado.MODIFICADO_POR + '</td>' +
-                            '<td class="direccion-column" style="display:none;">' + empleado.FECHA_MODIFICACION + '</td>' + 
+                            '<td class="direccion-column" style="display:none;">' + empleado.FECHA_MODIFICACION + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargaEmpleado(' + empleado.ID_EMPLEADO + ')">Editar</button>';
+                            row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargaEmpleado(' + empleado.ID_EMPLEADO + ')" title="Editar"></i>';
                         }
 
+                        // Validar si PERMISOS_ELIMINACION es igual a 1 para mostrar el botón de eliminar
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-empleado" data-id="' + empleado.ID_EMPLEADO + '" onclick="eliminarEmpleado(' + empleado.ID_EMPLEADO + ')">Eliminar</button>';
+                            row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="' + empleado.ID_EMPLEADO + '" onclick="eliminarEmpleado(' + empleado.ID_EMPLEADO + ')" title="Eliminar"></i>';
                         }
 
+                        // Validar si PERMISOS_INSERCION es igual a 1 para mostrar el botón de ingreso de préstamo
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
-                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + empleado.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + empleado.ID_EMPLEADO + ')">Movimiento</button>';
+                            row += '<i class="fas fa-credit-card text-secondary cursor-pointer icon-lg" data-id="' + empleado.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + empleado.ID_EMPLEADO + ')" title="Movimiento" data-toggle="tooltip" data-placement="top"></i>';
                         }
+
+
+
                         row += '</td>' +
                             '</tr>';
                         //Cambiar palabra null por vacio.
@@ -919,7 +932,7 @@ if (!isset($_SESSION['usuario'])) {
                 }
             });
         }
-        
+
         function Insertar_Empleado() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
@@ -1047,7 +1060,7 @@ if (!isset($_SESSION['usuario'])) {
                     document.getElementById('editar-direccion2').value = empleado.DIRECCION2;
                     document.getElementById('editar-sucursal').value = empleado.ID_SUCURSAL;
                     document.getElementById('editar-cargo').value = empleado.ID_CARGO;
-                    
+
                 })
                 .catch(function(error) {
                     // Manejar el error aquí
@@ -1072,7 +1085,7 @@ if (!isset($_SESSION['usuario'])) {
             var direccion2 = document.getElementById('editar-direccion2').value;
             var sucursal = document.getElementById('editar-sucursal').value;
             var cargo = document.getElementById('editar-cargo').value;
-           
+
 
             // Realiza una solicitud FETCH para actualizar los datos del usuario
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/empleados.php?op=updateEmpleado', {
@@ -1096,7 +1109,7 @@ if (!isset($_SESSION['usuario'])) {
                         "DIRECCION2": direccion2,
                         "ID_SUCURSAL": sucursal,
                         "ID_CARGO": cargo
-                        
+
                     }) // Convierte los datos en formato JSON
                 })
                 .then(function(response) {
@@ -1138,8 +1151,8 @@ if (!isset($_SESSION['usuario'])) {
                 text: 'No podrás revertir esto.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',  
-                cancelButtonColor: '#3085d6', 
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
                 confirmButtonText: 'Eliminar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
@@ -1331,11 +1344,11 @@ if (!isset($_SESSION['usuario'])) {
         }
 
 
-          //FUNCION SEPARADOR DE MILES Y DECIMALES
-          function formatoNumero(numero) {
+        //FUNCION SEPARADOR DE MILES Y DECIMALES
+        function formatoNumero(numero) {
             return numero.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
-        
+
         $(document).ready(function() {
             Lista_Empleados();
             Insertar_Empleado();
@@ -1529,7 +1542,7 @@ if (!isset($_SESSION['usuario'])) {
             location.reload();
         });
     </script>
-    
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
