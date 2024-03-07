@@ -242,7 +242,7 @@ if (!isset($_SESSION['usuario'])) {
         }
 
         .custom-large-icon {
-            font-size: 2em;
+            font-size: 2.5em;
             /* Ajusta e tamaño según tus necesidades */
         }
     </style>
@@ -427,7 +427,7 @@ if (!isset($_SESSION['usuario'])) {
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<i class="fas fa-plus-circle text-success cursor-pointer icon-lg custom-large-icon" data-toggle="modal" data-target="#crearModal" onclick="abrirCrearModal()" title="Nuevo"></i>';
+                                echo '<i class="fas fa-plus-square text-success cursor-pointer icon-lg custom-large-icon" data-toggle="modal" data-target="#crearModal" onclick="abrirCrearModal()" title="Nuevo"></i>';
                             }
 
 
@@ -437,6 +437,7 @@ if (!isset($_SESSION['usuario'])) {
                         <table class="table table-bordered mx-auto" id="Lista-rol" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
+                                    <th>No.</th>
                                     <th style="display: none;">Id</th>
                                     <th>Rol</th>
                                     <th>Descripcion</th>
@@ -590,9 +591,10 @@ if (!isset($_SESSION['usuario'])) {
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-rol tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
-
+                    var contador = 1; // Variable para contar el número de registro
                     data.forEach(function(rol) {
                         var row = '<tr>' +
+                            '<td>' + contador++ + '</td>' +
                             '<td style="display:none;">' + rol.ID_ROL + '</td>' +
                             '<td>' + rol.ROL + '</td>' +
                             '<td>' + rol.DESCRIPCION + '</td>' +

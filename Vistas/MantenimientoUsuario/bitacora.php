@@ -207,6 +207,18 @@ if (!isset($_SESSION['usuario'])) {
         .icono:hover {
             color: #4CAF50;
         }
+        .icon-lg {
+            font-size: 24px;
+            /* Ajusta el tamaño según tus necesidades */
+            margin-right: 10px;
+            /* Ajusta el margen derecho según tus necesidades */
+            cursor: pointer;
+        }
+
+        .custom-large-icon {
+            font-size: 2.5em;
+            /* Ajusta e tamaño según tus necesidades */
+        }
     </style>
 
     </style>
@@ -434,6 +446,7 @@ if (!isset($_SESSION['usuario'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+    <script src="../../Config/constantes.js"></script>
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
 

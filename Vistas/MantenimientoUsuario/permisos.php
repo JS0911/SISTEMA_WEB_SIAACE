@@ -272,6 +272,19 @@ if (!isset($_SESSION['usuario'])) {
         .icono:hover {
             color: #4CAF50;
         }
+
+        .icon-lg {
+            font-size: 24px;
+            /* Ajusta el tamaño según tus necesidades */
+            margin-right: 10px;
+            /* Ajusta el margen derecho según tus necesidades */
+            cursor: pointer;
+        }
+
+        .custom-large-icon {
+            font-size: 2.5em;
+            /* Ajusta e tamaño según tus necesidades */
+        }
     </style>
 </head>
 
@@ -457,7 +470,7 @@ if (!isset($_SESSION['usuario'])) {
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<button class="btn btn-success mb-1 custom-button" data-toggle="modal" data-target="#crearModalPermisos">Nuevo</button>';
+                                echo '<i class="fas fa-plus-square text-success cursor-pointer icon-lg custom-large-icon" data-toggle="modal" data-target="#crearModalPermisos"  title="Nuevo"></i>';
                             }
                             ?>
 

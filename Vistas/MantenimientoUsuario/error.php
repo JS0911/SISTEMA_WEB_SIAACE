@@ -133,6 +133,18 @@ if (!isset($_SESSION['usuario'])) {
         margin-right: 10px;
         /* Espacio a la derecha del logo para separarlo del texto */
     }
+    .icon-lg {
+            font-size: 24px;
+            /* Ajusta el tamaño según tus necesidades */
+            margin-right: 10px;
+            /* Ajusta el margen derecho según tus necesidades */
+            cursor: pointer;
+        }
+
+        .custom-large-icon {
+            font-size: 2.5em;
+            /* Ajusta e tamaño según tus necesidades */
+        }
 </style>
 
 <!DOCTYPE html>
