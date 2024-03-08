@@ -71,8 +71,8 @@ $id_objeto_Cargos = "26";
 
 //------OBJETOS DE MANT.PRESTAMO-----------------------
 $id_objeto_Forma_Pago = "12";
-$id_objeto_PrestamoMantenimiento = "30"; 
-$id_objeto_Tipoprestamo = "13"; 
+$id_objeto_PrestamoMantenimiento = "30";
+$id_objeto_Tipoprestamo = "13";
 
 //------------OBJETOS DE MANT.CUENTAS------------------
 $id_objeto_Transaccion = "11";
@@ -219,6 +219,23 @@ if (!isset($_SESSION['usuario'])) {
         .icono:hover {
             color: #4CAF50;
         }
+
+        .icon-lg {
+    font-size: 24px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.btn.btn-info  {
+    font-size: 18px;
+    margin-right: 10px;
+    cursor: pointer; /* Ajusta el tamaño según tus necesidades */
+}
+
+.custom-large-icon {
+    font-size: 2.5em; /* Ajusta el tamaño según tus necesidades */
+}
+
     </style>
 
     </style>
@@ -317,10 +334,10 @@ if (!isset($_SESSION['usuario'])) {
                                 if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 }
-                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {    
+                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
                                 }
-                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
                                 }
                             }
@@ -339,13 +356,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosTransacciones) && $permisosTransacciones[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTransacciones) && $permisosTransacciones[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 }
-                                if (!empty($permisosTipoCuentas) && $permisosTipoCuentas[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosTipoCuentas) && $permisosTipoCuentas[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 }
-                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Cuentas</a>';
                                 }
                             }
@@ -364,13 +381,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 }
-                                if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 }
-                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Prestamos</a>';
                                 }
                             }
@@ -401,15 +418,21 @@ if (!isset($_SESSION['usuario'])) {
                         <div class="d-flex align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
+                                echo '<i class="fas fa-plus-square text-success cursor-pointer icon-lg custom-large-icon" data-toggle="modal" data-target="#crearModal" title="Nuevo"></i>';
                             }
                             ?>
-                            <button style="margin-left: 10px;" class="btn btn-info mb-3" data-toggle="modal" data-target="#importarModal">Importar</button>
+
+                            <button class="btn btn-info btn-lg cursor-pointer custom-large-icon" data-toggle="modal" data-target="#importarModal">
+                                <i class="fas fa-file-import"></i>
+                            </button>
                         </div>
+
+
                         <!-- Tabla para mostrar los datos -->
                         <table class="table table-bordered mx-auto" id="Lista-transaccion" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
+                                     <th >No.</th>
                                     <th style="display: none;">Id</th>
                                     <th>Tipo Transaccion</th>
                                     <th>Descripcion</th>
@@ -473,7 +496,7 @@ if (!isset($_SESSION['usuario'])) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Modal para importar datos -->
                 <div class="modal fade" id="importarModal" tabindex="-1" role="dialog" aria-labelledby="importarModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -498,7 +521,7 @@ if (!isset($_SESSION['usuario'])) {
                                     </div>
                                 </form>
                             </div>
-                        </div>    
+                        </div>
                     </div>
                 </div>
 
@@ -597,9 +620,10 @@ if (!isset($_SESSION['usuario'])) {
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-transaccion tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
-
+                    var contador=1;
                     data.forEach(function(transaccion) {
                         var row = '<tr>' +
+                             '<td>' + contador++ + '</td>' +
                             '<td style="display:none;">' + transaccion.ID_TIPO_TRANSACCION + '</td>' +
                             '<td>' + transaccion.TIPO_TRANSACCION + '</td>' +
                             '<td>' + transaccion.DESCRIPCION + '</td>' +
@@ -614,11 +638,12 @@ if (!isset($_SESSION['usuario'])) {
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarTransaccion(' + transaccion.ID_TIPO_TRANSACCION + ')">Editar</button> ';
+                           
+                            row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargarTransaccion(' + transaccion.ID_TIPO_TRANSACCION + ') " title="Editar"></i>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-transaccion" data-id="' + transaccion.ID_TIPO_TRANSACCION + '" onclick="eliminarTransaccion(' + transaccion.ID_TIPO_TRANSACCION + ')">Eliminar</button>';
+                            row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="'+ transaccion.ID_TIPO_TRANSACCION + '" onclick="eliminarTransaccion(' + transaccion.ID_TIPO_TRANSACCION +')" title="Eliminar"></i>';
                         }
 
 
@@ -646,12 +671,13 @@ if (!isset($_SESSION['usuario'])) {
                 "pageLength": 10,
                 dom: 'lBfrtip',
                 buttons: [{
-                        extend: 'copy',
-                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
+                    extend: 'copy',
+                        text: '<i class="fas fa-copy text-secondary cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Copiar"></i>',
+
                     },
                     {
-                        extend: 'csv',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
+                        extend: 'excel',
+                      text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6, 7, 8],
                             modifier: {
@@ -661,7 +687,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
+                          text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6, 7, 8],
                             modifier: {
@@ -725,13 +751,21 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>',
+                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
                         autoPrint: true,
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6, 7, 8],
                             modifier: {
                                 page: 'current'
                             },
+                        }
+                    },
+                    {
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+
+
+                        action: function() {
+                            ocultarCampos();
                         }
                     }
                 ],
@@ -741,6 +775,18 @@ if (!isset($_SESSION['usuario'])) {
                 },
             });
         }
+        
+        function ocultarCampos() {
+            var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
+            celdasDireccion.forEach(function(celda) {
+                if (celda.style.display === 'none' || celda.style.display === '') {
+                    celda.style.display = 'table-cell';
+                } else {
+                    celda.style.display = 'none';
+                }
+            });
+        }
+
 
         function Insertar_Transaccion() {
             $("#btn-agregar").click(function() {
@@ -805,9 +851,9 @@ if (!isset($_SESSION['usuario'])) {
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
                                 throw new Error('El registro ya existe en la Base de Datos.');
-                                <?php 
-                                    $error = new Errores();
-                                    $error->insert_error('Error al Insertar', 'ERROR SQL: [1062] Duplicate entry: TIPO TRANSACCION for key Primary ID.', 'El registro ya existe en la Base de Datos.', date('Y-m-d H:i:s'));
+                                <?php
+                                $error = new Errores();
+                                $error->insert_error('Error al Insertar', 'ERROR SQL: [1062] Duplicate entry: TIPO TRANSACCION for key Primary ID.', 'El registro ya existe en la Base de Datos.', date('Y-m-d H:i:s'));
                                 ?>
                             }
                         })
@@ -1083,8 +1129,9 @@ if (!isset($_SESSION['usuario'])) {
     <script>
         const importarButton1 = document.getElementById('btn-importar');
         const archivo = document.getElementById('archivo');
+
         function checkForm() {
-            const isFormValid = archivo.value.trim() !== '' 
+            const isFormValid = archivo.value.trim() !== ''
             importarButton1.disabled = !isFormValid;
         }
         archivo.addEventListener('input', checkForm);

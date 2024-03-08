@@ -423,14 +423,15 @@ if (!isset($_SESSION['usuario'])) {
                         <table class="table table-bordered mx-auto" id="Lista-objetos" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
+                                    <th>No.</th>
                                     <th style="display: none;">Id</th>
                                     <th>Objeto</th>
                                     <th>Descripcion</th>
                                     <th>Tipo Objeto</th>
-                                    <th>Creado Por</th>
-                                    <th>Modificado Por</th>
-                                    <th>Fecha Creación</th>
-                                    <th>Fecha modicación</th>
+                                    <th class="direccion-column" style="display:none;">Creado Por</th>
+                                    <th class="direccion-column" style="display:none;">Modificado Por</th>
+                                    <th class="direccion-column" style="display:none;">Fecha Creación</th>
+                                    <th class="direccion-column" style="display:none;">Fecha modicación</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -564,27 +565,28 @@ if (!isset($_SESSION['usuario'])) {
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-objetos tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
-
+                    var contador=1;
                     data.forEach(function(objeto) {
                         var row = '<tr>' +
+                            '<td>' + contador++ + '</td>' +
                             '<td style="display:none;">' + objeto.ID_OBJETO + '</td>' +
                             '<td>' + objeto.OBJETO + '</td>' +
                             '<td>' + objeto.DESCRIPCION + '</td>' +
                             '<td>' + objeto.TIPO_OBJETO + '</td>' +
-                            '<td>' + objeto.CREADO_POR + '</td>' +
-                            '<td>' + objeto.MODIFICADO_POR + '</td>' +
-                            '<td>' + objeto.FECHA_CREACION + '</td>' +
-                            '<td>' + objeto.FECHA_MODIFICACION + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + objeto.CREADO_POR + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + objeto.MODIFICADO_POR + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + objeto.FECHA_CREACION + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + objeto.FECHA_MODIFICACION + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarObjeto(' + objeto.ID_OBJETO + ')">Editar</button>';
+                            row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargarObjeto(' + objeto.ID_OBJETO + ')" title="Editar"></i>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-objeto" data-id="' + objeto.ID_OBJETO + '" onclick="eliminarObjeto(' + objeto.ID_OBJETO + ')">Eliminar</button>';
+                            row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="' + objeto.ID_OBJETO + '" onclick="eliminarObjeto(' + objeto.ID_OBJETO + ')" title="Eliminar"></i>';
                         }
 
                         row += '</td>' +
@@ -611,12 +613,13 @@ if (!isset($_SESSION['usuario'])) {
                 "pageLength": 10,
                 dom: 'lBfrtip',
                 buttons: [{
-                        extend: 'copy',
-                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
+                    extend: 'copy',
+                        text: '<i class="fas fa-copy text-secondary cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Copiar"></i>',
+
                     },
                     {
                         extend: 'excel',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
+                      text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6, 7],
                             modifier: {
@@ -626,7 +629,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
+                          text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6, 7],
                             modifier: {
@@ -690,7 +693,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>',
+                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
                         autoPrint: true,
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6, 7],
@@ -698,12 +701,31 @@ if (!isset($_SESSION['usuario'])) {
                                 page: 'current'
                             },
                         },
+                    },
+                    {
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+
+
+                        action: function() {
+                            ocultarCampos();
+                        }
                     }
                 ],
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
+            });
+        }
+        
+        function ocultarCampos() {
+            var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
+            celdasDireccion.forEach(function(celda) {
+                if (celda.style.display === 'none' || celda.style.display === '') {
+                    celda.style.display = 'table-cell';
+                } else {
+                    celda.style.display = 'none';
+                }
             });
         }
 

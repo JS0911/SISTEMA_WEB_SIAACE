@@ -211,18 +211,20 @@ if (!isset($_SESSION['usuario'])) {
             color: #4CAF50;
         }
 
-        .icon-lg {
-            font-size: 24px;
-            /* Ajusta el tamaño según tus necesidades */
-            margin-right: 10px;
-            /* Ajusta el margen derecho según tus necesidades */
-            cursor: pointer;
-        }
+        .icon-lg,
+.btn-info.btn-lg {
+    font-size: 24px;
+    /* Ajusta el tamaño según tus necesidades */
+    margin-right: 10px;
+    /* Ajusta el margen derecho según tus necesidades */
+    cursor: pointer;
+}
 
-        .custom-large-icon {
-            font-size: 2.5em;
-            /* Ajusta e tamaño según tus necesidades */
-        }
+.custom-large-icon {
+    font-size: 2.5em;
+    /* Ajusta el tamaño según tus necesidades */
+}
+
     </style>
 
     </style>
@@ -405,6 +407,7 @@ if (!isset($_SESSION['usuario'])) {
                         <table class="table table-bordered mx-auto" id="Lista-historial" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
+                                     <th>No.</th>
                                     <th style="display: none;">Id Historial</th>
                                     <th>Contraseña</th>
                                     <th>Usuario</th>
@@ -466,9 +469,10 @@ if (!isset($_SESSION['usuario'])) {
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-historial tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
-
+                    var contador=1;
                     data.forEach(function(historial) {
                         var row = '<tr>' +
+                            '<td>' + contador++ + '</td>' +
                             '<td style="display:none;">' + historial.ID_HISTORIAL + '</td>' +
                             '<td>' + historial.CONTRASENA + '</td>' +
                             '<td>' + historial.USUARIO + '</td>' +
@@ -498,12 +502,13 @@ if (!isset($_SESSION['usuario'])) {
                 "pageLength": 10,
                 dom: 'lBfrtip',
                 buttons: [{
-                        extend: 'copy',
-                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
+                    extend: 'copy',
+                        text: '<i class="fas fa-copy text-secondary cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Copiar"></i>',
+
                     },
                     {
                         extend: 'excel',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
+                      text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
                             columns: [1, 2, 6],
                             modifier: {
@@ -513,7 +518,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
+                          text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
                             columns: [1, 2, 6],
                             modifier: {
@@ -577,13 +582,19 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>',
+                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
                         autoPrint: true,
                         exportOptions: {
                             columns: [1, 2, 6],
                             modifier: {
                                 page: 'current'
                             },
+                        }
+                    },
+                    {
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+                        action: function() {
+                            ocultarCampos();
                         }
                     }
                 ],
@@ -594,6 +605,17 @@ if (!isset($_SESSION['usuario'])) {
             });
         }
 
+        function ocultarCampos() {
+            var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
+            celdasDireccion.forEach(function(celda) {
+                if (celda.style.display === 'none' || celda.style.display === '') {
+                    celda.style.display = 'table-cell';
+                } else {
+                    celda.style.display = 'none';
+                }
+            });
+        }
+        
         $(document).ready(function() {
 
             Lista_Historial();

@@ -428,7 +428,7 @@ $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
                         <table class="table table-bordered mx-auto" id="Lista-rolPermiso" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-
+                                    <th> No.</th>
                                     <th style="display: none;">Id Rol</th>
                                     <th> Rol</th>
                                     <th style="display: none;">Id Objeto</th>
@@ -516,8 +516,9 @@ $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
                             var rol = permiso.ROL || '';
                             var idObjeto = permiso.ID_OBJETO || '';
                              var objeto = permiso.OBJETO || '';
-
+                            var contador =1;
                             var row = '<tr>' +
+                             '<td>' + contador++ + '</td>' +
                                 '<td style="display:none;">' + idRol + '</td>' +
                                 '<td >' + rol + '</td>' +
                                 '<td style="display:none;">' + idObjeto + '</td>' +
@@ -553,12 +554,13 @@ $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
                 "pageLength": 10,
                 dom: 'lBfrtip',
                 buttons: [{
-                        extend: 'copy',
-                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
+                    extend: 'copy',
+                        text: '<i class="fas fa-copy text-secondary cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Copiar"></i>',
+
                     },
                     {
                         extend: 'excel',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
+                      text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
                             columns: [1, 3, 4, 5, 6, 7],
                             modifier: {
@@ -568,7 +570,7 @@ $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
                     },
                     {
                         extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
+                          text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
                             columns: [1, 3, 4, 5, 6, 7],
                             modifier: {
@@ -632,7 +634,7 @@ $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
                     },
                     {
                         extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>',
+                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
                         autoPrint: true,
                         exportOptions: {
                             columns: [1, 3, 4, 5, 6, 7],
@@ -640,12 +642,31 @@ $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
                                 page: 'current'
                             },
                         }
+                    },
+                    {
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+
+
+                        action: function() {
+                            ocultarCampos();
+                        }
                     }
                 ],
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
+            });
+        }
+
+        function ocultarCampos() {
+            var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
+            celdasDireccion.forEach(function(celda) {
+                if (celda.style.display === 'none' || celda.style.display === '') {
+                    celda.style.display = 'table-cell';
+                } else {
+                    celda.style.display = 'none';
+                }
             });
         }
         $(document).ready(function() {

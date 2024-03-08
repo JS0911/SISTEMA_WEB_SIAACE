@@ -217,6 +217,18 @@ if (!isset($_SESSION['usuario'])) {
         .icono:hover {
             color: #4CAF50;
         }
+        .icon-lg {
+            font-size: 24px;
+            /* Ajusta el tamaño según tus necesidades */
+            margin-right: 10px;
+            /* Ajusta el margen derecho según tus necesidades */
+            cursor: pointer;
+        }
+
+        .custom-large-icon {
+            font-size: 2.5em;
+            /* Ajusta e tamaño según tus necesidades */
+        }
     </style>
 
     </style>
@@ -401,7 +413,7 @@ if (!isset($_SESSION['usuario'])) {
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
+                                echo '<i class="fas fa-plus-square text-success cursor-pointer icon-lg custom-large-icon" data-toggle="modal" data-target="#crearModal" title="Nuevo"></i>';
                             }
                             ?>
                         </div>
@@ -409,6 +421,7 @@ if (!isset($_SESSION['usuario'])) {
                         <table class="table table-bordered mx-auto" id="Lista-cargo" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
+                                <th >No.</th>
                                     <th style="display: none;">Id</th>
                                     <th>Cargo</th>
                                     <th>Descripcion</th>
@@ -558,9 +571,10 @@ if (!isset($_SESSION['usuario'])) {
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-cargo tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
-
+                    var contador = 1; // Variable para contar el número de registro
                     data.forEach(function(cargo) {
                         var row = '<tr>' +
+                             '<td >' + contador++ + '</td>' +
                             '<td style="display:none;">' + cargo.ID_CARGO + '</td>' +
                             '<td>' + cargo.CARGO + '</td>' +
                             '<td>' + cargo.DESCRIPCION + '</td>' +
@@ -574,11 +588,13 @@ if (!isset($_SESSION['usuario'])) {
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarCargo(' + cargo.ID_CARGO + ')">Editar</button>';
+                            row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargarCargo(' + cargo.ID_CARGO + ') " title="Editar"></i>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-cargo" data-id="' + cargo.ID_CARGO + '" onclick="eliminarCargo(' + cargo.ID_CARGO + ')">Eliminar</button>';
+
+                            row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="' + cargo.ID_CARGO + '" onclick="eliminarCargo(' + cargo.ID_CARGO + ')" title="Eliminar"></i>';
+
                         }
 
 
@@ -606,12 +622,13 @@ if (!isset($_SESSION['usuario'])) {
                 "pageLength": 10,
                 dom: 'lBfrtip',
                 buttons: [{
-                        extend: 'copy',
-                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
+                    extend: 'copy',
+                        text: '<i class="fas fa-copy text-secondary cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Copiar"></i>',
+
                     },
                     {
                         extend: 'excel',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
+                      text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
                             columns: [1, 2, 3],
                             modifier: {
@@ -621,7 +638,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
+                          text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
                             columns: [1, 2, 3],
                             modifier: {
@@ -685,13 +702,21 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>',
+                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
                         autoPrint: true,
                         exportOptions: {
                             columns: [1, 2, 3],
                             modifier: {
                                 page: 'current'
                             },
+                        }
+                    },
+                    {
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+
+
+                        action: function() {
+                            ocultarCampos();
                         }
                     }
                 ],
@@ -702,6 +727,16 @@ if (!isset($_SESSION['usuario'])) {
             });
         }
 
+        function ocultarCampos() {
+            var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
+            celdasDireccion.forEach(function(celda) {
+                if (celda.style.display === 'none' || celda.style.display === '') {
+                    celda.style.display = 'table-cell';
+                } else {
+                    celda.style.display = 'none';
+                }
+            });
+        }
         function Insertar_Cargo() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario

@@ -430,13 +430,14 @@ if (!isset($_SESSION['usuario'])) {
                         <table class="table table-bordered mx-auto" id="Lista-parametros" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
+                                     <th>No.</th>
                                     <th style="display: none;">Id Parametro</th>
                                     <th>Parametro</th>
                                     <th>Valor</th>
-                                    <th>Creado Por</th>
-                                    <th>Modificado Por</th>
-                                    <th>Fecha Creacion</th>
-                                    <th>Fecha Modificacion</th>
+                                    <th class="direccion-column" style="display:none;">Creado Por</th>
+                                    <th class="direccion-column" style="display:none;">Modificado Por</th>
+                                    <th class="direccion-column" style="display:none;">Fecha Creacion</th>
+                                    <th class="direccion-column" style="display:none;">Fecha Modificacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -565,24 +566,27 @@ if (!isset($_SESSION['usuario'])) {
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-parametros tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
-
+                     var contador=1;
                     data.forEach(function(parametro) {
                         var row = '<tr>' +
+                        
+                            '<td >' +contador++ + '</td>' +
                             '<td style="display:none;">' + parametro.ID_PARAMETRO + '</td>' +
                             '<td>' + parametro.PARAMETRO + '</td>' +
                             '<td>' + parametro.VALOR + '</td>' +
-                            '<td>' + parametro.CREADO_POR + '</td>' +
-                            '<td>' + parametro.MODIFICADO_POR + '</td>' +
-                            '<td>' + parametro.FECHA_CREACION + '</td>' +
-                            '<td>' + parametro.FECHA_MODIFICACION + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + parametro.CREADO_POR + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + parametro.MODIFICADO_POR + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + parametro.FECHA_CREACION + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + parametro.FECHA_MODIFICACION + '</td>' +
                             '<td>';
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarParametro(' + parametro.ID_PARAMETRO + ')">Editar</button> ';
+                            row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargarParametro(' + parametro.ID_PARAMETRO + ')" title="Editar"></i>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-parametro" data-id="' + parametro.ID_PARAMETRO + '" onclick="eliminarParametro(' + parametro.ID_PARAMETRO + ')">Eliminar</button>';
+
+                            row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="' + parametro.ID_PARAMETRO + '" onclick="eliminarParametro(' + parametro.ID_PARAMETRO + ')" title="Eliminar"></i>';
                         }
                         row += '</td>' +
                             '</tr>';
@@ -609,12 +613,13 @@ if (!isset($_SESSION['usuario'])) {
                 "pageLength": 10,
                 dom: 'lBfrtip',
                 buttons: [{
-                        extend: 'copy',
-                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
+                    extend: 'copy',
+                        text: '<i class="fas fa-copy text-secondary cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Copiar"></i>',
+
                     },
                     {
                         extend: 'excel',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
+                      text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
                             columns: [1, 2, 3],
                             modifier: {
@@ -624,7 +629,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
+                          text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
                             columns: [1, 2, 3],
                             modifier: {
@@ -688,13 +693,21 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>',
+                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
                         autoPrint: true,
                         exportOptions: {
                             columns: [1, 2, 3],
                             modifier: {
                                 page: 'current'
                             },
+                        }
+                    },
+                    {
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+
+
+                        action: function() {
+                            ocultarCampos();
                         }
                     }
                 ],
@@ -705,6 +718,16 @@ if (!isset($_SESSION['usuario'])) {
             });
         }
 
+        function ocultarCampos() {
+            var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
+            celdasDireccion.forEach(function(celda) {
+                if (celda.style.display === 'none' || celda.style.display === '') {
+                    celda.style.display = 'table-cell';
+                } else {
+                    celda.style.display = 'none';
+                }
+            });
+        }
         function Insertar_Parametro() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario

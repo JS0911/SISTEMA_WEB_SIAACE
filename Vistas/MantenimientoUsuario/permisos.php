@@ -480,6 +480,7 @@ if (!isset($_SESSION['usuario'])) {
                         <table class="table table-bordered mx-auto" id="Lista-Permiso" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
+                                    <th >No.</th> 
                                     <th style="display: none;">Id Rol</th> <!--OCULTAR LAS CABEZERAS -->
                                     <th> Rol</th>
                                     <th style="display: none;">Id Objeto</th>
@@ -488,10 +489,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Permisos Inserción </th>
                                     <th>Permisos Actualización</th>
                                     <th>Permisos Eliminación</th>
-                                    <th style="display: none;">Creado por</th>
-                                    <th style="display: none;">Modificado por</th>
-                                    <th style="display: none;">Fecha Creacion</th>
-                                    <th style="display: none;">Fecha Modificacion</th>
+                                    <th class="direccion-column" style="display:none;">Creado por</th>
+                                    <th class="direccion-column" style="display:none;">Modificado por</th>
+                                    <th class="direccion-column" style="display:none;">Fecha Creacion</th>
+                                    <th class="direccion-column" style="display:none;">Fecha Modificacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -758,9 +759,10 @@ if (!isset($_SESSION['usuario'])) {
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-Permiso tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
-
+                    var contador =1;
                     data.forEach(function(permiso) {
                         var row = '<tr>' +
+                            '<td>' + contador++ + '</td>' +
                             '<td style="display:none;">' + permiso.ID_ROL + '</td>' + /* OCULTAR LAS COLUMNAS */
                             '<td>' + permiso.ROL + '</td>' +
                             '<td style="display:none;">' + permiso.ID_OBJETO + '</td>' +
@@ -770,19 +772,19 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + (permiso.PERMISOS_ACTUALIZACION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
                             '<td>' + (permiso.PERMISOS_ELIMINACION === 'Sí' ? '<span class="check">&#10004;</span>' : '<span class="x">&#10008;</span>') + '</td>' +
 
-                            '<td style="display: none;">' + permiso.CREADO_POR + '</td>' +
-                            '<td style="display: none;">' + permiso.MODIFICADO_POR + '</td>' +
-                            '<td style="display: none;">' + permiso.FECHA_CREACION + '</td>' +
-                            '<td style="display: none;">' + permiso.FECHA_MODIFICACION + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + permiso.CREADO_POR + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + permiso.MODIFICADO_POR + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + permiso.FECHA_CREACION + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + permiso.FECHA_MODIFICACION + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botÃ³n de editar
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarPermiso(' + permiso.ID_ROL + ',' + permiso.ID_OBJETO + ')">Editar</button>';
+                            row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargarPermiso(' + permiso.ID_ROL + ',' + permiso.ID_OBJETO + ')" title="Editar"></i>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-permiso" data-id="' + permiso.ID_ROL + ',' + permiso.ID_OBJETO + '" onclick="eliminarPermiso(' + permiso.ID_ROL + ',' + permiso.ID_OBJETO + ')">Eliminar</button>';
+                            row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="' + permiso.ID_ROL + ',' + permiso.ID_OBJETO + '" onclick="eliminarPermiso(' + permiso.ID_ROL + ',' + permiso.ID_OBJETO + ')" title="Eliminar"></i>';
                         }
                         row += '</td>' +
                             '</tr>';
@@ -809,12 +811,13 @@ if (!isset($_SESSION['usuario'])) {
                 "pageLength": 10,
                 dom: 'lBfrtip',
                 buttons: [{
-                        extend: 'copy',
-                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
+                    extend: 'copy',
+                        text: '<i class="fas fa-copy text-secondary cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Copiar"></i>',
+
                     },
                     {
                         extend: 'excel',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
+                      text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
                             columns: [1, 3, 4, 5, 6, 7],
                             modifier: {
@@ -824,7 +827,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
+                          text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
                             columns: [1, 3, 4, 5, 6, 7],
                             modifier: {
@@ -888,7 +891,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>',
+                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
                         autoPrint: true,
                         exportOptions: {
                             columns: [1, 3, 4, 5, 6, 7],
@@ -896,12 +899,28 @@ if (!isset($_SESSION['usuario'])) {
                                 page: 'current'
                             },
                         }
+                    },
+                    {
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+                        action: function() {
+                            ocultarCampos();
+                        }
                     }
                 ],
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
+            });
+        }
+        function ocultarCampos() {
+            var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
+            celdasDireccion.forEach(function(celda) {
+                if (celda.style.display === 'none' || celda.style.display === '') {
+                    celda.style.display = 'table-cell';
+                } else {
+                    celda.style.display = 'none';
+                }
             });
         }
 
