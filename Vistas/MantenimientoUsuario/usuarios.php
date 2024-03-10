@@ -17,7 +17,7 @@ Kevin Zuniga           kgzuniga@unah.hn
 
 Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
 Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
-Catedratico evaluacion de sistemas: ???
+Catedratico evaluacion de sistemas:  Lic. Karla Melisa Garcia Pineda
 
 
 ---------------------------------------------------------------------
@@ -38,6 +38,8 @@ Kevin Zuniga              25-nov-2023                 Se agrego reporteria, vali
 Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 Sahori Garcia             09/02/2024                   Modificaciones en permisos 
+Areli Ordoñez             09/03/2024                   Modificacion de validaciones
+Ashley Matamoros          10/03/2024                   Modificacion de validaciones
 ------------------------------------------------------------------------->
 
 <?php
@@ -481,11 +483,11 @@ if (!isset($_SESSION['usuario'])) {
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Usuario</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-usuario" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-usuario" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco, números, ni letras minusculas" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="50" class="form-control" id="agregar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
                                         <label for="id-estado">Estado</label>
@@ -547,7 +549,7 @@ if (!isset($_SESSION['usuario'])) {
                                         <input type="text" maxlength="15" class="form-control" id="editar-usuario" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
 
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="50" class="form-control" id="editar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
 
                                         <label for="estado">Estado</label>
                                         <select class="form-control" id="editar-estado" name="IdEstado" required>
@@ -557,7 +559,7 @@ if (!isset($_SESSION['usuario'])) {
                                             <?php endforeach; ?>
                                         </select>
                                         <label for="estado">Correo Electronico</label>
-                                        <input type="text" maxlength="50" class="form-control" id="editar-correo" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida" />
+                                        <input type="text" maxlength="50" class="form-control" id="editar-correo" required pattern="/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/" title="Ingrese una dirección de correo electrónico válida" />
                                         <div id="mensaje6"></div>
                                         <?php
                                         //---------TRAER ROLES Y ESTADOS --------
@@ -1134,7 +1136,7 @@ if (!isset($_SESSION['usuario'])) {
             var mensaje1 = document.getElementById("mensaje1");
             handleInputAndBlurEvents(usuario, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayusculas");
 
-            var expresionValidadora2 = /^[A-Z0-9\s]+$/;
+            var expresionValidadora2 = /^[A-Z\s]+$/;
             var mensaje2 = document.getElementById("mensaje2");
             handleInputAndBlurEvents(nombre, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(nombre);
@@ -1173,13 +1175,15 @@ if (!isset($_SESSION['usuario'])) {
         const guardarButton = document.getElementById('btn-agregar');
 
                // Expresión regular para validar campos
-                 const expresionValidadora = /^[A-Z0-9\s]+$/; // Expresión regular para nombre
+                 const expresionValidadora = /^[A-Z\s]+$/; // Expresión regular para nombre
+                 const expresionValidadorausuario = /^[A-Z\s]+$/; // Expresión regular para usuario
                  const expresionValidadoraCorreo = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // Expresión regular para correo electrónico
 
                  // Función para verificar si los campos contiene caracteres no válidos
                   function contieneCaracteresNoValidosNombre() {
-                   return !expresionValidadora.test(nombreInput.value.trim()) ||!expresionValidadoraCorreo.test(correoInput.value.trim());
+                   return !expresionValidadora.test(nombreInput.value.trim()) ||!expresionValidadorausuario.test(usuarioInput.value.trim()) ||!expresionValidadoraCorreo.test(correoInput.value.trim());
                 }
+                
 
             // Función para verificar si todos los campos están llenos y habilitar/deshabilitar el botón de guardar
             function checkForm() {
