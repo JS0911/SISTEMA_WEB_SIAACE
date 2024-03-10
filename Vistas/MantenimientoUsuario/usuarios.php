@@ -497,7 +497,7 @@ if (!isset($_SESSION['usuario'])) {
                                         </select>
 
                                         <label for="agregar-correo">Correo Electrónico</label>
-                                        <input type="email" maxlength="50" class="form-control" id="agregar-correo" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida" />
+                                        <input type="email" maxlength="50" class="form-control" id="agregar-correo" required pattern="/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/" title="Ingrese una dirección de correo electrónico válida" />
                                         <div id="mensaje3"></div>
 
                                         <label for="id-rol">Rol</label>
@@ -1139,7 +1139,7 @@ if (!isset($_SESSION['usuario'])) {
             handleInputAndBlurEvents(nombre, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(nombre);
 
-            var expresionValidadora3 = /^[A-Za-z0-9.!@#$%^&*]+$/;
+            var expresionValidadora3 = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
             var mensaje3 = document.getElementById("mensaje3");
             handleInputAndBlurEvents(correo, expresionValidadora3, mensaje3, "Ingrese una dirección de correo electrónico válida");
 
@@ -1172,24 +1172,31 @@ if (!isset($_SESSION['usuario'])) {
         const confirmarContrasenaInput = document.getElementById("confirmar-contrasena");
         const guardarButton = document.getElementById('btn-agregar');
 
-        // Función para verificar si todos los campos están llenos
-        function checkForm() {
-            const isFormValid = usuarioInput.value.trim() !== '' && nombreInput.value.trim() !== '' && estadoInput.value !== '' &&
-                estadoInput.value.trim() !== '' && correoInput.value.trim() !== '' && rolInput.value !== '' &&
-                contrasenaInput.value.trim() !== '' && confirmarContrasenaInput.value.trim() !== '';
+               // Expresión regular para validar campos
+                 const expresionValidadora = /^[A-Z0-9\s]+$/; // Expresión regular para nombre
+                 const expresionValidadoraCorreo = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // Expresión regular para correo electrónico
 
-            guardarButton.disabled = !isFormValid;
-        }
+                 // Función para verificar si los campos contiene caracteres no válidos
+                  function contieneCaracteresNoValidosNombre() {
+                   return !expresionValidadora.test(nombreInput.value.trim()) ||!expresionValidadoraCorreo.test(correoInput.value.trim());
+                }
 
-        // Agrega un evento input a cada campo de entrada
-        usuarioInput.addEventListener('input', checkForm);
-        nombreInput.addEventListener('input', checkForm);
-        estadoInput.addEventListener('input', checkForm);
-        correoInput.addEventListener('input', checkForm);
-        rolInput.addEventListener('input', checkForm);
-        contrasenaInput.addEventListener('input', checkForm);
-        confirmarContrasenaInput.addEventListener('input', checkForm);
-    </script>
+            // Función para verificar si todos los campos están llenos y habilitar/deshabilitar el botón de guardar
+            function checkForm() {
+                 const isNombreValido = !contieneCaracteresNoValidosNombre();
+                const isFormValid = usuarioInput.value.trim() !== '' && nombreInput.value.trim() !== '' &&  estadoInput.value.trim() !== '' && correoInput.value.trim() !== '' && rolInput.value.trim() !== '' && contrasenaInput.value.trim() !== '' && confirmarContrasenaInput.value.trim() !== '';
+                 guardarButton.disabled = !isFormValid || !isNombreValido;
+            }
+
+            // Agrega un evento input a cada campo de entrada
+            usuarioInput.addEventListener('input', checkForm);
+            nombreInput.addEventListener('input', checkForm);
+            estadoInput.addEventListener('input', checkForm);
+            correoInput.addEventListener('input', checkForm);
+            rolInput.addEventListener('input', checkForm);
+            contrasenaInput.addEventListener('input', checkForm);
+            confirmarContrasenaInput.addEventListener('input', checkForm);
+                </script>
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar de Editar"
