@@ -34,7 +34,7 @@ class Empleados extends Conectar
 
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_me_empleados` (`DNI`, `PRIMER_NOMBRE`, `SEGUNDO_NOMBRE`, `PRIMER_APELLIDO`, `SEGUNDO_APELLIDO`, `EMAIL`, `SALARIO`, `ID_ESTADO_USUARIO`, `TELEFONO`, `DIRECCION1`, `DIRECCION2`, `ID_SUCURSAL`, `ID_CARGO`, `CREADO_POR`, `FECHA_CREACION`) 
+            $sql = "INSERT INTO `tbl_me_empleados` (`DNI`, `PRIMER_NOMBRE`, `SEGUNDO_NOMBRE`, `PRIMER_APELLIDO`, `SEGUNDO_APELLIDO`, `EMAIL`, `SALARIO`, `ID_ESTADO_USUARIO`, `TELEFONO`, `DIRECCION1`, `DIRECCION2`, `ID_SUCURSAL`, `ID_CARGO`, `CREADO_POR`, `FECHA_CREACION`) 
             VALUES (:DNI, :PRIMER_NOMBRE, :SEGUNDO_NOMBRE, :PRIMER_APELLIDO, :SEGUNDO_APELLIDO, :EMAIL, :SALARIO, :ID_ESTADO_USUARIO, :TELEFONO, :DIRECCION1, :DIRECCION2 , :ID_SUCURSAL, :ID_CARGO, :CREADO_POR, :FECHA_CREACION)";
 
             $stmt = $conectar->prepare($sql);
@@ -91,7 +91,7 @@ class Empleados extends Conectar
             parent::set_names();
 
             // Consulta SQL para actualizar los campos del usuario
-            $sql = "UPDATE `siaace`.`tbl_me_empleados` 
+            $sql = "UPDATE `tbl_me_empleados` 
                 SET `DNI` = :DNI,
                     `PRIMER_NOMBRE` = :PRIMER_NOMBRE, 
                     `SEGUNDO_NOMBRE` = :SEGUNDO_NOMBRE, 

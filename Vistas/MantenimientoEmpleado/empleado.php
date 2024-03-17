@@ -153,18 +153,22 @@ if (!isset($_SESSION['usuario'])) {
         text-decoration: none;
         margin: 0 10px;
     }
+    .icon-lg {
+            font-size: 24px;
+            /* Ajusta el tamaño según tus necesidades */
+            margin-right: 10px;
+            /* Ajusta el margen derecho según tus necesidades */
+            cursor: pointer;
+        }
 
+        .custom-large-icon {
+            font-size: 2.5em;
+            /* Ajusta e tamaño según tus necesidades */
+        }
     .icono:hover {
         color: #4CAF50;
     }
 
-    .icon-lg {
-        font-size: 24px;
-        /* Ajusta el tamaño según tus necesidades */
-        margin-right: 10px;
-        /* Ajusta el margen derecho según tus necesidades */
-        cursor: pointer;
-    }
 </style>
 
 <!DOCTYPE html>
@@ -419,7 +423,9 @@ if (!isset($_SESSION['usuario'])) {
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<button class="btn btn-success" data-toggle="modal" data-target="#crearModal"> Nuevo</button>';
+                                
+
+                                echo '<i class="fas fa-plus-square text-success cursor-pointer icon-lg custom-large-icon" data-toggle="modal" data-target="#crearModal"title="Nuevo"></i>';
                             }
                             ?>
                         </div>
@@ -428,7 +434,8 @@ if (!isset($_SESSION['usuario'])) {
                         <table class="table table-bordered mx-auto" id="Lista-Empleados" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-                                    <th style="display: none;">Id Empleado</th>
+                                <th >No.</th>
+                                    <th >ID Empleado</th>
                                     <th>DNI</th>
                                     <th>Nombre</th>
                                     <th>Apellidos</th>
@@ -557,6 +564,8 @@ if (!isset($_SESSION['usuario'])) {
                                             <?php endforeach; ?>
                                         </select>
 
+                                        
+                                        
                                         <label for="id-estado">Estado</label>
                                         <select class="form-control" id="agregar-estado" name="IdEstado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
@@ -568,8 +577,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-agregarCancelar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                              
                             </div>
                         </div>
                     </div>
@@ -678,6 +688,8 @@ if (!isset($_SESSION['usuario'])) {
                                                 <option value="<?php echo $cargo['id_cargo']; ?>"><?php echo $cargo['cargo']; ?></option>
                                             <?php endforeach; ?>
                                         </select>
+
+                                       
                                         <label for="id-estado">Estado</label>
                                         <select class="form-control" id="editar-estado" name="IdEstado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
@@ -689,8 +701,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateEmpleado()" disabled>Guardar </button>
                                 <button type="button" class="btn btn-danger" id="btn-editarCancelar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateEmpleado()" disabled>Guardar </button>
+                              
                             </div>
                         </div>
                     </div>
@@ -721,6 +734,7 @@ if (!isset($_SESSION['usuario'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+    <script src="../../Config/constantes.js"></script>
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
         //import LogoBase64 from '../../src/LogoBase64.js';                                        
@@ -746,12 +760,15 @@ if (!isset($_SESSION['usuario'])) {
                     var tbody = document.querySelector('#Lista-Empleados tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
+                    var contador = 1; // Variable para contar el número de registro
+
                     data.forEach(function(empleado) {
                         var nombreCompleto = empleado.PRIMER_NOMBRE + ' ' + empleado.SEGUNDO_NOMBRE;
                         var apellidoCompleto = empleado.PRIMER_APELLIDO + ' ' + empleado.SEGUNDO_APELLIDO;
 
                         var row = '<tr>' +
-                            '<td style="display:none;">' + empleado.ID_EMPLEADO + '</td>' +
+                        '<td>' + contador++ + '</td>' +
+                            '<td >' + empleado.ID_EMPLEADO + '</td>' +
                             '<td>' + empleado.DNI + '</td>' +
                             '<td>' + nombreCompleto + '</td>' + // Concatenación de primer y segundo nombre
                             '<td>' + apellidoCompleto + '</td>' + //concatenacion de primer y segundo apellido  
@@ -773,12 +790,14 @@ if (!isset($_SESSION['usuario'])) {
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargaEmpleado(' + empleado.ID_EMPLEADO + ')" title="Editar"></i>';
+
+                            
                         }
 
                         // Validar si PERMISOS_ELIMINACION es igual a 1 para mostrar el botón de eliminar
-                        if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="' + empleado.ID_EMPLEADO + '" onclick="eliminarEmpleado(' + empleado.ID_EMPLEADO + ')" title="Eliminar"></i>';
-                        }
+                       // if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
+                           // row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="' + empleado.ID_EMPLEADO + '" onclick="eliminarEmpleado(' + empleado.ID_EMPLEADO + ')" title="Eliminar"></i>';
+                       // }
 
                         // Validar si PERMISOS_INSERCION es igual a 1 para mostrar el botón de ingreso de préstamo
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
@@ -818,11 +837,11 @@ if (!isset($_SESSION['usuario'])) {
                 dom: 'lBfrtip',
                 buttons: [{
                         extend: 'copy',
-                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
+                        text: '<i class="fas fa-copy text-secondary cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Copiar"></i>',
                     },
                     {
                         extend: 'excel',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
+                        text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6, 7, 11],
                             modifier: {
@@ -832,7 +851,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
+                        text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6, 7, 11],
                             modifier: {
@@ -896,7 +915,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>',
+                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
                         autoPrint: true,
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6, 7, 11],
@@ -906,8 +925,7 @@ if (!isset($_SESSION['usuario'])) {
                         },
                     },
                     {
-                        text: '<button class="btn btn-warning" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;" onclick="ocultarColumn()"><i class="fas fa-eye"></i></button>',
-                        action: function() {
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',action: function() {
                             ocultarCampos();
                         }
                     }
@@ -972,7 +990,7 @@ if (!isset($_SESSION['usuario'])) {
                         DIRECCION2: direccion2,
                         ID_SUCURSAL: sucursal,
                         ID_CARGO: cargo,
-                        ESTADO: estado
+                        ID_ESTADO_USUARIO: estado
                     };
 
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/empleados.php?op=InsertEmpleado', {
@@ -984,43 +1002,55 @@ if (!isset($_SESSION['usuario'])) {
                         })
                         .then(function(response) {
                             if (response.ok) {
-                                // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
-                                return response.json();
+                                if (response.status === 200) {
+                                    // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Cerrar la modal después de guardar
+                                        $('#crearModal').modal('hide');
+                                        // Mostrar SweetAlert de éxito
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Guardado exitoso',
+                                            text: data.message
+                                        }).then(function() {
+                                            // Recargar la página para mostrar los nuevos datos
+                                            location.reload();
+                                        });
+                                    });
+                                } else if (response.status === 409) {
+                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
+                                    return response.json().then(function(data) {
+                                        console.log(data);
+                                        // Mostrar SweetAlert de error
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: data.error // Acceder al mensaje de error
+                                        });
+                                    });
+                                } else {
+                                    // Manejar otras respuestas aquí (códigos de respuesta diferentes a 200 o 409)
+                                    throw new Error('Error inesperado');
+                                }
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('Error en la solicitud');
+                                throw new Error('Error en la solicitud: ' + response.status);
                             }
                         })
-                        .then(function(data) {
-                            console.log(data);
-
-                            // Cerrar la modal después de guardar
-                            $('#crearModal').modal('hide');
-
-                            // Mostrar SweetAlert de éxito
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Guardado exitoso',
-                                text: 'Los datos se han guardado correctamente.'
-                            }).then(function() {
-                                // Recargar la página para mostrar los nuevos datos
-                                location.reload();
-                            });
-
-                        })
                         .catch(function(error) {
-                            console.log(error.message);
-
-                            // Mostrar SweetAlert de error
+                            // Mostrar SweetAlert de error genérico
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
                                 text: 'Error al guardar los datos: ' + error.message
                             });
+                            console.log(error.message);
                         });
                 }
             });
         }
+
 
         function cargaEmpleado(id) {
             // Crear un objeto con el ID del usuario
@@ -1054,7 +1084,7 @@ if (!isset($_SESSION['usuario'])) {
                     document.getElementById('editar-Sapellido').value = empleado.SEGUNDO_APELLIDO;
                     document.getElementById('editar-email').value = empleado.EMAIL;
                     document.getElementById('editar-salario').value = empleado.SALARIO;
-                    document.getElementById('editar-estado').value = empleado.ESTADO;
+                    document.getElementById('editar-estado').value = empleado.ID_ESTADO_USUARIO;
                     document.getElementById('editar-telefono').value = empleado.TELEFONO;
                     document.getElementById('editar-direccion1').value = empleado.DIRECCION1;
                     document.getElementById('editar-direccion2').value = empleado.DIRECCION2;
@@ -1103,7 +1133,7 @@ if (!isset($_SESSION['usuario'])) {
                         "SEGUNDO_APELLIDO": Sapellido,
                         "EMAIL": email,
                         "SALARIO": salario,
-                        "ESTADO": estado,
+                        "ID_ESTADO_USUARIO": estado,
                         "TELEFONO": telefono,
                         "DIRECCION1": direccion1,
                         "DIRECCION2": direccion2,
@@ -1296,7 +1326,7 @@ if (!isset($_SESSION['usuario'])) {
             var mensaje7 = document.getElementById("mensaje7");
             handleInputAndBlurEvents(salario, expresionValidadora4, mensaje7, "Ingrese un salario válido (por ejemplo, 1000.00)");
 
-            var expresionValidadora6 = /^[0-9-]+/;
+            var expresionValidadora6 = /^[0-9-]+$/;;
             var mensaje9 = document.getElementById("mensaje9");
             handleInputAndBlurEvents(telefono, expresionValidadora6, mensaje9, "Ingrese un número de teléfono válido (solo números y -)");
 
@@ -1373,14 +1403,32 @@ if (!isset($_SESSION['usuario'])) {
         const estadoInput = document.getElementById("agregar-estado");
         const guardarButton = document.getElementById('btn-agregar');
 
+                 // Expresiones regulares para validar campos
+const expresionValidadoraDNI = /^[0-9]+$/; // solo números
+const expresionValidadoraS = /^\d+(\.\d{2})?$/; // decimales
+const expresionValidadoraCorreo = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // correo electrónico
+const expresionValidadoraT = /^[0-9-]+$/;///telefono
+
+// Función para verificar si los campos contienen caracteres no válidos
+function contieneCaracteresNoValidos() {
+    return !expresionValidadoraDNI.test(dniInput.value.trim()) ||
+    !expresionValidadoraT.test(telefonoInput.value.trim()) ||
+        !expresionValidadoraS.test(salarioInput.value.trim()) ||
+        !expresionValidadoraCorreo.test(emailInput.value.trim());
+}
+                
+
+
+
         // Función para verificar si todos los campos están llenos
         function checkForm() {
+            const isNombreValido = !contieneCaracteresNoValidos();
             const isFormValid = dniInput.value.trim() !== '' && PnombreInput.value.trim() !== '' && SnombreInput.value !== '' &&
                 PapellidoInput.value.trim() !== '' && SapellidoInput.value.trim() !== '' && emailInput.value !== '' &&
                 salarioInput.value.trim() !== '' && telefonoInput.value.trim() !== '' && direccion1Input.value.trim() !== '' &&
                 direccion2Input.value.trim() !== '' && sucursalInput.value.trim() !== '' && cargoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
 
-            guardarButton.disabled = !isFormValid;
+                guardarButton.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
@@ -1416,14 +1464,30 @@ if (!isset($_SESSION['usuario'])) {
         const cargoInput1 = document.getElementById("editar-cargo");
         const estadoInput1 = document.getElementById("editar-estado");
 
+
+                 // Expresiones regulares para validar campos
+                 const expresionValidadoraDNI = /^[0-9]+$/; // solo números
+const expresionValidadoraS = /^\d+(\.\d{2})?$/; // decimales
+const expresionValidadoraCorreo = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // correo electrónico
+const expresionValidadoraT = /^[0-9-]+$/;
+
+// Función para verificar si los campos contienen caracteres no válidos
+function contieneCaracteresNoValidos() {
+    return !expresionValidadoraDNI.test(dniInput1.value.trim()) ||
+    !expresionValidadoraT.test(telefonoInput1.value.trim()) ||
+        !expresionValidadoraS.test(salarioInput1.value.trim()) ||
+        !expresionValidadoraCorreo.test(emailInput1.value.trim());
+}
+
         // Función para verificar si todos los campos están llenos
         function checkForm() {
+            const isNombreValido = !contieneCaracteresNoValidos();
             const isFormValid = dniInput1.value.trim() !== '' && PnombreInput1.value.trim() !== '' && SnombreInput1.value !== '' &&
                 PapellidoInput1.value.trim() !== '' && SapellidoInput1.value.trim() !== '' && emailInput1.value !== '' &&
                 salarioInput1.value.trim() !== '' && telefonoInput1.value.trim() !== '' && direccion1Input1.value.trim() !== '' &&
                 direccion2Input1.value.trim() !== '' && sucursalInput1.value.trim() !== '' && cargoInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
 
-            guardarButton1.disabled = !isFormValid;
+                guardarButton.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
