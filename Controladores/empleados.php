@@ -82,10 +82,14 @@ switch ($_GET["op"]) {
         $ID_SUCURSAL = $body["ID_SUCURSAL"];
         $ID_CARGO = $body["ID_CARGO"];
 
-        $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-7 hours");
-        $dateNew = $dateMod->format("Y-m-d H:i:s"); 
 
+        if (verificarExistenciaEmpleado($DNI) > 0 && !esMismoEmpleado($ID_EMPLEADO, $DNI)){
+            http_response_code(409);
+            echo json_encode(["error" => "El DNI ya existe en la base de datos."]);
+        } else {
+            $date = new DateTime(date("Y-m-d H:i:s"));
+        $dateMod = $date->modify("-7 hours");
+        $dateNew = $dateMod->format("Y-m-d H:i:s");
         $datos = $com->update_empleado($ID_EMPLEADO, 
         $DNI, 
         $PRIMER_NOMBRE, 
@@ -103,9 +107,16 @@ switch ($_GET["op"]) {
         $_SESSION['usuario'],
         $dateNew
     );
-        echo json_encode($datos);
-        $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL EMPLEADO: $PRIMER_NOMBRE $SEGUNDO_NOMBRE $PRIMER_APELLIDO $SEGUNDO_APELLIDO", $_SESSION['id_usuario'], 7, $_SESSION['usuario'], $dateNew);
-    break;
+    echo json_encode(["message" => "Empleado insertado Exitosamente."]);
+    $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL EMPLEADO: $PRIMER_NOMBRE $SEGUNDO_NOMBRE $PRIMER_APELLIDO $SEGUNDO_APELLIDO", $_SESSION['id_usuario'], 7, $_SESSION['usuario'], $dateNew);
+}
+
+
+
+
+       
+       
+        break;
         
     case "eliminarEmpleado":
         $ID_EMPLEADO = $body["ID_EMPLEADO"];
@@ -134,6 +145,22 @@ function verificarExistenciaEmpleado($DNI) {
     return $row['count'];
 }   
 
+function esMismoEmpleado($id_empleado, $dni) {
+    // Realiza una consulta en la base de datos para verificar si el DNI pertenece al mismo empleado
+    $sql = "SELECT COUNT(*) as count FROM tbl_me_empleados WHERE ID_EMPLEADO = :id_empleado AND DNI = :dni";
+
+    // Realiza la conexión a la base de datos y ejecuta la consulta
+    $conexion = new Conectar();
+    $conn = $conexion->Conexion();
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id_empleado', $id_empleado);
+    $stmt->bindParam(':dni', $dni);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Si el número de resultados encontrados es mayor que 0, significa que el DNI pertenece al mismo empleado
+    return $row['count'] > 0;
+}
 
 
 ?>
