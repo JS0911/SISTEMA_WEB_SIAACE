@@ -17,7 +17,7 @@ Kevin Zuniga           kgzuniga@unah.hn
 
 Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
 Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
-Catedratico evaluacion de sistemas: ???
+Catedratico evaluacion de sistemas: Lic. Karla Melisa Garcia Pineda 
 
 
 ---------------------------------------------------------------------
@@ -38,6 +38,7 @@ Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rut
 Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 Sahori Garcia             09/02/2024                   Modificaciones en permisos 
+Ashley Matamoros          29/03/2024                   Modificacion de Validaciones  
 ------------------------------------------------------------------------->
 
 
@@ -495,15 +496,16 @@ if (!isset($_SESSION['usuario'])) {
                                         <label for="nombre">Id</label>
                                         <input type="text" class="form-control" id="editar-id-objeto" disabled>
                                         <label for="nombre">Objeto</label>
-                                        <input type="text" class="form-control" id="editar-objeto" disabled>
+                                        <input type="text" maxlength="100" class="form-control" id="editar-objeto" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje4"></div>
 
                                         <label for="nombre">Descripcion</label>
                                         <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje4"></div>
+                                        <div id="mensaje5"></div>
 
                                         <label for="estado">Tipo Objeto</label>
                                         <input type="text" maxlength="15" class="form-control" id="editar-tipoObjeto" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje5"></div>
+                                        <div id="mensaje6"></div>
                                     </div>
                                 </form>
                             </div>
@@ -947,6 +949,7 @@ if (!isset($_SESSION['usuario'])) {
             nombreObjeto = document.getElementById("agregar-objeto");
             descripcion = document.getElementById("agregar-descripcion");
             tipoObjeto = document.getElementById("agregar-tipoObjeto");
+            nombreObjetoEditar = document.getElementById("editar-objeto");
             descripcionEditar = document.getElementById("editar-descripcion");
             tipoObjetoEditar = document.getElementById("editar-tipoObjeto");
 
@@ -994,7 +997,7 @@ if (!isset($_SESSION['usuario'])) {
             var mensaje1 = document.getElementById("mensaje1");
             handleInputAndBlurEvents(nombreObjeto, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
 
-            var expresionValidadora2 = /^[A-Z0-9\s]+$/;
+            var expresionValidadora2 =/^[A-Z\s]+$/;;
             var mensaje2 = document.getElementById("mensaje2");
             handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(descripcion);
@@ -1003,11 +1006,15 @@ if (!isset($_SESSION['usuario'])) {
             handleInputAndBlurEvents(tipoObjeto, expresionValidadora1, mensaje3, "Solo se permiten Letras Mayúsculas");
 
             var mensaje4 = document.getElementById("mensaje4");
-            handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje4, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(descripcionEditar);
+            handleInputAndBlurEvents(nombreObjetoEditar, expresionValidadora1, mensaje4, "Solo se permiten Letras Mayúsculas");
+
 
             var mensaje5 = document.getElementById("mensaje5");
-            handleInputAndBlurEvents(tipoObjetoEditar, expresionValidadora1, mensaje5, "Solo se permiten Letras Mayúsculas");
+            handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje5, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(descripcionEditar);
+
+            var mensaje6 = document.getElementById("mensaje6");
+            handleInputAndBlurEvents(tipoObjetoEditar, expresionValidadora1, mensaje6, "Solo se permiten Letras Mayúsculas");
 
         }
 
@@ -1026,10 +1033,22 @@ if (!isset($_SESSION['usuario'])) {
         const tipoObjetoInput = document.getElementById('agregar-tipoObjeto');
         const guardarButton = document.getElementById('btn-agregar');
 
+
+                       // Expresión regular para validar campos
+                       const expresionValidadora = /^[A-Z\s]+$/; // Expresión regular para rol
+                       const expresionValidadoradescripcion = /^[A-Z\s]+$/; // Expresión regular para descripcion
+                       const expresionValidadoraTipo = /^[A-Z\s]+$/; // Expresión regular para descripcion
+
+                        // Función para verificar si los campos contiene caracteres no válidos
+                       function contieneCaracteresNoValidosNombre() {
+                       return !expresionValidadora.test(objetoInput.value.trim()) ||!expresionValidadoradescripcion.test(descripcionInput.value.trim()) ||!expresionValidadoraTipo.test(tipoObjetoInput.value.trim());
+                }
+
         // Función para verificar si todos los campos están llenos
         function checkForm() {
+            const isNombreValido = !contieneCaracteresNoValidosNombre();
             const isFormValid = objetoInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && tipoObjetoInput.value.trim() !== '';
-            guardarButton.disabled = !isFormValid;
+            guardarButton.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
@@ -1040,17 +1059,34 @@ if (!isset($_SESSION['usuario'])) {
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
+        const objetoInput1 = document.getElementById('editar-objeto');
         const descripcionInput1 = document.getElementById('editar-descripcion');
         const tipoObjetoInput1 = document.getElementById('editar-tipoObjeto');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
+
+
+                        // Expresión regular para validar campos
+                       const expresionValidadoraeditar = /^[A-Z\s]+$/; // Expresión regular para objeto
+                       const expresionValidadoradescripcioneditar = /^[A-Z\s]+$/; // Expresión regular para descripcion
+                       const expresionValidadoraTipoeditar = /^[A-Z\s]+$/; // Expresión regular para tipo objeto
+
+                        // Función para verificar si los campos contiene caracteres no válidos
+                       function contieneCaracteresNoValidosNombreeditar() {
+                       return !expresionValidadoraeditar.test(objetoInput1.value.trim()) ||!expresionValidadoradescripcioneditar.test(descripcionInput1.value.trim()) ||!expresionValidadoraTipoeditar.test(tipoObjetoInput1.value.trim());
+                }
+
+
+
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = descripcionInput1.value.trim() !== '' && tipoObjetoInput1.value.trim() !== '';
-            guardarButton1.disabled = !isFormValid;
+            const isNombreValido = !contieneCaracteresNoValidosNombreeditar();
+            const isFormValid = objetoInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '' && tipoObjetoInput1.value.trim() !== '';
+            guardarButton1.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
+        objetoInput1.addEventListener('input', checkForm);
         descripcionInput1.addEventListener('input', checkForm);
         tipoObjetoInput1.addEventListener('input', checkForm);
     </script>
