@@ -17,7 +17,7 @@ Kevin Zuniga           kgzuniga@unah.hn
 
 Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
 Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
-Catedratico evaluacion de sistemas: ???
+Catedratico evaluacion de sistemas: Lic. Karla Melisa Garcia Pineda
 
 
 ---------------------------------------------------------------------
@@ -37,7 +37,8 @@ Programador               Fecha                      Descripcion
 Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
 Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
-Sahori Garcia             09/02/2024                   Modificaciones en permisos 
+Sahori Garcia             09/02/2024                   Modificaciones en permisos
+Ashley Matamoros          30/03/2024                   Modificacion de Validaciones 
 ------------------------------------------------------------------------->
 
 
@@ -984,7 +985,7 @@ if (!isset($_SESSION['usuario'])) {
                 });
             }
 
-            var expresionValidadora2 = /^[A-Z0-9\s]+$/;
+            var expresionValidadora2 =  /^[A-Z\s]+$/;
             var mensaje1 = document.getElementById("mensaje1");
             handleInputAndBlurEvents(parametro, expresionValidadora2, mensaje1, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(parametro);
@@ -1015,10 +1016,20 @@ if (!isset($_SESSION['usuario'])) {
         const valorInput = document.getElementById('agregar-valor');
         const guardarButton = document.getElementById('btn-agregar');
 
+        // Expresión regular para validar campos
+        const expresionValidadora = /^[A-Z\s]+$/; // Expresión regular para parametro
+        const expresionValidadoravalor = /^[0-9]+$/; // Expresión regular para valor
+
+        // Función para verificar si los campos contiene caracteres no válidos
+        function contieneCaracteresNoValidosNombre() {
+        return !expresionValidadora.test(parametroInput.value.trim()) ||!expresionValidadoravalor.test(valorInput.value.trim());
+         }  
+
         // Función para verificar si todos los campos están llenos
         function checkForm() {
+            const isNombreValido = !contieneCaracteresNoValidosNombre();
             const isFormValid = parametroInput.value.trim() !== '' && valorInput.value.trim() !== '';
-            guardarButton.disabled = !isFormValid;
+            guardarButton.disabled = !isFormValid || !isNombreValido;
         }
         // Agrega un evento input a cada campo de entrada
         parametroInput.addEventListener('input', checkForm);
@@ -1032,10 +1043,19 @@ if (!isset($_SESSION['usuario'])) {
         const valorInput1 = document.getElementById('editar-valor');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
+          // Expresión regular para validar campos
+          const expresionValidadoraeditar = /^[A-Z\s]+$/; // Expresión regular para parametro
+        const expresionValidadoravaloreditar = /^[0-9]+$/; // Expresión regular para valor
+
+        // Función para verificar si los campos contiene caracteres no válidos
+        function contieneCaracteresNoValidosNombreeditar() {
+        return !expresionValidadoraeditar.test(parametroInput1.value.trim()) ||!expresionValidadoravaloreditar.test(valorInput1.value.trim());
+         }  
         // Función para verificar si todos los campos están llenos
         function checkForm() {
+            const isNombreValido = !contieneCaracteresNoValidosNombreeditar();
             const isFormValid = parametroInput1.value.trim() !== '' && valorInput1.value.trim() !== '';
-            guardarButton1.disabled = !isFormValid;
+            guardarButton1.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada

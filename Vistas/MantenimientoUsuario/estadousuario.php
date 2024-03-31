@@ -17,7 +17,7 @@ Kevin Zuniga           kgzuniga@unah.hn
 
 Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
 Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
-Catedratico evaluacion de sistemas: ???
+Catedratico evaluacion de sistemas: Lic. Karla Melisa Garcia Pineda 
 
 
 ---------------------------------------------------------------------
@@ -36,7 +36,8 @@ Programador               Fecha                      Descripcion
 Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
 Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
-Sahori Garcia             09/02/2024                   Modificaciones en permisos 
+Sahori Garcia             09/02/2024                   Modificaciones en permisos
+Ashley Matamoros          30/03/2024                   Modificacion de Validaciones  
 ------------------------------------------------------------------------->
 
 
@@ -980,7 +981,7 @@ if (!isset($_SESSION['usuario'])) {
             var mensaje1 = document.getElementById("mensaje1");
             handleInputAndBlurEvents(nombreEstado, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
 
-            var expresionValidadora2 = /^[A-Z0-9\s]+$/;
+            var expresionValidadora2 =/^[A-Z\s]+$/;
             var mensaje2 = document.getElementById("mensaje2");
             handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(descripcion);
@@ -1007,10 +1008,19 @@ if (!isset($_SESSION['usuario'])) {
         const descripcionInput = document.getElementById('agregar-descripcion');
         const guardarButton = document.getElementById('btn-agregar');
 
+                  // Expresión regular para validar campos
+                  const expresionValidadora = /^[A-Z\s]+$/; // Expresión regular para nombre
+                  const expresionValidadoradescripcion = /^[A-Z\s]+$/; // Expresión regular para descripcion
+
+                  // Función para verificar si los campos contiene caracteres no válidos
+                  function contieneCaracteresNoValidosNombre() {
+                   return !expresionValidadora.test(nombreInput.value.trim()) ||!expresionValidadoradescripcion.test(descripcionInput.value.trim());
+                }
         // Función para verificar si todos los campos están llenos
         function checkForm() {
+            const isNombreValido = !contieneCaracteresNoValidosNombre();
             const isFormValid = nombreInput.value.trim() !== '' && descripcionInput.value.trim() !== '';
-            guardarButton.disabled = !isFormValid;
+            guardarButton.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
@@ -1024,10 +1034,21 @@ if (!isset($_SESSION['usuario'])) {
         const descripcionInput1 = document.getElementById('editar-descripcion');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
+        // Expresión regular para validar campos
+        const expresionValidadoraeditar = /^[A-Z\s]+$/; // Expresión regular para rol
+        const expresionValidadoradescripcioneditar = /^[A-Z\s]+$/; // Expresión regular para descripcion
+
+
+        // Función para verificar si los campos contiene caracteres no válidos
+        function contieneCaracteresNoValidosNombreeditar() {
+        return !expresionValidadoraeditar.test(nombreInput1.value.trim()) ||!expresionValidadoradescripcioneditar.test(descripcionInput1.value.trim());
+        }
+
         // Función para verificar si todos los campos están llenos
         function checkForm() {
+            const isNombreValido = !contieneCaracteresNoValidosNombreeditar();
             const isFormValid = nombreInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '';
-            guardarButton1.disabled = !isFormValid;
+            guardarButton1.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
