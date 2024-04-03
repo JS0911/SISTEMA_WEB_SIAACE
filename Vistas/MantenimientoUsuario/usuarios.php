@@ -557,8 +557,14 @@ if (!isset($_SESSION['usuario'])) {
                                         <input type="text" maxlength="50" class="form-control" id="agregar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
-                                        <label for="id-estado">Estado</label>
-                                        <input type="text" class="form-control" id="agregar-estado" name="IdEstado" value="NUEVO" readonly>
+                                        <label for="estado">Estado</label>
+                                        <select class="form-control" id="agregar-estado" name="IdEstado" required>
+                                            <?php foreach ($Estados as $Estado) : ?>
+                                                <?php if ($Estado['ID_ESTADO_USUARIO'] == 3) : ?>
+                                                    <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>" selected disabled><?php echo $Estado['NOMBRE']; ?></option>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </select>
 
 
                                         <label for="agregar-correo">Correo Electrónico</label>
@@ -605,6 +611,7 @@ if (!isset($_SESSION['usuario'])) {
 
                                         <label for="nombre">Nombre</label>
                                         <input type="text" maxlength="50" class="form-control" id="editar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+
                                         <label for="estado">Estado</label>
                                         <select class="form-control" id="editar-estado" name="IdEstado" required>
                                             <option value="" disabled>Selecciona una opción</option>
@@ -685,6 +692,7 @@ if (!isset($_SESSION['usuario'])) {
                     }
                 })
                 .then(function(response) {
+
                     if (response.ok) {
                         // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
                         return response.json();
@@ -901,86 +909,105 @@ if (!isset($_SESSION['usuario'])) {
                 // Obtener los valores de los campos del formulario
                 var usuario = $("#agregar-usuario").val();
                 var nombre = $("#agregar-nombre").val();
-                var estado = $("#agregar-estado").val();
                 var correo = $("#agregar-correo").val();
                 var rol = $("#agregar-rol").val();
-
-                // Verificar que las contraseñas coincidan
-
+                // Establecer el valor del estado como 3 (NUEVO)
+                var estado = 3;
+                var autoRegistro = 1;
+                // Verificar que los campos obligatorios no estén vacíos
                 if (usuario == "" || nombre == "" || correo == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
                         text: 'No se pueden enviar Campos Vacios.'
-                    })
-
-                } else {
-                    // Crear un usuario con los datos a enviar al servidor
-                    var datos = {
-                        USUARIO: usuario,
-                        NOMBRE_USUARIO: nombre,
-                        ID_ESTADO_USUARIO: estado,
-                        CORREO_ELECTRONICO: correo,
-                        ID_ROL: rol,
-                    };
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=InsertUsuarios', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(datos)
-                        })
-                        .then(function(response) {
-                            if (response.ok) {
-                                if (response.status === 200) {
-                                    // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
-                                    return response.json().then(function(data) {
-                                        console.log(data);
-                                        // Cerrar la modal después de guardar
-                                        $('#crearModal').modal('hide');
-                                        // Mostrar SweetAlert de éxito
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Guardado exitoso',
-                                            text: data.message
-                                        }).then(function() {
-                                            // Recargar la página para mostrar los nuevos datos
-                                            location.reload();
-                                        });
-                                    });
-                                } else if (response.status === 409) {
-                                    // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
-                                    return response.json().then(function(data) {
-                                        console.log(data);
-                                        // Mostrar SweetAlert de error
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Error',
-                                            text: data.error // Acceder al mensaje de error
-                                        });
-                                    });
-                                }
-                            } else {
-                                // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('El registro ya existe en la Base de Datos.');
-                                <?php
-                                $error = new Errores();
-                                $error->insert_error('Error al Insertar', 'ERROR SQL: [1062] Duplicate entry: USUARIO for key Primary ID.', 'El registro ya existe en la Base de Datos.', date('Y-m-d H:i:s'));
-                                ?>
-                            }
-                        })
-                        .catch(function(error) {
-                            // Mostrar SweetAlert de error
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Error al guardar los datos: ' + error.message
-                            });
-                            console.log(error.message);
-                        });
+                    });
+                    return; // Detener la ejecución si hay campos vacíos
                 }
+
+                // Crear un objeto con los datos del usuario
+                var datos = {
+                    USUARIO: usuario,
+                    NOMBRE_USUARIO: nombre,
+                    ID_ESTADO_USUARIO: estado,
+                    CORREO_ELECTRONICO: correo,
+                    ID_ROL: rol,
+                    AUTO_REGISTRO: autoRegistro
+                };
+
+                // Realizar la solicitud al servidor
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=InsertUsuarios', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(datos)
+                    })
+                    .then(function(response) {
+
+                        switch (response.status) {
+                            case 200:
+                                // Manejar la respuesta exitosa
+                                return response.json().then(function(data) {
+                                    // console.log(response);
+                                    // Cerrar la modal después de guardar
+                                    $('#crearModal').modal('hide');
+                                    // Mostrar SweetAlert de éxito
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Guardado exitoso',
+                                        text: data.message
+                                    }).then(function() {
+                                        // Recargar la página para mostrar los nuevos datos
+                                        location.reload();
+                                    });
+                                });
+                            case 400:
+                                // Error de solicitud incorrecta
+                                throw new Error('Error de solicitud incorrecta: ' + response.statusText);
+                            case 404:
+                                // Recurso no encontrado
+                                throw new Error('Recurso no encontrado: ' + response.statusText);
+                            case 409:
+                                // Conflicto (por ejemplo, registro duplicado)
+                                return response.json().then(function(data) {
+                                    throw new Error('Error de conflicto: ' + data.message);
+                                });
+                            default:
+                                throw new Error('Error inesperado: ' + response.statusText);
+                        }
+                    })
+                    .catch(function(error) {
+                        // Verificar si el error está definido
+                        if (error) {
+                            console.log(error); // Imprimir el error completo en la consola para depuración
+                        } else {
+                            console.log('Error desconocido'); // Mensaje genérico en caso de que no se haya capturado un error específico
+                        }
+
+                        // Mostrar SweetAlert de error con el mensaje específico del error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al guardar los datos: ' + (error ? error.message : 'Error desconocido')
+                        });
+
+
+
+                        // console.log(error.message);
+
+                        // Registrar el error en el servidor (si es necesario)
+                        // fetch('ruta_al_endpoint_de_registro_de_errores', {
+                        //     method: 'POST',
+                        //     headers: {
+                        //         'Content-Type': 'application/json'
+                        //     },
+                        //     body: JSON.stringify({ error: error.message })
+                        // });
+                    });
             });
         }
+
+
 
         function cargarUsuario(id) {
             // Crear un usuario con el ID del usuario

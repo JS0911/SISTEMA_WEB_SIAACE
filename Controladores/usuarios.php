@@ -37,22 +37,28 @@ switch ($_GET["op"]) {
         $CORREO_ELECTRONICO = $body["CORREO_ELECTRONICO"];
         $ID_ROL = $body["ID_ROL"];
         $AUTO_REGISTRO = $body["AUTO_REGISTRO"];
-        $PRUEBA = "HOLA";
-        if (verificarExistenciaUsuario($USUARIO) > 0){
+    
+        if (verificarExistenciaUsuario($USUARIO) > 0) {
             http_response_code(409);
             echo json_encode(["error" => "El usuario ya existe en la base de datos."]);
         } elseif (verificarExistenciaEmail($CORREO_ELECTRONICO) > 0) {      
-            Http_response_code(409);
+            http_response_code(409);
             echo json_encode(["error" => "El correo ya existe en la base de datos."]);
         } else {
             $date = new DateTime(date("Y-m-d H:i:s"));
             $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s");
+           // $AUTO_REGISTRO=1;
             $datos = $com->insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CORREO_ELECTRONICO, $ID_ROL, $_SESSION['usuario'], $dateNew, $AUTO_REGISTRO);
-            echo json_encode(["message" => "Usuario insertado Exitosamente."]);
-            //$bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL USUARIO: $USUARIO", $_SESSION['id_usuario'], 2, $_SESSION['usuario'], $dateNew);
+            
+            if ($datos === "Usuario Insertado") {
+                echo json_encode(["message" => "Usuario insertado exitosamente."]);
+            } else {
+                http_response_code(500); // Internal Server Error
+                echo json_encode(["error" => $datos]);
+            }
         }
-    break;
+        break;    
 
     case "GetUsuario":
         $datos = $com->get_usuario($body["ID_USUARIO"]);

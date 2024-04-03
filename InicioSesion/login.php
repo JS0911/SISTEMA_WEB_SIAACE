@@ -43,7 +43,8 @@ if ($_POST) {
                     $mensajeEstado = 'Su usuario se encuentra inactivo';
                     header("refresh: 2; url=login.php");
                 } elseif ($row['id_estado_usuario'] == 3) {
-                    header("Location: ../Vistas/MantenimientoUsuario/Contestar_preguntas.php");
+                   // header("Location: ../Vistas/MantenimientoUsuario/Contestar_preguntas.php");
+                    header("Location: cambiocontrasena.php");
                 } elseif ($row['id_estado_usuario'] == 4) {
                     $mensajeEstado = 'Su usuario se encuentra bloqueado.';
                     header("refresh: 2; url=login.php");
