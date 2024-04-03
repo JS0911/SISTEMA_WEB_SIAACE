@@ -157,26 +157,43 @@ class Prestamo extends Conectar
         try {
             $conectar = parent::conexion();
             parent::set_names();
-
+    
+            // Consulta SQL para obtener la fecha de desembolso del préstamo
+            $sql_fecha_desembolso = "SELECT FECHA_DE_DESEMBOLSO FROM tbl_mp_prestamos WHERE ID_PRESTAMO = :ID_PRESTAMO";
+            $stmt_fecha_desembolso = $conectar->prepare($sql_fecha_desembolso);
+            $stmt_fecha_desembolso->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmt_fecha_desembolso->execute();
+            $fecha_desembolso = $stmt_fecha_desembolso->fetch(PDO::FETCH_COLUMN);
+    
+            // Verificar si la fecha de desembolso está establecida
+            if (!empty($fecha_desembolso)) {
+                // Si la fecha de desembolso está establecida, el préstamo ya ha sido desembolsado
+                echo json_encode(array('message' => 'El préstamo ya ha sido desembolsado anteriormente'));
+                return;
+            }
+    
+            // Si la fecha de desembolso no está establecida, proceder con el desembolso
             $date = new DateTime(date("Y-m-d H:i:s"));
             $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s");
-
+    
             // Consulta SQL para actualizar la fecha de desembolso
-            $sql = "UPDATE `tbl_mp_prestamos` SET `FECHA_DE_DESEMBOLSO` = :FECHA_DE_DESEMBOLSO WHERE `ID_PRESTAMO` = :ID_PRESTAMO";
+            $sql = "UPDATE tbl_mp_prestamos SET FECHA_DE_DESEMBOLSO = :FECHA_DE_DESEMBOLSO WHERE ID_PRESTAMO = :ID_PRESTAMO";
             $stmt = $conectar->prepare($sql);
             $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
             $stmt->bindParam(':FECHA_DE_DESEMBOLSO', $dateNew, PDO::PARAM_STR);
             $stmt->execute();
+    
             if ($stmt->rowCount() > 0) {
                 echo json_encode(array('message' => 'Desembolso realizado correctamente'));
             } else {
-                echo json_encode(array('message' => 'No se realizó ningun desembolso, o el préstamo no existe'));
+                echo json_encode(array('message' => 'No se realizó ningún desembolso, o el préstamo no existe'));
             }
         } catch (PDOException $e) {
             echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
         }
     }
+    
     public function obtenerEstadoPrestamo($ID_PRESTAMO)
     {
         try {
@@ -211,6 +228,7 @@ class Prestamo extends Conectar
         $conectar = parent::conexion();
         parent::set_names();
 
+        // Obtener el salario y el saldo del empleado
         $sqlSalario = "SELECT `SALARIO` FROM `tbl_me_empleados` WHERE `ID_EMPLEADO` = :ID_EMPLEADO";
         $sqlAhorro = "SELECT `SALDO` FROM `tbl_mc_cuenta` WHERE `ID_EMPLEADO` = :ID_EMPLEADO";
 
@@ -231,12 +249,32 @@ class Prestamo extends Conectar
         $salario = $resultSalario['SALARIO'];
         $ahorro = $resultAhorro['SALDO'];
 
+        // Calcular el monto máximo permitido
         $montoMaximo = ($ahorro * 3) + ($salario / 2);
 
-        $responseData = array(
-            "valido" => ($MONTO_SOLICITADO <= $montoMaximo),
-            "montoMaximo" => $montoMaximo // Incluir el monto mínimo en la respuesta
-        );
+        // Obtener la suma de los montos solicitados para el empleado en la tabla de préstamos
+        $sqlSumaMontos = "SELECT SUM(MONTO_SOLICITADO) AS SUMA_MONTOS FROM tbl_mp_prestamos WHERE ID_EMPLEADO = :ID_EMPLEADO";
+        $stmtSumaMontos = $conectar->prepare($sqlSumaMontos);
+        $stmtSumaMontos->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
+        $stmtSumaMontos->execute();
+        $resultSumaMontos = $stmtSumaMontos->fetch(PDO::FETCH_ASSOC);
+        //$mensaje = "Tiene préstamos activos. La cantidad restante que puede solicitar es $" . $cantidadRestante;
+        // Verificar si la suma de los montos solicitados más el monto actual excede el monto máximo permitido
+        if ($resultSumaMontos['SUMA_MONTOS'] + $MONTO_SOLICITADO > $montoMaximo) {
+            // Calcular la cantidad restante que el empleado puede solicitar
+            $cantidadRestante = $montoMaximo - $resultSumaMontos['SUMA_MONTOS'];
+
+            $responseData = array(
+                "cantidadRestante" => $cantidadRestante, // Incluir el mensaje en la respuesta
+                "montoMaximo" => $montoMaximo // Incluir el monto máximo en la respuesta
+            );
+        } else {
+            $responseData = array(
+                "valido" => true,
+                "montoMaximo" => $montoMaximo // Incluir el monto máximo en la respuesta
+            );
+        }
+        
         return json_encode($responseData); // Devolver la respuesta en formato JSON
 
     } catch (PDOException $e) {
@@ -249,5 +287,8 @@ class Prestamo extends Conectar
         return json_encode($response); // Devolver la respuesta de error en formato JSON
     }
 }
+
+
+
 
 }

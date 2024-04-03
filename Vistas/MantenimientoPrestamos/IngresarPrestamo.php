@@ -71,8 +71,8 @@ $id_objeto_Cargos = "26";
 
 //------OBJETOS DE MANT.PRESTAMO-----------------------
 $id_objeto_Forma_Pago = "12";
-$id_objeto_PrestamoMantenimiento = "30"; 
-$id_objeto_Tipoprestamo = "13"; 
+$id_objeto_PrestamoMantenimiento = "30";
+$id_objeto_Tipoprestamo = "13";
 
 //------------OBJETOS DE MANT.CUENTAS------------------
 $id_objeto_Transaccion = "11";
@@ -247,7 +247,12 @@ if (!isset($_SESSION['usuario'])) {
 
     .btn.btn-link.collapsed {
         font-family: 'Open Sans', sans-serif;
-        font-weight: 600;
+        font-weight: 800;
+        /* Grosor de fuente deseado */
+        font-size: 20px;
+        /* Tamaño de fuente deseado */
+        color: green;
+        /* Color del texto */
     }
 </style>
 
@@ -286,7 +291,7 @@ if (!isset($_SESSION['usuario'])) {
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="../MantenimientoUsuario/perfil.php">Perfil</a>   
+                    <a class="dropdown-item" href="../MantenimientoUsuario/perfil.php">Perfil</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="../../InicioSesion/logout.php">Salir</a>
                 </div>
@@ -364,10 +369,10 @@ if (!isset($_SESSION['usuario'])) {
                                 if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 }
-                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {    
+                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
                                 }
-                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
                                 }
                             }
@@ -385,13 +390,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 }
-                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 }
-                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Cuentas</a>';
                                 }
                             }
@@ -409,13 +414,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 }
-                                if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 }
-                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Prestamos</a>';
                                 }
                             }
@@ -475,21 +480,23 @@ if (!isset($_SESSION['usuario'])) {
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <button class="btn btn-outline-success" data-toggle="modal" data-target="#crearModalP"> Nuevo</button>
                                         </div>
-                                        <table class="table table-bordered mx-auto" id="Lista-Prestamos" style="margin-top: 20px; margin-bottom: 20px">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Plazo Prestamo</th>
-                                                    <th scope="col">Forma Pago</th>
-                                                    <th scope="col">Monto</th>
-                                                    <th scope="col">Saldo Adeudado</th>
-                                                    <th scope="col">Fecha Aprobado</th>
-                                                    <th scope="col">Detalles</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                        <div style="max-height: 400px; overflow-y: auto;">
+                                            <table class="table table-bordered mx-auto" id="Lista-Prestamos" style="margin-top: 20px; margin-bottom: 20px">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Plazo Prestamo</th>
+                                                        <th scope="col">Forma Pago</th>
+                                                        <th scope="col">Monto</th>
+                                                        <th scope="col">Saldo Adeudado</th>
+                                                        <th scope="col">Fecha Aprobado</th>
+                                                        <th scope="col">Detalles</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
 
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -648,9 +655,9 @@ if (!isset($_SESSION['usuario'])) {
                                             <label for="saldo">Saldo</label>
                                             <input type="text" class="form-control" id="Saldo" disabled>
                                             <label for="Deposito">Monto De Deposito</label>
-                                           
+
                                             <input type="text" class="form-control" id="Monto_Deposito " required pattern="[0-9]{1,8}(\.[0-9]{0,2})?" title="Ingrese un depósito válido (hasta 8 dígitos enteros y 2 decimales)" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 46 && this.value.indexOf('.') === -1)">
-                                         <div id="mensaje3"></div>
+                                            <div id="mensaje3"></div>
                                         </div>
                                     </form>
                                 </div>
@@ -699,14 +706,12 @@ if (!isset($_SESSION['usuario'])) {
         </div>
     </div>
 
+<!-- Modal Alerta Re -->
+
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
 
-        //FUNCIONES PARA PRESTAMOS                                       
         function Lista_Prestamos() {
-            // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
-            // Actualizar el valor predeterminado
-
             var data = {
                 "ID_EMPLEADO": <?php echo $ID_EMPLEADO; ?>,
             };
@@ -717,25 +722,25 @@ if (!isset($_SESSION['usuario'])) {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data) // Convierte la forma de pago en formato JSON
+                    body: JSON.stringify(data)
                 })
                 .then(function(response) {
                     if (response.ok) {
-                        // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
                         return response.json();
                     } else {
-                        // Si hubo un error en la solicitud, maneja el error aquí
                         throw new Error('Error en la solicitud');
                     }
                 })
                 .then(function(data) {
+                    // Ordenar los datos por fecha de aprobación (asumiendo que FECHA_APROBACION es la clave para la fecha)
+                    data.sort(function(a, b) {
+                        return new Date(b.FECHA_APROBACION) - new Date(a.FECHA_APROBACION);
+                    });
 
-                    // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-Prestamos tbody');
-                    tbody.innerHTML = ''; // Limpia el contenido anterior
+                    tbody.innerHTML = '';
 
                     data.forEach(async function(prestamo) {
-                        //SALDO_TOTAL = SaldoTotal(prestamo.ID_PRESTAMO);
                         var row = '<tr>' +
                             '<td style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
                             '<td>' + prestamo.PLAZO + ' meses</td>' +
@@ -745,23 +750,21 @@ if (!isset($_SESSION['usuario'])) {
                             '<td class="texto-derecha">' + (isNaN(await SaldoTotal(prestamo.ID_PRESTAMO)) ? '' : formatoNumero(parseFloat(await SaldoTotal(prestamo.ID_PRESTAMO)))) + '</td>' +
                             '<td>' + prestamo.FECHA_APROBACION + '</td>' +
                             '<td>';
-                        // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         row += '<button class="btn btn-outline-secondary" data-id="' + prestamo.ID_PRESTAMO + '" onclick="redirectToPlanPago(' + prestamo.ID_PRESTAMO + ')">Cuota</button>';
 
                         row += '</td>' +
                             '</tr>';
-                        //Cambiar palabra null por vacio.
+
                         newrow = row.replaceAll("null", " ");
                         row = newrow;
-                        tbody.innerHTML += row;;
+                        tbody.innerHTML += row;
                     });
-
                 })
                 .catch(function(error) {
-                    // Manejar el error aquí
-                    // alert('Error al cargar los datos: ' + error.message);
+                    console.error('Error al cargar los datos: ' + error.message);
                 });
         }
+
 
         function Insertar_Prestamo() {
 
@@ -847,10 +850,11 @@ if (!isset($_SESSION['usuario'])) {
 
                                 console.log('Monto Mínimo Permitido:', responseData.montoMaximo);
                                 montoMaximo = responseData.montoMaximo;
+                                cantidadRestante = responseData.cantidadRestante;
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error!',
-                                    text: 'El monto solicitado excede el límite permitido de : ' + montoMaximo
+                                    text: 'Su monto maximo es de Lps.' + montoMaximo + ' ,Pero tiene prestamos activos, su saldo restante a prestar es de Lps. '+ cantidadRestante
                                 });
                             }
                         })
@@ -865,9 +869,6 @@ if (!isset($_SESSION['usuario'])) {
                 }
             });
         }
-
-
-
 
         async function SaldoTotal(ID_PRESTAMO) {
             try {
@@ -1352,12 +1353,13 @@ if (!isset($_SESSION['usuario'])) {
             handleInputAndBlurEvents(NumeroCuenta, expresionValidadora2, mensaje2, "Ingrese un número de cuenta válido (solo números y -)");
 
             var mensaje3 = document.getElementById("mensaje3");
-            handleInputAndBlurEvents(Monto_Deposito , expresionValidadora1, mensaje3, "Ingrese un deposito válido (por ejemplo, 1000.00)");
+            handleInputAndBlurEvents(Monto_Deposito, expresionValidadora1, mensaje3, "Ingrese un deposito válido (por ejemplo, 1000.00)");
 
             var mensaje4 = document.getElementById("mensaje4");
             handleInputAndBlurEvents(Monto_Reembolso, expresionValidadora1, mensaje4, "Ingrese un retiro válido (por ejemplo, 1000.00)");
 
         }
+
         //FUNCION SEPARADOR DE MILES Y DECIMALES
         function formatoNumero(numero) {
             return numero.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');

@@ -34,9 +34,10 @@ switch ($_GET["op"]) {
         $USUARIO = $body["USUARIO"];
         $NOMBRE_USUARIO = $body["NOMBRE_USUARIO"];
         $ID_ESTADO_USUARIO = $body["ID_ESTADO_USUARIO"];
-        $CONTRASENA = $body["CONTRASENA"];
         $CORREO_ELECTRONICO = $body["CORREO_ELECTRONICO"];
         $ID_ROL = $body["ID_ROL"];
+        $AUTO_REGISTRO = $body["AUTO_REGISTRO"];
+        $PRUEBA = "HOLA";
         if (verificarExistenciaUsuario($USUARIO) > 0){
             http_response_code(409);
             echo json_encode(["error" => "El usuario ya existe en la base de datos."]);
@@ -47,9 +48,9 @@ switch ($_GET["op"]) {
             $date = new DateTime(date("Y-m-d H:i:s"));
             $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s");
-            $datos = $com->insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CONTRASENA, $CORREO_ELECTRONICO, $ID_ROL, $_SESSION['usuario'], $dateNew);
+            $datos = $com->insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CORREO_ELECTRONICO, $ID_ROL, $_SESSION['usuario'], $dateNew, $AUTO_REGISTRO);
             echo json_encode(["message" => "Usuario insertado Exitosamente."]);
-            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL USUARIO: $USUARIO", $_SESSION['id_usuario'], 2, $_SESSION['usuario'], $dateNew);
+            //$bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL USUARIO: $USUARIO", $_SESSION['id_usuario'], 2, $_SESSION['usuario'], $dateNew);
         }
     break;
 
@@ -65,7 +66,6 @@ switch ($_GET["op"]) {
         $ID_ESTADO_USUARIO = $body["ID_ESTADO_USUARIO"];
         $CORREO_ELECTRONICO = $body["CORREO_ELECTRONICO"];
         $ID_ROL = $body["ID_ROL"];
-        $CONTRASENA = $body["CONTRASENA"];
 
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
@@ -78,7 +78,6 @@ switch ($_GET["op"]) {
             $CORREO_ELECTRONICO, 
             $ID_ROL,
             $_SESSION['usuario'],
-            $CONTRASENA,
             $dateNew
         );
         echo json_encode($datos);

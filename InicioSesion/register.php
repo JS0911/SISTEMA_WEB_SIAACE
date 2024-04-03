@@ -17,6 +17,7 @@ if (isset($_POST['submit'])) {
     $correo_electronico = $_POST['correo_electronico'];
     $contrasena = $_POST['contrasena'];
     $confirmar_contrasena = $_POST['confirmar_contrasena'];
+    $Autoregistro = 1;
     
     // Verifica si las contraseñas coinciden
     if ($contrasena === $confirmar_contrasena) {
@@ -46,10 +47,10 @@ if (isset($_POST['submit'])) {
                     $mensajeCorreoExistente = "El correo ya existe en la base de datos. Por favor, elija un correo electrónico disponible.";
                 } else {
                     // Si ni el usuario ni el correo existen en la base de datos, proceder con la inserción
-                    $sqlInsertarUsuario = "INSERT INTO tbl_ms_usuario (usuario, nombre_usuario, correo_electronico, contrasena, id_estado_usuario, preguntas_contestadas,id_rol) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    $sqlInsertarUsuario = "INSERT INTO tbl_ms_usuario (usuario, nombre_usuario, correo_electronico, contrasena, id_estado_usuario, preguntas_contestadas,id_rol,AUTO_REGISTRO) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                     $stmtInsertarUsuario = $conn->prepare($sqlInsertarUsuario);
 
-                    if ($stmtInsertarUsuario->execute([$usuario, $nombre_usuario, $correo_electronico, $hashed_password, $id_estado_usuario, $preguntas_contestadas,$rol])) {
+                    if ($stmtInsertarUsuario->execute([$usuario, $nombre_usuario, $correo_electronico, $hashed_password, $id_estado_usuario, $preguntas_contestadas,$rol,$Autoregistro])) {
                         // La inserción fue exitosa
                         $_SESSION['registro_exitoso'] = true;
                         header("refresh:2;url=login.php");

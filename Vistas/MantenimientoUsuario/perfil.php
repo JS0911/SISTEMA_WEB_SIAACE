@@ -643,9 +643,12 @@ if (!isset($_SESSION['usuario'])) {
       });
 
       // Obtener los valores de las contraseñas
+    
       var contrasena = document.getElementById('contrasena').value;
       var confirmar_contrasena = document.getElementById('confirmar_contrasena').value;
+      var contraActual = document.getElementById('contrasena_actual');
 
+      // Validamos que las contraseñas nuevas sean iguales en los 2 campos
       if (!validarContraseñas(contrasena, confirmar_contrasena)) {
         return;
       }
@@ -716,12 +719,25 @@ if (!isset($_SESSION['usuario'])) {
       }
     }
 
+    //Validaciones y Mensajes Para El Cambio De Contraseña
     function validarContraseñas(contrasena, confirmar_contrasena) {
       if (contrasena !== confirmar_contrasena) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: 'Las contraseñas no coinciden.'
+        });
+        return false;
+      }
+      return true;
+    }
+
+    function validarContraseñasA(contrasenaA, confirmar_contrasena) {
+      if (contrasenaA == confirmar_contrasena) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'La contraseña nueva debe ser diferente de la anterior.'
         });
         return false;
       }

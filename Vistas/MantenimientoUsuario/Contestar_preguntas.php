@@ -7,19 +7,19 @@ $id_usuario = $_SESSION['id_usuario'];
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
-$sql1 = "UPDATE `siaace`.`tbl_ms_usuario` SET `ID_ESTADO_USUARIO` = 1 WHERE (`ID_USUARIO` = $id_usuario);";
+$sql1 = "UPDATE `tbl_ms_usuario` SET `ID_ESTADO_USUARIO` = 1 WHERE (`ID_USUARIO` = $id_usuario);";
 $stmt1 = $conn->prepare($sql1);
 
 
 //TRAIGO EL VALOR DEL PARAMETRO PREGUNTAS MAXIMAS
-$sql2 = "SELECT VALOR FROM siaace.tbl_ms_parametros WHERE ID_PARAMETRO = 3";
+$sql2 = "SELECT VALOR FROM tbl_ms_parametros WHERE ID_PARAMETRO = 3";
 $stmt2 = $conn->prepare($sql2);
 $stmt2->execute();
 $valorParametro=$stmt2->fetchColumn();;
 echo $valorParametro;
 
 //TRAIGO EL VALOR DE PREGUNTAS CONTESTADAS
-$sql3 = "SELECT PREGUNTAS_CONTESTADAS FROM siaace.tbl_ms_usuario WHERE ID_USUARIO = $id_usuario";
+$sql3 = "SELECT PREGUNTAS_CONTESTADAS FROM tbl_ms_usuario WHERE ID_USUARIO = $id_usuario";
 $stmt3 = $conn->prepare($sql3);
 $stmt3->execute();
 $PregunContes = $stmt3->fetchColumn();

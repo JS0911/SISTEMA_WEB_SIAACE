@@ -73,8 +73,8 @@ $id_objeto_Cargos = "26";
 
 //------OBJETOS DE MANT.PRESTAMO-----------------------
 $id_objeto_Forma_Pago = "12";
-$id_objeto_PrestamoMantenimiento = "30"; 
-$id_objeto_Tipoprestamo = "13"; 
+$id_objeto_PrestamoMantenimiento = "30";
+$id_objeto_Tipoprestamo = "13";
 
 //------------OBJETOS DE MANT.CUENTAS------------------
 $id_objeto_Transaccion = "11";
@@ -187,9 +187,13 @@ if (!isset($_SESSION['usuario'])) {
         font-family: Arial;
     }
 
-    .btn.btn-link.collapsed {
-        font-family: 'Open Sans', sans-serif;
-        font-weight: 600;
+    .btn.btn-link.collapsed,
+    .btn.btn-link.collapsed:visited {
+        font-family: 'Open Sans', sans-serif !important;
+        font-weight: 800 !important;
+        font-size: 20px !important;
+        color: green !important;
+        text-decoration: none !important;
     }
 </style>
 
@@ -305,10 +309,10 @@ if (!isset($_SESSION['usuario'])) {
                                 if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 }
-                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {    
+                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
                                 }
-                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
                                 }
                             }
@@ -326,13 +330,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 }
-                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 }
-                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Cuentas</a>';
                                 }
                             }
@@ -350,13 +354,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 }
-                                if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 }
-                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Prestamos</a>';
                                 }
                             }
@@ -417,48 +421,53 @@ if (!isset($_SESSION['usuario'])) {
                                     <div class="card-body">
                                         <h2 class="bel-typography bel-typography-h2">Movimientos</h2>
                                         <p class="bel-typography bel-typography-h2">Consulta todos los movimientos realizados por la cuenta seleccionada</p>
-                                        <table class="table table-bordered mx-auto" id="Lista-Transacciones" style="margin-top: 20px; margin-bottom: 20px">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Fecha</th>
-                                                    <th scope="col">Monto</th>
-                                                    <th scope="col">Descripcion</th>
-                                                    <th scope="col">Acciones</th>
-                                                </tr>
-                                                <?php
-                                                $consulta = new cuenta();
-                                                $result = $consulta->historial_cuenta($ID_CUENTA);
+                                        <div style="max-height: 400px; overflow-y: auto;">
+                                            <table class="table table-bordered mx-auto" id="Lista-Transacciones" style="margin-top: 20px; margin-bottom: 20px">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Fecha</th>
+                                                        <th scope="col">Monto</th>
+                                                        <th scope="col">Descripcion</th>
+                                                        <th scope="col">Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    $consulta = new cuenta();
+                                                    $result = $consulta->historial_cuenta($ID_CUENTA);
 
+                                                    if ($result !== false) {
+                                                        // Ordenar los resultados por fecha de más reciente a más antigua
+                                                        usort($result, function ($a, $b) {
+                                                            return strtotime($b['FECHA']) - strtotime($a['FECHA']);
+                                                        });
 
-
-                                                if ($result !== false) {
-                                                    if (is_array($result) && count($result) > 0) {
-                                                        foreach ($result as $row) {
-                                                            echo "<tr>";
-                                                            echo "<td>" . $row["FECHA"] . "</td>";
-                                                            echo "<td class='texto-derecha'>" . formatoNumero($row["MONTO"]) . "</td>";
-                                                            echo "<td>" . $row["TIPO_TRANSACCION"] . "</td>";
-                                                            echo "<td><button type='button' id='btn-anular' class='btn btn-outline-danger' onclick='Anular({$ID_CUENTA}, {$row["ID_TRANSACCION"]})'>Anular</button></td>";
-                                                            echo "</tr>";
+                                                        if (is_array($result) && count($result) > 0) {
+                                                            foreach ($result as $row) {
+                                                                echo "<tr>";
+                                                                echo "<td>" . $row["FECHA"] . "</td>";
+                                                                echo "<td class='texto-derecha'>" . formatoNumero($row["MONTO"]) . "</td>";
+                                                                echo "<td>" . $row["TIPO_TRANSACCION"] . "</td>";
+                                                                echo "<td><button type='button' id='btn-anular' class='btn btn-outline-danger' onclick='Anular({$ID_CUENTA}, {$row["ID_TRANSACCION"]})'>Anular</button></td>";
+                                                                echo "</tr>";
+                                                            }
+                                                        } else {
+                                                            echo "<tr><td colspan='4'>No hay datos</td></tr>";
                                                         }
                                                     } else {
-                                                        echo "<tr><td colspan='4'>No hay datos</td></tr>";
+                                                        echo "<tr><td colspan='4'>Error en la consulta</td></tr>";
                                                     }
-                                                } else {
-                                                    echo "<tr><td colspan='4'>'Error en la consulta: ' . $conn->$error</td></tr>";
-                                                }
+
+                                                    function formatoNumero($numero)
+                                                    {
+                                                        return number_format($numero, 2, '.', ',');
+                                                    }
+                                                    ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
 
 
-                                                function formatoNumero($numero)
-                                                {
-                                                    return number_format($numero, 2, '.', ',');
-                                                }
-                                                ?>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -470,7 +479,7 @@ if (!isset($_SESSION['usuario'])) {
     </div>
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
-//DEBE DE ESTAR VALIDADO LA ANULACION Y LA VISUALIZACION 
+        //DEBE DE ESTAR VALIDADO LA ANULACION Y LA VISUALIZACION 
         function Anular(id_cuenta, id_transaccion) {
             var datos = {
                 "ID_CUENTA": id_cuenta,

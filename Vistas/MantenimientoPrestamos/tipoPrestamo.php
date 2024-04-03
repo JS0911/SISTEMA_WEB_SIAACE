@@ -71,8 +71,8 @@ $id_objeto_Cargos = "26";
 
 //------OBJETOS DE MANT.PRESTAMO-----------------------
 $id_objeto_Forma_Pago = "12";
-$id_objeto_PrestamoMantenimiento = "30"; 
-$id_objeto_Tipoprestamo = "13"; 
+$id_objeto_PrestamoMantenimiento = "30";
+$id_objeto_Tipoprestamo = "13";
 
 //------------OBJETOS DE MANT.CUENTAS------------------
 $id_objeto_Transaccion = "11";
@@ -219,6 +219,19 @@ if (!isset($_SESSION['usuario'])) {
         .icono:hover {
             color: #4CAF50;
         }
+
+        .icon-lg {
+            font-size: 24px;
+            /* Ajusta el tamaño según tus necesidades */
+            margin-right: 10px;
+            /* Ajusta el margen derecho según tus necesidades */
+            cursor: pointer;
+        }
+
+        .custom-large-icon {
+            font-size: 2.5em;
+            /* Ajusta e tamaño según tus necesidades */
+        }
     </style>
 
     </style>
@@ -317,10 +330,10 @@ if (!isset($_SESSION['usuario'])) {
                                 if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 }
-                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {    
+                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
                                 }
-                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
                                 }
                             }
@@ -339,15 +352,15 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
-                                 if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) { 
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
-                            }
-                            if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
-                            }
-                            if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) { 
-                                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Cuentas</a>';
-                            }
+                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
+                                }
+                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
+                                }
+                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Cuentas</a>';
+                                }
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -363,13 +376,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 }
-                                if (!empty($permisosTipoPrestamos) && $permisosTipoPrestamos[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTipoPrestamos) && $permisosTipoPrestamos[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 }
-                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Prestamos</a>';
                                 }
                             }
@@ -400,7 +413,7 @@ if (!isset($_SESSION['usuario'])) {
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<button class="btn btn-success mb-3" data-toggle="modal" data-target="#crearModal">Nuevo</button>';
+                                echo '<i class="fas fa-plus-square text-success cursor-pointer icon-lg custom-large-icon" data-toggle="modal" data-target="#crearModal"title="Nuevo"></i>';
                             }
                             ?>
                         </div>
@@ -408,21 +421,22 @@ if (!isset($_SESSION['usuario'])) {
                         <table class="table table-bordered mx-auto" id="Lista-tipoprestamo" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
+                                    <th>No.</th>
                                     <th style="display: none;">Id Tipo Prestamo</th>
                                     <th>Tipo Prestamo</th>
                                     <th>Descripcion</th>
                                     <th>Aplica Seguro</th>
-                                    <th style="display: none;">Monto Máximo</th>
-                                    <th style="display: none;">Monto Minimo</th>
-                                    <th style="display: none;">Tasa Máxima</th>
-                                    <th style="display: none;">Tasa Minima</th>
-                                    <th style="display: none;">Plazo Máximo</th>
-                                    <th style="display: none;">Plazo Minimo</th>
+                                    <th class="direccion-column" style="display:none;">Monto Máximo</th>
+                                    <th class="direccion-column" style="display:none;">Monto Minimo</th>
+                                    <th class="direccion-column" style="display:none;">Tasa Máxima</th>
+                                    <th class="direccion-column" style="display:none;">Tasa Minima</th>
+                                    <th class="direccion-column" style="display:none;">Plazo Máximo</th>
+                                    <th class="direccion-column" style="display:none;">Plazo Minimo</th>
                                     <th>Estado </th>
-                                    <th style="display: none;">Creado por</th>
-                                    <th style="display: none;">Fecha Creacion</th>
-                                    <th style="display: none;">Modificado por</th>
-                                    <th style="display: none;">Fecha Modificacion</th>
+                                    <th class="direccion-column" style="display:none;">Creado por</th>
+                                    <th class="direccion-column" style="display:none;">Fecha Creacion</th>
+                                    <th class="direccion-column" style="display:none;">Modificado por</th>
+                                    <th class="direccion-column" style="display:none;">Fecha Modificacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -627,34 +641,36 @@ if (!isset($_SESSION['usuario'])) {
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-tipoprestamo tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
-
+                    var contador = 1; // Variable para contar el número de registro
                     data.forEach(function(tipoprestamo) {
                         var row = '<tr>' +
+                            '<td>' + contador++ + '</td>' +
                             '<td style="display:none;">' + tipoprestamo.ID_TIPO_PRESTAMO + '</td>' +
                             '<td>' + tipoprestamo.TIPO_PRESTAMO + '</td>' +
                             '<td>' + tipoprestamo.DESCRIPCION + '</td>' +
                             '<td>' + tipoprestamo.APLICA_SEGUROS + '</td>' +
-                            '<td style="display:none;">' + tipoprestamo.MONTO_MAXIMO + '</td>' +
-                            '<td style="display:none;">' + tipoprestamo.MONTO_MINIMO + '</td>' +
-                            '<td style="display:none;">' + tipoprestamo.TASA_MAXIMA + '</td>' +
-                            '<td style="display:none;">' + tipoprestamo.TASA_MINIMA + '</td>' +
-                            '<td style="display:none;">' + tipoprestamo.PLAZO_MAXIMO + '</td>' +
-                            '<td style="display:none;">' + tipoprestamo.PLAZO_MINIMO + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + tipoprestamo.MONTO_MAXIMO + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + tipoprestamo.MONTO_MINIMO + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + tipoprestamo.TASA_MAXIMA + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + tipoprestamo.TASA_MINIMA + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + tipoprestamo.PLAZO_MAXIMO + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + tipoprestamo.PLAZO_MINIMO + '</td>' +
                             '<td>' + tipoprestamo.ESTADO + '</td>' +
-                            '<td style="display:none;">' + tipoprestamo.CREADO_POR + '</td>' +
-                            '<td style="display:none;">' + tipoprestamo.FECHA_CREACION + '</td>' +
-                            '<td style="display:none;">' + tipoprestamo.MODIFICADO_POR + '</td>' +
-                            '<td style="display:none;">' + tipoprestamo.FECHA_MODIFICACION + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + tipoprestamo.CREADO_POR + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + tipoprestamo.FECHA_CREACION + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + tipoprestamo.MODIFICADO_POR + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + tipoprestamo.FECHA_MODIFICACION + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-primary" data-toggle="modal" data-target="#editarModal" onclick="cargarTipoprestamo(' + tipoprestamo.ID_TIPO_PRESTAMO + ')">Editar</button>';
+
+                            row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargarTipoprestamo(' + tipoprestamo.ID_TIPO_PRESTAMO + ') " title="Editar"></i>';
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger eliminar-tipoprestamo" data-id="' + tipoprestamo.ID_TIPO_PRESTAMO + '" onclick="eliminarTipoprestamo(' + tipoprestamo.ID_TIPO_PRESTAMO + ')">Eliminar</button>';
+                            row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="' + tipoprestamo.ID_TIPO_PRESTAMO + '" onclick="eliminarTipoprestamo(' + tipoprestamo.ID_TIPO_PRESTAMO + ')" title="Eliminar"></i>';
                         }
                         row += '</td>' +
                             '</tr>';
@@ -683,13 +699,13 @@ if (!isset($_SESSION['usuario'])) {
                 dom: 'lBfrtip',
                 buttons: [{
                         extend: 'copy',
-                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
+                        text: '<i class="fas fa-copy text-secondary cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Copiar"></i>',
                     },
                     {
                         extend: 'excel',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
+                        text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                            columns: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                             modifier: {
                                 page: 'current'
                             },
@@ -697,9 +713,9 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
+                        text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                            columns: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
                             modifier: {
                                 page: 'current'
                             }
@@ -761,13 +777,19 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>',
+                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
                         autoPrint: true,
                         exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                            columns: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                             modifier: {
                                 page: 'current'
                             },
+                        },
+                    },
+                    {
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+                        action: function() {
+                            ocultarCampos();
                         }
                     }
                 ],
@@ -775,6 +797,17 @@ if (!isset($_SESSION['usuario'])) {
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
+            });
+        }
+
+        function ocultarCampos() {
+            var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
+            celdasDireccion.forEach(function(celda) {
+                if (celda.style.display === 'none' || celda.style.display === '') {
+                    celda.style.display = 'table-cell';
+                } else {
+                    celda.style.display = 'none';
+                }
             });
         }
 

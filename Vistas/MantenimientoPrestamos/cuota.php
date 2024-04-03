@@ -86,8 +86,8 @@ $id_objeto_Cargos = "26";
 
 //------OBJETOS DE MANT.PRESTAMO-----------------------
 $id_objeto_Forma_Pago = "12";
-$id_objeto_PrestamoMantenimiento = "30"; 
-$id_objeto_Tipoprestamo = "13"; 
+$id_objeto_PrestamoMantenimiento = "30";
+$id_objeto_Tipoprestamo = "13";
 
 //------------OBJETOS DE MANT.CUENTAS------------------
 $id_objeto_Transaccion = "11";
@@ -205,7 +205,12 @@ if (!isset($_SESSION['usuario'])) {
 
     .btn.btn-link.collapsed {
         font-family: 'Open Sans', sans-serif;
-        font-weight: 600;
+        font-weight: 800;
+        /* Grosor de fuente deseado */
+        font-size: 20px;
+        /* Tamaño de fuente deseado */
+        color: blue;
+        /* Color del texto */
     }
 </style>
 
@@ -323,10 +328,10 @@ if (!isset($_SESSION['usuario'])) {
                                 if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 }
-                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {    
+                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
                                 }
-                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
                                 }
                             }
@@ -344,13 +349,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 }
-                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 }
-                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Cuentas</a>';
                                 }
                             }
@@ -368,13 +373,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 }
-                                if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 }
-                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Prestamos</a>';
                                 }
                             }
@@ -474,80 +479,74 @@ if (!isset($_SESSION['usuario'])) {
                                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <div class="ml-3 card" style="max-height: 400px; overflow-y: auto;">
-                                            <table class="table table-bordered mx-auto" id="Lista-Cuotas" style="margin-top: 20px; margin-bottom: 20px">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col" style="display: none;">Id Plan Pago</th>
-                                                        <th scope="col" style="display: none;">Id Prestamo</th>
-                                                        <th scope="col">N.Cuota</th>
-                                                        <th scope="col">Fecha Vencimiento</th>
-                                                        <th scope="col">Fecha Pago</th>
-                                                        <th scope="col">Cuota</th>
-                                                        <th scope="col" style="display: none;">Monto Adeudado</th>
-                                                        <th scope="col" style="display: none;">Monto Pagado</th>
-                                                        <th scope="col">Capital Adeudado</th>
-                                                        <th scope="col">Capital Pagado</th>
-                                                        <th scope="col">Interes Adeudado</th>
-                                                        <th scope="col">Interes Pagado</th>
-                                                        <th scope="col" style="display: none;">Monto Adeudaro Mora</th>
-                                                        <th scope="col" style="display: none;">Monto Pagado Mora</th>
-                                                        <th scope="col">Estado Pago</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
+                                            <div class="ml-3 card" style="max-height: 400px; overflow-y: auto;">
+                                                <table class="table table-bordered mx-auto" id="Lista-Cuotas" style="margin-top: 20px; margin-bottom: 20px">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" style="display: none;">Id Plan Pago</th>
+                                                            <th scope="col" style="display: none;">Id Prestamo</th>
+                                                            <th scope="col">N.Cuota</th>
+                                                            <th scope="col">Fecha Vencimiento</th>
+                                                            <th scope="col">Fecha Pago</th>
+                                                            <th scope="col">Cuota</th>
+                                                            <th scope="col" style="display: none;">Monto Adeudado</th>
+                                                            <th scope="col" style="display: none;">Monto Pagado</th>
+                                                            <th scope="col">Capital Adeudado</th>
+                                                            <th scope="col">Capital Pagado</th>
+                                                            <th scope="col">Interes Adeudado</th>
+                                                            <th scope="col">Interes Pagado</th>
+                                                            <th scope="col" style="display: none;">Monto Adeudaro Mora</th>
+                                                            <th scope="col" style="display: none;">Monto Pagado Mora</th>
+                                                            <th scope="col">Estado Pago</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <br>
-                        <div class="modal fade" id="pagoModal" tabindex="-1" role="dialog" aria-labelledby="pagoModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="pagoModalLabel">Pago</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <!-- Formulario de Edición -->
-                                        <form>
-                                            <div class="form-group">
+                            <br>
+                            <div class="modal fade" id="pagoModal" tabindex="-1" role="dialog" aria-labelledby="pagoModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="pagoModalLabel">Pago</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Formulario de Edición -->
+                                            <form>
+                                                <div class="form-group">
 
-                                                <label>Pago de Cuota</label>
+                                                    <label>Pago de Cuota</label>
 
-                                                <!-- Checkbox para Pago Interes -->
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="pagoInteres" name="pago_Interes" value="1">
-                                                    <label class="form-check-label" for="pagoInteres">Pago Interes</label>
+                                                    <!-- Checkbox para Pago Interes -->
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="pagoInteres" name="pago_Interes" value="1">
+                                                        <label class="form-check-label" for="pagoInteres">Pago Interes</label>
+                                                    </div>
+
+                                                    <!-- Checkbox para Pago Total -->
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="pagoTotal" name="pago_total" value="1">
+                                                        <label class="form-check-label" for="pagoTotal">Pago Total</label>
+                                                    </div>
+
                                                 </div>
-
-                                                <!-- Checkbox para Pago Capital -->
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="pagoCapital" name="pago_capital" value="1">
-                                                    <label class="form-check-label" for="pagoCapital">Pago Capital</label>
-                                                </div>
-
-                                                <!-- Checkbox para Pago Total -->
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="pagoTotal" name="pago_total" value="1">
-                                                    <label class="form-check-label" for="pagoTotal">Pago Total</label>
-                                                </div>
-
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" id="btn-cancelar" data-dismiss="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-primary" id="btn-Aceptar" disabled>Aceptar</button>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" id="btn-cancelar" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" id="btn-Aceptar" disabled>Aceptar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
             </main>
         </div>
     </div>
@@ -699,93 +698,93 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
-        function PagoCapital(ID_PLANP) {
-            // Crear un objeto con el ID 
-            var data = {
-                "ID_PPAGO": ID_PLANP
+        // function PagoCapital(ID_PLANP) {
+        //     // Crear un objeto con el ID 
+        //     var data = {
+        //         "ID_PPAGO": ID_PLANP
 
-            };
-            // Obtener el estado actual del pago
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=obtenerEstadoPago', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data) // Convierte el objeto en formato JSON
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data === 'PENDIENTE') {
-                        // Realizar la acción solo si el estado es "PENDIENTE"
-                        fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoCapital', {
-                                method: 'POST',
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(data) // Convierte el objeto en formato JSON
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                // Procesar la respuesta del servidor si es necesario
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Pago Capital Realizado',
-                                    text: 'El pago del capital se ha realizado correctamente.'
-                                }).then(function() {
-                                    // Realizar otras acciones si es necesario, como cambiar el estado
-                                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoPEstado', {
-                                            method: 'POST',
-                                            headers: {
-                                                'Accept': 'application/json',
-                                                'Content-Type': 'application/json'
-                                            },
-                                            body: JSON.stringify(data) // Convierte el objeto en formato JSON
-                                        })
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            // Procesar la respuesta del cambio de estado si es necesario
-                                            Swal.fire({
-                                                icon: 'success',
-                                                title: 'Cambio de Estado Realizado',
-                                                text: 'El estado del pago ha sido actualizado correctamente.'
-                                            });
-                                            return data;
-                                        })
-                                        .catch(error => {
-                                            console.error('Error:', error);
-                                        });
+        //     };
+        //     // Obtener el estado actual del pago
+        //     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=obtenerEstadoPago', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Accept': 'application/json',
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify(data) // Convierte el objeto en formato JSON
+        //         })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             if (data === 'PENDIENTE') {
+        //                 // Realizar la acción solo si el estado es "PENDIENTE"
+        //                 fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoCapital', {
+        //                         method: 'POST',
+        //                         headers: {
+        //                             'Accept': 'application/json',
+        //                             'Content-Type': 'application/json'
+        //                         },
+        //                         body: JSON.stringify(data) // Convierte el objeto en formato JSON
+        //                     })
+        //                     .then(response => response.json())
+        //                     .then(data => {
+        //                         // Procesar la respuesta del servidor si es necesario
+        //                         Swal.fire({
+        //                             icon: 'success',
+        //                             title: 'Pago Capital Realizado',
+        //                             text: 'El pago del capital se ha realizado correctamente.'
+        //                         }).then(function() {
+        //                             // Realizar otras acciones si es necesario, como cambiar el estado
+        //                             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoPEstado', {
+        //                                     method: 'POST',
+        //                                     headers: {
+        //                                         'Accept': 'application/json',
+        //                                         'Content-Type': 'application/json'
+        //                                     },
+        //                                     body: JSON.stringify(data) // Convierte el objeto en formato JSON
+        //                                 })
+        //                                 .then(response => response.json())
+        //                                 .then(data => {
+        //                                     // Procesar la respuesta del cambio de estado si es necesario
+        //                                     Swal.fire({
+        //                                         icon: 'success',
+        //                                         title: 'Cambio de Estado Realizado',
+        //                                         text: 'El estado del pago ha sido actualizado correctamente.'
+        //                                     });
+        //                                     return data;
+        //                                 })
+        //                                 .catch(error => {
+        //                                     console.error('Error:', error);
+        //                                 });
 
-                                    location.reload();
-                                });
-                            })
-                            .catch(error => {
-                                console.error('Error en la solicitud:', error);
-                            });
-                    } else if (data === 'PARCIAL') {
-                        // Puedes mostrar una alerta indicando que el pago ya ha sido realizado parcialmente
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Pago Parcial',
-                            text: 'El pago del capital ya ha sido realizado parcialmente.'
-                        });
-                    } else if (data === 'PAGADO') {
-                        // Puedes mostrar una alerta indicando que el pago ya ha sido realizado
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Pago Realizado',
-                            text: 'Esta cuota ya ha sido pagada.'
-                        });
-                    } else {
-                        // Puedes manejar otros estados si es necesario
-                        console.error('Error en el estado del pago:', data);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error en la solicitud:', error);
-                });
-        }
+        //                             location.reload();
+        //                         });
+        //                     })
+        //                     .catch(error => {
+        //                         console.error('Error en la solicitud:', error);
+        //                     });
+        //             } else if (data === 'PARCIAL') {
+        //                 // Puedes mostrar una alerta indicando que el pago ya ha sido realizado parcialmente
+        //                 Swal.fire({
+        //                     icon: 'warning',
+        //                     title: 'Pago Parcial',
+        //                     text: 'El pago del capital ya ha sido realizado parcialmente.'
+        //                 });
+        //             } else if (data === 'PAGADO') {
+        //                 // Puedes mostrar una alerta indicando que el pago ya ha sido realizado
+        //                 Swal.fire({
+        //                     icon: 'warning',
+        //                     title: 'Pago Realizado',
+        //                     text: 'Esta cuota ya ha sido pagada.'
+        //                 });
+        //             } else {
+        //                 // Puedes manejar otros estados si es necesario
+        //                 console.error('Error en el estado del pago:', data);
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error('Error en la solicitud:', error);
+        //         });
+        // }
 
         function PagoInteres(ID_PLANP) {
             // Obtener el estado actual del pago
@@ -871,6 +870,100 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
+        // function PagoTotal(ID_PLANP) {
+        //     // Obtener el estado actual del pago
+        //     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=obtenerEstadoPago', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Accept': 'application/json',
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({
+        //                 "ID_PPAGO": ID_PLANP
+        //             })
+        //         })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             if (data === 'PENDIENTE' || data === 'PARCIAL') {
+        //                 // Realizar la acción solo si el estado es "PENDIENTE" o "PARCIAL"
+        //                 fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoTotalCuota', {
+        //                         method: 'POST',
+        //                         headers: {
+        //                             'Accept': 'application/json',
+        //                             'Content-Type': 'application/json'
+        //                         },
+        //                         body: JSON.stringify({
+        //                             "ID_PPAGO": ID_PLANP
+        //                         })
+        //                     })
+        //                     .then(response => response.json())
+        //                     .then(data => {
+        //                         // Verificar si el estado es "PAGADO"
+        //                         if (data === 'PAGADO') {
+        //                             Swal.fire({
+        //                                 icon: 'warning',
+        //                                 title: 'Pago ya realizado',
+        //                                 text: 'Esta cuota ya ha sido pagada.'
+        //                             });
+        //                         } else {
+        //                             // Procesar la respuesta del servidor si es necesario
+        //                             Swal.fire({
+        //                                 icon: 'success',
+        //                                 title: 'Pago Realizado',
+        //                                 text: 'El pago total de la cuota se ha realizado correctamente.'
+        //                             }).then(function() {
+        //                                 // Realizar otras acciones si es necesario, como cambiar el estado
+        //                                 fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoTEstado', {
+        //                                         method: 'POST',
+        //                                         headers: {
+        //                                             'Accept': 'application/json',
+        //                                             'Content-Type': 'application/json'
+        //                                         },
+        //                                         body: JSON.stringify({
+        //                                             "ID_PPAGO": ID_PLANP
+        //                                         })
+        //                                     })
+        //                                     .then(response => response.json())
+        //                                     .then(data => {
+        //                                         // Procesar la respuesta del cambio de estado si es necesario
+        //                                         Swal.fire({
+        //                                             icon: 'success',
+        //                                             title: 'Cambio de Estado Realizado',
+        //                                             text: 'El estado del pago ha sido actualizado correctamente.'
+        //                                         });
+        //                                         //return data;
+        //                                         EstadoFinalizado(ID_PLANP);
+        //                                     })
+        //                                     .catch(error => {
+        //                                         console.error('Error:', error);
+        //                                     });
+
+        //                                 location.reload();
+        //                             });
+        //                         }
+        //                     })
+        //                     .catch(error => {
+        //                         console.error('Error en la solicitud:', error);
+        //                     });
+        //             } else if (data === 'PAGADO') {
+        //                 // Mostrar alerta si ya está pagado
+        //                 Swal.fire({
+        //                     icon: 'warning',
+        //                     title: 'Pago ya realizado',
+        //                     text: 'Esta cuota ya ha sido pagada.'
+        //                 });
+        //             } else {
+        //                 // Puedes manejar otros estados si es necesario
+        //                 console.error('Error en el estado del pago:', data);
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error('Error en la solicitud:', error);
+        //         });
+
+        // }
+
+
         function PagoTotal(ID_PLANP) {
             // Obtener el estado actual del pago
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=obtenerEstadoPago', {
@@ -923,6 +1016,7 @@ if (!isset($_SESSION['usuario'])) {
                                                 body: JSON.stringify({
                                                     "ID_PPAGO": ID_PLANP
                                                 })
+
                                             })
                                             .then(response => response.json())
                                             .then(data => {
@@ -931,15 +1025,18 @@ if (!isset($_SESSION['usuario'])) {
                                                     icon: 'success',
                                                     title: 'Cambio de Estado Realizado',
                                                     text: 'El estado del pago ha sido actualizado correctamente.'
+                                                    // Llamar a la función para verificar y cambiar el estado a "FINALIZADO"
+
                                                 });
-                                                return data;
+
                                             })
                                             .catch(error => {
                                                 console.error('Error:', error);
                                             });
-
                                         location.reload();
                                     });
+                                    EstadoFinalizado(ID_PLANP,data);
+                                    console.log("data " + data);
                                 }
                             })
                             .catch(error => {
@@ -956,33 +1053,88 @@ if (!isset($_SESSION['usuario'])) {
                         // Puedes manejar otros estados si es necesario
                         console.error('Error en el estado del pago:', data);
                     }
+
+                    /*  // Realizar la acción correspondiente si hay cuotas pendientes
+                     if (data.message1) {
+                         // Realizar la solicitud para obtener el estado finalizado y cambiar el estado del préstamo
+                         fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=estadoFinalizado', {
+                                 method: 'POST',
+                                 headers: {
+                                     'Accept': 'application/json',
+                                     'Content-Type': 'application/json'
+                                 },
+                                 body: JSON.stringify({
+                                     "ID_PPAGO": ID_PLANP
+                                 })
+                             })
+                             .then(response => response.json())
+                             .then(data => {
+                                 // Procesar la respuesta si es necesario
+                                 console.log('Estado finalizado: ', data);
+                             })
+                             .catch(error => {
+                                 console.error('Error en la solicitud:', error);
+                             });
+                     } else {
+                         // No hay cuotas pendientes, no se realiza ninguna acción
+                         console.log(data.message2);
+                     } */
                 })
                 .catch(error => {
                     console.error('Error en la solicitud:', error);
                 });
+
         }
+
+        function EstadoFinalizado(ID_PLANP,data) {
+            console.log("entra estado finalizado " + ID_PLANP);
+            if (data.message1) {
+                console.log(data.message1); // Esto debería imprimir "No hay cuotas pendientes"
+                // Realizar la acción correspondiente si hay cuotas pendientes
+                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=estadoFinalizado', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "ID_PPAGO": ID_PLANP
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(responseData => {
+                        // Procesar la respuesta si es necesario
+                        console.log('Estado finalizado:', responseData);
+                    })
+                    .catch(error => {
+                        console.error('Error en la solicitud:', error);
+                    });
+            } else if (data.message2) {
+                console.log(data.message2); // Esto debería imprimir "Número de cuotas pendientes: N"
+                // Manejar el caso en que hay cuotas pendientes
+                // ...
+            } else {
+                console.log('Mensaje desconocido:', data);
+            }
+        }
+
+
 
         function tipoPago(ID_PLANP) {
             //console.log(ID_PLANP);
             // Verificar el estado de las casillas de verificación
             var pagoInteres = document.getElementById('pagoInteres').checked;
-            var pagoCapital = document.getElementById('pagoCapital').checked;
             var pagoTotal = document.getElementById('pagoTotal').checked;
 
             // Ejecutar funciones según las casillas de verificación seleccionadas
             if (pagoInteres) {
                 PagoInteres(ID_PLANP);
-                console.log("Entra Interes");
+                //console.log("Entra Interes");
             }
-
-            if (pagoCapital) {
-                PagoCapital(ID_PLANP);
-                console.log("Entra Capital");
-            }
-
             if (pagoTotal) {
                 PagoTotal(ID_PLANP);
-                console.log("Entra Total");
+                //EstadoFinalizado(ID_PLANP);
+                //console.log("Entra Total");
             }
         }
 

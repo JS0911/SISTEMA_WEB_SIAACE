@@ -73,8 +73,8 @@ $id_objeto_Cargos = "26";
 
 //------OBJETOS DE MANT.PRESTAMO-----------------------
 $id_objeto_Forma_Pago = "12";
-$id_objeto_PrestamoMantenimiento = "30"; 
-$id_objeto_Tipoprestamo = "13"; 
+$id_objeto_PrestamoMantenimiento = "30";
+$id_objeto_Tipoprestamo = "13";
 
 //------------OBJETOS DE MANT.CUENTAS------------------
 $id_objeto_Transaccion = "11";
@@ -224,6 +224,19 @@ if (!isset($_SESSION['usuario'])) {
         .icono:hover {
             color: #4CAF50;
         }
+
+        .icon-lg {
+            font-size: 24px;
+            /* Ajusta el tamaño según tus necesidades */
+            margin-right: 10px;
+            /* Ajusta el margen derecho según tus necesidades */
+            cursor: pointer;
+        }
+
+        .custom-large-icon {
+            font-size: 2.5em;
+            /* Ajusta e tamaño según tus necesidades */
+        }
     </style>
 
     </style>
@@ -321,10 +334,10 @@ if (!isset($_SESSION['usuario'])) {
                                 if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 }
-                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {    
+                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
                                 }
-                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
                                 }
                             }
@@ -342,13 +355,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 }
-                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 }
-                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Cuentas</a>';
                                 }
                             }
@@ -366,13 +379,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                                 }
-                                if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
                                 }
-                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista Prestamos</a>';
                                 }
                             }
@@ -402,7 +415,8 @@ if (!isset($_SESSION['usuario'])) {
                         <table class="table table-bordered mx-auto" id="Lista-prestamo" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-                                    <th style="display: none;">Id Prestamo</th>
+                                    <th>No.</th>
+                                    <th class="direccion-column" style="display:none;">Id Prestamo</th>
                                     <th>Empleado</th>
                                     <th style="display: none;"> Id Tipo Prestamo</th>
                                     <th>Tipo Prestamo</th>
@@ -410,10 +424,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Tasa</th>
                                     <th>Plazo</th>
                                     <th style="display: none;">Forma/Pago</th>
-                                    <th style="display: none;">Fecha/Solicitud</th>
-                                    <th style="display: none;">Fecha/Aprobacion</th>
-                                    <th style="display: none;">Fecha/Cancelacion</th>
-                                    <th style="display: none;">Fecha/Desembolso</th>
+                                    <th class="direccion-column" style="display:none;">Fecha/Solicitud</th>
+                                    <th class="direccion-column" style="display:none;">Fecha/Aprobacion</th>
+                                    <th class="direccion-column" style="display:none;">Fecha/Cancelacion</th>
+                                    <th class="direccion-column" style="display:none;">Fecha/Desembolso</th>
                                     <th>Monto/Solicitado</th>
                                     <th style="display: none;">Monto Desembolsado </th>
                                     <th style="display: none;">Monto Adeudado </th>
@@ -482,11 +496,12 @@ if (!isset($_SESSION['usuario'])) {
                     var tbody = document.querySelector('#Lista-prestamo tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
 
-
+                    var contador = 1; // Variable para contar el número de registro
                     data.forEach(function(prestamo) {
                         var nombre = prestamo.PRIMER_NOMBRE + ' ' + prestamo.PRIMER_APELLIDO;
                         var row = '<tr>' +
-                            '<td style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
+                            '<td>' + contador++ + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
                             '<td>' + nombre + '</td>' +
                             '<td style="display:none;">' + prestamo.ID_TIPO_PRESTAMO + '</td>' +
                             '<td >' + prestamo.TIPO_PRESTAMO + '</td>' +
@@ -494,10 +509,10 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + prestamo.FORMA_DE_PAGO + '</td>' +
                             '<td>' + prestamo.PLAZO + '</td>' +
                             '<td>' + prestamo.TASA + '</td>' +
-                            '<td style="display:none;">' + prestamo.FECHA_SOLICITUD + '</td>' +
-                            '<td style="display:none;">' + prestamo.FECHA_APROBACION + '</td>' +
-                            '<td style="display:none;">' + prestamo.FECHA_DE_CANCELACION + '</td>' +
-                            '<td style="display:none;">' + prestamo.FECHA_DE_DESEMBOLSO + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + prestamo.FECHA_SOLICITUD + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + prestamo.FECHA_APROBACION + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + prestamo.FECHA_DE_CANCELACION + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + prestamo.FECHA_DE_DESEMBOLSO + '</td>' +
                             '<td class="texto-derecha">' + formatoNumero(parseFloat(prestamo.MONTO_SOLICITADO)) + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_DESEMBOLSO + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_ADEUDADO + '</td>' +
@@ -506,24 +521,24 @@ if (!isset($_SESSION['usuario'])) {
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger" id="AnularButton" onclick="AnularPrestamo(' + prestamo.ID_PRESTAMO + ')">Anular</button>';
-                            row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ',' + prestamo.MONTO_SOLICITADO + ',' + prestamo.PLAZO + ',' + prestamo.TASA + ',' + prestamo.ESTADO_PRESTAMO + ')">Aprobar</button>';
-                           
+                            row += '<i class="fa fa-times text-danger cursor-pointer icon-lg" onclick="AnularPrestamo(' + prestamo.ID_PRESTAMO + ')" title="Anular"></i>';
+                            row += '<i class="fa fa-check text-success cursor-pointer icon-lg" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ',' + prestamo.MONTO_SOLICITADO + ',' + prestamo.PLAZO + ',' + prestamo.TASA + ',' + prestamo.ESTADO_PRESTAMO + ')" title="Aprobar"></i>';
+
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-success" id="DesembolsoButton" onclick="DesembolsoPrestamo(' + prestamo.ID_PRESTAMO + ')">Desembolso</button>';
+                            row += '<i class="fa fa-hand-holding-usd text-primary cursor-pointer icon-lg" onclick="DesembolsoPrestamo(' + prestamo.ID_PRESTAMO + ')" title="Desembolso"></i>';
+
                         }
 
-
-                       
 
                         // if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                         //     row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ')">Aprobar</button>';
                         // }
 
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
-                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + prestamo.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + prestamo.ID_EMPLEADO + ')">Movimiento</button>';
+                            row += '<i class="fa fa-money-bill text-secondary cursor-pointer icon-lg crear-movimiento" data-id="' + prestamo.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + prestamo.ID_EMPLEADO + ')" title="Movimiento"></i>';
+
                         }
 
                         row += '</td>' +
@@ -551,11 +566,11 @@ if (!isset($_SESSION['usuario'])) {
                 dom: 'lBfrtip',
                 buttons: [{
                         extend: 'copy',
-                        text: '<button class="btn btn-secondary" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Copiar <i class="fas fa-copy"></i></button>'
+                        text: '<i class="fas fa-copy text-secondary cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Copiar"></i>',
                     },
                     {
                         extend: 'excel',
-                        text: '<button class="btn btn-success" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Excel <i class="fas fa-file-excel"></i></button>',
+                        text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
                             columns: [1, 3, 5, 6, 8, 9, 10, 11, 12, 15],
                             modifier: {
@@ -565,7 +580,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'pdfHtml5',
-                        text: '<button class="btn btn-danger" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">PDF <i class="fas fa-file-pdf"></i></button>',
+                        text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
                             columns: [1, 3, 5, 6, 8, 9, 10, 11, 12, 15],
                             modifier: {
@@ -629,7 +644,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     {
                         extend: 'print',
-                        text: '<button class="btn btn-info" style="margin-top: -11px; margin-bottom: -8px; margin-left: -15px; margin-right: -15px; border-radius: 0px;">Imprimir <i class="fas fa-print"></i></button>',
+                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
                         autoPrint: true,
                         exportOptions: {
                             columns: [1, 3, 5, 6, 8, 9, 10, 11, 12, 15],
@@ -640,6 +655,12 @@ if (!isset($_SESSION['usuario'])) {
                         customize: function(doc) {
                             doc.pageOrientation = 'landscape';
                         }
+                    },
+                    {
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+                        action: function() {
+                            ocultarCampos();
+                        }
                     }
                 ],
                 "lengthMenu": [10, 20, 30, 50, 100],
@@ -649,6 +670,17 @@ if (!isset($_SESSION['usuario'])) {
             });
         }
 
+
+        function ocultarCampos() {
+            var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
+            celdasDireccion.forEach(function(celda) {
+                if (celda.style.display === 'none' || celda.style.display === '') {
+                    celda.style.display = 'table-cell';
+                } else {
+                    celda.style.display = 'none';
+                }
+            });
+        }
         function redirectToIngresarPrestamo(ID_EMPLEADO) {
             // Redirige a la página IngresarPrestamo.php
             window.location.href = 'IngresarPrestamo.php?ID_EMPLEADO=' + ID_EMPLEADO;
@@ -728,6 +760,96 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
+        function DesembolsoPrestamo(ID_PRESTAMO) {
+            // Realizar una solicitud FETCH al servidor para obtener el estado del préstamo
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=obtenerEstadoPrestamo', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_PRESTAMO": ID_PRESTAMO
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // La solicitud se completó con éxito
+                        return response.json();
+                    } else {
+                        throw new Error('Error en la solicitud de obtener estado del préstamo: ' + response.statusText);
+                    }
+                })
+                .then(data => {
+                    // Verificar el estado del préstamo
+                    if (data === APROBADO) {
+                        // Si el préstamo está aprobado, proceder con el desembolso
+                        realizarDesembolso(ID_PRESTAMO);
+                    } else {
+                        // El préstamo no está en estado APROBADO, mostrar un mensaje de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'El préstamo debe estar en estado APROBADO para realizar el desembolso.'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud de obtener estado del préstamo:', error);
+                });
+        }
+
+        function realizarDesembolso(ID_PRESTAMO) {
+            // Realizar una solicitud FETCH al servidor para desembolsar el préstamo
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=desembolsoPrestamo', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_PRESTAMO": ID_PRESTAMO
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // La solicitud se completó con éxito
+                        return response.json();
+                    } else {
+                        throw new Error('Error en la solicitud de desembolso: ' + response.statusText);
+                    }
+                })
+                .then(data => {
+                    // Manejar la respuesta del backend
+                    console.log(data.message); // Mensaje de éxito o error desde el backend
+
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Desembolso',
+                        text: data.message
+                    });
+
+                    setTimeout(function() {
+                        // Redirigir a reciboDesembolso.php si el desembolso fue exitoso
+                        if (data.message == "Desembolso realizado correctamente") {
+                            redirectToReciboPrestamo(ID_PRESTAMO);
+                        } else {
+                            location.reload();
+                        }
+                    }, 5000);
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud de desembolso:', error);
+                });
+        }
+
+
+
+        function redirectToReciboPrestamo(ID_PRESTAMO) {
+            // Redirige a la página IngresarPrestamo.php
+            window.location.href = 'reciboDesembolso.php?ID_PRESTAMO=' + ID_PRESTAMO;
+        }
+
         function AprobarPrestamo(ID_PRESTAMO, MONTO_SOLICITADO, PLAZO, TASA, ESTADO_PRESTAMO) {
             // Verificar el estado del préstamo antes de aprobar
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=obtenerEstadoPrestamo', {
@@ -799,43 +921,6 @@ if (!isset($_SESSION['usuario'])) {
                             });
                         }
 
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        function DesembolsoPrestamo(ID_PRESTAMO) {
-            // Realiza una solicitud FETCH al servidor para anular el préstamo
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=desembolsoPrestamo', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "ID_PRESTAMO": ID_PRESTAMO
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // La solicitud se completó con éxito
-                        document.getElementById('DesembolsoButton').classList.remove('btn-success');
-                        document.getElementById('DesembolsoButton').classList.add('btn-secondary');
-                        document.getElementById('DesembolsoButton').disabled = true;
-                        // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
-                        //location.reload();
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Desembolso Realizado',
-                            text: 'El Desembolso ha sido realizado exitosamente.'
-                        });
-                        setTimeout(function() {
-                            location.reload();
-                        }, 5000)
-                    } else {
-                        console.error('Error en la solicitud');
                     }
                 })
                 .catch(error => {

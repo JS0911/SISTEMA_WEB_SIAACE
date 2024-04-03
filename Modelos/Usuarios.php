@@ -28,14 +28,17 @@ class Usuario extends Conectar
     }
 
     //INSERTA UN USUARIO
-    public function insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CONTRASENA, $CORREO_ELECTRONICO, $ID_ROL, $CREADO_POR, $FECHA_CREACION)
+    public function insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CORREO_ELECTRONICO, $ID_ROL, $CREADO_POR, $FECHA_CREACION, $AUTO_REGISTRO)
     {
         try {
+            $AUTO_REGISTRO = 1;
+            $CONTRASENA = $USUARIO . "ab123@@";
             $contrasenaEncriptada = password_hash($CONTRASENA, PASSWORD_DEFAULT);
             //echo $contrasenaEncriptada;
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `tbl_ms_usuario` (`USUARIO`, `NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CONTRASENA`, `CORREO_ELECTRONICO`, `ID_ROL`, `CREADO_POR`, `FECHA_CREACION`) VALUES ( :USUARIO, :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CONTRASENA, :CORREO_ELECTRONICO, :ID_ROL, :CREADO_POR, :FECHA_CREACION)";
+            $sql = "INSERT INTO `tbl_ms_usuario` (`USUARIO`, `NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CONTRASENA`,`CORREO_ELECTRONICO`, `ID_ROL`, `CREADO_POR`, `FECHA_CREACION`,`AUTO_REGISTRO`) 
+            VALUES (:USUARIO, :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CONTRASENA, :CORREO_ELECTRONICO, :ID_ROL, :CREADO_POR, :FECHA_CREACION, :AUTO_REGISTRO)";
 
             $stmt = $conectar->prepare($sql);
 
@@ -47,7 +50,9 @@ class Usuario extends Conectar
             $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
             $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
             $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
-            $stmt->execute();
+            $stmt->bindParam(':AUTO_REGISTRO', $AUTO_REGISTRO, PDO::PARAM_STR);
+           
+
 
             if ($stmt->rowCount() > 0) {
                 return "Usuario Insertado";

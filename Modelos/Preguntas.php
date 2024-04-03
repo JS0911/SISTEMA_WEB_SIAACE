@@ -28,14 +28,14 @@ class preguntas extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "INSERT INTO `siaace`.`tbl_ms_preguntas_usuario` (`ID_PREGUNTA`, `ID_USUARIO`, `RESPUESTAS`) VALUES (:ID_PREGUNTA, :ID_USUARIO, :RESPUESTAS);";
+        $sql = "INSERT INTO `tbl_ms_preguntas_usuario` (`ID_PREGUNTA`, `ID_USUARIO`, `RESPUESTAS`) VALUES (:ID_PREGUNTA, :ID_USUARIO, :RESPUESTAS);";
         $stmt = $conectar->prepare($sql);
 
         $stmt->bindParam(':ID_PREGUNTA', $ID_PREGUNTA, PDO::PARAM_INT);
         $stmt->bindParam(':ID_USUARIO', $ID_USUARIO, PDO::PARAM_INT);
         $stmt->bindParam(':RESPUESTAS', $RESPUESTAS, PDO::PARAM_STR);
 
-        $sql1 = "UPDATE `siaace`.`tbl_ms_usuario` SET `PREGUNTAS_CONTESTADAS` = `PREGUNTAS_CONTESTADAS`+1
+        $sql1 = "UPDATE `tbl_ms_usuario` SET `PREGUNTAS_CONTESTADAS` = `PREGUNTAS_CONTESTADAS`+1
         WHERE  (`ID_USUARIO` = $ID_USUARIO)";
         $sql1 = $conectar->prepare($sql1);
         $sql1->execute();
@@ -50,7 +50,7 @@ class preguntas extends Conectar
         $conectar = parent::conexion();
         parent::set_names();
         
-        $sql = "UPDATE `siaace`.`tbl_ms_usuario`
+        $sql = "UPDATE `tbl_ms_usuario`
         SET `PREGUNTAS_CONTESTADAS` = `PREGUNTAS_CONTESTADAS` + 1
         WHERE `ID_USUARIO` = $ID_USUARIO;";
 
