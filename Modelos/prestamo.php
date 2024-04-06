@@ -252,8 +252,8 @@ class Prestamo extends Conectar
         // Calcular el monto máximo permitido
         $montoMaximo = ($ahorro * 3) + ($salario / 2);
 
-        // Obtener la suma de los montos solicitados para el empleado en la tabla de préstamos
-        $sqlSumaMontos = "SELECT SUM(MONTO_SOLICITADO) AS SUMA_MONTOS FROM tbl_mp_prestamos WHERE ID_EMPLEADO = :ID_EMPLEADO";
+        $sqlSumaMontos = "SELECT SUM(MONTO_SOLICITADO) AS SUMA_MONTOS FROM tbl_mp_prestamos WHERE ID_EMPLEADO = :ID_EMPLEADO AND ESTADO_PRESTAMO = 'APROBADO'";
+
         $stmtSumaMontos = $conectar->prepare($sqlSumaMontos);
         $stmtSumaMontos->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
         $stmtSumaMontos->execute();

@@ -416,7 +416,7 @@ if (!isset($_SESSION['usuario'])) {
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th class="direccion-column" style="display:none;">Id Prestamo</th>
+                                    <th style="display: none;">Id Prestamo</th>
                                     <th>Empleado</th>
                                     <th style="display: none;"> Id Tipo Prestamo</th>
                                     <th>Tipo Prestamo</th>
@@ -501,7 +501,7 @@ if (!isset($_SESSION['usuario'])) {
                         var nombre = prestamo.PRIMER_NOMBRE + ' ' + prestamo.PRIMER_APELLIDO;
                         var row = '<tr>' +
                             '<td>' + contador++ + '</td>' +
-                            '<td class="direccion-column" style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
+                            '<td style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
                             '<td>' + nombre + '</td>' +
                             '<td style="display:none;">' + prestamo.ID_TIPO_PRESTAMO + '</td>' +
                             '<td >' + prestamo.TIPO_PRESTAMO + '</td>' +
@@ -522,15 +522,17 @@ if (!isset($_SESSION['usuario'])) {
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
                             row += '<i class="fa fa-times text-danger cursor-pointer icon-lg" onclick="AnularPrestamo(' + prestamo.ID_PRESTAMO + ')" title="Anular"></i>';
+
                             row += '<i class="fa fa-check text-success cursor-pointer icon-lg" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ',' + prestamo.MONTO_SOLICITADO + ',' + prestamo.PLAZO + ',' + prestamo.TASA + ',' + prestamo.ESTADO_PRESTAMO + ')" title="Aprobar"></i>';
 
+
                         }
+
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<i class="fa fa-hand-holding-usd text-primary cursor-pointer icon-lg" onclick="DesembolsoPrestamo(' + prestamo.ID_PRESTAMO + ')" title="Desembolso"></i>';
 
                         }
-
 
                         // if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                         //     row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ')">Aprobar</button>';
@@ -842,8 +844,6 @@ if (!isset($_SESSION['usuario'])) {
                     console.error('Error en la solicitud de desembolso:', error);
                 });
         }
-
-
 
         function redirectToReciboPrestamo(ID_PRESTAMO) {
             // Redirige a la página IngresarPrestamo.php

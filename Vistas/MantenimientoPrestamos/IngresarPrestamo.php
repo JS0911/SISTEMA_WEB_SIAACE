@@ -484,11 +484,13 @@ if (!isset($_SESSION['usuario'])) {
                                             <table class="table table-bordered mx-auto" id="Lista-Prestamos" style="margin-top: 20px; margin-bottom: 20px">
                                                 <thead>
                                                     <tr>
+                                                       <th scope="col">Id</th>
                                                         <th scope="col">Plazo Prestamo</th>
                                                         <th scope="col">Forma Pago</th>
                                                         <th scope="col">Monto</th>
                                                         <th scope="col">Saldo Adeudado</th>
                                                         <th scope="col">Fecha Aprobado</th>
+                                                        <th scope="col">Estado</th>
                                                         <th scope="col">Detalles</th>
                                                     </tr>
                                                 </thead>
@@ -742,13 +744,14 @@ if (!isset($_SESSION['usuario'])) {
 
                     data.forEach(async function(prestamo) {
                         var row = '<tr>' +
-                            '<td style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
+                            '<td >' + prestamo.ID_PRESTAMO + '</td>' +
                             '<td>' + prestamo.PLAZO + ' meses</td>' +
                             '<td style="display:none;">' + prestamo.ID_FPAGO + '</td>' +
                             '<td>' + prestamo.FORMA_DE_PAGO + '</td>' +
                             '<td class="texto-derecha">' + formatoNumero(parseFloat(prestamo.MONTO_SOLICITADO)) + '</td>' +
                             '<td class="texto-derecha">' + (isNaN(await SaldoTotal(prestamo.ID_PRESTAMO)) ? '' : formatoNumero(parseFloat(await SaldoTotal(prestamo.ID_PRESTAMO)))) + '</td>' +
                             '<td>' + prestamo.FECHA_APROBACION + '</td>' +
+                            '<td>' + prestamo.ESTADO_PRESTAMO + '</td>' +
                             '<td>';
                         row += '<button class="btn btn-outline-secondary" data-id="' + prestamo.ID_PRESTAMO + '" onclick="redirectToPlanPago(' + prestamo.ID_PRESTAMO + ')">Cuota</button>';
 

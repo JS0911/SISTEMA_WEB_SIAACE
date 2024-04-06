@@ -33,6 +33,7 @@ class Usuario extends Conectar
         try {
             //$AUTO_REGISTRO = 1;
             $CONTRASENA = $USUARIO . "ab123@@";
+            //$preguntas = 0;
             $contrasenaEncriptada = password_hash($CONTRASENA, PASSWORD_DEFAULT);
             //echo $contrasenaEncriptada;
             $conectar = parent::conexion();
@@ -51,6 +52,8 @@ class Usuario extends Conectar
             $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
             $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
             $stmt->bindParam(':AUTO_REGISTRO', $AUTO_REGISTRO, PDO::PARAM_INT);
+
+            //$stmt->bindParam('PREGUNTAS_CONTESTADAS:', $preguntas, PDO::PARAM_INT);
            
             $stmt->execute(); // Ejecutar la consulta preparada
 
