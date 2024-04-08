@@ -39,6 +39,10 @@ Sahori Garcia             29-11-2023                   Se agrego separador de mi
 Sahori Garcia              29-11-2023                  Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 Sahori Garcia             09/02/2024                   Modificaciones en permisos 
+Khaterine Ordoñez         09/03/2024                  Modificaciones en validaciones de campos
+Khaterine Ordoñez         12/03/2024                  cambio de iconos
+Khaterine Ordoñez         25/03/2024                  modificacion de modal agregar y editar
+Khaterine Ordoñez         06/04/2024                  se agrego switch en tabla 
 ------------------------------------------------------------------------->
 <?php
 
@@ -168,6 +172,7 @@ if (!isset($_SESSION['usuario'])) {
     .icono:hover {
         color: #4CAF50;
     }
+    
 
 </style>
 
@@ -247,6 +252,63 @@ if (!isset($_SESSION['usuario'])) {
             margin-top: 1px;
 
         }
+        /* Estilo para el switch general */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        /* Cambiar color del switch según estado */
+        /* Activo: verde */
+        .switch-activo+.slider {
+            background-color: #4CAF50;
+        }
+
+        /* Inactivo: rojo */
+        .switch-inactivo+.slider {
+            background-color: #f44336;
+        }
+
+        
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        /* input:checked+.slider:before {
+            transform: translateX(26px);
+        } */
     </style>
 </head>
 
@@ -833,9 +895,19 @@ if (!isset($_SESSION['usuario'])) {
                     var contador = 1; // Variable para contar el número de registro
 
                     data.forEach(function(empleado) {
+
+                        if (empleado.NOMBRE === "ACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-activo" checked><span class="slider round"></span></label>';
+                        } else if (empleado.NOMBRE === "INACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-inactivo"><span class="slider round"></span></label>';
+                        } else {
+                            estadoBtn = ''; // En caso de que el nombre del usuario no coincida con ninguno de los casos anteriores
+                        }  
+
                         var nombreCompleto = empleado.PRIMER_NOMBRE + ' ' + empleado.SEGUNDO_NOMBRE;
                         var apellidoCompleto = empleado.PRIMER_APELLIDO + ' ' + empleado.SEGUNDO_APELLIDO;
 
+                       
                         var row = '<tr>' +
                         '<td>' + contador++ + '</td>' +
                             '<td >' + empleado.ID_EMPLEADO + '</td>' +
@@ -850,7 +922,8 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + empleado.ID_SUCURSAL + '</td>' +
                             '<td style="display:none;">' + empleado.ID_CARGO + '</td>' +
                             '<td style="display:none;">' + empleado.ID_ESTADO_USUARIO + '</td>' +
-                            '<td>' + empleado.NOMBRE + '</td>' +
+                            //'<td>' + empleado.NOMBRE + '</td>' +
+                            '<td>' + estadoBtn + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + empleado.CREADO_POR + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + empleado.FECHA_CREACION + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + empleado.MODIFICADO_POR + '</td>' +

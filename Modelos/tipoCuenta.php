@@ -36,7 +36,7 @@ class Cuentas extends Conectar
     
             $stmt->bindParam(':TIPO_CUENTA', $TIPO_CUENTA, PDO::PARAM_STR);
             $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
-            $stmt->bindParam(':TASA', $TASA, PDO::PARAM_INT);
+            $stmt->bindParam(':TASA', $TASA, PDO::PARAM_STR);
             $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
             $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
             $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);

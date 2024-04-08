@@ -66,7 +66,11 @@ switch ($_GET["op"]) {
             $DESCRIPCION = $body["DESCRIPCION"];
             $TASA = $body["TASA"];
             $ESTADO = $body["ESTADO"];
-
+            if (verificarExistenciaTipoCuenta($TIPO_CUENTA) > 0 &&  !esMismaCuenta($ID_TIPOCUENTA, $TIPO_CUENTA))  {
+                // Envía una respuesta de conflicto (409) si el Tipo de cuenta ya existe
+                http_response_code(409);
+                echo json_encode(["error" => "El Tipo de cuenta ya existe en la base de datos."]);
+            } else {
             $date = new DateTime(date("Y-m-d H:i:s"));
             $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s");
@@ -84,7 +88,7 @@ switch ($_GET["op"]) {
             );
             echo json_encode($datos);
             $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL TIPO DE CUENTA # $ID_TIPOCUENTA", $_SESSION['id_usuario'], 28, $_SESSION['usuario'], $dateNew);
-
+        }
             break;
 
         case "EliminarTipoCuenta":
@@ -115,4 +119,23 @@ function verificarExistenciaTipoCuenta($tipo_cuenta) {
     // Devuelve el número de resultados encontrados
     return $row['count'];
 }
+
+function esMismaCuenta($id_tipocuenta, $tipo_cuenta) {
+    // Realiza una consulta en la base de datos para verificar si la cuenta tiene el mismo id_tipocuenta y nombre de tipo de cuenta
+    $sql = "SELECT COUNT(*) as count FROM tbl_mc_tipocuenta WHERE id_tipocuenta = :id_tipocuenta AND tipo_cuenta = :tipo_cuenta";
+
+    // Realiza la conexión a la base de datos y ejecuta la consulta
+    $conexion = new Conectar();
+    $conn = $conexion->Conexion();
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id_tipocuenta', $id_tipocuenta);
+    $stmt->bindParam(':tipo_cuenta', $tipo_cuenta);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Si el número de resultados encontrados es mayor que 0, significa que la cuenta tiene el mismo id_tipocuenta y nombre de tipo de cuenta
+    return $row['count'] > 0;
+}
+
+
 ?>

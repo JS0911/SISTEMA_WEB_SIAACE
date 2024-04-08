@@ -61,6 +61,10 @@ switch ($_GET["op"]) {
         $DESCRIPCION = $body["DESCRIPCION"];
         $ESTADO =  $body["ESTADO"];
 
+        if (verificarExistenciaRegion($REGION) > 0  && !esMismaRegion($ID_REGION, $REGION) ) {
+            http_response_code(409);
+            echo json_encode(["error" => "La region ya existe en la base de datos."]);
+        } else{
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
@@ -73,9 +77,9 @@ switch ($_GET["op"]) {
             $dateNew,
             $ESTADO
         );
-        echo json_encode($datos);
+        echo json_encode(["message" => "Region editado Exitosamente."]);
         $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO LA REGION # $ID_REGION", $_SESSION['id_usuario'], 8, $_SESSION['usuario'], $dateNew);
-
+    }
     break;
 
     case "EliminarRegion":
@@ -103,4 +107,20 @@ function verificarExistenciaRegion($region) {
     // Devuelve el número de resultados encontrados
     return $row['count'];
 }
+
+function esMismaRegion($id_region, $region) {
+    $sql = "SELECT COUNT(*) as count FROM tbl_me_region WHERE ID_REGION = :id_region AND REGION = :region";
+
+    $conexion = new Conectar();
+    $conn = $conexion->Conexion();
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id_region', $id_region);
+    $stmt->bindParam(':region', $region);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $row['count'];
+}
+
+
 ?>

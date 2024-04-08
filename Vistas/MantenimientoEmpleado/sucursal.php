@@ -38,6 +38,7 @@ Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rut
 Sahori Garcia              29-11-2023                  Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 Sahori Garcia             09/02/2024                   Modificaciones en permisos 
+khaterine Ordoñez         06/04/2024                  Modificacion en validaciones, cambio de posicion de los botones. agrego de switch en la tabla
 ------------------------------------------------------------------------->
 
 <?php
@@ -122,7 +123,7 @@ $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
 // consultar 
-$sql = "SELECT id_region ,region FROM tbl_me_region";
+$sql = "SELECT id_region ,region FROM tbl_me_region WHERE ESTADO = 'ACTIVO'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 // Obtener los resultados en un array asociativo
@@ -241,6 +242,63 @@ if (!isset($_SESSION['usuario'])) {
             font-size: 2.5em;
             /* Ajusta e tamaño según tus necesidades */
         }
+        /* Estilo para el switch general */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        /* Cambiar color del switch según estado */
+        /* Activo: verde */
+        .switch-activo+.slider {
+            background-color: #4CAF50;
+        }
+
+        /* Inactivo: rojo */
+        .switch-inactivo+.slider {
+            background-color: #f44336;
+        }
+
+        
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        /* input:checked+.slider:before {
+            transform: translateX(26px);
+        } */
     </style>
 
     </style>
@@ -440,8 +498,8 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Direccion</th>
                                     <th style="display: none;">Id Region</th>
                                     <th>Region</th>
-                                    <th>Estado</th>
                                     <th>Telefono</th>
+                                    <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -467,15 +525,16 @@ if (!isset($_SESSION['usuario'])) {
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Sucursal</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-sucursal" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-sucursal" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
                                         <label for="nombre">Direccion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-direccion" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
+                                        <textarea maxlength="45" class="form-control" id="agregar-direccion" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()"></textarea>
+
                                         <div id="mensaje3"></div>
 
                                         <label for="id-region">Region</label>
@@ -501,9 +560,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
-
+                            <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                                
 
                             </div>
                         </div>
@@ -525,19 +584,22 @@ if (!isset($_SESSION['usuario'])) {
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Id Sucursal</label>
-                                        <input type="text" class="form-control" id="editar-id-sucursal" disabled>
+                                       
+                                        <input type="text" maxlength="15" class="form-control" id="editar-id-sucursal" disabled>
+                                      
 
                                         <label for="nombre">Sucursal</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-sucursal" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-sucursal" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje5"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje6"></div>
 
                                         <label for="nombre">Direccion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-direccion" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje7"></div>
+                                        <textarea maxlength="100" class="form-control" id="editar-direccion" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()"></textarea>
+                                    <div id="mensaje7"></div>
+
 
                                         <?php //---------CONEXION A LA TABLA REGION --------
                                         // Crear una instancia de la clase Conectar
@@ -581,8 +643,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateSucursal()" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateSucursal()" disabled>Guardar</button>
+                                
 
                             </div>
                         </div>
@@ -642,6 +705,13 @@ if (!isset($_SESSION['usuario'])) {
                     tbody.innerHTML = ''; // Limpia el contenido anterior
                     var contador=1;
                     data.forEach(function(sucursal) {
+                        if (sucursal.ESTADO === "ACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-activo" checked><span class="slider round"></span></label>';
+                        } else if (sucursal.ESTADO === "INACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-inactivo"><span class="slider round"></span></label>';
+                        } else {
+                            estadoBtn = ''; // En caso de que el nombre del usuario no coincida con ninguno de los casos anteriores
+                        } 
                         var row = '<tr>' +
                         '<td >' + contador++ + '</td>' +
                             '<td style="display:none;">' + sucursal.ID_SUCURSAL + '</td>' +
@@ -650,8 +720,10 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + sucursal.DIRECCION + '</td>' +
                             '<td style="display:none;">' + sucursal.ID_REGION + '</td>' +
                             '<td>' + sucursal.REGION + '</td>' +
-                            '<td>' + sucursal.ESTADO + '</td>' +
                             '<td>' + sucursal.TELEFONO + '</td>' +
+                            //'<td>' + sucursal.ESTADO + '</td>' +
+                            '<td>' + estadoBtn + '</td>' +
+                           
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -978,7 +1050,7 @@ if (!isset($_SESSION['usuario'])) {
                             });
 
                         } else {
-                            throw new Error('Error en la solicitud de actualización');
+                            throw new Error('El registro ya existe en la Base de Datos.');
                         }
                     })
                     .catch(function(error) {
@@ -1132,26 +1204,48 @@ if (!isset($_SESSION['usuario'])) {
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar para insertar"
-        const sucursalInput = document.getElementById('agregar-sucursal');
-        const descripcionInput = document.getElementById('agregar-descripcion');
-        const direccionInput = document.getElementById('agregar-direccion');
-        const estadoInput = document.getElementById('agregar-estado');
-        const regionInput = document.getElementById('agregar-region');
-        const telefonoInput = document.getElementById('agregar-telefono');
-        const guardarButton = document.getElementById('btn-agregar');
+const sucursalInput = document.getElementById('agregar-sucursal');
+const descripcionInput = document.getElementById('agregar-descripcion');
+const direccionInput = document.getElementById('agregar-direccion');
+const estadoInput = document.getElementById('agregar-estado');
+const regionInput = document.getElementById('agregar-region');
+const telefonoInput = document.getElementById('agregar-telefono');
+const guardarButton = document.getElementById('btn-agregar');
 
-        // Función para verificar si todos los campos están llenos
-        function checkForm() {
-            const isFormValid = sucursalInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && direccionInput.value.trim() !== '' && estadoInput.value.trim() !== '' && regionInput.value.trim() !== '' && telefonoInput.value.trim() !== '';
-            guardarButton.disabled = !isFormValid;
-        }
-        // Agrega un evento input a cada campo de entrada
-        sucursalInput.addEventListener('input', checkForm);
-        descripcionInput.addEventListener('input', checkForm);
-        direccionInput.addEventListener('input', checkForm);
-        regionInput.addEventListener('input', checkForm);
-        estadoInput.addEventListener('input', checkForm);
-        telefonoInput.addEventListener('input', checkForm);
+// Expresión regular para validar campos
+const expresionValidadoraSucursal = /^[A-Z\s]+$/; // Expresión regular para sucursal
+const expresionValidadoraDescripcion = /^[A-Z0-9\s]+$/; // Expresión regular para descripción
+const expresionValidadoraDireccion = /^[A-Z0-9\s]+$/; // Expresión regular para dirección
+const expresionValidadoraTelefono = /^[0-9]+$/; // Expresión regular para teléfono
+
+// Función para verificar si los campos contienen caracteres no válidos
+function contieneCaracteresNoValidos() {
+    return !expresionValidadoraSucursal.test(sucursalInput.value.trim()) ||
+        !expresionValidadoraDescripcion.test(descripcionInput.value.trim()) ||
+        !expresionValidadoraDireccion.test(direccionInput.value.trim()) ||
+        !expresionValidadoraTelefono.test(telefonoInput.value.trim());
+}
+
+// Función para verificar si todos los campos están llenos y válidos
+function checkForm() {
+    const isNombreValido = !contieneCaracteresNoValidos();
+    const isFormValid = sucursalInput.value.trim() !== '' &&
+        descripcionInput.value.trim() !== '' &&
+        direccionInput.value.trim() !== '' &&
+        estadoInput.value.trim() !== '' &&
+        regionInput.value.trim() !== '' &&
+        telefonoInput.value.trim() !== '';
+    guardarButton.disabled = !isFormValid || !isNombreValido;
+}
+
+// Agrega un evento input a cada campo de entrada
+sucursalInput.addEventListener('input', checkForm);
+descripcionInput.addEventListener('input', checkForm);
+direccionInput.addEventListener('input', checkForm);
+estadoInput.addEventListener('input', checkForm);
+regionInput.addEventListener('input', checkForm);
+telefonoInput.addEventListener('input', checkForm);
+
         guardarButton.addEventListener('input', checkForm);
     </script>
 
@@ -1164,11 +1258,22 @@ if (!isset($_SESSION['usuario'])) {
         const estadoInput1 = document.getElementById('editar-estado');
         const telefonoInput1 = document.getElementById('editar-telefono');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
+        // Expresión regular para validar campos
+        const expresionValidadorarSucursal2 = /^[A-Z\s]+$/; // Expresión regular para rol
+        const expresionValidadoradescripcion2 = /^[A-Z0-9\s]+$/; // Expresión regular para descripcion
+        const expresionValidadoradireccion2 = /^[A-Z0-9\s]+$/;
+        const expresionValidadoratelefono2 = /^[0-9]+$/;
+                        // Función para verificar si los campos contiene caracteres no válidos
+                  function contieneCaracteresNoValidosNombre() {
+                   return !expresionValidadorarSucursal2.test(sucursalInput1.value.trim()) ||!expresionValidadoradescripcion2.test(descripcionInput1.value.trim())||!expresionValidadoradireccion2.test(direccionInput1.value.trim())||!expresionValidadoratelefono2.test(telefonoInput1.value.trim());
+                }
+
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
+            const isNombreValido = !contieneCaracteresNoValidosNombre();
             const isFormValid = sucursalInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '' && direccionInput1.value.trim() !== '' && regionInput1.value.trim() !== '' && estadoInput1.value.trim() !== '' && telefonoInput1.value.trim() !== '';
-            guardarButton1.disabled = !isFormValid;
+            guardarButton1.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada

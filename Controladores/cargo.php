@@ -61,7 +61,10 @@ switch ($_GET["op"]) {
         $CARGO = $body["CARGO"];
         $DESCRIPCION = $body["DESCRIPCION"];
         $ESTADO = $body["ESTADO"];
-
+        if (verificarExistenciaCargo($CARGO) > 0 && !esMismoCargo($ID_CARGO, $CARGO)) {
+            http_response_code(409);
+            echo json_encode(["error" => "El ROL ya existe en la base de datos."]);
+        } else {
          
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-8 hours");
@@ -76,9 +79,9 @@ switch ($_GET["op"]) {
             $_SESSION['usuario'],
             $dateNew
         );
-        echo json_encode($datos);
+        echo json_encode(["message" => "cargo editado Exitosamente."]);
         $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL CARGO # $ID_CARGO", $_SESSION['id_usuario'], 26, $_SESSION['usuario'], $dateNew);
-
+    }
         break;
 
         case "EliminarCargo":
@@ -108,4 +111,23 @@ function verificarExistenciaCargo($cargo) {
     // Devuelve el número de resultados encontrados
     return $row['count'];
 }
+
+function esMismoCargo($id_cargo, $cargo) {
+    // Realiza una consulta en la base de datos para verificar si el cargo tiene el mismo id_cargo y nombre de cargo
+    $sql = "SELECT COUNT(*) as count FROM tbl_me_cargo WHERE id_cargo = :id_cargo AND CARGO = :cargo";
+
+    // Realiza la conexión a la base de datos y ejecuta la consulta
+    $conexion = new Conectar();
+    $conn = $conexion->Conexion();
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id_cargo', $id_cargo);
+    $stmt->bindParam(':cargo', $cargo);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Si el número de resultados encontrados es mayor que 0, significa que el cargo tiene el mismo id_cargo y nombre de cargo
+    return $row['count'] > 0;
+}
+
+
 ?>

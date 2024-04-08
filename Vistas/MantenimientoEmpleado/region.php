@@ -38,6 +38,7 @@ Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rut
 Sahori Garcia              29-11-2023                  Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 Sahori Garcia             09/02/2024                   Modificaciones en permisos 
+khaterine Ordoñez         06/04/2024                  Modificacion en validaciones, cambio de posicion de los botones. agrego de switch en la tabla
 ------------------------------------------------------------------------->
 
 <?php
@@ -231,6 +232,64 @@ if (!isset($_SESSION['usuario'])) {
             font-size: 2.5em;
             /* Ajusta e tamaño según tus necesidades */
         }
+
+         /* Estilo para el switch general */
+         .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        /* Cambiar color del switch según estado */
+        /* Activo: verde */
+        .switch-activo+.slider {
+            background-color: #4CAF50;
+        }
+
+        /* Inactivo: rojo */
+        .switch-inactivo+.slider {
+            background-color: #f44336;
+        }
+
+        
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        /* input:checked+.slider:before {
+            transform: translateX(26px);
+        } */
     </style>
 
     </style>
@@ -457,26 +516,27 @@ if (!isset($_SESSION['usuario'])) {
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Region</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-region" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-region" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
                                         <label for="Estado">Estado</label>
                                         <select class="form-control" id="agregar-estado" maxlength="15" name="IdRegion" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="ACTIVO">Activo</option>
-                                            <option value="INACTIVO">Inactivo</option>
-                                            <option value="NUEVO">Nuevo</option>
+                                            <option value="ACTIVO">ACTIVO</option>
+                                            <option value="INACTIVO">INACTIVO</option>
+                                           
                                         </select>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                                
                             </div>
                         </div>
                     </div>
@@ -499,25 +559,26 @@ if (!isset($_SESSION['usuario'])) {
                                         <label for="nombre">Id</label>
                                         <input type="text" class="form-control" id="editar-id-region" disabled>
                                         <label for="nombre">Region</label>
-                                        <input type="text" class="form-control" id="editar-region" disabled>
+                                        <input type="text" maxlength="15" class="form-control" id="editar-region" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje4"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje3"></div>
 
                                         <label for="Estado">Estado</label>
                                         <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="ACTIVO">Activo</option>
-                                            <option value="INACTIVO">Inactivo</option>
-                                            <option value="NUEVO">Nuevo</option>
+                                            <option value="ACTIVO">ACTIVO</option>
+                                            <option value="INACTIVO">INACTIVO</option>
                                         </select>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateRegion()" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateRegion()" disabled>Guardar</button>
+                               
                             </div>
                         </div>
                     </div>
@@ -575,6 +636,14 @@ if (!isset($_SESSION['usuario'])) {
                     tbody.innerHTML = ''; // Limpia el contenido anterior
                     var contador=1;
                     data.forEach(function(region) {
+                        
+                        if (region.ESTADO === "ACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-activo" checked><span class="slider round"></span></label>';
+                        } else if (region.ESTADO === "INACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-inactivo"><span class="slider round"></span></label>';
+                        } else {
+                            estadoBtn = ''; // En caso de que el nombre del usuario no coincida con ninguno de los casos anteriores
+                        } 
                         var row = '<tr>' +
                         '<td >' + contador++ + '</td>' +
                             '<td style="display:none;">' + region.ID_REGION + '</td>' +
@@ -583,7 +652,8 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + region.FECHA_CREACION + '</td>' +
                             '<td style="display:none;">' + region.MODIFICADO_POR + '</td>' +
                             '<td style="display:none;">' + region.FECHA_MODIFICACION + '</td>' +
-                            '<td>' + region.ESTADO + '</td>' +
+                           // '<td>' + region.ESTADO + '</td>' +
+                            '<td>' + estadoBtn + '</td>' +
                             '<td style="display:none;">' + region.CREADO_POR + '</td>' +
                             '<td>';
 
@@ -900,7 +970,7 @@ if (!isset($_SESSION['usuario'])) {
                             });
 
                         } else {
-                            throw new Error('Error en la solicitud de actualización');
+                            throw new Error('El registro ya existe en la Base de Datos');
                         }
                     })
                     .catch(function(error) {
@@ -963,6 +1033,7 @@ if (!isset($_SESSION['usuario'])) {
         function validarNombre() {
             var nombreRegion = document.getElementById("agregar-region");
             var descripcion = document.getElementById("agregar-descripcion");
+            var nombreRegionEditar = document.getElementById("editar-region");
             var descripcionEditar = document.getElementById("editar-descripcion");
 
             function clearMessage(messageElement, inputElement) {
@@ -1017,6 +1088,10 @@ if (!isset($_SESSION['usuario'])) {
             var mensaje3 = document.getElementById("mensaje3");
             handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje3, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(descripcionEditar);
+
+            var mensaje4 = document.getElementById("mensaje4");
+            handleInputAndBlurEvents(nombreRegionEditar, expresionValidadora1, mensaje3, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(nombreRegionEditar);
         }
 
         $(document).ready(function() {
@@ -1028,37 +1103,52 @@ if (!isset($_SESSION['usuario'])) {
 
     <!-- VALIDACIONES SCRIPT -->
     <script>
-        // Obtén los campos de entrada y el botón "Guardar para insertar"
-        const regionInput = document.getElementById('agregar-region');
-        const descripcionInput = document.getElementById('agregar-descripcion');
-        const estadoInput = document.getElementById('agregar-estado');
-        const guardarButton = document.getElementById('btn-agregar');
+ // Obtén los campos de entrada y el botón "Guardar para insertar"
+const regionInput = document.getElementById('agregar-region');
+const descripcionInput = document.getElementById('agregar-descripcion');
+const estadoInput = document.getElementById('agregar-estado');
+const guardarButton = document.getElementById('btn-agregar');
 
-        // Función para verificar si todos los campos están llenos
-        function checkForm() {
-            const isFormValid = regionInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && estadoInput.value.trim() !== '';
-            guardarButton.disabled = !isFormValid;
-        }
 
-        // Agrega un evento input a cada campo de entrada
-        regionInput.addEventListener('input', checkForm);
-        descripcionInput.addEventListener('input', checkForm);
-        estadoInput.addEventListener('input', checkForm);
+
+// Función para verificar si todos los campos están llenos
+function checkForm() {
+ 
+    const isFormValid = regionInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && estadoInput.value.trim() !== '';
+    guardarButton.disabled = !isFormValid ;
+}
+
+// Agrega un evento input a cada campo de entrada
+regionInput.addEventListener('input', checkForm);
+descripcionInput.addEventListener('input', checkForm);
+estadoInput.addEventListener('input', checkForm);
+
+
     </script>
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
+        const regionInput1 = document.getElementById('editar-region');
         const descripcionInput1 = document.getElementById('editar-descripcion');
         const estadoInput1 = document.getElementById('editar-estado');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
+                        // Expresión regular para validar campos
+                        const expresionValidadorarRegion2 = /^[A-Z\s]+$/; // Expresión regular para rol
+                       const expresionValidadoradescripcion2 =  /^[A-Z0-9\s]+$/; // Expresión regular para descripcion
 
+                        // Función para verificar si los campos contiene caracteres no válidos
+                  function contieneCaracteresNoValidosNombre() {
+                   return !expresionValidadorarRegion2.test(regionInput1.value.trim()) ||!expresionValidadoradescripcion2.test(descripcionInput1.value.trim());
+                }
         // Función para verificar si todos los campos están llenos
         function checkForm() {
+            const isNombreValido = !contieneCaracteresNoValidosNombre();
             const isFormValid = descripcionInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
-            guardarButton1.disabled = !isFormValid;
+            guardarButton1.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
+        regionInput1.addEventListener('input', checkForm);
         descripcionInput1.addEventListener('input', checkForm);
         estadoInput1.addEventListener('input', checkForm);
     </script>

@@ -65,6 +65,10 @@ switch ($_GET["op"]) {
         $DESCRIPCION = $body["DESCRIPCION"];
         $ID_ESTADO_USUARIO = $body["ID_ESTADO_USUARIO"];
 
+        if (verificarExistenciaRol($ROL) > 0 && !esMismoRol($ID_ROL, $ROL)) {
+            http_response_code(409);
+            echo json_encode(["error" => "El ROL ya existe en la base de datos."]);
+        } else {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s");
@@ -78,9 +82,9 @@ switch ($_GET["op"]) {
             $dateNew
 
         );
-        echo json_encode($datos);
+        echo json_encode(["message" => "Rol editado Exitosamente."]);
         $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL ROL # $ID_ROL", $_SESSION['id_usuario'], 1, $_SESSION['usuario'], $dateNew);
-
+    }
         break;
 
     case "EliminarRol":
@@ -126,3 +130,23 @@ function verificarExistenciaRol($rol)
     // Devuelve el número de resultados encontrados
     return $row['count'];
 }
+
+function esMismoRol($id_rol, $rol) {
+    // Realiza una consulta en la base de datos para verificar si el rol tiene el mismo id_rol y nombre de rol
+    $sql = "SELECT COUNT(*) as count FROM tbl_ms_roles WHERE id_rol = :id_rol AND rol = :rol";
+
+    // Realiza la conexión a la base de datos y ejecuta la consulta
+    $conexion = new Conectar();
+    $conn = $conexion->Conexion();
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id_rol', $id_rol);
+    $stmt->bindParam(':rol', $rol);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Si el número de resultados encontrados es mayor que 0, significa que el rol tiene el mismo id_rol y nombre de rol
+    return $row['count'] > 0;
+}
+
+
+?>

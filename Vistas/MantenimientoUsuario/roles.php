@@ -38,7 +38,8 @@ Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rut
 Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 Sahori Garcia             09/02/2024                   Modificaciones en permisos 
-Ashley Matamoros          28/03/2024                   Modificacion de Validaciones  
+Ashley Matamoros          28/03/2024                   Modificacion de Validaciones 
+Khaterine Ordoñez         06-04-2024                  Modificaciones en validaciones, campo de estado al insertar que solo aparezca 2 opciones activo e inactivo, se agrego boton swith en en la tabla
 ----------------------------------------------------------------------- -->
 
 <?php
@@ -126,7 +127,7 @@ $conexion = new Conectar();
 $conn = $conexion->Conexion();
 // Consultar la contraseña actual del usuario desde la base de datos
 
-$sql1 = "SELECT ID_ESTADO_USUARIO, NOMBRE FROM tbl_ms_estadousuario";
+$sql1 = "SELECT ID_ESTADO_USUARIO, NOMBRE FROM tbl_ms_estadousuario WHERE ID_ESTADO_USUARIO IN (1, 2)";
 $stmt1 = $conn->prepare($sql1);
 $stmt1->execute();
 
@@ -246,6 +247,65 @@ if (!isset($_SESSION['usuario'])) {
             font-size: 2.5em;
             /* Ajusta e tamaño según tus necesidades */
         }
+
+        /* Estilo para el switch general */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        /* Cambiar color del switch según estado */
+        /* Activo: verde */
+        .switch-activo+.slider {
+            background-color: #4CAF50;
+        }
+
+        /* Inactivo: rojo */
+        .switch-inactivo+.slider {
+            background-color: #f44336;
+        }
+
+        
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        /* input:checked+.slider:before {
+            transform: translateX(26px);
+        } */
     </style>
 
     </style>
@@ -473,7 +533,7 @@ if (!isset($_SESSION['usuario'])) {
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Rol</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-rol" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="30" class="form-control" id="agregar-rol" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
                                         <label for="estado">Descripcion</label>
@@ -491,8 +551,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                                
                             </div>
                         </div>
                     </div>
@@ -516,7 +577,7 @@ if (!isset($_SESSION['usuario'])) {
                                         <input type="text" class="form-control" id="editar-id-rol" disabled>
 
                                         <label for="nombre">Rol</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-rol" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="30" class="form-control" id="editar-rol" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje4"></div>
 
                                         <label for="estado">Desripcion</label>
@@ -534,8 +595,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateRol()" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateRol()" disabled>Guardar</button>
+                                
                             </div>
                         </div>
                     </div>
@@ -595,13 +657,21 @@ if (!isset($_SESSION['usuario'])) {
                     tbody.innerHTML = ''; // Limpia el contenido anterior
                     var contador = 1; // Variable para contar el número de registro
                     data.forEach(function(rol) {
+                        if (rol.NOMBRE === "ACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-activo" checked><span class="slider round"></span></label>';
+                        } else if (rol.NOMBRE === "INACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-inactivo"><span class="slider round"></span></label>';
+                        } else {
+                            estadoBtn = ''; // En caso de que el nombre del usuario no coincida con ninguno de los casos anteriores
+                        }
                         var row = '<tr>' +
                             '<td>' + contador++ + '</td>' +
                             '<td style="display:none;">' + rol.ID_ROL + '</td>' +
                             '<td>' + rol.ROL + '</td>' +
                             '<td>' + rol.DESCRIPCION + '</td>' +
                             '<td style="display:none;">' + rol.ID_ESTADO_USUARIO + '</td>' +
-                            '<td>' + rol.NOMBRE + '</td>' + //ES EL NOMBRE DEL ESTADO
+                            //'<td>' + rol.NOMBRE + '</td>' + //ES EL NOMBRE DEL ESTADO
+                            '<td>' + estadoBtn + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + rol.CREADO_POR + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + rol.MODIFICADO_POR + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + rol.FECHA_CREACION + '</td>' +

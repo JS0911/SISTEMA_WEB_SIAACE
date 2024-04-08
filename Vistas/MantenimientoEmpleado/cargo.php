@@ -38,6 +38,7 @@ Kevin Zuniga              25-nov-2023                Rutas hacia otras nuevas vi
 Sahori Garcia              29-11-2023                  Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 Sahori Garcia             09/02/2024                   Modificaciones en permisos 
+khaterine Ordoñez         06/04/2024                  Modificacion en validaciones, cambio de posicion de los botones. quitar interaccion al switch
 ----------------------------------------------------------------------- -->
 <?php
 
@@ -229,6 +230,64 @@ if (!isset($_SESSION['usuario'])) {
             font-size: 2.5em;
             /* Ajusta e tamaño según tus necesidades */
         }
+
+        /* Estilo para el switch general */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        /* Cambiar color del switch según estado */
+        /* Activo: verde */
+        .switch-activo+.slider {
+            background-color: #4CAF50;
+        }
+
+        /* Inactivo: rojo */
+        .switch-inactivo+.slider {
+            background-color: #f44336;
+        }
+
+        
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        /* input:checked+.slider:before {
+            transform: translateX(26px);
+        } */
     </style>
 
     </style>
@@ -473,8 +532,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                                
                             </div>
                         </div>
                     </div>
@@ -497,7 +557,8 @@ if (!isset($_SESSION['usuario'])) {
                                         <label for="nombre">Id</label>
                                         <input type="text" class="form-control" id="editar-id-cargo" disabled>
                                         <label for="nombre">Cargo</label>
-                                        <input type="text" class="form-control" id="editar-cargo" disabled>
+                                        <input type="text" maxlength="15" class="form-control" id="editar-cargo" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje6"></div>
 
                                         <label for="nombre">Descripcion</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
@@ -514,8 +575,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateCargo()" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateCargo()" disabled>Guardar</button>
+                               
                             </div>
                         </div>
                     </div>
@@ -573,12 +635,20 @@ if (!isset($_SESSION['usuario'])) {
                     tbody.innerHTML = ''; // Limpia el contenido anterior
                     var contador = 1; // Variable para contar el número de registro
                     data.forEach(function(cargo) {
+                        if (cargo.ESTADO === "ACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-activo" checked><span class="slider round"></span></label>';
+                        } else if (cargo.ESTADO === "INACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-inactivo"><span class="slider round"></span></label>';
+                        } else {
+                            estadoBtn = ''; // En caso de que el nombre del usuario no coincida con ninguno de los casos anteriores
+                        } 
                         var row = '<tr>' +
                              '<td >' + contador++ + '</td>' +
                             '<td style="display:none;">' + cargo.ID_CARGO + '</td>' +
                             '<td>' + cargo.CARGO + '</td>' +
                             '<td>' + cargo.DESCRIPCION + '</td>' +
-                            '<td>' + cargo.ESTADO + '</td>' +
+                           // '<td>' + cargo.ESTADO + '</td>' +
+                            '<td>' + estadoBtn + '</td>' +
                             '<td style="display:none;">' + cargo.FECHA_CREACION + '</td>' +
                             '<td style="display:none;">' + cargo.FECHA_MODIFICACION + '</td>' +
                             '<td style="display:none;">' + cargo.CREADO_POR + '</td>' +
@@ -889,7 +959,7 @@ if (!isset($_SESSION['usuario'])) {
                             });
 
                         } else {
-                            throw new Error('Error en la solicitud de actualización');
+                            throw new Error('El registro ya existe en la Base de Datos');
                         }
                     })
                     .catch(function(error) {
@@ -955,7 +1025,7 @@ if (!isset($_SESSION['usuario'])) {
             var estado = document.getElementById("agregar-estado");
             var descripcionEditar = document.getElementById("editar-descripcion");
             var estadoEditar = document.getElementById("editar-estado");
-
+            var cargoEditar = document.getElementById("editar-cargo");
             function clearMessage(messageElement, inputElement) {
                 messageElement.innerHTML = ""; // Elimina el contenido del mensaje
                 inputElement.style.borderColor = ""; // Restablece el borde
@@ -1016,6 +1086,9 @@ if (!isset($_SESSION['usuario'])) {
             var mensaje5 = document.getElementById("mensaje5");
             handleInputAndBlurEvents(estado, expresionValidadora1, mensaje5, "Solo se permiten Letras Mayúsculas");
 
+            var mensaje6 = document.getElementById("mensaje6");
+            handleInputAndBlurEvents(cargoEditar, expresionValidadora1, mensaje6, "Solo se permiten Letras Mayúsculas");
+
 
         }
 
@@ -1034,11 +1107,14 @@ if (!isset($_SESSION['usuario'])) {
         const estadoInput = document.getElementById('agregar-estado');
         const guardarButton = document.getElementById('btn-agregar');
 
+             
+    
+                
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = cargoInput.value.trim() !== '' && descripcionInput.value.trim() !== '' &&
-                estadoInput.value.trim() !== '';
-            guardarButton.disabled = !isFormValid;
+           
+            const isFormValid = cargoInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && estadoInput.value.trim() !== '';
+            guardarButton.disabled = !isFormValid  ;
         }
 
         // Agrega un evento input a cada campo de entrada
@@ -1051,19 +1127,30 @@ if (!isset($_SESSION['usuario'])) {
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
         const descripcionInput1 = document.getElementById('editar-descripcion');
-
+        const cargoEditar1 = document.getElementById('editar-cargo');
         const estadoInput3 = document.getElementById('editar-estado');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
+         // Expresión regular para validar campos
+         const expresionValidadora1 = /^[A-Z\s]+$/; // Expresión regular para rol
+                       const expresionValidadoradescripcion1 = /^[A-Z0-9\s]+$/; // Expresión regular para descripcion
+
+                        // Función para verificar si los campos contiene caracteres no válidos
+                  function contieneCaracteresNoValidosNombre() {
+                   return !expresionValidadora1.test(cargoEditar1.value.trim()) ||!expresionValidadoradescripcion1.test(descripcionInput1.value.trim());
+                }
+
+
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = descripcionInput1.value.trim() !== '' || estadoInput3.value.trim() !== '';
-            guardarButton1.disabled = !isFormValid;
+            const isNombreValido = !contieneCaracteresNoValidosNombre();
+            const isFormValid = descripcionInput1.value.trim() !== '' || cargoEditar1 .value.trim() !== '' || estadoInput3.value.trim() !== '';
+            guardarButton1.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
         descripcionInput1.addEventListener('input', checkForm);
-
+        cargoEditar1.addEventListener('input', checkForm);
         estadoInput3.addEventListener('input', checkForm);
     </script>
 

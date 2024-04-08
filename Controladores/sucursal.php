@@ -40,7 +40,7 @@ switch ($_GET["op"]) {
          $TELEFONO = $body["TELEFONO"];
          $ESTADO = $body["ESTADO"];
         
-         if (verificarExistenciaSucursal($SUCURSAL) > 0) {
+         if (verificarExistenciaSucursal($SUCURSAL) > 0 ) {
              // Envía una respuesta de conflicto (409) si la region ya existe
              http_response_code(409);
              echo json_encode(["error" => "La Sucursal ya existe en la base de datos."]);
@@ -70,7 +70,11 @@ switch ($_GET["op"]) {
         $ID_REGION = $body["ID_REGION"];
         $TELEFONO = $body["TELEFONO"];
         $ESTADO = $body["ESTADO"];
-
+        if (verificarExistenciaSucursal($SUCURSAL) > 0 &&  !esMismoRegion($ID_SUCURSAL, $SUCURSAL)) {
+            // Envía una respuesta de conflicto (409) si la region ya existe
+            http_response_code(409);
+            echo json_encode(["error" => "La Sucursal ya existe en la base de datos."]);
+        } else {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-8 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
@@ -78,7 +82,7 @@ switch ($_GET["op"]) {
         $datos = $com->update_sucursal($ID_SUCURSAL, $SUCURSAL, $DESCRIPCION , $DIRECCION,$ID_REGION,$TELEFONO, $ESTADO, $_SESSION['usuario'],$dateNew);
         echo json_encode($datos);
         $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO LA SUCURSAL # $ID_SUCURSAL", $_SESSION['id_usuario'], 9, $_SESSION['usuario'], $dateNew);
-
+        }
         break;
     case "eliminarSucursal":
         $ID_SUCURSAL = $body["ID_SUCURSAL"];
@@ -107,4 +111,22 @@ function verificarExistenciaSucursal($SUCURSAL) {
     // Devuelve el número de resultados encontrados
     return $row['count'];
 }
+function esMismoRegion($id_sucursal, $sucursal) {
+    // Realiza una consulta en la base de datos para verificar si la sucursal tiene el mismo id_sucursal y nombre de sucursal
+    $sql = "SELECT COUNT(*) as count FROM tbl_ms_sucursales WHERE id_sucursal = :id_sucursal AND sucursal = :sucursal";
+
+    // Realiza la conexión a la base de datos y ejecuta la consulta
+    $conexion = new Conectar();
+    $conn = $conexion->Conexion();
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id_sucursal', $id_sucursal);
+    $stmt->bindParam(':sucursal', $sucursal);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Si el número de resultados encontrados es mayor que 0, significa que la sucursal tiene el mismo id_sucursal y nombre de sucursal
+    return $row['count'] > 0;
+}
+
+
 ?>

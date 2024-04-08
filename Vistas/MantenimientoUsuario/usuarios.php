@@ -38,8 +38,10 @@ Kevin Zuniga              25-nov-2023                 Se agrego reporteria, vali
 Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 Sahori Garcia             09/02/2024                   Modificaciones en permisos 
-Areli Ordoñez             09/03/2024                   Modificacion de validaciones
+Khaterine Ordoñez         09/03/2024                   Modificacion de validaciones
 Ashley Matamoros          10/03/2024                   Modificacion de validaciones
+khaterine Ordoñez         06/04/2024                   Modificacion de validaciones tamano de campos, agregar en la sentencia de roles solo llamar los roles activos. cambio de pocision de los botones. quitar interaccion al switch
+
 ------------------------------------------------------------------------->
 
 <?php
@@ -128,7 +130,7 @@ $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
 // Consultar la contraseña actual del usuario desde la base de datos
-$sql = "SELECT id_rol ,rol FROM tbl_ms_roles";
+$sql = "SELECT id_rol ,rol FROM tbl_ms_roles WHERE ID_ESTADO_USUARIO = 1";
 $sql1 = "SELECT ID_ESTADO_USUARIO, NOMBRE FROM tbl_ms_estadousuario";
 $stmt = $conn->prepare($sql);
 $stmt1 = $conn->prepare($sql1);
@@ -296,7 +298,7 @@ if (!isset($_SESSION['usuario'])) {
 
         /* Cambiar color del switch según estado */
         /* Activo: verde */
-        input:checked.switch-activo+.slider {
+        .switch-activo+.slider {
             background-color: #4CAF50;
         }
 
@@ -319,9 +321,9 @@ if (!isset($_SESSION['usuario'])) {
             box-shadow: 0 0 1px #2196F3;
         }
 
-        input:checked+.slider:before {
+        /* input:checked+.slider:before {
             transform: translateX(26px);
-        }
+        } */
     </style>
 </head>
 
@@ -554,7 +556,7 @@ if (!isset($_SESSION['usuario'])) {
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" maxlength="50" class="form-control" id="agregar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="30" class="form-control" id="agregar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
                                         <label for="estado">Estado</label>
@@ -568,7 +570,7 @@ if (!isset($_SESSION['usuario'])) {
 
 
                                         <label for="agregar-correo">Correo Electrónico</label>
-                                        <input type="email" maxlength="50" class="form-control" id="agregar-correo" required pattern="/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/" title="Ingrese una dirección de correo electrónico válida" />
+                                        <input type="email" maxlength="30" class="form-control" id="agregar-correo" required pattern="/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/" title="Ingrese una dirección de correo electrónico válida" />
                                         <div id="mensaje3"></div>
 
                                         <label for="id-rol">Rol</label>
@@ -582,8 +584,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                                
                             </div>
                         </div>
                     </div>
@@ -648,8 +651,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateUsuario()" disabled>Guardar </button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateUsuario()" disabled>Guardar </button>
+                                
                             </div>
                         </div>
                     </div>
@@ -1089,7 +1093,7 @@ if (!isset($_SESSION['usuario'])) {
                         });
 
                     } else {
-                        throw new Error('Error en la solicitud de actualización');
+                        throw new Error('El registro ya existe en la Base de Datos');
                     }
                 })
                 .catch(function(error) {

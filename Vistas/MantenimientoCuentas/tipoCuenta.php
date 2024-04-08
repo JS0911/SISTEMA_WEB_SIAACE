@@ -37,6 +37,7 @@ Programador               Fecha                      Descripcion
 Kevin Zuniga              25-nov-2023                Se agrego reporteria y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
 Sahori Garcia              29-11-2023                  Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
+khaterine Ordoñez         06/04/2024                  Modificacion en validaciones, cambio de posicion de los botones. agrego de switch en la tabla
 ----------------------------------------------------------------------- -->
 <?php
 
@@ -231,6 +232,63 @@ if (!isset($_SESSION['usuario'])) {
             font-size: 2.5em;
             /* Ajusta e tamaño según tus necesidades */
         }
+          /* Estilo para el switch general */
+          .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        /* Cambiar color del switch según estado */
+        /* Activo: verde */
+        .switch-activo+.slider {
+            background-color: #4CAF50;
+        }
+
+        /* Inactivo: rojo */
+        .switch-inactivo+.slider {
+            background-color: #f44336;
+        }
+
+        
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        /* input:checked+.slider:before {
+            transform: translateX(26px);
+        } */
     </style>
 
     </style>
@@ -458,15 +516,15 @@ if (!isset($_SESSION['usuario'])) {
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Tipo de Cuenta</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-cuenta" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="25" class="form-control" id="agregar-cuenta" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
                                         <label for="nombre">Tasa</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-tasa" required pattern="^[\d.]+%?$" title="Solo datos numericos" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="10" class="form-control" id="agregar-tasa" required pattern="^[\d.]+%?$" title="Solo datos numericos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje3"></div>
 
                                         <label for="Estado">Estado</label>
@@ -480,8 +538,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                                
                             </div>
                         </div>
                     </div>
@@ -504,14 +563,15 @@ if (!isset($_SESSION['usuario'])) {
                                         <label for="nombre">Id</label>
                                         <input type="text" class="form-control" id="editar-id-cuenta" disabled>
                                         <label for="nombre">Tipo de Cuenta</label>
-                                        <input type="text" class="form-control" id="editar-cuenta" disabled>
+                                        <input type="text" maxlength="25" class="form-control" id="editar-cuenta" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje8"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje5"></div>
 
                                         <label for="nombre">Tasa</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-tasa" required pattern="^[\d.]+%?$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="10" class="form-control" id="editar-tasa" required pattern="^[\d.]+%?$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje6"></div>
 
                                         <label for="Estado">Estado</label>
@@ -526,8 +586,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateTipoCuenta()" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateTipoCuenta()" disabled>Guardar</button>
+                               
                             </div>
                         </div>
                     </div>
@@ -585,6 +646,13 @@ if (!isset($_SESSION['usuario'])) {
                     tbody.innerHTML = ''; // Limpia el contenido anterior
                      var contador=1;
                     data.forEach(function(cuenta) {
+                        if (cuenta.ESTADO === "ACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-activo" checked><span class="slider round"></span></label>';
+                        } else if (cuenta.ESTADO === "INACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-inactivo"><span class="slider round"></span></label>';
+                        } else {
+                            estadoBtn = ''; // En caso de que el nombre del usuario no coincida con ninguno de los casos anteriores
+                        } 
                         var row = '<tr>' +
                         '<td>' + contador++ + '</td>' +
                             '<td style="display:none;">' + cuenta.ID_TIPOCUENTA + '</td>' +
@@ -595,7 +663,8 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + cuenta.FECHA_CREACION + '</td>' +
                             '<td style="display:none;">' + cuenta.MODIFICADO_POR + '</td>' +
                             '<td style="display:none;">' + cuenta.FECHA_MODIFICACION + '</td>' +
-                            '<td>' + cuenta.ESTADO + '</td>' +
+                            //'<td>' + cuenta.ESTADO + '</td>' +
+                            '<td>' + estadoBtn + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
@@ -904,7 +973,7 @@ if (!isset($_SESSION['usuario'])) {
                             });
 
                         } else {
-                            throw new Error('Error en la solicitud de actualización');
+                            throw new Error('El registro ya existe en la Base de Datos.');
                         }
                     })
                     .catch(function(error) {
@@ -969,6 +1038,7 @@ if (!isset($_SESSION['usuario'])) {
             var descripcion = document.getElementById("agregar-descripcion");
             var tasa = document.getElementById("agregar-tasa");
             var estado = document.getElementById("agregar-estado");
+            var nombreTipoCuentaEditar = document.getElementById("editar-cuenta");
             var descripcionEditar = document.getElementById("editar-descripcion");
             var tasaEditar = document.getElementById("editar-tasa");
             var estadoEditar = document.getElementById("editar-estado");
@@ -1041,6 +1111,9 @@ if (!isset($_SESSION['usuario'])) {
             var mensaje7 = document.getElementById("mensaje7");
             handleInputAndBlurEvents(estado, expresionValidadora1, mensaje7, "Solo se permiten Letras Mayúsculas");
 
+            var mensaje8 = document.getElementById("mensaje8");
+            handleInputAndBlurEvents(nombreTipoCuentaEditar, expresionValidadora1, mensaje8, "Solo se permiten Letras Mayúsculas");
+
         }
 
         $(document).ready(function() {
@@ -1059,11 +1132,23 @@ if (!isset($_SESSION['usuario'])) {
         const estadoInput = document.getElementById('agregar-estado');
         const guardarButton = document.getElementById('btn-agregar');
 
+        // Expresión regular para validar campos
+const expresionValidadoracuenta = /^[A-Z]+$/; // Expresión regular para sucursal
+const expresionValidadoraDescripcion = /^[A-Z0-9\s]+$/; // Expresión regular para descripción
+const expresionValidadoratasa = /^\d+(\.\d+)?/; // Expresión regular para tasa
+
+// Función para verificar si los campos contienen caracteres no válidos
+function contieneCaracteresNoValidos() {
+    return !expresionValidadoracuenta.test(cuentaInput.value.trim()) ||
+        !expresionValidadoraDescripcion.test(descripcionInput.value.trim()) ||
+        !expresionValidadoratasa.test(tasaInput.value.trim());
+}
+
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = cuentaInput.value.trim() !== '' && descripcionInput.value.trim() !== '' &&
-                tasaInput.value.trim() !== '' && estadoInput.value.trim() !== '';
-            guardarButton.disabled = !isFormValid;
+            const isNombreValido = !contieneCaracteresNoValidos();
+            const isFormValid = cuentaInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && tasaInput.value.trim() !== '' && estadoInput.value.trim() !== '';
+            guardarButton.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
@@ -1076,18 +1161,33 @@ if (!isset($_SESSION['usuario'])) {
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
+        const cuentaInput1 = document.getElementById('editar-cuenta');
         const descripcionInput1 = document.getElementById('editar-descripcion');
         const tasaInput2 = document.getElementById('editar-tasa');
         const estadoInput3 = document.getElementById('editar-estado');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
+        // Expresión regular para validar campos
+        const expresionValidadoracuenta1 = /^[A-Z]+$/; // Expresión regular para sucursal
+const expresionValidadoraDescripcion1 = /^[A-Z0-9\s]+$/; // Expresión regular para descripción
+const expresionValidadoratasa1= /^\d+(\.\d+)?/; // Expresión regular para tasa
+
+// Función para verificar si los campos contienen caracteres no válidos
+function contieneCaracteresNoValidos() {
+    return !expresionValidadoracuenta1.test(cuentaInput1.value.trim()) ||
+        !expresionValidadoraDescripcion1.test(descripcionInput1.value.trim()) ||
+        !expresionValidadoratasa1.test(tasaInput2.value.trim());
+}
+
         // Función para verificar si todos los campos están llenos
         function checkForm() {
+            const isNombreValido = !contieneCaracteresNoValidos();
             const isFormValid = descripcionInput1.value.trim() !== '' || tasaInput2.value.trim() !== '' || estadoInput3.value.trim() !== '';
-            guardarButton1.disabled = !isFormValid;
+            guardarButton1.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
+        cuentaInput1.addEventListener('input', checkForm);
         descripcionInput1.addEventListener('input', checkForm);
         tasaInput2.addEventListener('input', checkForm);
         estadoInput3.addEventListener('input', checkForm);
