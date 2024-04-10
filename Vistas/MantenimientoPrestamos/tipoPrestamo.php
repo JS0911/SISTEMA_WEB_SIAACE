@@ -30,13 +30,14 @@ descripcion:      Pantalla que registra los tipos de prestamo que existen
 -----------------------------------------------------------------------
 
                 Historial de Cambio
-
+khaterine Ordoñez         09/04/2024                  Modificacion en validaciones, cambio de posicion de los botones. agrego de switch en la tabla
 -----------------------------------------------------------------------
 
 Programador               Fecha                      Descripcion
 Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rutas hacia otras nuevas vistas, ademas de algunos detalles esteticos
 Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
+khaterine Ordoñez         10/04/2024                   cambio de posicion de los botones. se agrego switch en tabla
 ------------------------------------------------------------------------->
 
 <?php
@@ -232,6 +233,63 @@ if (!isset($_SESSION['usuario'])) {
             font-size: 2.5em;
             /* Ajusta e tamaño según tus necesidades */
         }
+        /* Estilo para el switch general */
+.switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        /* Cambiar color del switch según estado */
+        /* Activo: verde */
+        .switch-activo+.slider {
+            background-color: #4CAF50;
+        }
+
+        /* Inactivo: rojo */
+        .switch-inactivo+.slider {
+            background-color: #f44336;
+        }
+
+        
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        /* input:checked+.slider:before {
+            transform: translateX(26px);
+        } */
     </style>
 
     </style>
@@ -509,9 +567,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
-
+                            <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                              
 
                             </div>
                         </div>
@@ -583,8 +641,9 @@ if (!isset($_SESSION['usuario'])) {
                                 </form>
                             </div>
                             <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateTipoprestamo()" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-cancelarEditar" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateTipoprestamo()" disabled>Guardar</button>
+                                
 
                             </div>
                         </div>
@@ -643,6 +702,13 @@ if (!isset($_SESSION['usuario'])) {
                     tbody.innerHTML = ''; // Limpia el contenido anterior
                     var contador = 1; // Variable para contar el número de registro
                     data.forEach(function(tipoprestamo) {
+                        if (tipoprestamo.ESTADO === "ACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-activo" checked><span class="slider round"></span></label>';
+                        } else if (tipoprestamo.ESTADO === "INACTIVO") {
+                            estadoBtn = '<label class="switch"><input type="checkbox" class="switch-inactivo"><span class="slider round"></span></label>';
+                        } else {
+                            estadoBtn = ''; // En caso de que el nombre del usuario no coincida con ninguno de los casos anteriores
+                        } 
                         var row = '<tr>' +
                             '<td>' + contador++ + '</td>' +
                             '<td style="display:none;">' + tipoprestamo.ID_TIPO_PRESTAMO + '</td>' +
@@ -655,7 +721,8 @@ if (!isset($_SESSION['usuario'])) {
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.TASA_MINIMA + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.PLAZO_MAXIMO + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.PLAZO_MINIMO + '</td>' +
-                            '<td>' + tipoprestamo.ESTADO + '</td>' +
+                            //'<td>' + tipoprestamo.ESTADO + '</td>' +
+                            '<td>' + estadoBtn + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.CREADO_POR + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.FECHA_CREACION + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.MODIFICADO_POR + '</td>' +
