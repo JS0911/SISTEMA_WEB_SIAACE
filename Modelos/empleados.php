@@ -113,7 +113,7 @@ class Empleados extends Conectar
             $stmt = $conectar->prepare($sql);
 
             $stmt->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
-            $stmt->bindParam(':DNI', $DNI, PDO::PARAM_INT);
+            $stmt->bindParam(':DNI', $DNI, PDO::PARAM_STR);
             $stmt->bindParam(':PRIMER_NOMBRE', $PRIMER_NOMBRE, PDO::PARAM_STR);
             $stmt->bindParam(':SEGUNDO_NOMBRE', $SEGUNDO_NOMBRE, PDO::PARAM_STR);
             $stmt->bindParam(':PRIMER_APELLIDO', $PRIMER_APELLIDO, PDO::PARAM_STR);

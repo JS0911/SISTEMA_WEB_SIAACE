@@ -471,7 +471,8 @@ if (!isset($_SESSION['usuario'])) {
 
         const PENDIENTE = 'PENDIENTE';
         const APROBADO = 'APROBADO';
-        const ANULADO = 'ANULADO';
+        const ENCURSO = 'EN CURSO';
+        const FINALIZADO = 'FINALIZADO';
 
         function Lista_Prestamo() {
             // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
@@ -672,7 +673,6 @@ if (!isset($_SESSION['usuario'])) {
             });
         }
 
-
         function ocultarCampos() {
             var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
             celdasDireccion.forEach(function(celda) {
@@ -703,7 +703,7 @@ if (!isset($_SESSION['usuario'])) {
                 .then(response => response.json())
                 .then(data => {
                     console.log("estado:", data);
-                    if (data === 'PENDIENTE' || data === 'APROBADO') {
+                    if (data === 'PENDIENTE' || data === 'APROBADO' || data === 'FINALIZADO' || data === 'EN CURSO' ) {
                         if (data === 'APROBADO') {
                             Swal.fire({
                                 icon: 'error',
@@ -907,7 +907,7 @@ if (!isset($_SESSION['usuario'])) {
                                 console.error('Error:', error);
                             });
                     } else {
-                        if (data === APROBADO) {
+                        if (data === APROBADO || (data === FINALIZADO ) || (data === ENCURSO )) {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Préstamo Aprobado',

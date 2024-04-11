@@ -400,7 +400,7 @@ private function marcarPrestamoComoFinalizado($ID_PRESTAMO) {
         if ($stmt1->rowCount() > 0 && $stmt2->rowCount() > 0) {
             echo json_encode(array('message' => 'Préstamo finalizado correctamente'));
         } else {
-            echo json_encode(array('message' => 'No se pudo finalizar el préstamo'));
+            echo json_encode(array('message' => 'No se pudo finalizar el préstamo aun faltan cuotas por pagar'));
         }
     } catch (PDOException $e) {
         echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
@@ -420,9 +420,9 @@ private function marcarPrestamoComoEnCurso($ID_PRESTAMO) {
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
-            echo json_encode(array('message' => 'Préstamo marcado como EN CURSO correctamente'));
+            echo json_encode(array('message' => 'Préstamo marcado como EN CURSO correctamente '));
         } else {
-            echo json_encode(array('message' => 'No se pudo marcar el préstamo como EN CURSO'));
+            echo json_encode(array('message' => 'No se pudo marcar el préstamo como EN CURSO porque ya fue marcado en Curso'));
         }
     } catch (PDOException $e) {
         echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
