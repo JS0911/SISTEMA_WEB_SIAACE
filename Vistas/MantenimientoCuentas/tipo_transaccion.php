@@ -540,8 +540,8 @@ if (!isset($_SESSION['usuario'])) {
                                         <label for="Estado">Estado</label>
                                         <select class="form-control" id="agregar-estado" maxlength="15" name="IdTipoTransaccion" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="ACTIVO">Activo</option>
-                                            <option value="INACTIVO">Inactivo</option>
+                                            <option value="ACTIVO">ACTIVO</option>
+                                            <option value="INACTIVO">INACTIVO</option>
                                             
                                         </select>
 
@@ -618,9 +618,9 @@ if (!isset($_SESSION['usuario'])) {
                                         <label for="Estado">Estado</label>
                                         <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="ACTIVO">Activo</option>
-                                            <option value="INACTIVO">Inactivo</option>
-                                            <option value="NUEVO">Nuevo</option>
+                                            <option value="ACTIVO">ACTIVO</option>
+                                            <option value="INACTIVO">INACTIVO</option>
+                                         
                                         </select>
                                     </div>
                                 </form>
@@ -1168,17 +1168,31 @@ if (!isset($_SESSION['usuario'])) {
         const estadoInput = document.getElementById('agregar-estado');
         const guardarButton = document.getElementById('btn-agregar');
 
+        const expresionValidadoratransaccion = /^[A-Z]+$/;
+        const expresionValidadoradescripcion = /^[A-Z0-9\s]+$/;
+        const expresionValidadoranumerosigno = /^-?[0-9]+(\.[0-9]+)?$/;
+
+
+        // Función para verificar si los campos contiene caracteres no válidos
+    // Función para verificar si los campos contiene caracteres no válidos en el formulario de agregar
+function contieneCaracteresNoValidosAgregarAgregar() {
+    return !expresionValidadoratransaccion.test(transaccionInput.value.trim()) || 
+           !expresionValidadoradescripcion.test(descripcionInput.value.trim()) || 
+           !expresionValidadoranumerosigno.test(signoInput.value.trim());
+}
         // Función para verificar si todos los campos están llenos
-        function checkForm() {
+        function checkFormAgregar() {
+            const isNombreValido = !contieneCaracteresNoValidosAgregarAgregar();
             const isFormValid = transaccionInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && signoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
-            guardarButton.disabled = !isFormValid;
+            guardarButton.disabled = !isFormValid  || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
-        transaccionInput.addEventListener('input', checkForm);
-        descripcionInput.addEventListener('input', checkForm);
-        signoInput.addEventListener('input', checkForm);
-        estadoInput.addEventListener('input', checkForm);
+        transaccionInput.addEventListener('input', checkFormAgregar);
+        descripcionInput.addEventListener('input', checkFormAgregar);
+        signoInput.addEventListener('input', checkFormAgregar);
+        estadoInput.addEventListener('input', checkFormAgregar);
+        guardarButton.addEventListener('input', checkFormAgregar);
     </script>
 
     <script>
@@ -1188,11 +1202,22 @@ if (!isset($_SESSION['usuario'])) {
         const signoInput1 = document.getElementById('editar-signo');
         const estadoInput1 = document.getElementById('editar-estado');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
+        const expresionValidadoratransaccion1 = /^[A-Z]+$/;
+        const expresionValidadoradescripcion1 = /^[A-Z0-9\s]+$/;
+        const expresionValidadoranumerosigno1 = /^-?[0-9]+(\.[0-9]+)?$/;
 
+
+        // Función para verificar si los campos contiene caracteres no válidos
+    // Función para verificar si los campos contiene caracteres no válidos en el formulario de agregar
+function contieneCaracteresNoValidosAgregar() {
+    return !expresionValidadoratransaccion1.test(transaccionInput1.value.trim()) || 
+           !expresionValidadoradescripcion1.test(descripcionInput1.value.trim()) || 
+           !expresionValidadoranumerosigno1.test(signoInput1.value.trim());}
         // Función para verificar si todos los campos están llenos
         function checkForm() {
+            const isNombreValido = !contieneCaracteresNoValidosAgregar();
             const isFormValid =  transaccionInput1.value.trim() !== '' &&descripcionInput1.value.trim() !== '' && signoInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
-            guardarButton1.disabled = !isFormValid;
+            guardarButton1.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada

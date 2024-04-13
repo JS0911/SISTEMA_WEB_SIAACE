@@ -1109,19 +1109,26 @@ const descripcionInput = document.getElementById('agregar-descripcion');
 const estadoInput = document.getElementById('agregar-estado');
 const guardarButton = document.getElementById('btn-agregar');
 
+ // Expresión regular para validar campos
+ const expresionValidadorarRegion = /^[A-Z\s]+$/; // Expresión regular para rol
+                       const expresionValidadoradescripcion =  /^[A-Z0-9\s]+$/; // Expresión regular para descripcion
 
+                        // Función para verificar si los campos contiene caracteres no válidos
+                  function contieneCaracteresNoValidosNombre1() {
+                   return !expresionValidadorarRegion.test(regionInput.value.trim()) ||!expresionValidadoradescripcion.test(descripcionInput.value.trim());
+                }
 
 // Función para verificar si todos los campos están llenos
-function checkForm() {
- 
+function checkFormAgregar() {
+    const isNombreValido = !contieneCaracteresNoValidosNombre1();
     const isFormValid = regionInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && estadoInput.value.trim() !== '';
-    guardarButton.disabled = !isFormValid ;
+    guardarButton.disabled = !isFormValid || !isNombreValido ;
 }
 
 // Agrega un evento input a cada campo de entrada
-regionInput.addEventListener('input', checkForm);
-descripcionInput.addEventListener('input', checkForm);
-estadoInput.addEventListener('input', checkForm);
+regionInput.addEventListener('input', checkFormAgregar);
+descripcionInput.addEventListener('input', checkFormAgregar);
+estadoInput.addEventListener('input', checkFormAgregar);
 
 
     </script>

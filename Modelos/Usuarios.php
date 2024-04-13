@@ -28,19 +28,18 @@ class Usuario extends Conectar
     }
 
     //INSERTA UN USUARIO
-    public function insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CORREO_ELECTRONICO, $ID_ROL, $CREADO_POR, $FECHA_CREACION,$AUTO_REGISTRO)
+    public function insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CONTRASENA, $CORREO_ELECTRONICO, $ID_ROL, $CREADO_POR, $FECHA_CREACION)
+
     {
         try {
             //$AUTO_REGISTRO = 1;
-            $CONTRASENA = $USUARIO . "ab123@@";
+           // $CONTRASENA = $USUARIO . "ab123@@";
             //$preguntas = 0;
             $contrasenaEncriptada = password_hash($CONTRASENA, PASSWORD_DEFAULT);
             //echo $contrasenaEncriptada;
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `tbl_ms_usuario` (`USUARIO`, `NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CONTRASENA`,`CORREO_ELECTRONICO`, `ID_ROL`, `CREADO_POR`, `FECHA_CREACION`,`AUTO_REGISTRO`) 
-            VALUES (:USUARIO, :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CONTRASENA, :CORREO_ELECTRONICO, :ID_ROL, :CREADO_POR, :FECHA_CREACION, :AUTO_REGISTRO)";
-
+            $sql = "INSERT INTO `tbl_ms_usuario` (`USUARIO`, `NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CONTRASENA`, `CORREO_ELECTRONICO`, `ID_ROL`, `CREADO_POR`, `FECHA_CREACION`) VALUES ( :USUARIO, :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CONTRASENA, :CORREO_ELECTRONICO, :ID_ROL, :CREADO_POR, :FECHA_CREACION)";
             $stmt = $conectar->prepare($sql);
 
             $stmt->bindParam(':USUARIO', $USUARIO, PDO::PARAM_STR);
@@ -51,8 +50,8 @@ class Usuario extends Conectar
             $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
             $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
             $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
-            $stmt->bindParam(':AUTO_REGISTRO', $AUTO_REGISTRO, PDO::PARAM_INT);
-
+           // $stmt->bindParam(':AUTO_REGISTRO', $AUTO_REGISTRO, PDO::PARAM_INT);
+        
             //$stmt->bindParam('PREGUNTAS_CONTESTADAS:', $preguntas, PDO::PARAM_INT);
            
             $stmt->execute(); // Ejecutar la consulta preparada

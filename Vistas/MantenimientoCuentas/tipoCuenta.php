@@ -1138,25 +1138,25 @@ const expresionValidadoraDescripcion = /^[A-Z0-9\s]+$/; // Expresión regular pa
 const expresionValidadoratasa = /^\d+(\.\d+)?/; // Expresión regular para tasa
 
 // Función para verificar si los campos contienen caracteres no válidos
-function contieneCaracteresNoValidos() {
+function contieneCaracteresNoValidos1() {
     return !expresionValidadoracuenta.test(cuentaInput.value.trim()) ||
         !expresionValidadoraDescripcion.test(descripcionInput.value.trim()) ||
         !expresionValidadoratasa.test(tasaInput.value.trim());
 }
 
         // Función para verificar si todos los campos están llenos
-        function checkForm() {
-            const isNombreValido = !contieneCaracteresNoValidos();
+        function checkFormAgregar() {
+            const isNombreValido = !contieneCaracteresNoValidos1();
             const isFormValid = cuentaInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && tasaInput.value.trim() !== '' && estadoInput.value.trim() !== '';
             guardarButton.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
-        cuentaInput.addEventListener('input', checkForm);
-        descripcionInput.addEventListener('input', checkForm);
-        tasaInput.addEventListener('input', checkForm);
-        estadoInput.addEventListener('input', checkForm);
-        guardarButton.addEventListener('input', checkForm);
+        cuentaInput.addEventListener('input', checkFormAgregar);
+        descripcionInput.addEventListener('input', checkFormAgregar);
+        tasaInput.addEventListener('input', checkFormAgregar);
+        estadoInput.addEventListener('input', checkFormAgregar);
+        guardarButton.addEventListener('input', checkFormAgregar);
     </script>
 
     <script>
@@ -1170,7 +1170,7 @@ function contieneCaracteresNoValidos() {
         // Expresión regular para validar campos
         const expresionValidadoracuenta1 = /^[A-Z]+$/; // Expresión regular para sucursal
 const expresionValidadoraDescripcion1 = /^[A-Z0-9\s]+$/; // Expresión regular para descripción
-const expresionValidadoratasa1= /^\d+(\.\d+)?/; // Expresión regular para tasa
+const expresionValidadoratasa1 = /^\d+(\.\d+)?$/; // Expresión regular para tasa
 
 // Función para verificar si los campos contienen caracteres no válidos
 function contieneCaracteresNoValidos() {

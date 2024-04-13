@@ -324,6 +324,20 @@ if (!isset($_SESSION['usuario'])) {
         /* input:checked+.slider:before {
             transform: translateX(26px);
         } */
+
+        .input-group-append {
+    position: relative;
+}
+
+.input-group-append .btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 5px; /* Ajusta la posición a la derecha según sea necesario */
+    z-index: 3;
+    height: calc(100% - 10px); /* Ajusta la altura para que coincida con el campo de entrada */
+}
+
     </style>
 </head>
 
@@ -551,36 +565,59 @@ if (!isset($_SESSION['usuario'])) {
                                 <!-- Formulario de creación -->
                                 <form>
                                     <div class="form-group">
-                                        <label for="nombre">Usuario</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-usuario" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco, números, ni letras minusculas" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje1"></div>
+                                   <label for="nombre">Usuario</label>
+                                   <input type="text" maxlength="15" class="form-control" id="agregar-usuario" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco, números, ni letras minúsculas" oninput="this.value = this.value.toUpperCase()">
+                                  <div id="mensaje1"></div>
 
-                                        <label for="nombre">Nombre</label>
-                                        <input type="text" maxlength="30" class="form-control" id="agregar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje2"></div>
+                                  <label for="nombre">Nombre</label>
+                                  <input type="text" maxlength="30" class="form-control" id="agregar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten letras mayúsculas y un espacio entre palabras" oninput="this.value = this.value.toUpperCase()">
+                                 <div id="mensaje2"></div>
 
-                                        <label for="estado">Estado</label>
-                                        <select class="form-control" id="agregar-estado" name="IdEstado" required>
-                                            <?php foreach ($Estados as $Estado) : ?>
-                                                <?php if ($Estado['ID_ESTADO_USUARIO'] == 3) : ?>
-                                                    <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>" selected disabled><?php echo $Estado['NOMBRE']; ?></option>
-                                                <?php endif; ?>
-                                            <?php endforeach; ?>
-                                        </select>
+                                 <label for="estado">Estado</label>
+                                 <select class="form-control" id="agregar-estado" name="IdEstado" required>
+                                 <?php foreach ($Estados as $Estado) : ?>
+                                  <?php if ($Estado['ID_ESTADO_USUARIO'] == 3) : ?>
+                                 <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>" selected disabled><?php echo $Estado['NOMBRE']; ?></option>
+                                 <?php endif; ?>
+                                  <?php endforeach; ?>
+                               </select>
 
+                               <label for="agregar-correo">Correo Electrónico</label>
+                               <input type="email" maxlength="30" class="form-control" id="agregar-correo" required pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" title="Ingrese una dirección de correo electrónico válida">
+                               <div id="mensaje3"></div>
 
-                                        <label for="agregar-correo">Correo Electrónico</label>
-                                        <input type="email" maxlength="30" class="form-control" id="agregar-correo" required pattern="/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/" title="Ingrese una dirección de correo electrónico válida" />
-                                        <div id="mensaje3"></div>
+                                <label for="estado">Contraseña</label>
+                                <div class="input-group">
+                                <input type="password" maxlength="9" class="form-control" id="agregar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
+                               <div class="input-group-append">
+                                 <button onclick="ver_contrasena_nueva()" class="btn btn-primary" type="button">
+                             <i class="fa fa-eye" aria-hidden="true"></i>
+                            </button>
+                             </div>
+                             </div>
+                             <div id="mensaje4"></div>
 
-                                        <label for="id-rol">Rol</label>
-                                        <select class="form-control" id="agregar-rol" name="IdRol" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <?php foreach ($roles as $rol) : ?>
-                                                <option value="<?php echo $rol['id_rol']; ?>"><?php echo $rol['rol']; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
+                              <label for="estado">Confirmar Contraseña</label>
+                             <div class="input-group">
+                              <input type="password" maxlength="9" class="form-control" id="confirmar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
+                                <div class="input-group-append">
+                                  <button onclick="ver_contrasena_confirmar()" class="btn btn-primary" type="button">
+                                      <i class="fa fa-eye" aria-hidden="true"></i>
+                                   </button>
                                     </div>
+                                    </div>
+                                  <div id="mensaje5"></div>
+
+                               <label for="id-rol">Rol</label>
+                               <select class="form-control" id="agregar-rol" name="IdRol" required>
+                              <option value="" disabled selected>Selecciona una opción</option>
+                             <?php foreach ($roles as $rol) : ?>
+                              <option value="<?php echo $rol['id_rol']; ?>"><?php echo $rol['rol']; ?></option>
+                            <?php endforeach; ?>
+                             </select>
+                             </div>
+                                </form>
+
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -896,17 +933,17 @@ if (!isset($_SESSION['usuario'])) {
                 }
             });
         }
-        // function validarContraseñas(contrasena, confirmarContrasena) {
-        //     if (contrasena !== confirmarContrasena) {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Error',
-        //             text: 'Las contraseñas no coinciden.'
-        //         });
-        //         return false;
-        //     }
-        //     return true;
-        // }
+         function validarContraseñas(contrasena, confirmarContrasena) {
+            if (contrasena !== confirmarContrasena) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Las contraseñas no coinciden.'
+                });
+                return false;
+            }
+            return true;
+        }
 
         function Insertar_Usuario() {
             $("#btn-agregar").click(function() {
@@ -917,9 +954,17 @@ if (!isset($_SESSION['usuario'])) {
                 var rol = $("#agregar-rol").val();
                 // Establecer el valor del estado como 3 (NUEVO)
                 var estado = 3;
-                var autoRegistro = 1;
+                var contrasena = $("#agregar-contrasena").val();
+                var confirmarContrasena = $("#confirmar-contrasena").val();
+                //var autoRegistro = 1;
                 // Verificar que los campos obligatorios no estén vacíos
-                if (usuario == "" || nombre == "" || correo == "") {
+
+                  // Verificar que las contraseñas coincidan
+                  if (!validarContraseñas(contrasena, confirmarContrasena)) {
+                    return;
+                }
+                
+                if (usuario == "" || nombre == "" || correo == "" || contrasena == "" || confirmarContrasena == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
@@ -935,7 +980,8 @@ if (!isset($_SESSION['usuario'])) {
                     ID_ESTADO_USUARIO: estado,
                     CORREO_ELECTRONICO: correo,
                     ID_ROL: rol,
-                    AUTO_REGISTRO: autoRegistro
+                    CONTRASENA: contrasena
+                   // AUTO_REGISTRO: autoRegistro
                 };
 
                 // Realizar la solicitud al servidor
@@ -1010,6 +1056,24 @@ if (!isset($_SESSION['usuario'])) {
                     });
             });
         }
+
+        function ver_contrasena_nueva() {
+    var tipo = document.getElementById("agregar-contrasena");
+    if (tipo.type === "password") {
+        tipo.type = "text";
+    } else {
+        tipo.type = "password";
+    }
+}
+
+function ver_contrasena_confirmar() {
+    var tipo = document.getElementById("confirmar-contrasena");
+    if (tipo.type === "password") {
+        tipo.type = "text";
+    } else {
+        tipo.type = "password";
+    }
+}
 
 
 

@@ -520,41 +520,57 @@ if (!isset($_SESSION['usuario'])) {
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Tipo Prestamo</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-tipoprestamo" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="15" class="form-control" id="agregar-tipoprestamo" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
 
                                         <label for="nombre">Aplica seguro</label>
-                                        <input type="text" maxlength="1" class="form-control" id="agregar-aplicaseguro" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <select class="form-control" id="agregar-aplicaseguro" required>
+                                        <option value="" disabled selected>Selecciona una opción</option>
+                                         <option value="1">SI</option>
+                                        <option value="0">NO</option>
+                                         </select>
                                         <div id="mensaje3"></div>
-
+                                        
+                                        <div class="row">
+                                       <div class="col-md-6">
                                         <label for="nombre"> Monto Maximo</label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-montomaximo" required pattern="[0-9]+" title="Solo se permiten números (1, 0)">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-montomaximo" required pattern="\d+(\.\d{1,2})?" title="Solo se permiten números con hasta dos decimales">
                                         <div id="mensaje4"></div>
-
+                                        </div>
+                                        <div class="col-md-6">
                                         <label for="nombre">Monto Minimo</label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-montominimo" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-montominimo" required pattern="\d+(\.\d{1,2})?" title="Solo se permiten números con hasta dos decimales">
                                         <div id="mensaje5"></div>
-
+                                        </div>
+                                        </div>
+                                        <div class="row">
+                                       <div class="col-md-6">
                                         <label for="nombre"> Tasa Maxima</label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-tasamaxima" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-tasamaxima" required pattern="\d+(\.\d{1,2})?" title="Solo se permiten números con hasta dos decimales">
                                         <div id="mensaje6"></div>
-
+                                        </div>
+                                        <div class="col-md-6">
                                         <label for="nombre">Tasa Minima</label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-tasaminima" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <input type="text" maxlength="45" class="form-control" id="agregar-tasaminima"required pattern="\d+(\.\d{1,2})?" title="Solo se permiten números con hasta dos decimales">
                                         <div id="mensaje7"></div>
-
+                                        </div>
+                                        </div>
+                                        <div class="row">
+                                       <div class="col-md-6">
                                         <label for="nombre"> Plazo Maximo</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-plazomaximo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje8"></div>
-
+                                        </div>
+                                        <div class="col-md-6">
                                         <label for="nombre">Plazo Minimo</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-plazominimo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje9"></div>
-
+                                        </div>
+                                        </div>
                                         <label for="nombre">Estado</label>
                                         <select class="form-control" id="agregar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
@@ -594,41 +610,57 @@ if (!isset($_SESSION['usuario'])) {
                                         <input type="text" class="form-control" id="editar-id-tipoprestamo" disabled>
 
                                         <label for="nombre">Tipo Prestamo</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-tipoprestamo" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="15" class="form-control" id="editar-tipoprestamo" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje11"></div>
 
                                         <label for="nombre">Descripcion</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-descripcion" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje12"></div>
 
-                                        <label for="nombre">Aplica seguro</label>
-                                        <input type="text" maxlength="1" class="form-control" id="editar-aplicaseguro" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <label for="editar-aplicaseguro">Aplica seguro</label>
+                                        <select class="form-control" id="editar-aplicaseguro" required>
+                                        <option value="" disabled selected>Selecciona una opción</option> 
+                                        <option value="1">SI</option>
+                                        <option value="0">NO</option>
+                                         </select>
+
                                         <div id="mensaje13"></div>
-
+                                        <div class="row">
+                                       <div class="col-md-6">
                                         <label for="nombre"> Monto Maximo</label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-montomaximo" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-montomaximo" required pattern="\d+(\.\d{1,2})?" title="Solo se permiten números con hasta dos decimales">
                                         <div id="mensaje14"></div>
-
+                                        </div>
+                                        <div class="col-md-6">
                                         <label for="nombre">Monto Minimo</label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-montominimo" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-montominimo" required pattern="\d+(\.\d{1,2})?" title="Solo se permiten números con hasta dos decimales">
                                         <div id="mensaje15"></div>
-
+                                        </div>
+                                        </div>
+                                        <div class="row">
+                                       <div class="col-md-6">
                                         <label for="nombre"> Tasa Maxima</label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-tasamaxima" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-tasamaxima" required pattern="\d+(\.\d{1,2})?" title="Solo se permiten números con hasta dos decimales">
                                         <div id="mensaje16"></div>
-
+                                        </div>
+                                        <div class="col-md-6">
                                         <label for="nombre">Tasa Minima</label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-tasaminima" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <input type="text" maxlength="45" class="form-control" id="editar-tasaminima" required pattern="\d+(\.\d{1,2})?" title="Solo se permiten números con hasta dos decimales">
                                         <div id="mensaje17"></div>
-
+                                        </div>
+                                        </div>
+                                        <div class="row">
+                                       <div class="col-md-6">
                                         <label for="nombre"> Plazo Maximo</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-plazomaximo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje18"></div>
-
+                                        </div>
+                                        <div class="col-md-6">
                                         <label for="nombre">Plazo Minimo</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-plazominimo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje19"></div>
-
+                                        </div>
+                                        </div>
                                         <label for="nombre">Estado</label>
                                         <select class="form-control" id="editar-estado" maxlength="15" name="estado" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
@@ -714,7 +746,7 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + tipoprestamo.ID_TIPO_PRESTAMO + '</td>' +
                             '<td>' + tipoprestamo.TIPO_PRESTAMO + '</td>' +
                             '<td>' + tipoprestamo.DESCRIPCION + '</td>' +
-                            '<td>' + tipoprestamo.APLICA_SEGUROS + '</td>' +
+                            '<td>' + (tipoprestamo.APLICA_SEGUROS == 1 ? 'SI' : 'NO') + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.MONTO_MAXIMO + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.MONTO_MINIMO + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.TASA_MAXIMA + '</td>' +
@@ -956,7 +988,7 @@ if (!isset($_SESSION['usuario'])) {
                                 }
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
-                                throw new Error('Error en la solicitud');
+                                throw new Error('El registro ya existe en la Base de Datos.');
                             }
                         })
                         .catch(function(error) {
@@ -1074,7 +1106,7 @@ if (!isset($_SESSION['usuario'])) {
                             });
 
                         } else {
-                            throw new Error('Error en la solicitud de actualización');
+                            throw new Error('El registro ya existe en la Base de Datos.');
                         }
                     })
                     .catch(function(error) {
@@ -1206,24 +1238,24 @@ if (!isset($_SESSION['usuario'])) {
             var mensaje2 = document.getElementById("mensaje2");
             handleInputAndBlurEvents(descripcion, expresionValidadora2, mensaje2, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(descripcion);
-
-            var expresionValidadora1 = /^[0-9]+$/;
+            
+            var expresionValidadora1 = /^\d+(\.\d{1,2})?$/;
             var mensaje3 = document.getElementById("mensaje3");
-            handleInputAndBlurEvents(aplicaseguro, expresionValidadora1, mensaje3, "Solo se permiten números");
+            handleInputAndBlurEvents(aplicaseguro, expresionValidadora1, mensaje3, "Solo se permiten números con hasta dos decimales");
 
 
             var mensaje4 = document.getElementById("mensaje4");
-            handleInputAndBlurEvents(montomaximo, expresionValidadora1, mensaje4, "Solo se permiten números");
+            handleInputAndBlurEvents(montomaximo, expresionValidadora1, mensaje4, "Solo se permiten números con hasta dos decimales");
 
 
             var mensaje5 = document.getElementById("mensaje5");
-            handleInputAndBlurEvents(montominimo, expresionValidadora1, mensaje5, "Solo se permiten números");
+            handleInputAndBlurEvents(montominimo, expresionValidadora1, mensaje5, "Solo se permiten números con hasta dos decimales");
 
             var mensaje6 = document.getElementById("mensaje6");
-            handleInputAndBlurEvents(tasamaxima, expresionValidadora1, mensaje6, "Solo se permiten números");
+            handleInputAndBlurEvents(tasamaxima, expresionValidadora1, mensaje6, "Solo se permiten números con hasta dos decimales");
 
             var mensaje7 = document.getElementById("mensaje7");
-            handleInputAndBlurEvents(tasaminima, expresionValidadora1, mensaje7, "Solo se permiten números");
+            handleInputAndBlurEvents(tasaminima, expresionValidadora1, mensaje7, "Solo se permiten números con hasta dos decimales");
 
             var mensaje8 = document.getElementById("mensaje8");
             handleInputAndBlurEvents(plazomaximo, expresionValidadora1, mensaje8, "Solo se permiten números");
@@ -1248,16 +1280,16 @@ if (!isset($_SESSION['usuario'])) {
             handleInputAndBlurEvents(aplicaseguroEditar, expresionValidadora1, mensaje13, "Solo se permiten números ( 1 ó 0)");
 
             var mensaje14 = document.getElementById("mensaje14");
-            handleInputAndBlurEvents(montomaximoEditar, expresionValidadora1, mensaje14, "Solo se permiten números");
+            handleInputAndBlurEvents(montomaximoEditar, expresionValidadora1, mensaje14, "Solo se permiten números con hasta dos decimales");
 
             var mensaje15 = document.getElementById("mensaje15");
-            handleInputAndBlurEvents(montominimoEditar, expresionValidadora1, mensaje15, "Solo se permiten números");
+            handleInputAndBlurEvents(montominimoEditar, expresionValidadora1, mensaje15, "Solo se permiten números con hasta dos decimales");
 
             var mensaje16 = document.getElementById("mensaje16");
-            handleInputAndBlurEvents(tasamaximaEditar, expresionValidadora1, mensaje16, "Solo se permiten números");
+            handleInputAndBlurEvents(tasamaximaEditar, expresionValidadora1, mensaje16, "Solo se permiten números con hasta dos decimales");
 
             var mensaje17 = document.getElementById("mensaje17");
-            handleInputAndBlurEvents(tasaminimaEditar, expresionValidadora1, mensaje17, "Solo se permiten números");
+            handleInputAndBlurEvents(tasaminimaEditar, expresionValidadora1, mensaje17, "Solo se permiten números con hasta dos decimales");
 
             var mensaje18 = document.getElementById("mensaje18");
             handleInputAndBlurEvents(plazomaximoEditar, expresionValidadora1, mensaje18, "Solo se permiten números");
@@ -1291,28 +1323,43 @@ if (!isset($_SESSION['usuario'])) {
         const estadoInput = document.getElementById('agregar-estado');
         const guardarButton = document.getElementById('btn-agregar');
 
+        const expresionValidadoraprestamo = /^[A-Z0-9\s]+$/;
+        const expresionValidadoranumero = /^\d+(\.\d{1,2})?$/;
+
+        // Función para verificar si los campos contiene caracteres no válidos
+    // Función para verificar si los campos contiene caracteres no válidos en el formulario de agregar
+function contieneCaracteresNoValidosAgregarAgregar() {
+    return !expresionValidadoraprestamo.test(tipoprestamoInput.value.trim()) || 
+           !expresionValidadoraprestamo.test(descripcionInput.value.trim()) || 
+           !expresionValidadoranumero.test(montomaximoInput.value.trim()) || 
+           !expresionValidadoranumero.test(montominimoInput.value.trim()) || 
+           !expresionValidadoranumero.test(tasamaximaInput.value.trim()) || 
+           !expresionValidadoranumero.test(tasaminimaInput.value.trim()) || 
+           !expresionValidadoranumero.test(plazomaximoInput.value.trim()) || !expresionValidadoranumero.test(plazominimoInput.value.trim());
+}
 
         // Función para verificar si todos los campos están llenos
-        function checkForm() {
+        function checkFormAgregar() {
+            const isNombreValido = !contieneCaracteresNoValidosAgregarAgregar();
             const isFormValid = tipoprestamoInput.value.trim() !== '' && descripcionInput.value.trim() !== '' &&
                 aplicaseguroInput.value.trim() !== '' && montomaximoInput.value.trim() !== '' && montominimoInput.value.trim() !== '' &&
                 tasamaximaInput.value.trim() !== '' && tasaminimaInput.value.trim() !== '' && plazomaximoInput.value.trim() !== '' &&
                 plazominimoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
-            guardarButton.disabled = !isFormValid;
+            guardarButton.disabled = !isFormValid || !isNombreValido;
         }
         // Agrega un evento input a cada campo de entrada
-        tipoprestamoInput.addEventListener('input', checkForm);
-        descripcionInput.addEventListener('input', checkForm);
-        aplicaseguroInput.addEventListener('input', checkForm);
-        montomaximoInput.addEventListener('input', checkForm);
-        montominimoInput.addEventListener('input', checkForm);
-        tasamaximaInput.addEventListener('input', checkForm);
-        tasaminimaInput.addEventListener('input', checkForm);
-        plazomaximoInput.addEventListener('input', checkForm);
-        plazominimoInput.addEventListener('input', checkForm);
-        estadoInput.addEventListener('input', checkForm);
+        tipoprestamoInput.addEventListener('input', checkFormAgregar);
+        descripcionInput.addEventListener('input', checkFormAgregar);
+        aplicaseguroInput.addEventListener('input', checkFormAgregar);
+        montomaximoInput.addEventListener('input', checkFormAgregar);
+        montominimoInput.addEventListener('input', checkFormAgregar);
+        tasamaximaInput.addEventListener('input', checkFormAgregar);
+        tasaminimaInput.addEventListener('input', checkFormAgregar);
+        plazomaximoInput.addEventListener('input', checkFormAgregar);
+        plazominimoInput.addEventListener('input', checkFormAgregar);
+        estadoInput.addEventListener('input', checkFormAgregar);
 
-        guardarButton.addEventListener('input', checkForm);
+        guardarButton.addEventListener('input', checkFormAgregar);
     </script>
 
     <script>
@@ -1329,11 +1376,20 @@ if (!isset($_SESSION['usuario'])) {
         const plazominimoInput1 = document.getElementById('editar-plazominimo');
         const estadoInput1 = document.getElementById('editar-estado');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
+        
+        const expresionValidadoraprestamo1 = /^[A-Z0-9\s]+$/;
+        const expresionValidadoranumero1 = /^\d+(\.\d{1,2})?$/;
+
+        // Función para verificar si los campos contiene caracteres no válidos
+    function contieneCaracteresNoValidosAgregar() {
+        return !expresionValidadoraprestamo1.test(tipoprestamoInput1.value.trim()) || !expresionValidadoraprestamo1.test(descripcionInput1.value.trim()) || !expresionValidadoranumero1.test(montomaximoInput1.value.trim()) || !expresionValidadoranumero1.test(montominimoInput1.value.trim()) || !expresionValidadoranumero1.test(tasamaximaInput1.value.trim()) || !expresionValidadoranumero1.test(tasaminimaInput1.value.trim()) || !expresionValidadoranumero1.test(plazomaximoInput1.value.trim()) || !expresionValidadoranumero1.test(plazominimoInput1.value.trim()) ;
+    }
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
+            const isNombreValido = !contieneCaracteresNoValidosAgregar();
             const isFormValid = tipoprestamoInput1.value.trim() !== '' && descripcionInput1.value.trim() !== '' && aplicaseguroInput1.value.trim() !== '' && montomaximoInput1.value.trim() !== '' && montominimoInput1.value.trim() !== '' && tasamaximaInput1.value.trim() !== '' && tasaminimaInput1.value.trim() !== '' && plazomaximoInput1.value.trim() !== '' && plazominimoInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
-            guardarButton1.disabled = !isFormValid;
+            guardarButton1.disabled = !isFormValid  || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada

@@ -60,7 +60,11 @@ switch ($_GET["op"]) {
         $FORMA_DE_PAGO = $body["FORMA_DE_PAGO"];
         $DESCRIPCION = $body["DESCRIPCION"];
         $ESTADO =  $body["ESTADO"];
-
+        if(verificarExistenciaFpago($FORMA_DE_PAGO) > 0 && !esMismaFormaPago($ID_FPAGO, $FORMA_DE_PAGO))  {
+            // Envía una respuesta de conflicto (409) si el Tipo de cuenta ya existe
+            http_response_code(409);
+            echo json_encode(["error" => "Fomar de Pago ya existe en la base de datos."]);
+        } else {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
@@ -73,9 +77,10 @@ switch ($_GET["op"]) {
             $dateNew,
             $ESTADO
         );
-        echo json_encode($datos);
+        echo json_encode(["message" => "Forma de Pago editado Exitosamente."]);
         $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO LA FORMA DE PAGO # $ID_FPAGO", $_SESSION['id_usuario'], 12, $_SESSION['usuario'], $dateNew);
-    break;
+        }
+        break;
 
     case "EliminarFpago":
         $ID_FPAGO = $body["ID_FPAGO"];  
@@ -102,4 +107,22 @@ function verificarExistenciaFpago($FORMA_DE_PAGO) {
     // Devuelve el número de resultados encontrados
     return $row['count'];
 }
+
+function esMismaFormaPago($ID_FPAGO, $FORMA_DE_PAGO) {
+    // Realiza una consulta en la base de datos para verificar si la forma de pago tiene el mismo ID y nombre de forma de pago
+    $sql = "SELECT COUNT(*) as count FROM tbl_formapago WHERE ID_FPAGO = :ID_FPAGO AND FORMA_DE_PAGO = :FORMA_DE_PAGO";
+
+    // Realiza la conexión a la base de datos y ejecuta la consulta
+    $conexion = new Conectar();
+    $conn = $conexion->Conexion();
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':ID_FPAGO', $ID_FPAGO);
+    $stmt->bindParam(':FORMA_DE_PAGO', $FORMA_DE_PAGO);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Si el número de resultados encontrados es mayor que 0, significa que la forma de pago tiene el mismo ID y nombre de forma de pago
+    return $row['count'] > 0;
+}
+
 ?>
