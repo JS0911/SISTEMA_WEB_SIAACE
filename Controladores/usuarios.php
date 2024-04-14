@@ -36,7 +36,8 @@ switch ($_GET["op"]) {
         $ID_ESTADO_USUARIO = $body["ID_ESTADO_USUARIO"];
         $CORREO_ELECTRONICO = $body["CORREO_ELECTRONICO"];
         $ID_ROL = $body["ID_ROL"];
-        $AUTO_REGISTRO = $body["AUTO_REGISTRO"];
+        $CONTRASENA = $body["CONTRASENA"];
+       // $AUTO_REGISTRO = $body["AUTO_REGISTRO"];
     
         if (verificarExistenciaUsuario($USUARIO) > 0) {
             http_response_code(409);
@@ -49,7 +50,7 @@ switch ($_GET["op"]) {
             $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s");
            // $AUTO_REGISTRO=1;
-            $datos = $com->insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CORREO_ELECTRONICO, $ID_ROL, $_SESSION['usuario'], $dateNew, $AUTO_REGISTRO);
+           $datos = $com->insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CONTRASENA, $CORREO_ELECTRONICO, $ID_ROL, $_SESSION['usuario'], $dateNew);
             
             if ($datos === "Usuario Insertado") {
                 echo json_encode(["message" => "Usuario insertado exitosamente."]);

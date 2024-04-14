@@ -227,7 +227,7 @@ if (!isset($_SESSION['usuario'])) {
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento Tipo de Cuenta</title>
+    <title>Lista de Cuenta</title>
     <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -482,14 +482,14 @@ if (!isset($_SESSION['usuario'])) {
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
-                            <h1 class="mt-4 mb-4">Mantenimiento de Cuentas</h1>
+                            <h1 class="mt-4 mb-4">Lista de Cuentas</h1>
                         </center>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <?php
-                            if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                echo '<i class="fas fa-plus-square text-success cursor-pointer icon-lg custom-large-icon" data-toggle="modal" data-target="#crearModal" title="Nuevo"></i>';
-                            }
+                           // if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
+                           //     echo '<i class="fas fa-plus-square text-success cursor-pointer icon-lg custom-large-icon" data-toggle="modal" data-target="#crearModal" title="Nuevo"></i>';
+                           // }
                             ?>
                         </div>
                         <!-- Tabla para mostrar los datos -->
@@ -677,10 +677,10 @@ if (!isset($_SESSION['usuario'])) {
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
 
-                        if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) == 1) {
-                            row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargarCuenta(' + cuenta.ID_CUENTA + ') " title="Editar"></i>';
+                        //if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) == 1) {
+                        //    row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargarCuenta(' + cuenta.ID_CUENTA + ') " title="Editar"></i>';
 
-                        }
+                       // }
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
 
                             row += '<i class="fas fa-credit-card text-secondary cursor-pointer icon-lg" data-id="'  + cuenta.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + cuenta.ID_EMPLEADO + ')" title="Movimiento" data-toggle="tooltip" data-placement="top"></i>';

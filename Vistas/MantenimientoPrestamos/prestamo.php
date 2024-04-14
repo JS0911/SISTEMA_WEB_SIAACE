@@ -146,7 +146,7 @@ if (!isset($_SESSION['usuario'])) {
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento Prestamo</title>
+    <title>Lista Prestamo</title>
     <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -409,7 +409,7 @@ if (!isset($_SESSION['usuario'])) {
                     <!-- Botón para abrir el formulario de creación -->
                     <div class="container" style="max-width: 1400px;">
                         <center>
-                            <h1 class="mt-4 mb-4">Mantenimiento Prestamos</h1>
+                            <h1 class="mt-4 mb-4">Lista Prestamos</h1>
                         </center>
                         <!-- Tabla para mostrar los datos -->
                         <table class="table table-bordered mx-auto" id="Lista-prestamo" style="margin-top: 20px; margin-bottom: 20px">

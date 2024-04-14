@@ -554,8 +554,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <div class="form-group">
                                         <label for="nombre">Id</label>
                                         <input type="text" class="form-control" id="editar-id-pago" disabled>
+                                        
                                         <label for="nombre">Forma de Pago</label>
-                                        <input type="text" class="form-control" id="editar-pago" disabled>
+                                        <input type="text" maxlength="15" class="form-control" id="editar-pago" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje4"></div>
 
                                         <label for="nombre">Descripción</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
@@ -959,7 +961,7 @@ if (!isset($_SESSION['usuario'])) {
                             });
 
                         } else {
-                            throw new Error('Error en la solicitud de actualización');
+                            throw new Error('El registro ya existe en la Base de Datos.');
                         }
                     })
                     .catch(function(error) {
@@ -1021,6 +1023,7 @@ if (!isset($_SESSION['usuario'])) {
         // VALIDACIONES FUNCIONES    
         function validarNombre() {
             var nombreFormaPago = document.getElementById("agregar-pago");
+            var nombreFormaPagoEditar = document.getElementById("editar-pago");
             var descripcion = document.getElementById("agregar-descripcion");
             var descripcionEditar = document.getElementById("editar-descripcion");
 
@@ -1076,6 +1079,10 @@ if (!isset($_SESSION['usuario'])) {
             var mensaje3 = document.getElementById("mensaje5");
             handleInputAndBlurEvents(descripcionEditar, expresionValidadora2, mensaje3, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
             handleDescriptionKeypressEvent(descripcionEditar);
+
+            var mensaje4 = document.getElementById("mensaje4");
+            handleInputAndBlurEvents(nombreFormaPagoEditar, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
+            
         }
 
         $(document).ready(function() {
@@ -1087,38 +1094,60 @@ if (!isset($_SESSION['usuario'])) {
 
     <!-- VALIDACIONES SCRIPT -->
     <script>
-        // Obtén los campos de entrada y el botón "Guardar para insertar"
-        const pagoInput = document.getElementById('agregar-pago');
-        const descripcionInput = document.getElementById('agregar-descripcion');
-        const estadoInput = document.getElementById('agregar-estado');
-        const guardarButton = document.getElementById('btn-agregar');
+       // Obtén los campos de entrada y el botón "Guardar para insertar"
+    const pagoInput = document.getElementById('agregar-pago');
+    const descripcionInput = document.getElementById('agregar-descripcion');
+    const estadoInput = document.getElementById('agregar-estado');
+    const guardarButton = document.getElementById('btn-agregar');
 
-        // Función para verificar si todos los campos están llenos
-        function checkForm() {
-            const isFormValid = pagoInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && estadoInput.value.trim() !== '';
-            guardarButton.disabled = !isFormValid;
-        }
+    // Expresión regular para validar campos
+    const expresionValidadorapago2 = /^[A-Z]+$/; // Expresión regular para nombre
+    const expresionValidadoradescripcionpago = /^[A-Z0-9\s]+$/; // Expresión regular 
 
-        // Agrega un evento input a cada campo de entrada
-        pagoInput.addEventListener('input', checkForm);
-        descripcionInput.addEventListener('input', checkForm);
-        estadoInput.addEventListener('input', checkForm);
-        guardarButton.addEventListener('input', checkForm);
+    // Función para verificar si los campos contiene caracteres no válidos
+    function contieneCaracteresNoValidosAgregar() {
+        return !expresionValidadorapago2.test(pagoInput.value.trim()) || !expresionValidadoradescripcionpago.test(descripcionInput.value.trim());
+    }
+
+    // Función para verificar si todos los campos están llenos
+    function checkFormAgregar() {
+        const isNombreValido = !contieneCaracteresNoValidosAgregar();
+        const isFormValid = pagoInput.value.trim() !== '' && descripcionInput.value.trim() !== '' && estadoInput.value.trim() !== '';
+        guardarButton.disabled = !isFormValid || !isNombreValido;
+    }
+
+    // Agrega un evento input a cada campo de entrada
+    pagoInput.addEventListener('input', checkFormAgregar);
+    descripcionInput.addEventListener('input', checkFormAgregar);
+    estadoInput.addEventListener('input', checkFormAgregar);
+    guardarButton.addEventListener('input', checkFormAgregar);
     </script>
 
     <script>
         // Obtén los campos de entrada y el botón "Guardar para editar"
+        const pagoInput1 = document.getElementById('editar-pago');
         const descripcionInput1 = document.getElementById('editar-descripcion');
         const estadoInput2 = document.getElementById('editar-estado');
         const guardarButton1 = document.getElementById('btn-editar'); // Asegúrate de que el ID del botón sea correcto
 
+        // Expresión regular para validar campos
+        const expresionValidadorapago1 = /^[A-Z]+$/; // Expresión regular para nombre
+        const expresionValidadoradescripcionpago1 = /^[A-Z0-9\s]+$/; // Expresión regular 
+     
+
+        // Función para verificar si los campos contiene caracteres no válidos
+        function contieneCaracteresNoValidosNombre() {
+            return !expresionValidadorapago1.test(pagoInput1.value.trim()) || !expresionValidadoradescripcionpago1.test(descripcionInput1.value.trim()) ;
+        }
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isFormValid = descripcionInput1.value.trim() !== '' || estadoInput2.value.trim() !== '';
-            guardarButton1.disabled = !isFormValid;
+            const isNombreValido = !contieneCaracteresNoValidosNombre();
+            const isFormValid = pagoInput1.value.trim() !== '' || descripcionInput1.value.trim() !== '' || estadoInput2.value.trim() !== '';
+            guardarButton1.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
+        pagoInput1.addEventListener('input', checkForm);
         descripcionInput1.addEventListener('input', checkForm);
         estadoInput2.addEventListener('input', checkForm);
     </script>
