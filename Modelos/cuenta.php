@@ -32,7 +32,10 @@ class cuenta extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_mc_cuenta where ID_EMPLEADO = :ID";
+        $sql = "SELECT C.*, T.TIPO_CUENTA
+        FROM siaace.tbl_mc_cuenta AS C
+        INNER JOIN siaace.tbl_mc_tipocuenta AS T ON C.ID_TIPOCUENTA = T.ID_TIPOCUENTA
+        WHERE C.ID_EMPLEADO = :ID";
         $stmt = $conectar->prepare($sql);
         $stmt->bindParam(':ID', $ID_EMPLEADO, PDO::PARAM_INT);
         $stmt->execute();

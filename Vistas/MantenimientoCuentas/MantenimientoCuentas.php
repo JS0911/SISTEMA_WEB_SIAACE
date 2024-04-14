@@ -504,6 +504,7 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Saldo</th>
                                     <th style="display: none;">Id Tipo De Cuenta</th>
                                     <th>Tipo De Cuenta</th>
+                                    <th>Creado por</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -669,6 +670,7 @@ if (!isset($_SESSION['usuario'])) {
                             '<td class="texto-derecha">' + formatoNumero(parseFloat(cuenta.SALDO)) + '</td>' +
                             '<td style="display:none;">' + cuenta.ID_TIPOCUENTA + '</td>' +
                             '<td>' + cuenta.TIPO_CUENTA + '</td>' +
+                            '<td>' + cuenta.CREADO_POR + '</td>' +
                             //'<td>' + cuenta.ESTADO + '</td>' +
                             '<td>' + estadoBtn + '</td>' +
                             '<td>';
@@ -801,14 +803,6 @@ if (!isset($_SESSION['usuario'])) {
                             },
                         }
                     },
-                    {
-                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
-
-
-                        action: function() {
-                            ocultarCampos();
-                        }
-                    }
                 ],
                 "lengthMenu": [10, 20, 30, 50, 100],
                 "language": {
@@ -816,18 +810,7 @@ if (!isset($_SESSION['usuario'])) {
                 },
             });
         }
-
-        function ocultarCampos() {
-            var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
-            celdasDireccion.forEach(function(celda) {
-                if (celda.style.display === 'none' || celda.style.display === '') {
-                    celda.style.display = 'table-cell';
-                } else {
-                    celda.style.display = 'none';
-                }
-            });
-        }
-
+        
         function Insertar_Cuenta() {
             $("#btn-agregar").click(function() {
                 // Obtener los valores de los campos del formulario
