@@ -283,53 +283,36 @@ class PlanPago extends Conectar
     }
 }
  
-private function verificarUltimaCuotaPagada($ID_PRESTAMO) {
-    $conectar = parent::conexion();
-    parent::set_names();
-
+public function EstadoFinalizado($ID_PPAGO) {
     try {
-        // Consulta SQL para verificar si la última cuota ha sido pagada
-        $sql = "SELECT COUNT(*) AS cuotas_pagadas FROM tbl_mp_planp WHERE ID_PRESTAMO = :ID_PRESTAMO AND ESTADO = 'PAGADO'";
-        $stmt = $conectar->prepare($sql);
-        $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-        $stmt->execute();
+        // Obtener el ID_PRESTAMO correspondiente al ID_PPAGO
+        $ID_PRESTAMO = $this->obtenerIdPrestamo($ID_PPAGO);
 
-        // Obtener el resultado como un array asociativo
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Contar cuántas filas están pendientes para el ID_PRESTAMO dado
+        $numero_cuotas_pendientes = $this->contarCuotasPendientes($ID_PRESTAMO);
+        $mensaje1="No hay cuotas pendientes ";
+        $mensaje2="Número de cuotas pendientes: $numero_cuotas_pendientes";
 
-        // Obtener el total de cuotas
-        $total_cuotas = $this->contarTotalCuotas($ID_PRESTAMO);
-
-        // Devolver true si todas las cuotas han sido pagadas, false en caso contrario
-        return $resultado['cuotas_pagadas'] == $total_cuotas;
+        // Si no hay cuotas pendientes, marcar el préstamo como finalizado
+        if ($numero_cuotas_pendientes == 0) {
+            $this->marcarPrestamoComoFinalizado($ID_PRESTAMO);
+           // Si hay cuotas NO HAY pendientes, cambia de estado
+           // echo json_encode(array('message' => $mensaje1));
+            return [
+                'message1' => $mensaje1,
+            ];
+        }else {
+            // Si hay cuotas pendientes, mostrar el número de cuotas pendientes
+           // echo json_encode(array('message' => $mensaje2));
+            return [
+                'message2' => $mensaje2,
+            ];
+        }
     } catch (PDOException $e) {
-        // Manejar errores de PDO
-        throw new Exception("Error al verificar si la última cuota ha sido pagada: " . $e->getMessage());
+        // Manejar cualquier error de base de datos
+        echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
     }
 }
-
-private function contarTotalCuotas($ID_PRESTAMO) {
-    $conectar = parent::conexion();
-    parent::set_names();
-
-    try {
-        // Consulta SQL para contar el total de cuotas
-        $sql = "SELECT COUNT(*) AS total_cuotas FROM tbl_mp_planp WHERE ID_PRESTAMO = :ID_PRESTAMO";
-        $stmt = $conectar->prepare($sql);
-        $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-        $stmt->execute();
-
-        // Obtener el resultado como un array asociativo
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Devolver el total de cuotas
-        return $resultado['total_cuotas'];
-    } catch (PDOException $e) {
-        // Manejar errores de PDO
-        throw new Exception("Error al contar el total de cuotas: " . $e->getMessage());
-    }
-}
-
 
 private function obtenerIdPrestamo($ID_PPAGO) {
     $conectar = parent::conexion();
@@ -391,7 +374,7 @@ private function marcarPrestamoComoFinalizado($ID_PRESTAMO) {
         $stmt1->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
         $stmt1->execute();
 
-        // Consulta SQL para actualizar el estado de todas las cuotas asociadas al préstamo a "FINALIZADO" en tbl_mp_planp
+        // Consulta SQL para actualizar el estado del préstamo a "FINALIZADO" en tbl_mp_planp
         $sql2 = "UPDATE tbl_mp_planp SET ESTADO = 'FINALIZADO' WHERE ID_PRESTAMO = :ID_PRESTAMO";
         $stmt2 = $conectar->prepare($sql2);
         $stmt2->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
@@ -400,93 +383,12 @@ private function marcarPrestamoComoFinalizado($ID_PRESTAMO) {
         if ($stmt1->rowCount() > 0 && $stmt2->rowCount() > 0) {
             echo json_encode(array('message' => 'Préstamo finalizado correctamente'));
         } else {
-            echo json_encode(array('message' => 'No se pudo finalizar el préstamo aun faltan cuotas por pagar'));
+            echo json_encode(array('message' => 'No se pudo finalizar el préstamo'));
         }
     } catch (PDOException $e) {
         echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
     }
 }
-
-
-private function marcarPrestamoComoEnCurso($ID_PRESTAMO) {
-    try {
-        $conectar = parent::conexion();
-        parent::set_names();
-
-        // Consulta SQL para actualizar el estado del préstamo a "EN CURSO" en tbl_mp_prestamos
-        $sql = "UPDATE tbl_mp_prestamos SET ESTADO_PRESTAMO = 'EN CURSO' WHERE ID_PRESTAMO = :ID_PRESTAMO";
-        $stmt = $conectar->prepare($sql);
-        $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-        $stmt->execute();
-
-        if ($stmt->rowCount() > 0) {
-            echo json_encode(array('message' => 'Préstamo marcado como EN CURSO correctamente '));
-        } else {
-            echo json_encode(array('message' => 'No se pudo marcar el préstamo como EN CURSO porque ya fue marcado en Curso'));
-        }
-    } catch (PDOException $e) {
-        echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
-    }
-}
-
-public function EstadoFinalizado($ID_PPAGO) {
-    try {
-        // Obtener el ID_PRESTAMO correspondiente al ID_PPAGO
-        $ID_PRESTAMO = $this->obtenerIdPrestamo($ID_PPAGO);
-
-        // Contar cuántas filas están pendientes para el ID_PRESTAMO dado
-        $numero_cuotas_pendientes = $this->contarCuotasPendientes($ID_PRESTAMO);
-        $mensaje1="No hay cuotas pendientes ";
-        $mensaje2="Número de cuotas pendientes: $numero_cuotas_pendientes";
-
-        // Si no hay cuotas pendientes, marcar el préstamo como finalizado
-        if ($numero_cuotas_pendientes < 1) {
-            $this->marcarPrestamoComoFinalizado($ID_PRESTAMO);
-            // Si hay cuotas NO HAY pendientes, cambia de estado
-            // echo json_encode(array('message' => $mensaje1));
-            return [
-                'message1' => $mensaje1,
-            ];
-        } else {
-            // Si hay cuotas pendientes, mostrar el número de cuotas pendientes
-            // Verificar si es la primera cuota y cambiar el estado del préstamo a "EN CURSO"
-            $cuota_pagada = $this->verificarPrimeraCuotaPagada($ID_PRESTAMO);
-            if ($cuota_pagada) {
-                $this->marcarPrestamoComoEnCurso($ID_PRESTAMO);
-            }
-            // echo json_encode(array('message' => $mensaje2));
-            return [
-                'message2' => $mensaje2,
-            ];
-        }
-    } catch (PDOException $e) {
-        // Manejar cualquier error de base de datos
-        echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
-    }
-}
-
-private function verificarPrimeraCuotaPagada($ID_PRESTAMO) {
-    $conectar = parent::conexion();
-    parent::set_names();
-
-    try {
-        // Consulta SQL para verificar si la primera cuota ha sido pagada
-        $sql = "SELECT COUNT(*) AS cuotas_pagadas FROM tbl_mp_planp WHERE ID_PRESTAMO = :ID_PRESTAMO AND ESTADO = 'PAGADO'";
-        $stmt = $conectar->prepare($sql);
-        $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-        $stmt->execute();
-
-        // Obtener el resultado como un array asociativo
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Devolver true si la primera cuota ha sido pagada, false en caso contrario
-        return $resultado['cuotas_pagadas'] > 0;
-    } catch (PDOException $e) {
-        // Manejar errores de PDO
-        throw new Exception("Error al verificar si la primera cuota ha sido pagada: " . $e->getMessage());
-    }
-}
-
 
     public function PAGOP_ESTADO($ID_PPAGO)
     {

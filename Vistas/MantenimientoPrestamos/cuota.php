@@ -584,7 +584,7 @@ if (!isset($_SESSION['usuario'])) {
                     // Recorre los datos JSON y agrega filas a la tabla
                     var tbody = document.querySelector('#Lista-Cuota tbody');
                     tbody.innerHTML = ''; // Limpia el contenido anterior
-                    console.log(data);
+                    //console.log(data);
 
                     // Validar si hay datos para mostrar
                     if (data && data.ID_PLANP !== 0) {
@@ -639,70 +639,68 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
+        function Lista_Cuotas() {
+            // Crear un objeto con el ID del usuario
+            var data = {
+                "ID_PRESTAMO": <?php echo json_encode($ID_PRESTAMO); ?>,
+            };
 
+            // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=GetPlanPago', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data) // Convierte el objeto en formato JSON
+                })
+                .then(function(response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Error en la solicitud');
+                    }
+                })
+                .then(function(data) {
+                    // Recorre los datos JSON y agrega filas a la tabla
+                    var tbody = document.querySelector('#Lista-Cuotas tbody');
+                    tbody.innerHTML = ''; // Limpia el contenido anterior
+                    //consol.log(data);
+                    data.forEach(function(plan) {
+                        // Convertir el array a un objeto
+                        // plan = Object.assign({}, plan[0]);
+                        var row = '<tr>' +
+                            '<td style="display:none;">' + plan.ID_PLANP + '</td>' +
+                            '<td style="display:none;">' + plan.ID_PRESTAMO + '</td>' +
+                            '<td>' + plan.NUMERO_CUOTA + '</td>' +
+                            '<td>' + plan.FECHA_VENC_C + '</td>' +
+                            '<td>' + plan.FECHA_R_PAGO + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.VALOR_CUOTA)) + '</td>' +
+                            '<td style="display: none;">' + plan.MONTO_ADEUDADO + '</td>' +
+                            '<td style="display: none;">' + plan.MONTO_PAGADO + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_ADEUDADO_CAP)) + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_PAGADO_CAP)) + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_ADEUDADO_ITS)) + '</td>' +
+                            '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_PAGADO_ITS)) + '</td>' +
+                            '<td style="display:none;">' + plan.MONTO_ADEUDADO_MORA + '</td>' +
+                            '<td style="display:none;">' + plan.MONTO_PAGADO_MORA + '</td>' +
+                            '<td>' + plan.ESTADO + '</td>';
+                        '</tr>';
+                        //Cambiar palabra null por vacio.
+                        newrow = row.replaceAll("null", " ");
+                        row = newrow;
+                        tbody.innerHTML += row;
+                    });
+                    // consol.log(data);
+                    // Llamar a EstadoFinalizado después de cargar los datos de las cuotas
+                    EstadoFinalizado(data[0].ID_PLANP,data[0].ESTADO); // Aquí asumo que ID_PLANP está disponible en el primer objeto de datos.
 
-        // function Lista_Cuotas() {
-        //     // Crear un objeto con el ID del usuario
-        //     var data = {
-        //         "ID_PRESTAMO": <?php echo json_encode($ID_PRESTAMO); ?>,
-        //     };
-
-        //     // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
-        //     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=GetPlanPago', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Accept': 'application/json',
-        //                 'Content-Type': 'application/json'
-        //             },
-        //             body: JSON.stringify(data) // Convierte el objeto en formato JSON
-        //         })
-        //         .then(function(response) {
-        //             if (response.ok) {
-        //                 return response.json();
-        //             } else {
-        //                 throw new Error('Error en la solicitud');
-        //             }
-        //         })
-        //         .then(function(data) {
-        //             // Recorre los datos JSON y agrega filas a la tabla
-        //             var tbody = document.querySelector('#Lista-Cuotas tbody');
-        //             tbody.innerHTML = ''; // Limpia el contenido anterior
-        //             //consol.log(data);
-        //             data.forEach(function(plan) {
-        //                 // Convertir el array a un objeto
-        //                 // plan = Object.assign({}, plan[0]);
-        //                 var row = '<tr>' +
-        //                     '<td style="display:none;">' + plan.ID_PLANP + '</td>' +
-        //                     '<td style="display:none;">' + plan.ID_PRESTAMO + '</td>' +
-        //                     '<td>' + plan.NUMERO_CUOTA + '</td>' +
-        //                     '<td>' + plan.FECHA_VENC_C + '</td>' +
-        //                     '<td>' + plan.FECHA_R_PAGO + '</td>' +
-        //                     '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.VALOR_CUOTA)) + '</td>' +
-        //                     '<td style="display: none;">' + plan.MONTO_ADEUDADO + '</td>' +
-        //                     '<td style="display: none;">' + plan.MONTO_PAGADO + '</td>' +
-        //                     '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_ADEUDADO_CAP)) + '</td>' +
-        //                     '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_PAGADO_CAP)) + '</td>' +
-        //                     '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_ADEUDADO_ITS)) + '</td>' +
-        //                     '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_PAGADO_ITS)) + '</td>' +
-        //                     '<td style="display:none;">' + plan.MONTO_ADEUDADO_MORA + '</td>' +
-        //                     '<td style="display:none;">' + plan.MONTO_PAGADO_MORA + '</td>' +
-        //                     '<td>' + plan.ESTADO + '</td>';
-        //                 '</tr>';
-        //                 //Cambiar palabra null por vacio.
-        //                 newrow = row.replaceAll("null", " ");
-        //                 row = newrow;
-        //                 tbody.innerHTML += row;
-        //             });
-        //             // consol.log(data);
-        //             // Llamar a EstadoFinalizado después de cargar los datos de las cuotas
-        //             EstadoFinalizado(data[0].ID_PLANP); // Aquí asumo que ID_PLANP está disponible en el primer objeto de datos.
-
-        //         })
-        //         .catch(function(error) {
-        //             // Manejar el error aquí
-        //             alert('Error al cargar los datos: ' + error.message);
-        //         });
-        // }
+                })
+                .catch(function(error) {
+                    // Manejar el error aquí
+                    alert('Error al cargar los datos: ' + error.message);
+                });
+        }
 
         // function PagoCapital(ID_PLANP) {
         //     // Crear un objeto con el ID 
@@ -1031,15 +1029,14 @@ if (!isset($_SESSION['usuario'])) {
                                                     title: 'Cambio de Estado Realizado',
                                                     text: 'El estado del pago ha sido actualizado correctamente.'
                                                 });
-                                                EstadoFinalizado(ID_PLANP, data);
-                                                location.reload();
-
+                                                return data;
                                             })
                                             .catch(error => {
                                                 console.error('Error:', error);
                                             });
+
+                                        location.reload();
                                     });
-                                    console.log("data " + data);
                                 }
                             })
                             .catch(error => {
@@ -1056,7 +1053,6 @@ if (!isset($_SESSION['usuario'])) {
                         // Puedes manejar otros estados si es necesario
                         console.error('Error en el estado del pago:', data);
                     }
-
                 })
                 .catch(error => {
                     console.error('Error en la solicitud:', error);
@@ -1064,125 +1060,42 @@ if (!isset($_SESSION['usuario'])) {
         }
 
 
+        function EstadoFinalizado(ID_PLANP,ESTADO) {
+            console.log("entra estado finalizado " + ID_PLANP);
+            console.log("VALORES DATA " + ESTADO);
 
+            // Contar las cuotas pendientes
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=estadoFinalizado', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_PPAGO": ID_PLANP
+                    })
+                }).then(response => response.json())
+                .then(responseData => {
+                    console.log('Cuotas pendientes:', responseData);
+                    // ... procesar la información de las cuotas pendientes ...
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud:', error);
+                });
 
-        // function EstadoFinalizado(ID_PLANP,data) {
-        //     console.log("entra estado finalizado " + ID_PLANP);
-
-        //     // Contar las cuotas pendientes
-        //     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=estadoFinalizado', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Accept': 'application/json',
-        //                 'Content-Type': 'application/json'
-        //             },
-        //             body: JSON.stringify({
-        //                 "ID_PPAGO": ID_PLANP
-        //             })
-        //         }).then(response => response.json())
-        //         .then(responseData => {
-        //             console.log('Cuotas pendientes:', responseData);
-        //             // ... procesar la información de las cuotas pendientes ...
-        //         })
-        //         .catch(error => {
-        //             console.error('Error en la solicitud:', error);
-        //         });
-
-        //     // Verificar si la primera cuota fue pagada
-        //     if (data.ESTADO === "PAGADO") {
-        //         console.log("La primera cuota ya fue pagada");
-        //         // ... realizar acciones si la primera cuota fue pagada ...
-        //     } else {
-        //         console.log("La primera cuota no ha sido pagada");
-        //         // ... realizar acciones si la primera cuota no fue pagada ...
-        //     }
-        // }
-
-
-        async function Lista_Cuotas() {
-    try {
-        // Crear un objeto con el ID del usuario
-        var data = {
-            "ID_PRESTAMO": <?php echo json_encode($ID_PRESTAMO); ?>,
-        };
-
-        // Realizar una solicitud FETCH para obtener los datos JSON desde tu servidor
-        const response = await fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=GetPlanPago', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data) // Convierte el objeto en formato JSON
-        });
-
-        if (!response.ok) {
-            throw new Error('Error en la solicitud');
+            // Verificar si la primera cuota fue pagada
+            if (ESTADO === "PAGADO") {
+                console.log("La primera cuota ya fue pagada");
+                // ... realizar acciones si la primera cuota fue pagada ...
+            } else {
+                console.log("La primera cuota no ha sido pagada");
+                // ... realizar acciones si la primera cuota no fue pagada ...
+            }
         }
 
-        const responseData = await response.json();
 
-        // Recorre los datos JSON y agrega filas a la tabla
-        var tbody = document.querySelector('#Lista-Cuotas tbody');
-        tbody.innerHTML = ''; // Limpia el contenido anterior
-        
-        // Llamar a EstadoFinalizado después de cargar los datos de las cuotas
-        for (const plan of responseData) {
-            await EstadoFinalizado(plan.ID_PLANP);
-            var row = '<tr>' +
-                '<td style="display:none;">' + plan.ID_PLANP + '</td>' +
-                '<td style="display:none;">' + plan.ID_PRESTAMO + '</td>' +
-                '<td>' + plan.NUMERO_CUOTA + '</td>' +
-                '<td>' + plan.FECHA_VENC_C + '</td>' +
-                '<td>' + plan.FECHA_R_PAGO + '</td>' +
-                '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.VALOR_CUOTA)) + '</td>' +
-                '<td style="display: none;">' + plan.MONTO_ADEUDADO + '</td>' +
-                '<td style="display: none;">' + plan.MONTO_PAGADO + '</td>' +
-                '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_ADEUDADO_CAP)) + '</td>' +
-                '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_PAGADO_CAP)) + '</td>' +
-                '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_ADEUDADO_ITS)) + '</td>' +
-                '<td class="texto-derecha">' + formatoNumero(parseFloat(plan.MONTO_PAGADO_ITS)) + '</td>' +
-                '<td style="display:none;">' + plan.MONTO_ADEUDADO_MORA + '</td>' +
-                '<td style="display:none;">' + plan.MONTO_PAGADO_MORA + '</td>' +
-                '<td>' + plan.ESTADO + '</td>' +
-                '</tr>';
 
-            //Cambiar palabra null por vacio.
-            newrow = row.replaceAll("null", " ");
-            row = newrow;
-            tbody.innerHTML += row;
-        }
-    } catch (error) {
-        // Manejar el error aquí
-        alert('Error al cargar los datos: ' + error.message);
-    }
-}
 
-async function EstadoFinalizado(ID_PLANP) {
-    try {
-        console.log("entra estado finalizado " + ID_PLANP);
-
-        const response = await fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=estadoFinalizado', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "ID_PPAGO": ID_PLANP
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Error en la solicitud');
-        }
-
-        const responseData = await response.json();
-        console.log('Estado finalizado:', responseData);
-    } catch (error) {
-        console.error("Error al procesar estado finalizado:", error);
-    }
-}
  
 
         // function EstadoFinalizado(ID_PLANP) {

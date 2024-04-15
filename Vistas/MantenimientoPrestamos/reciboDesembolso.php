@@ -1,3 +1,23 @@
+<?php
+session_start();
+require "../../Config/conexion.php";
+//require_once "../../Modelos/permisoUsuario.php";
+
+
+if (isset($_GET['ID_PRESTAMO'])) {
+    $ID_PRESTAMO = $_GET['ID_PRESTAMO'];
+    // $MONTO_SOLICITADO = $_GET['MONTO_SOLICITADO'];
+    // $PLAZO = $_GET['PLAZO'];
+    // $TASA = $_GET['TASA'];
+    // echo "ID_PRESTAMOP: " . $ID_PRESTAMOP;
+    // echo "MONTO_SOLICITADO: " . $MONTO_SOLICITADO;
+    // echo "PLAZO: " . $PLAZO;
+    // echo "TASA: " . $TASA;
+} else {
+    echo "No se proporcionó el ID_PRESTAMO en la URL.";
+}
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -49,7 +69,7 @@
         // Aquí puedes llenar dinámicamente los datos del desembolso utilizando JavaScript
         const datosDesembolso = {
             fechaDesembolso: '2024-03-15',
-            idPrestamo: '123456',
+            idPrestamo: $ID_PRESTAMO,
             montoDesembolsado: '$1000.00' // Puedes llenar con los datos reales obtenidos del backend
         };
 
