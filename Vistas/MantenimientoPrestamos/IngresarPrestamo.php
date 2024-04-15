@@ -520,6 +520,9 @@ if (!isset($_SESSION['usuario'])) {
                                                 <tr>
                                                     <th scope="col">Numero De Cuenta</th>
                                                     <th scope="col">Saldo</th>
+                                                    <th scope="col">Tipo Cuenta</th>
+                                                    <th scope="col">Fecha Creacion</th>
+                                                    <th scope="col">Creado por</th>
                                                     <th scope="col">Acciones</th>
                                                 </tr>
                                             </thead>
@@ -656,7 +659,7 @@ if (!isset($_SESSION['usuario'])) {
                                             <input type="text" class="form-control" id="Numero-Cuenta" disabled>
                                             <label for="saldo">Saldo</label>
                                             <input type="text" class="form-control" id="Saldo" disabled>
-                                            <label for="Deposito">Monto De Deposito</label>
+                                            <label for="Deposito">Monto de Deposito</label>
 
                                             <input type="text" class="form-control" id="Monto_Deposito " required pattern="[0-9]{1,8}(\.[0-9]{0,2})?" title="Ingrese un depósito válido (hasta 8 dígitos enteros y 2 decimales)" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 46 && this.value.indexOf('.') === -1)">
                                             <div id="mensaje3"></div>
@@ -676,7 +679,7 @@ if (!isset($_SESSION['usuario'])) {
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="editarModalLabel">Hacer Reembolso</h5>
+                                    <h5 class="modal-title" id="editarModalLabel">Hacer Retiro</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -690,7 +693,7 @@ if (!isset($_SESSION['usuario'])) {
                                             <input type="text" class="form-control" id="Numero-CuentaR" disabled>
                                             <label for="saldo">Saldo</label>
                                             <input type="text" class="form-control" id="SaldoR" disabled>
-                                            <label for="Deposito">Monto De Reembolso</label>
+                                            <label for="Deposito">Monto de Retiro</label>
                                             <input type="text" class="form-control" id="Monto_Reembolso" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un retiro válido (hasta 8 dígitos enteros y 2 decimales)" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 46 && this.value.indexOf('.') === -1)">
                                             <div id="mensaje4"></div>
                                         </div>
@@ -940,13 +943,16 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + cuenta.ID_CUENTA + '</td>' +
                             '<td>' + cuenta.NUMERO_CUENTA + '</td>' +
                             '<td class="texto-derecha">' + formatoNumero(parseFloat(cuenta.SALDO)) + '</td>' +
+                            '<td>' + cuenta.TIPO_CUENTA + '</td>' +
+                            '<td>' + cuenta.FECHA_CREACION + '</td>' +
+                            '<td>' + cuenta.CREADO_POR + '</td>' +
                             '<td>';
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<button class="btn btn-outline-primary" data-toggle="modal" data-target="#DepositoModal" onclick="CargarCuenta(' + cuenta.ID_CUENTA + ')">Deposito</button>';
                             row += '<button class="btn btn-outline-secondary" crear-movimiento" data-toggle="modal" data-target="#ReembolsoModal" onclick="CargarCuentaR(' + cuenta.ID_CUENTA + ')">Retiro</button>';
-                            row += '<button class="btn btn-outline-info" crear-movimiento" data-id="' + cuenta.ID_CUENTA + '" onclick="redirectToHistorialCuenta(' + cuenta.ID_CUENTA + ')">Historial Transaccional</button>';
+                            row += '<button class="btn btn-outline-info" crear-movimiento" data-id="' + cuenta.ID_CUENTA + '" onclick="redirectToHistorialCuenta(' + cuenta.ID_CUENTA + ')">Historial</button>';
                         }
 
                         row += '</td>' +
