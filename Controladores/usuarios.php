@@ -73,14 +73,16 @@ switch ($_GET["op"]) {
         $ID_ESTADO_USUARIO = $body["ID_ESTADO_USUARIO"];
         $CORREO_ELECTRONICO = $body["CORREO_ELECTRONICO"];
         $ID_ROL = $body["ID_ROL"];
-
-        if (verificarExistenciaUsuario($USUARIO) > 0 && !esMismoEmpleado($ID_USUARIO, $USUARIO)) {
+    
+        if (verificarExistenciaUsuario($USUARIO) > 0 && !esMismoUsuario($ID_USUARIO, $USUARIO)) {
             http_response_code(409);
-            echo json_encode(["error" => "El USUARIO ya existe en la base de datos."]);
-        } else{
+            echo json_encode(["error" => "El usuario ya existe en la base de datos."]);
+        } else {
+            // Actualizar el usuario
             $date = new DateTime(date("Y-m-d H:i:s"));
             $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+
             $datos = $com->update_usuario($ID_USUARIO, 
                 $USUARIO, 
                 $NOMBRE_USUARIO, 
@@ -90,12 +92,11 @@ switch ($_GET["op"]) {
                 $_SESSION['usuario'],
                 $dateNew
             );
-            echo json_encode(["message" => "Empleado insertado Exitosamente."]);
+            echo json_encode(["message" => "Usuario editado Exitosamente."]);
             $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL USUARIO # $ID_USUARIO", $_SESSION['id_usuario'], 2, $_SESSION['usuario'], $dateNew);
-       
         }
-
         break;
+    
 
     case "eliminarUsuario":
         $ID_USUARIO = $body["ID_USUARIO"];
@@ -139,19 +140,20 @@ function verificarExistenciaEmail($correo) {
     return $row['count'];
 }
 
-function esMismoUsuario($id_usuario, $usuario) {
-    $sql = "SELECT COUNT(*) as count FROM tbl_me_usuarios WHERE USUARIO = :usuario AND ID_USUARIO != :id_usuario";
+function esMismoUsuario($ID_USUARIO, $USUARIO) {
+    $sql = "SELECT COUNT(*) as count FROM tbl_ms_usuario WHERE ID_USUARIO = :id_usuario AND USUARIO = :usuario";
 
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id_usuario', $id_usuario);
-    $stmt->bindParam(':usuario', $usuario);
+    $stmt->bindParam(':id_usuario', $ID_USUARIO);
+    $stmt->bindParam(':usuario', $USUARIO);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return $row['count'];
 }
+
 
 
 
