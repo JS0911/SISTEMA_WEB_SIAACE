@@ -29,20 +29,31 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Cambio de Contraseña</h3><img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"></div>
+                                    <div class="card-header"><img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"></div>
                                     <div class="card-body">
-                                        <div class="small mb-3 text-muted">Ingrese su correo para enviar </div>
+                                        <div class="small mb-3 text-muted">Ingrese su nueva contraseña:</div>
                                         <form id="formRecetPass" action= "../../Controladores/RecuperacionContrasenia/CambioContrasenia.php" name="formRecetPass" method="POST">
-                                            <div class="form-group"><label class="small mb-1" for="inputPassword">Contraseña</label>
-                                            <input class="form-control py-4" name="inputPassword" id="inputPassword" type="password" aria-describedby="emailHelp" placeholder="Ingrese su contraseña:"required /></div>
-                                            <div class="form-group"><label class="small mb-1" for="inputConfirm">Confirmar Contraseñá</label>
-                                            <input class="form-control py-4" name="inputConfirm" id="inputConfirm" type="password" aria-describedby="emailHelp" placeholder="Confirmar Contraseña:" required/></div>
-                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="small" href="../../InicioSesion/login.php">Regresar al Inicio de Sesión</a>
+                                        <label class="small mb-1" for="inputPassword">Contraseña</label>
+                                        <div class="input-group">
+                                            <input class="form-control py-4" name="inputPassword" id="inputPassword" type="password" aria-describedby="emailHelp" placeholder="Ingrese su contraseña:" required />
+                                            <div class="input-group-append">
+                                                <button type="button" id="showPasswordBtn" class="btn btn-outline-secondary" onclick="togglePasswordVisibility()">
+                                                    <i id="eyeIcon" class="fas fa-eye"></i>
+                                                </button>
                                             </div>
-                                            <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
+                                        </div>
+                                        <label class="small mb-1" for="inputConfirm">Confirmar Contraseña</label>
+                                        <div class="input-group">
+                                            <input class="form-control py-4" name="inputConfirm" id="inputConfirm" type="password" aria-describedby="emailHelp" placeholder="Confirmar Contraseña:" required/>
+                                            <div class="input-group-append">
+                                                <button type="button" id="showConfirmPasswordBtn" class="btn btn-outline-secondary" onclick="toggleConfirmPasswordVisibility()">
+                                                    <i id="confirmEyeIcon" class="fas fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
                                             <button class="btn btn-primary" type="submit">Confirmar Contraseña</button>
-                                            </div>  
+                                            </div>
                                         </form>
                                     </div>
                                     <div class="card-footer text-center">
@@ -78,5 +89,35 @@
             this.classList.toggle('fa-eye-slash');
         });
         </script>
+        <script>
+        function togglePasswordVisibility() {
+    var passwordInput = document.getElementById("inputPassword");
+    var eyeIcon = document.getElementById("eyeIcon");
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        eyeIcon.classList.remove("fa-eye");
+        eyeIcon.classList.add("fa-eye-slash");
+    } else {
+        passwordInput.type = "password";
+        eyeIcon.classList.remove("fa-eye-slash");
+        eyeIcon.classList.add("fa-eye");
+    }
+}
+
+function toggleConfirmPasswordVisibility() {
+    var confirmInput = document.getElementById("inputConfirm");
+    var confirmEyeIcon = document.getElementById("confirmEyeIcon");
+    if (confirmInput.type === "password") {
+        confirmInput.type = "text";
+        confirmEyeIcon.classList.remove("fa-eye");
+        confirmEyeIcon.classList.add("fa-eye-slash");
+    } else {
+        confirmInput.type = "password";
+        confirmEyeIcon.classList.remove("fa-eye-slash");
+        confirmEyeIcon.classList.add("fa-eye");
+    }
+}
+        </script>
+
     </body>
 </html>

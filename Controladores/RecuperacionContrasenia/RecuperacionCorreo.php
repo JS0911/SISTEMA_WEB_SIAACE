@@ -1,9 +1,9 @@
 <?php
+session_start();
 // Conectar a la base de datos
 require ("../../Config/conexion.php");
 require ("../../Modelos/Recuperacion.php");
 //require ("../../Modelos/EnviarCorreo.php");
-session_start();
 
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
@@ -49,7 +49,7 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
             $mensaje = "<div>Hola $usuario.</div><br><div>Recibimos una solicitud para restablecer tu password de IDH.</div>
             <div>Ingresa el siguiente codigo para restablecer la password.</div><br>
             <div><h2>$tokeng</h2></div><br>";
-            //<div><a href=http://localhost:90/sistema_web_siaace/Vistas/RecuperacionContrasenia/IngresoToken.php?token='$tokeng'&usuario='$id_usuario'>Recuperar</a></div>";
+            //<div><a href=https://idhcoop.site/SISTEMA_WEB_SIAACE/Vistas/RecuperacionContrasenia/IngresoToken.php?token='$tokeng'&usuario='$id_usuario'>Recuperar</a></div>";
 
             $errors = $savetoken->enviarCorreo($email,$asunto,$mensaje);
             If ($errors !="Ha ocurrido un error. Intentelo mas tarde."){

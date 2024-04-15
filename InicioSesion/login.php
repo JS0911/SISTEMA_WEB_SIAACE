@@ -140,12 +140,19 @@ if ($_POST) {
                                 </div>
                                 <div class="card-body">
                                     <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                                        <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Usuario</label><input class="form-control py-4" id="inputEmailAddress" name="usuario" type="text" maxlength="15" placeholder="Ingresa tu usuario:" 
-                                        required pattern="^(?!.*\s).*$" title="No se permiten espacios en blanco o campos vacios." oninput="this.value = this.value.toUpperCase()" /></div>
+                                        <label class="small mb-1" for="inputEmailAddress">Usuario</label>
+                                        <div class="form-group"><input class="form-control py-4" id="inputEmailAddress" name="usuario" type="text" maxlength="15" placeholder="Ingresa tu usuario:" 
+                                        required pattern="^(?!.*\s).*$" title="No se permiten espacios en blanco o campos vacios." oninput="this.value = this.value.toUpperCase()" />
                                         
-                                        <div class="form-group"><label class="small mb-1" for="inputPassword">Contraseña</label><input class="form-control py-4" id="inputPassword" name="contrasena" type="password" maxlength="100" placeholder="Ingresa tu contraseña:" 
-                                        required pattern="^[^\s]{1,100}$" title="No se permiten espacios en blanco o campos vacios." /></div>
-                                        <div style="text-align: center;">
+                                        </div>
+                                        <label class="small mb-1" for="inputPassword">Contraseña</label>
+                                        <div class="input-group"><input class="form-control py-4" id="inputPassword" name="contrasena" type="password" maxlength="100" placeholder="Ingresa tu contraseña:" 
+                                        required pattern="^[^\s]{1,100}$" title="No se permiten espacios en blanco o campos vacios." />
+                                        <button type="button" id="showPasswordBtn" class="btn btn-outline-secondary" onclick="togglePasswordVisibility()">
+                                                    <i id="eyeIcon" class="fas fa-eye"></i>
+                                        </button>
+                                        </div>
+                                        <div style="text-align: center; margin-top: 15px;">
                                             <button type="submit" class="btn btn-primary">Ingresar</button>
                                         </div>
                                         <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><a class="small" href="../Vistas/RecuperacionContrasenia/SeleccionarMetodo.php">¿Olvido su contraseña? Recuperar aquí</a>
@@ -209,6 +216,20 @@ if ($_POST) {
         });  
     });
     </script>
+    <script>
+        function togglePasswordVisibility() {
+        var passwordInput = document.getElementById("inputPassword");
+        var eyeIcon = document.getElementById("eyeIcon");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            }
+        }</script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../js/scripts.js"></script>

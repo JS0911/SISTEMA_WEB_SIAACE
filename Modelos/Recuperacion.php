@@ -75,5 +75,11 @@ require '../../PHPMailer/SMTP.php';
 				return 0;
 			}
 		}
+
+		Public function ObtenerPreguntas($usuario){
+			$conexion = new Conectar();
+       		$conn = $conexion->Conexion();
+			
+		}
 	}
 ?>

@@ -30,10 +30,10 @@
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Metodo de Recuperación</h3><img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"></div>
+                                <div class="card-header"><img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"></div>
                                     <div class="card-body">
                                         <form id="formRecetPass" action= "../../Controladores/RecuperacionContrasenia/MetodoRecuperacion.php" name="formRecetPass" method="POST">
-                                            <h2 class ="titulo-registro" style="font-size: 1.8rem;  ">Elije un método para la recuperación</h2>
+                                            <h5 class ="titulo-registro" style="text-align: center;">Elije un método para la recuperación</h5>
                                             <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="radioOption" id="correo" value="correo" checked>
@@ -43,11 +43,9 @@
                                                 <input class="form-check-input" type="radio" name="radioOption" id="pregunta" value="pregunta">
                                                 <label class="form-check-label" for="pregunta" style="font-size: 1rem;">Pregunta secreta</label>
                                             </div></div>
-                                            <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
-                                            <button class="btn btn-primary" type="submit">Continuar</button>
-                                            </div>  <!-- href="../../Controladores/Recuperacion.php" -->
                                             <div class="form-group d-flex align-items-center justify-content-center mt-2 mb-0">
-                                            <a href="../../InicioSesion/login.php" class="btn btn-danger" style="margin-top: 1.5rem; ">Cancelar</a>
+                                            <button class="btn btn-primary mr-2">Continuar</button>
+                                            <a href="../../InicioSesion/login.php" class="btn btn-danger">Cancelar</a>
                                             </div>
                                         </form>
                                     </div>

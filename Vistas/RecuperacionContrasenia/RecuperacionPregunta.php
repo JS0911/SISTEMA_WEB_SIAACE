@@ -1,11 +1,8 @@
 <style>
     .logo {
         width: 100px;
-        /* Ancho deseado del logo */
         margin: 0 auto;
-        /* Auto-centrar horizontalmente */
         display: block;
-        /* Asegurarse de que sea un bloque para que el auto-centrado funcione */
     }
 </style>
 <?php
@@ -34,30 +31,43 @@ require("../../Controladores/RecuperacionContrasenia/RecuperacionPregunta.php");
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Recuperación por Pregunta</h3><img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"></div>
+                                    <div class="card-header"><img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"></div>
                                     <div class="card-body">
-                                        <div class="small mb-3 text-muted">Seleccione una pregunta de seguridad y conteste: </div>
-                                        <form id="formRecetPass" action= "../../Controladores/RecuperacionContrasenia/RecuperacionPregunta.php"name="formRecetPass" method="POST">
-                                            <div class="form-group"><label class="small mb-1" for="inputUsuario">Usuario</label>
-                                            <input class="form-control py-4" id="inputUsuarios" name="inputUsuario" type="text" maxlength="15" placeholder="Ingresa tu usuario:" 
-                                            required pattern="^(?!.*\s).*$" title="No se permiten espacios en blanco o campos vacios." oninput="this.value = this.value.toUpperCase()" /></div>
                                         
-                                            <div class="form-group"><label class="small mb-1" for="pregunta">Preguntas de Seguridad</label>
-                                            <select name="pregunta" class="form-select form-control form-control" style="width:400px">
-                                                <?php
-                                                foreach($preguntas as $row ) {
-                                                    echo "<option value='$row[ID_PREGUNTA]'>$row[PREGUNTA]</option>";
-                                                }
-                                                ?>
-                                            </select></div>
-                                            <div class="form-group"><label class="small mb-1" for="inputRespuesta">Respuesta</label>
-                                            <input class="form-control py-4" name="inputRespuesta" id="inputRespuestas" aria-describedby="emailHelp" placeholder="Ingrese su respuesta:" required/></div>
-                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><a class="small" href="../../InicioSesion/login.php">Regresar al Inicio de Sesión</a><a class="small" href="SeleccionarMetodo.php">Probar otro metodo</a></div>
+                                        <form id="formRecetPass" action= "../../Controladores/RecuperacionContrasenia/RecuperacionPregunta.php" name="formRecetPass" method="POST">
+                                            <div class="form-group"><label class="small mb-1" for="inputUsuario">Usuario</label>
+                                            <input class="form-control py-4" id="inputUsuarios" name="inputUsuarios" aria-describedby="emailHelp" type="text" maxlength="15" placeholder="Ingresa tu usuario:" 
+                                            required title="No se permiten espacios en blanco o campos vacios." oninput="this.value = this.value.toUpperCase()" /></div>
                                             <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
-                                            <button class="btn btn-primary" type="submit">Enviar Respuesta</button>
+                                                <button class="btn btn-primary" disabled onclick="verificarFormulario()" id="verPreguntas" name="verPreguntas" type="button" >Ver Preguntas</button>
+                                                
+                                            </div>
+                                            <div id="preguntasid" style="display: none; ">
+                                                <div class="form-group"><label class="small mb-1" for="pregunta">Preguntas de Seguridad</label>
+                                                <select id="cmbPreguntas"  name="cmbPreguntas" class="form-select form-control form-control" style="width:400px">
+                                                    
+                                                    <?php
+                                                        if (isset($_POST['verPreguntas'])) {
+                                                            foreach($preguntas as $row ) {
+                                                                echo "<option value='$row[ID_PREGUNTA]'>$row[PREGUNTA]</option>";
+                                                                echo "hola";
+                                                           }
+                                                        } 
+                                                        
+                                                    
+                                                    ?>
+                                                </select></div>
+                                                <div class="form-group"><label class="small mb-1" for="inputRespuesta">Respuesta</label>
+                                                <input class="form-control py-4" name="inputRespuesta" id="inputRespuestas" aria-describedby="emailHelp" placeholder="Ingrese su respuesta:" required/></div>
+                                                
+                                                <div class="form-group d-md-flex align-items-center justify-content-center mt-4 mb-0">
+                                                <button class="btn btn-success mr-2" id="editarnombre" name="editarnombre" type="button" style="display: none;" >Editar Usuario</button>
+                                                <button id="btnverrespuesta"class="btn btn-primary mr-2" type="submit">Enviar Respuesta</button>
+                                                </div>
                                             </div>
                                         </form>
-                                    </div>
+                                            </div>
+                                    
                                     <div class="card-footer text-center">
                                         <div class="small"><a href="../../InicioSesion/register.php">¿Aún no tiene una cuenta? Registrarse</a></div>
                                     </div>
@@ -80,5 +90,49 @@ require("../../Controladores/RecuperacionContrasenia/RecuperacionPregunta.php");
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
+        <script>
+            document.getElementById("verPreguntas").addEventListener("click", function() {
+                document.getElementById("inputUsuarios").disabled = false;
+                this.style.display = "none";
+                document.getElementById("preguntasid").style.display = "block";
+                document.getElementById("editarnombre").style.display = "block";
+            });
+            document.getElementById("editarnombre").addEventListener("click", function() {
+                document.getElementById("inputUsuarios").disabled = false; 
+                document.getElementById("preguntasid").style.display = "none"; 
+                document.getElementById("verPreguntas").style.display = "block";
+                this.style.display = "none"; 
+            }); 
+            var inputUsuario = document.getElementById("inputUsuarios");
+            inputUsuario.addEventListener("input", function() {
+                if (inputUsuario.value.trim() !== "") {
+                    document.getElementById("verPreguntas").disabled = false;
+                } else {
+                    document.getElementById("verPreguntas").disabled = true;
+                }
+            });    
+        </script>
+        <script>
+            function verificarFormulario() {
+                    var comboBox = document.getElementById("cmbPreguntas");
+                    comboBox.innerHTML = "";
+                    var Usuario = document.getElementById("inputUsuarios").value;
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var datos = JSON.parse(xhr.responseText); 
+                            for (var i = 0; i < datos.length; i++) {
+                                var option = document.createElement("option");
+                                option.text = datos[i];
+                                comboBox.add(option);
+                            }
+                        }
+                    };
+                    xhr.open("POST","../../Modelos/recuperacionfunciones.php?", true); 
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.send("Usuario=" + Usuario); 
+                }
+        </script>
+        
     </body>
 </html>

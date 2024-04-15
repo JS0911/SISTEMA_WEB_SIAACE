@@ -1,8 +1,8 @@
 <?php
-
 session_start();
 require ("../../Config/conexion.php");
 require ("../../Modelos/Recuperacion.php");
+//require ("../../Config/Ruta.php");
 
 
 // Conectar a la base de datos

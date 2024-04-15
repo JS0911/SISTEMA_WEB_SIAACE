@@ -2,6 +2,7 @@
 
 // Conectar a la base de datos
 require ("../../Config/conexion.php");
+require ("../../Config/Ruta.php");
 require ("../../Modelos/Recuperacion.php");
 session_start();
 $conexion = new Conectar();
