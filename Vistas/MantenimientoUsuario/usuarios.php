@@ -760,7 +760,6 @@ if (!isset($_SESSION['usuario'])) {
                             estadoBtn = ''; // En caso de que el nombre del usuario no coincida con ninguno de los casos anteriores
                         }
 
-
                         var row = '<tr>' +
                             '<td>' + contador++ + '</td>' +
                             '<td style="display:none;">' + usuario.ID_USUARIO + '</td>' +
@@ -1020,7 +1019,7 @@ if (!isset($_SESSION['usuario'])) {
                             case 409:
                                 // Conflicto (por ejemplo, registro duplicado)
                                 return response.json().then(function(data) {
-                                    throw new Error('Error de conflicto: ' + data.message);
+                                    throw new Error('El usuario esta duplicado');
                                 });
                             default:
                                 throw new Error('Error inesperado: ' + response.statusText);

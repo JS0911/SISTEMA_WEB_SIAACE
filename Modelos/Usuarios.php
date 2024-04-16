@@ -32,14 +32,12 @@ class Usuario extends Conectar
 
     {
         try {
-            //$AUTO_REGISTRO = 1;
-           // $CONTRASENA = $USUARIO . "ab123@@";
-            //$preguntas = 0;
+            
             $contrasenaEncriptada = password_hash($CONTRASENA, PASSWORD_DEFAULT);
-            //echo $contrasenaEncriptada;
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `tbl_ms_usuario` (`USUARIO`, `NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CONTRASENA`, `CORREO_ELECTRONICO`, `ID_ROL`, `CREADO_POR`, `FECHA_CREACION`) VALUES ( :USUARIO, :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CONTRASENA, :CORREO_ELECTRONICO, :ID_ROL, :CREADO_POR, :FECHA_CREACION)";
+            $sql = "INSERT INTO `tbl_ms_usuario` (`USUARIO`, `NOMBRE_USUARIO`, `ID_ESTADO_USUARIO`, `CONTRASENA`, `CORREO_ELECTRONICO`, `ID_ROL`, `CREADO_POR`, `FECHA_CREACION`,`PRIMER_INGRESO`,`PREGUNTAS_CONTESTADAS`,`AUTO_REGISTRO`) 
+            VALUES ( :USUARIO, :NOMBRE_USUARIO, :ID_ESTADO_USUARIO, :CONTRASENA, :CORREO_ELECTRONICO, :ID_ROL, :CREADO_POR, :FECHA_CREACION, 1,0,0)";
             $stmt = $conectar->prepare($sql);
 
             $stmt->bindParam(':USUARIO', $USUARIO, PDO::PARAM_STR);
@@ -50,9 +48,6 @@ class Usuario extends Conectar
             $stmt->bindParam(':ID_ROL', $ID_ROL, PDO::PARAM_INT);
             $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
             $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
-           // $stmt->bindParam(':AUTO_REGISTRO', $AUTO_REGISTRO, PDO::PARAM_INT);
-        
-            //$stmt->bindParam('PREGUNTAS_CONTESTADAS:', $preguntas, PDO::PARAM_INT);
            
             $stmt->execute(); // Ejecutar la consulta preparada
 

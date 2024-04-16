@@ -52,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($row) {
         $contrasenaBD = $row['contrasena'];
+        
 
         if (password_verify($contrasenaActual, $contrasenaBD)) {
             // Contraseña actual es correcta
@@ -79,9 +80,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $date = new DateTime(date("Y-m-d H:i:s"));
                         $dateMod = $date->modify("-7 hours");
                         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+
                         $sql2 = "INSERT INTO tbl_ms_historial_contrasena(CONTRASENA, ID_USUARIO, FECHA_MODIFICACION) VALUES ('$hashedPassword', '$id_usuario', '$dateNew');";
                         $stmt2 = $conn->prepare($sql2);
                         $stmt2->execute();
+
+                        $sql3 = "UPDATE tbl_ms_usuario SET ID_ESTADO_USUARIO = '1' WHERE ID_USUARIO = $id_usuario;";
+                        $stmt3 = $conn->prepare($sql3);
+                        $stmt3->execute();
+
+                        $sql4 = "UPDATE tbl_ms_usuario SET AUTO_REGISTRO = '2' WHERE ID_USUARIO = $id_usuario;";
+                        $stmt4 = $conn->prepare($sql4);
+
                         $_SESSION['cambio_contrasena'] = true;
                         //header("refresh: 2; url=login.php");
                         //exit;
@@ -109,6 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 if (!isset($_SESSION['usuario'])) {
+    $stmt4->execute();
     header("Location: login.php");
     session_destroy();
     exit();

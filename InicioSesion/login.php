@@ -14,7 +14,7 @@ if ($_POST) {
     $contrasena = $_POST['contrasena'];
 
     if ($conn) {
-        $sql = "SELECT id_usuario, usuario, contrasena, id_estado_usuario, id_rol, preguntas_contestadas FROM tbl_ms_usuario WHERE usuario = :usuario";
+        $sql = "SELECT id_usuario, usuario, contrasena, id_estado_usuario, id_rol, preguntas_contestadas, auto_registro, primer_ingreso FROM tbl_ms_usuario WHERE usuario = :usuario";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':usuario', $usuario);
         $stmt->execute();
@@ -42,12 +42,13 @@ if ($_POST) {
                 } elseif ($row['id_estado_usuario'] == 2) {
                     $mensajeEstado = 'Su usuario se encuentra inactivo';
                     header("refresh: 2; url=login.php");
-                } elseif ($row['id_estado_usuario'] == 3) {
-                   // header("Location: ../Vistas/MantenimientoUsuario/Contestar_preguntas.php");
-                    header("Location: cambiocontrasena.php");
-                } elseif ($row['id_estado_usuario'] == 4) {
+                } elseif ($row['id_estado_usuario'] == 4) { 
                     $mensajeEstado = 'Su usuario se encuentra bloqueado.';
                     header("refresh: 2; url=login.php");
+                }  elseif ($row['auto_registro'] < 1) { 
+                    header("refresh: 2; url= ../InicioSesion/cambiocontrasena.php");
+                } elseif ($row['preguntas_contestadas'] == 0) { 
+                    header("refresh: 2; url= ../Vistas/MantenimientoUsuario/Contestar_preguntas.php");
                 }
             } else {
 
