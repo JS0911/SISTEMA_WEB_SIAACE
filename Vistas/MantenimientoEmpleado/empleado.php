@@ -157,23 +157,23 @@ if (!isset($_SESSION['usuario'])) {
         text-decoration: none;
         margin: 0 10px;
     }
-    .icon-lg {
-            font-size: 24px;
-            /* Ajusta el tamaño según tus necesidades */
-            margin-right: 10px;
-            /* Ajusta el margen derecho según tus necesidades */
-            cursor: pointer;
-        }
 
-        .custom-large-icon {
-            font-size: 2.5em;
-            /* Ajusta e tamaño según tus necesidades */
-        }
+    .icon-lg {
+        font-size: 24px;
+        /* Ajusta el tamaño según tus necesidades */
+        margin-right: 10px;
+        /* Ajusta el margen derecho según tus necesidades */
+        cursor: pointer;
+    }
+
+    .custom-large-icon {
+        font-size: 2.5em;
+        /* Ajusta e tamaño según tus necesidades */
+    }
+
     .icono:hover {
         color: #4CAF50;
     }
-    
-
 </style>
 
 <!DOCTYPE html>
@@ -252,6 +252,7 @@ if (!isset($_SESSION['usuario'])) {
             margin-top: 1px;
 
         }
+
         /* Estilo para el switch general */
         .switch {
             position: relative;
@@ -289,6 +290,7 @@ if (!isset($_SESSION['usuario'])) {
             transition: .4s;
             border-radius: 50%;
         }
+
         /* Cambiar color del switch según estado */
         /* Activo: verde */
         .switch-activo+.slider {
@@ -300,7 +302,7 @@ if (!isset($_SESSION['usuario'])) {
             background-color: #f44336;
         }
 
-        
+
 
         input:focus+.slider {
             box-shadow: 0 0 1px #2196F3;
@@ -485,7 +487,7 @@ if (!isset($_SESSION['usuario'])) {
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <?php
                             if (!empty($permisos) && $permisos[0]['PERMISOS_INSERCION'] == 1) {
-                                
+
 
                                 echo '<i class="fas fa-plus-square text-success cursor-pointer icon-lg custom-large-icon" data-toggle="modal" data-target="#crearModal"title="Nuevo"></i>';
                             }
@@ -496,8 +498,8 @@ if (!isset($_SESSION['usuario'])) {
                         <table class="table table-bordered mx-auto" id="Lista-Empleados" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-                                <th >No.</th>
-                                    <th >ID Empleado</th>
+                                    <th>No.</th>
+                                    <th>ID Empleado</th>
                                     <th>DNI</th>
                                     <th>Nombre</th>
                                     <th>Apellidos</th>
@@ -545,133 +547,133 @@ if (!isset($_SESSION['usuario'])) {
                                         <div id="mensaje1"></div>
 
                                         <div class="row">
-                                       <div class="col-md-6">
-                                        <label for="Pnombre">Primer Nombre</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-Pnombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje2"></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                        <label for="Snombre">Segundo Nombre</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-Snombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje3"></div>
-                                        </div>
+                                            <div class="col-md-6">
+                                                <label for="Pnombre">Primer Nombre</label>
+                                                <input type="text" maxlength="15" class="form-control" id="agregar-Pnombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                                <div id="mensaje2"></div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="Snombre">Segundo Nombre</label>
+                                                <input type="text" maxlength="15" class="form-control" id="agregar-Snombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                                <div id="mensaje3"></div>
+                                            </div>
                                         </div>
                                         <div class="row">
-                                       <div class="col-md-6">
-                                        <label for="Papellido">Primer Apellido</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-Papellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje4"></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                        <label for="Sapellido">Segundo Apellido</label>
-                                        <input type="text" maxlength="15" class="form-control" id="agregar-Sapellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje5"></div>
-                                        </div>
+                                            <div class="col-md-6">
+                                                <label for="Papellido">Primer Apellido</label>
+                                                <input type="text" maxlength="15" class="form-control" id="agregar-Papellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                                <div id="mensaje4"></div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="Sapellido">Segundo Apellido</label>
+                                                <input type="text" maxlength="15" class="form-control" id="agregar-Sapellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                                <div id="mensaje5"></div>
+                                            </div>
                                         </div>
 
-                                      
+
                                         <label for="agregar-email">Email</label>
                                         <input type="email" maxlength="45" class="form-control" id="agregar-email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida">
                                         <div id="mensaje6"></div>
 
                                         <div class="row">
-                                       <div class="col-md-6">
-                                        <label for="salario">Salario</label>
-                                        <input type="text" class="form-control" id="agregar-salario" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
-                                        <div id="mensaje7"></div>
+                                            <div class="col-md-6">
+                                                <label for="salario">Salario</label>
+                                                <input type="text" class="form-control" id="agregar-salario" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
+                                                <div id="mensaje7"></div>
                                             </div>
-                                        <div class="col-md-6">
+                                            <div class="col-md-6">
 
-                                        <label for="telefono">Teléfono</label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-telefono" required pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -)">
-                                        <div id="mensaje9"></div>
-                                        </div>
-                                        </div>
-
-                                        <div class="row">
-                                       <div class="col-md-6">
-                                        <label for="direccion1">Dirección 1</label>
-                                        <textarea maxlength="45" class="form-control" id="agregar-direccion1" required pattern="^[A-Za-z0-9\s.,-]+$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()"></textarea>
-
-                                        <div id="mensaje10"></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                        <label for="direccion2">Dirección 2</label>
-                                        <textarea maxlength="45" class="form-control" id="agregar-direccion2" required pattern="^[A-Za-z0-9\s.,-]+$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()"></textarea>
-
-                                        <div id="mensaje11"></div>
-                                        </div>
+                                                <label for="telefono">Teléfono</label>
+                                                <input type="text" maxlength="45" class="form-control" id="agregar-telefono" required pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -)">
+                                                <div id="mensaje9"></div>
+                                            </div>
                                         </div>
 
                                         <div class="row">
-                                       <div class="col-md-6">
-                                        <?php
-                                        //---------CONEXION A LA TABLA SUCURSAL --------
-                                        // Crear una instancia de la clase Conectar
-                                        $conexion = new Conectar();
-                                        $conn = $conexion->Conexion();
+                                            <div class="col-md-6">
+                                                <label for="direccion1">Dirección 1</label>
+                                                <textarea maxlength="45" class="form-control" id="agregar-direccion1" required pattern="^[A-Za-z0-9\s.,-]+$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()"></textarea>
 
-                                        // Consultar la contraseña actual del usuario desde la base de datos
-                                        $sql = "SELECT id_sucursal ,sucursal FROM tbl_me_sucursal WHERE estado = 'ACTIVO'";
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
+                                                <div id="mensaje10"></div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="direccion2">Dirección 2</label>
+                                                <textarea maxlength="45" class="form-control" id="agregar-direccion2" required pattern="^[A-Za-z0-9\s.,-]+$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()"></textarea>
 
-                                        // Obtener los resultados en un array asociativo
-                                        $sucursales = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                                        ?>
-                                        <label for="sucursal">Sucursal</label>
-                                        <select class="form-control" id="agregar-sucursal" name="idSucursal" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <?php foreach ($sucursales as $sucursal) : ?>
-                                                <option value="<?php echo $sucursal['id_sucursal']; ?>"><?php echo $sucursal['sucursal']; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                        <?php
-                                        //---------CONEXION A LA TABLA CARGO --------
-                                        // Crear una instancia de la clase Conectar
-                                        $conexion = new Conectar();
-                                        $conn = $conexion->Conexion();
-
-                                        // Consultar la contraseña actual del usuario desde la base de datos
-                                        $sql = "SELECT id_cargo ,cargo FROM tbl_me_cargo WHERE estado = 'ACTIVO'";
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
-
-                                        // Obtener los resultados en un array asociativo
-                                        $cargo = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                        ?>
-                                        <label for="cargo">Cargo</label>
-                                        <select class="form-control" id="agregar-cargo" name="idCargo" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <?php foreach ($cargo as $cargo) : ?>
-                                                <option value="<?php echo $cargo['id_cargo']; ?>"><?php echo $cargo['cargo']; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                        </div>
+                                                <div id="mensaje11"></div>
+                                            </div>
                                         </div>
 
-                                        
                                         <div class="row">
-                                       <div class="col-md-6">
-                                        <label for="id-estado">Estado</label>
-                                        <select class="form-control" id="agregar-estado" name="IdEstado" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <?php foreach ($Estados as $Estado) : ?>
-                                                <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
+                                            <div class="col-md-6">
+                                                <?php
+                                                //---------CONEXION A LA TABLA SUCURSAL --------
+                                                // Crear una instancia de la clase Conectar
+                                                $conexion = new Conectar();
+                                                $conn = $conexion->Conexion();
+
+                                                // Consultar la contraseña actual del usuario desde la base de datos
+                                                $sql = "SELECT id_sucursal ,sucursal FROM tbl_me_sucursal WHERE estado = 'ACTIVO'";
+                                                $stmt = $conn->prepare($sql);
+                                                $stmt->execute();
+
+                                                // Obtener los resultados en un array asociativo
+                                                $sucursales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                                ?>
+                                                <label for="sucursal">Sucursal</label>
+                                                <select class="form-control" id="agregar-sucursal" name="idSucursal" required>
+                                                    <option value="" disabled selected>Selecciona una opción</option>
+                                                    <?php foreach ($sucursales as $sucursal) : ?>
+                                                        <option value="<?php echo $sucursal['id_sucursal']; ?>"><?php echo $sucursal['sucursal']; ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <?php
+                                                //---------CONEXION A LA TABLA CARGO --------
+                                                // Crear una instancia de la clase Conectar
+                                                $conexion = new Conectar();
+                                                $conn = $conexion->Conexion();
+
+                                                // Consultar la contraseña actual del usuario desde la base de datos
+                                                $sql = "SELECT id_cargo ,cargo FROM tbl_me_cargo WHERE estado = 'ACTIVO'";
+                                                $stmt = $conn->prepare($sql);
+                                                $stmt->execute();
+
+                                                // Obtener los resultados en un array asociativo
+                                                $cargo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                                ?>
+                                                <label for="cargo">Cargo</label>
+                                                <select class="form-control" id="agregar-cargo" name="idCargo" required>
+                                                    <option value="" disabled selected>Selecciona una opción</option>
+                                                    <?php foreach ($cargo as $cargo) : ?>
+                                                        <option value="<?php echo $cargo['id_cargo']; ?>"><?php echo $cargo['cargo']; ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
                                         </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="id-estado">Estado</label>
+                                                <select class="form-control" id="agregar-estado" name="IdEstado" required>
+                                                    <option value="" disabled selected>Selecciona una opción</option>
+                                                    <?php foreach ($Estados as $Estado) : ?>
+                                                        <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                                <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
                                 <button type="button" class="btn btn-danger" id="btn-agregarCancelar" data-dismiss="modal">Cancelar</button>
-                              
+
                             </div>
                         </div>
                     </div>
@@ -691,151 +693,151 @@ if (!isset($_SESSION['usuario'])) {
                                 <!-- Formulario de edición -->
                                 <form>
                                     <div class="form-group">
-                                    <div class="row">
-                                       <div class="col-md-6">
-                                          <label for="idEmpleado">Id Empleado</label>
-                                           <input type="text" class="form-control" id="editar-id-empleado" disabled>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="idEmpleado">Id Empleado</label>
+                                                <input type="text" class="form-control" id="editar-id-empleado" disabled>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="dni">DNI </label>
+                                                <input type="text" maxlength="45" class="form-control" id="editar-dni" required pattern="[0-9]+" title="Solo se permiten números">
+                                                <div id="mensaje12"></div>
+                                            </div>
                                         </div>
 
-                                       <div class="col-md-6">
-                                           <label for="dni">DNI </label>
-                                           <input type="text" maxlength="45" class="form-control" id="editar-dni" required pattern="[0-9]+" title="Solo se permiten números">
-                                           <div id="mensaje12"></div>
-                                        </div>
-                                     </div>
-                                     
-                                    <div class="row">
-                                       <div class="col-md-6">
-                                          <label for="Pnombre">Primer Nombre</label>
-                                           <input type="text" maxlength="15" class="form-control" id="editar-Pnombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                          <div id="mensaje13"></div>
-                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="Pnombre">Primer Nombre</label>
+                                                <input type="text" maxlength="15" class="form-control" id="editar-Pnombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                                <div id="mensaje13"></div>
+                                            </div>
 
-                                        <div class="col-md-6">
-                                            <label for="Snombre">Segundo Nombre</label>
-                                            <input type="text" maxlength="15" class="form-control" id="editar-Snombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                           <div id="mensaje14"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                       <div class="col-md-6">
-                                          <label for="Papellido">Primer Apellido</label>
-                                          <input type="text" maxlength="15" class="form-control" id="editar-Papellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-                                          <div id="mensaje15"></div>
+                                            <div class="col-md-6">
+                                                <label for="Snombre">Segundo Nombre</label>
+                                                <input type="text" maxlength="15" class="form-control" id="editar-Snombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                                <div id="mensaje14"></div>
+                                            </div>
                                         </div>
 
-                                        <div class="col-md-6">
-                                          <label for="Sapellido">Segundo Apellido</label>
-                                          <input type="text" maxlength="15" class="form-control" id="editar-Sapellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío"  oninput="this.value = this.value.toUpperCase()">
-                                          <div id="mensaje16"></div>
-                                          </div>
-                                    </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="Papellido">Primer Apellido</label>
+                                                <input type="text" maxlength="15" class="form-control" id="editar-Papellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                                <div id="mensaje15"></div>
+                                            </div>
 
-                                    
-                                          <label for="agregar-email">Email</label>
-                                          <input type="email" maxlength="45" class="form-control" id="editar-email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida">
-                                          <div id="mensaje17"></div>
-                                        
-
-                                    <div class="row">
-                                       <div class="col-md-6">
-                                          <label for="salario">Salario</label>
-                                          <input type="text" class="form-control" id="editar-salario" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (por ejemplo, 1000.00)">
-                                          <div id="mensaje18"></div>
+                                            <div class="col-md-6">
+                                                <label for="Sapellido">Segundo Apellido</label>
+                                                <input type="text" maxlength="15" class="form-control" id="editar-Sapellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                                <div id="mensaje16"></div>
+                                            </div>
                                         </div>
 
-                                        <div class="col-md-6">
-                                           <label for="telefono">Teléfono</label>
-                                           <input type="text" maxlength="45" class="form-control" id="editar-telefono" required pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -)">
-                                          <div id="mensaje20"></div>
-                                        </div>  
-                                    </div> 
 
-                                    <div class="row">
-                                       <div class="col-md-6">
-                                       <label for="direccion1">Dirección 1</label>
-                                       <textarea maxlength="45" class="form-control" id="editar-direccion1" required pattern="^[A-Za-z0-9\s.,-]*$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()"></textarea>
-                                          <div id="mensaje21"></div>
+                                        <label for="agregar-email">Email</label>
+                                        <input type="email" maxlength="45" class="form-control" id="editar-email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida">
+                                        <div id="mensaje17"></div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="salario">Salario</label>
+                                                <input type="text" class="form-control" id="editar-salario" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (por ejemplo, 1000.00)">
+                                                <div id="mensaje18"></div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="telefono">Teléfono</label>
+                                                <input type="text" maxlength="45" class="form-control" id="editar-telefono" required pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -)">
+                                                <div id="mensaje20"></div>
+                                            </div>
                                         </div>
 
-                                        <div class="col-md-6">
-                                           <label for="direccion2">Dirección 2</label>
-                                           <textarea maxlength="45" class="form-control" id="editar-direccion2" required pattern="^[A-Za-z0-9\s.,-]*$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()"></textarea>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="direccion1">Dirección 1</label>
+                                                <textarea maxlength="45" class="form-control" id="editar-direccion1" required pattern="^[A-Za-z0-9\s.,-]*$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()"></textarea>
+                                                <div id="mensaje21"></div>
+                                            </div>
 
-                                          <div id="mensaje22"></div>
-                                        </div>
-                                    </div>
+                                            <div class="col-md-6">
+                                                <label for="direccion2">Dirección 2</label>
+                                                <textarea maxlength="45" class="form-control" id="editar-direccion2" required pattern="^[A-Za-z0-9\s.,-]*$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()"></textarea>
 
-                                    <div class="row">
-                                       <div class="col-md-6">
-                                        <?php
-                                        //---------CONEXION A LA TABLA SUCURSAL --------
-                                        // Crear una instancia de la clase Conectar
-                                        $conexion = new Conectar();
-                                        $conn = $conexion->Conexion();
-
-                                        // Consultar la contraseña actual del usuario desde la base de datos
-                                        $sql = "SELECT id_sucursal ,sucursal FROM tbl_me_sucursal";
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
-
-                                        // Obtener los resultados en un array asociativo
-                                        $sucursales = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                                        ?>
-
-                                        <label for="sucursal">Sucursal</label>
-                                        <select class="form-control" id="editar-sucursal" name="idSucursal" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <?php foreach ($sucursales as $sucursal) : ?>
-                                                <option value="<?php echo $sucursal['id_sucursal']; ?>"><?php echo $sucursal['sucursal']; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
+                                                <div id="mensaje22"></div>
+                                            </div>
                                         </div>
 
-                                      <div class="col-md-6">
-                                        <?php
-                                        //---------CONEXION A LA TABLA CARGO --------
-                                        // Crear una instancia de la clase Conectar
-                                        $conexion = new Conectar();
-                                        $conn = $conexion->Conexion();
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <?php
+                                                //---------CONEXION A LA TABLA SUCURSAL --------
+                                                // Crear una instancia de la clase Conectar
+                                                $conexion = new Conectar();
+                                                $conn = $conexion->Conexion();
 
-                                        // Consultar la contraseña actual del usuario desde la base de datos
-                                        $sql = "SELECT id_cargo ,cargo FROM tbl_me_cargo ";
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
+                                                // Consultar la contraseña actual del usuario desde la base de datos
+                                                $sql = "SELECT id_sucursal ,sucursal FROM tbl_me_sucursal";
+                                                $stmt = $conn->prepare($sql);
+                                                $stmt->execute();
 
-                                        // Obtener los resultados en un array asociativo
-                                        $cargo = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                        ?>
-                                        <label for="cargo">Cargo</label>
-                                        <select class="form-control" id="editar-cargo" name="idCargo" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <?php foreach ($cargo as $cargo) : ?>
-                                                <option value="<?php echo $cargo['id_cargo']; ?>"><?php echo $cargo['cargo']; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
+                                                // Obtener los resultados en un array asociativo
+                                                $sucursales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                                ?>
+
+                                                <label for="sucursal">Sucursal</label>
+                                                <select class="form-control" id="editar-sucursal" name="idSucursal" required>
+                                                    <option value="" disabled selected>Selecciona una opción</option>
+                                                    <?php foreach ($sucursales as $sucursal) : ?>
+                                                        <option value="<?php echo $sucursal['id_sucursal']; ?>"><?php echo $sucursal['sucursal']; ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <?php
+                                                //---------CONEXION A LA TABLA CARGO --------
+                                                // Crear una instancia de la clase Conectar
+                                                $conexion = new Conectar();
+                                                $conn = $conexion->Conexion();
+
+                                                // Consultar la contraseña actual del usuario desde la base de datos
+                                                $sql = "SELECT id_cargo ,cargo FROM tbl_me_cargo ";
+                                                $stmt = $conn->prepare($sql);
+                                                $stmt->execute();
+
+                                                // Obtener los resultados en un array asociativo
+                                                $cargo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                                ?>
+                                                <label for="cargo">Cargo</label>
+                                                <select class="form-control" id="editar-cargo" name="idCargo" required>
+                                                    <option value="" disabled selected>Selecciona una opción</option>
+                                                    <?php foreach ($cargo as $cargo) : ?>
+                                                        <option value="<?php echo $cargo['id_cargo']; ?>"><?php echo $cargo['cargo']; ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                       <div class="col-md-6">
-                                        <label for="id-estado">Estado</label>
-                                        <select class="form-control" id="editar-estado" name="IdEstado" required>
-                                            <option value="" disabled selected>Selecciona una opción</option>
-                                            <?php foreach ($Estados as $Estado) : ?>
-                                                <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="id-estado">Estado</label>
+                                                <select class="form-control" id="editar-estado" name="IdEstado" required>
+                                                    <option value="" disabled selected>Selecciona una opción</option>
+                                                    <?php foreach ($Estados as $Estado) : ?>
+                                                        <option value="<?php echo $Estado['ID_ESTADO_USUARIO']; ?>"><?php echo $Estado['NOMBRE']; ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateEmpleado()" disabled>Guardar </button>
+                                <button type="button" class="btn btn-primary" id="btn-editar" onclick="updateEmpleado()" disabled>Guardar </button>
                                 <button type="button" class="btn btn-danger" id="btn-editarCancelar" data-dismiss="modal">Cancelar</button>
-                              
+
                             </div>
                         </div>
                     </div>
@@ -902,14 +904,14 @@ if (!isset($_SESSION['usuario'])) {
                             estadoBtn = '<label class="switch"><input type="checkbox" class="switch-inactivo"><span class="slider round"></span></label>';
                         } else {
                             estadoBtn = ''; // En caso de que el nombre del usuario no coincida con ninguno de los casos anteriores
-                        }  
+                        }
 
                         var nombreCompleto = empleado.PRIMER_NOMBRE + ' ' + empleado.SEGUNDO_NOMBRE;
                         var apellidoCompleto = empleado.PRIMER_APELLIDO + ' ' + empleado.SEGUNDO_APELLIDO;
 
-                       
+
                         var row = '<tr>' +
-                        '<td>' + contador++ + '</td>' +
+                            '<td>' + contador++ + '</td>' +
                             '<td >' + empleado.ID_EMPLEADO + '</td>' +
                             '<td>' + empleado.DNI + '</td>' +
                             '<td>' + nombreCompleto + '</td>' + // Concatenación de primer y segundo nombre
@@ -934,13 +936,13 @@ if (!isset($_SESSION['usuario'])) {
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<i class="fas fa-pencil-alt text-primary cursor-pointer icon-lg" data-toggle="modal" data-target="#editarModal" onclick="cargaEmpleado(' + empleado.ID_EMPLEADO + ')" title="Editar"></i>';
 
-                            
+
                         }
 
                         // Validar si PERMISOS_ELIMINACION es igual a 1 para mostrar el botón de eliminar
-                       // if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                           // row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="' + empleado.ID_EMPLEADO + '" onclick="eliminarEmpleado(' + empleado.ID_EMPLEADO + ')" title="Eliminar"></i>';
-                       // }
+                        // if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
+                        // row += '<i class="fas fa-trash-alt text-danger cursor-pointer icon-lg" data-id="' + empleado.ID_EMPLEADO + '" onclick="eliminarEmpleado(' + empleado.ID_EMPLEADO + ')" title="Eliminar"></i>';
+                        // }
 
                         // Validar si PERMISOS_INSERCION es igual a 1 para mostrar el botón de ingreso de préstamo
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
@@ -1068,7 +1070,8 @@ if (!isset($_SESSION['usuario'])) {
                         },
                     },
                     {
-                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',action: function() {
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+                        action: function() {
                             ocultarCampos();
                         }
                     }
@@ -1137,7 +1140,7 @@ if (!isset($_SESSION['usuario'])) {
                     };
 
                     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/empleados.php?op=InsertEmpleado', {
-                        method: 'POST',
+                            method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
@@ -1148,7 +1151,8 @@ if (!isset($_SESSION['usuario'])) {
                                 if (response.status === 200) {
                                     // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
                                     return response.json().then(function(data) {
-                                        console.log(data);
+                                        //console.log(data.ID_EMPLEADO);
+
                                         // Cerrar la modal después de guardar
                                         $('#crearModal').modal('hide');
                                         // Mostrar SweetAlert de éxito
@@ -1157,14 +1161,17 @@ if (!isset($_SESSION['usuario'])) {
                                             title: 'Guardado exitoso',
                                             text: data.message
                                         }).then(function() {
+                                             // Llamar a la función cuentaAutomatica con el ID_EMPLEADO creado
+                                            cuentaAutomatica(data.ID_EMPLEADO);
                                             // Recargar la página para mostrar los nuevos datos
                                             location.reload();
                                         });
+                                       
                                     });
                                 } else if (response.status === 409) {
                                     // Si el código de respuesta es 409 (Conflict), muestra mensaje de region existente
                                     return response.json().then(function(data) {
-                                        console.log(data);
+                                        //  console.log(data);
                                         // Mostrar SweetAlert de error
                                         Swal.fire({
                                             icon: 'error',
@@ -1176,7 +1183,7 @@ if (!isset($_SESSION['usuario'])) {
                             } else {
                                 // Si hubo un error en la solicitud, maneja el error aquí
                                 throw new Error('El registro ya existe en la Base de Datos.');
-                                
+
                             }
                         })
                         .catch(function(error) {
@@ -1190,6 +1197,36 @@ if (!isset($_SESSION['usuario'])) {
                         });
                 }
             });
+        }
+
+
+
+        function cuentaAutomatica(id) {
+            console.log("entra cuenta Aumtomatica", id)
+            var datos = {
+                ID_EMPLEADO: id
+            };
+
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=insert_cuentaAutomatica', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                })
+                .then(function(response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Error en la solicitud.');
+                    }
+                })
+                .then(function(data) {
+                    mostrarMensajeExito(data.message);
+                })
+                .catch(function(error) {
+                    mostrarError('Error al guardar los datos: ' + error.message);
+                });
         }
 
 
@@ -1544,20 +1581,20 @@ if (!isset($_SESSION['usuario'])) {
         const estadoInput = document.getElementById("agregar-estado");
         const guardarButton = document.getElementById('btn-agregar');
 
-                 // Expresiones regulares para validar campos
-const expresionValidadoraDNI = /^[0-9]+$/; // solo números
-const expresionValidadoraS = /^\d+(\.\d{2})?$/; // decimales
-const expresionValidadoraCorreo = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // correo electrónico
-const expresionValidadoraT = /^[0-9-]+$/;///telefono
+        // Expresiones regulares para validar campos
+        const expresionValidadoraDNI = /^[0-9]+$/; // solo números
+        const expresionValidadoraS = /^\d+(\.\d{2})?$/; // decimales
+        const expresionValidadoraCorreo = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // correo electrónico
+        const expresionValidadoraT = /^[0-9-]+$/; ///telefono
 
-// Función para verificar si los campos contienen caracteres no válidos
-function contieneCaracteresNoValidos() {
-    return !expresionValidadoraDNI.test(dniInput.value.trim()) ||
-    !expresionValidadoraT.test(telefonoInput.value.trim()) ||
-        !expresionValidadoraS.test(salarioInput.value.trim()) ||
-        !expresionValidadoraCorreo.test(emailInput.value.trim());
-}
-                
+        // Función para verificar si los campos contienen caracteres no válidos
+        function contieneCaracteresNoValidos() {
+            return !expresionValidadoraDNI.test(dniInput.value.trim()) ||
+                !expresionValidadoraT.test(telefonoInput.value.trim()) ||
+                !expresionValidadoraS.test(salarioInput.value.trim()) ||
+                !expresionValidadoraCorreo.test(emailInput.value.trim());
+        }
+
 
 
 
@@ -1569,7 +1606,7 @@ function contieneCaracteresNoValidos() {
                 salarioInput.value.trim() !== '' && telefonoInput.value.trim() !== '' && direccion1Input.value.trim() !== '' &&
                 direccion2Input.value.trim() !== '' && sucursalInput.value.trim() !== '' && cargoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
 
-                guardarButton.disabled = !isFormValid || !isNombreValido;
+            guardarButton.disabled = !isFormValid || !isNombreValido;
         }
 
         // Agrega un evento input a cada campo de entrada
@@ -1588,7 +1625,7 @@ function contieneCaracteresNoValidos() {
         estadoInput.addEventListener('input', checkForm);
     </script>
 
-<script>
+    <script>
         // Obtén los campos de entrada y el botón "Guardar para Editar"
         const dniInput1 = document.getElementById("editar-dni");
         const PnombreInput1 = document.getElementById("editar-Pnombre");
@@ -1607,43 +1644,43 @@ function contieneCaracteresNoValidos() {
 
 
         const expresionValidadoraDNI1 = /^[0-9]+$/; // solo números
-                 const expresionValidadoraS1= /^\d+(\.\d{2})?$/; // decimales
-                 const expresionValidadoraCorreo1 = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // correo                  electrónico
-                 const expresionValidadoraT1 = /^[0-9-]+$/;
+        const expresionValidadoraS1 = /^\d+(\.\d{2})?$/; // decimales
+        const expresionValidadoraCorreo1 = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // correo                  electrónico
+        const expresionValidadoraT1 = /^[0-9-]+$/;
 
-             // Función para verificar si los campos contienen caracteres no válidos
-             function contieneCaracteresNoValidos1() {
-                 return !expresionValidadoraDNI1.test(dniInput1.value.trim()) ||
-                     !expresionValidadoraT1.test(telefonoInput1.value.trim()) ||
-                     !expresionValidadoraS1.test(salarioInput1.value.trim()) ||
-                     !expresionValidadoraCorreo1.test(emailInput1.value.trim());
-             }
+        // Función para verificar si los campos contienen caracteres no válidos
+        function contieneCaracteresNoValidos1() {
+            return !expresionValidadoraDNI1.test(dniInput1.value.trim()) ||
+                !expresionValidadoraT1.test(telefonoInput1.value.trim()) ||
+                !expresionValidadoraS1.test(salarioInput1.value.trim()) ||
+                !expresionValidadoraCorreo1.test(emailInput1.value.trim());
+        }
 
-             // Función para verificar si todos los campos están llenos
-             function checkForm() {
-                 const isNombreValido1 = !contieneCaracteresNoValidos1();
-                 const isFormValid = dniInput1.value.trim() !== '' && PnombreInput1.value.trim() !== '' &&              SnombreInput1.value.trim() !== '' &&
-                     PapellidoInput1.value.trim() !== '' && SapellidoInput1.value.trim() !== '' && emailInput1.             value.trim() !== '' &&
-                     salarioInput1.value.trim() !== '' && telefonoInput1.value.trim() !== '' && direccion1Input1.             value.trim() !== '' &&
-                     direccion2Input1.value.trim() !== '' && sucursalInput1.value.trim() !== '' && cargoInput1.             value.trim() !== '' && estadoInput1.value.trim() !== '';
-             
-                 guardarButton1.disabled = !isFormValid || !isNombreValido1;
-             }
+        // Función para verificar si todos los campos están llenos
+        function checkForm() {
+            const isNombreValido1 = !contieneCaracteresNoValidos1();
+            const isFormValid = dniInput1.value.trim() !== '' && PnombreInput1.value.trim() !== '' && SnombreInput1.value.trim() !== '' &&
+                PapellidoInput1.value.trim() !== '' && SapellidoInput1.value.trim() !== '' && emailInput1.value.trim() !== '' &&
+                salarioInput1.value.trim() !== '' && telefonoInput1.value.trim() !== '' && direccion1Input1.value.trim() !== '' &&
+                direccion2Input1.value.trim() !== '' && sucursalInput1.value.trim() !== '' && cargoInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
 
-             // Agrega un evento input a cada campo de entrada
-             dniInput1.addEventListener('input', checkForm);
-             PnombreInput1.addEventListener('input', checkForm);
-             SnombreInput1.addEventListener('input', checkForm);
-             PapellidoInput1.addEventListener('input', checkForm);
-             SapellidoInput1.addEventListener('input', checkForm);
-             emailInput1.addEventListener('input', checkForm);
-             salarioInput1.addEventListener('input', checkForm);
-             telefonoInput1.addEventListener('input', checkForm);
-             direccion1Input1.addEventListener('input', checkForm);
-             direccion2Input1.addEventListener('input', checkForm);
-             sucursalInput1.addEventListener('input', checkForm);
-             cargoInput1.addEventListener('input', checkForm);
-             estadoInput1.addEventListener('input', checkForm);
+            guardarButton1.disabled = !isFormValid || !isNombreValido1;
+        }
+
+        // Agrega un evento input a cada campo de entrada
+        dniInput1.addEventListener('input', checkForm);
+        PnombreInput1.addEventListener('input', checkForm);
+        SnombreInput1.addEventListener('input', checkForm);
+        PapellidoInput1.addEventListener('input', checkForm);
+        SapellidoInput1.addEventListener('input', checkForm);
+        emailInput1.addEventListener('input', checkForm);
+        salarioInput1.addEventListener('input', checkForm);
+        telefonoInput1.addEventListener('input', checkForm);
+        direccion1Input1.addEventListener('input', checkForm);
+        direccion2Input1.addEventListener('input', checkForm);
+        sucursalInput1.addEventListener('input', checkForm);
+        cargoInput1.addEventListener('input', checkForm);
+        estadoInput1.addEventListener('input', checkForm);
     </script>
 
     <script>

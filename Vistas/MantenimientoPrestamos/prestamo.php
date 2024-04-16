@@ -704,12 +704,13 @@ if (!isset($_SESSION['usuario'])) {
                 .then(response => response.json())
                 .then(data => {
                     console.log("estado:", data);
-                    if (data === 'PENDIENTE' || data === 'APROBADO') {
-                        if (data === 'APROBADO') {
+                    if (data === 'PENDIENTE' || data === 'APROBADO') {  
+                        //NO ESTA LEYENDO EL ESTADO FINALIZADO O EN CURSO 
+                        if ((data === APROBADO) || (data === FINALIZADO) || (data=== ENCURSO)) {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: 'No se puede anular un préstamo ya aprobado.'
+                                text: 'No se puede anular, Préstamo ya ha sido aprobado.'
                             });
                         } else {
                             // Realiza una solicitud FETCH al servidor para anular el préstamo

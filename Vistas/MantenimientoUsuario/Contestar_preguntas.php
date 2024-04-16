@@ -16,14 +16,14 @@ $sql2 = "SELECT VALOR FROM tbl_ms_parametros WHERE ID_PARAMETRO = 3";
 $stmt2 = $conn->prepare($sql2);
 $stmt2->execute();
 $valorParametro=$stmt2->fetchColumn();;
-echo $valorParametro;
+//echo $valorParametro;
 
 //TRAIGO EL VALOR DE PREGUNTAS CONTESTADAS
 $sql3 = "SELECT PREGUNTAS_CONTESTADAS FROM tbl_ms_usuario WHERE ID_USUARIO = $id_usuario";
 $stmt3 = $conn->prepare($sql3);
 $stmt3->execute();
 $PregunContes = $stmt3->fetchColumn();
-echo $PregunContes;
+//echo $PregunContes;
 
 
 ?>

@@ -85,6 +85,19 @@ switch ($_GET["op"]) {
         echo json_encode($datos);
     break;
 
+    case "insert_cuentaAutomatica":
+        $ID_EMPLEADO = $body["ID_EMPLEADO"];
+        if (verificarExistenciaCuenta($NUMERO_CUENTA) > 0) {
+            Http_response_code(409);
+            echo json_encode(["error" => "La cuenta ya existe en la base de datos."]);
+        } else {
+            $date = new DateTime(date("Y-m-d H:i:s"));
+            $dateMod = $date->modify("-7 hours");
+            $dateNew = $dateMod->format("Y-m-d H:i:s");
+            $datos = $com->insert_cuentaAutomatica($ID_EMPLEADO, $_SESSION['usuario'], $dateNew);
+            echo json_encode(["message" => "Cuenta insertada Exitosamente."]);
+            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO LA CUENTA: $NUMERO_CUENTA", $_SESSION['id_usuario'], 28, $_SESSION['usuario'], $dateNew);
+        }
 }
 
 

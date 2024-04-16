@@ -72,6 +72,58 @@ class cuenta extends Conectar
         }
     }
 
+    //INSERTA CUENTA AUTOMATICA
+//INSERTA CUENTA
+public function insert_cuentaAutomatica($ID_EMPLEADO, $CREADO_POR, $FECHA_CREACION)
+{
+    $saldo = 0;
+    $estado = "ACTIVO";
+    $tipoCuenta = 1;
+    
+    // Genera un número de cuenta único
+    $numeroCuenta = $this->generarNumeroCuentaUnico($ID_EMPLEADO);
+
+    try {
+        $conectar = parent::conexion();
+        parent::set_names();
+        
+        // Utiliza el número de cuenta generado en la consulta SQL
+        $sql = "INSERT INTO `siaace`.`tbl_mc_cuenta` (`ID_EMPLEADO`, `ID_TIPOCUENTA`, `SALDO`, `NUMERO_CUENTA`, `ESTADO`, `CREADO_POR`, `FECHA_CREACION`) VALUES (:ID_EMPLEADO, :ID_TIPOCUENTA, :SALDO, :NUMERO_CUENTA, :ESTADO, :CREADO_POR, :FECHA_CREACION)";
+
+        $stmt = $conectar->prepare($sql);
+
+        $stmt->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
+        $stmt->bindParam(':ID_TIPOCUENTA', $tipoCuenta, PDO::PARAM_INT);
+        $stmt->bindParam(':SALDO', $saldo, PDO::PARAM_INT);
+        $stmt->bindParam(':NUMERO_CUENTA', $numeroCuenta, PDO::PARAM_INT);
+        $stmt->bindParam(':ESTADO', $estado, PDO::PARAM_STR);
+        $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+        $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            return "Cuenta Insertada";
+        } else {
+            return "Error al insertar la cuenta";
+        }
+    } catch (PDOException $e) {
+        return "Error al insertar el usuario: " . $e->getMessage();
+    }
+}
+
+private function generarNumeroCuentaUnico($idEmpleado) {
+    // Obtiene la fecha actual en formato Unix timestamp
+    $timestamp = time();
+
+    // Genera un número de cuenta concatenando la fecha actual y el ID del empleado
+    // Asegura que el número de cuenta tenga 8 dígitos truncando los caracteres sobrantes
+    $numeroCuenta = substr($timestamp, -5) . substr($idEmpleado, -3);
+
+    return $numeroCuenta;
+}
+
+
+
     //EDITA CUENTA
     public function update_cuenta($ID_CUENTA, $ESTADO)
     {
