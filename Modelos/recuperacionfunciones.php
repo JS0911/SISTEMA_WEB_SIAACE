@@ -4,8 +4,8 @@ $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
 if ($conn) {
-	//$usuario = $_GET['Usuario'];
-	$usuario = "PANQUEQUE";
+	$usuario = $_POST['Usuario'];
+	//$usuario = "PANQUEQUE";
 	$sql = "SELECT ID_USUARIO FROM tbl_ms_usuario WHERE USUARIO = '$usuario'";
 	$stmt = $conn->query($sql);
 

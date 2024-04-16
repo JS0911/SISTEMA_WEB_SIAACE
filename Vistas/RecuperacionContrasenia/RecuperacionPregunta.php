@@ -37,11 +37,14 @@ require("../../Controladores/RecuperacionContrasenia/RecuperacionPregunta.php");
                                         <form id="formRecetPass" action= "../../Controladores/RecuperacionContrasenia/RecuperacionPregunta.php" name="formRecetPass" method="POST">
                                             <div class="form-group"><label class="small mb-1" for="inputUsuario">Usuario</label>
                                             <input class="form-control py-4" id="inputUsuarios" name="inputUsuarios" aria-describedby="emailHelp" type="text" maxlength="15" placeholder="Ingresa tu usuario:" 
-                                            required title="No se permiten espacios en blanco o campos vacios." oninput="this.value = this.value.toUpperCase()" /></div>
+                                            required title="No se permiten espacios en blanco o campos vacios." oninput="this.value = this.value.toUpperCase()" />
+                                            <input class="form-control py-4" id="inputUsuarios2" name="inputUsuarios2" style="display: none;"/>
+                                            </div>
                                             <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
                                                 <button class="btn btn-primary" disabled onclick="verificarFormulario()" id="verPreguntas" name="verPreguntas" type="button" >Ver Preguntas</button>
                                                 
                                             </div>
+                                            
                                             <div id="preguntasid" style="display: none; ">
                                                 <div class="form-group"><label class="small mb-1" for="pregunta">Preguntas de Seguridad</label>
                                                 <select id="cmbPreguntas"  name="cmbPreguntas" class="form-select form-control form-control" style="width:400px">
@@ -92,7 +95,8 @@ require("../../Controladores/RecuperacionContrasenia/RecuperacionPregunta.php");
         <script src="js/scripts.js"></script>
         <script>
             document.getElementById("verPreguntas").addEventListener("click", function() {
-                document.getElementById("inputUsuarios").disabled = false;
+                document.getElementById("inputUsuarios").disabled = true;
+                document.getElementById("inputUsuarios2").disabled = false;
                 this.style.display = "none";
                 document.getElementById("preguntasid").style.display = "block";
                 document.getElementById("editarnombre").style.display = "block";
@@ -110,7 +114,12 @@ require("../../Controladores/RecuperacionContrasenia/RecuperacionPregunta.php");
                 } else {
                     document.getElementById("verPreguntas").disabled = true;
                 }
-            });    
+            });  
+                const inputOriginal = document.getElementById('inputUsuarios');
+                const inputCopia = document.getElementById('inputUsuarios2');
+                inputOriginal.addEventListener('input', function() {
+                    inputCopia.value = inputOriginal.value;
+                });
         </script>
         <script>
             function verificarFormulario() {

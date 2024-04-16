@@ -41,7 +41,7 @@ require '../../PHPMailer/SMTP.php';
 						$mail->Host       = 'smtp-mail.outlook.com';                     //Set the SMTP server to send through
 						$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
 						$mail->Username   = 'SIAACEpruebaIDH@outlook.com';                     //SMTP username
-						$mail->Password   = 'SistemaIDH2023';           //Enable implicit TLS encryption
+						$mail->Password   = 'SistemaIDH2024';           //Enable implicit TLS encryption
 						$mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 					
 						//Recipients

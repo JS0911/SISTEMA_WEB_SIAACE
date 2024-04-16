@@ -35,7 +35,8 @@
                                         <form id="formRecetPass" action= "../../Controladores/RecuperacionContrasenia/CambioContrasenia.php" name="formRecetPass" method="POST">
                                         <label class="small mb-1" for="inputPassword">Contraseña</label>
                                         <div class="input-group">
-                                            <input class="form-control py-4" name="inputPassword" id="inputPassword" type="password" aria-describedby="emailHelp" placeholder="Ingrese su contraseña:" required />
+                                            <input class="form-control py-4" name="inputPassword" id="inputPassword" type="password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':\\\|,.<>\/?]).+$" title="El texto debe contener al menos una mayúscula, una minúscula y un caracter especial"
+                                            aria-describedby="emailHelp" placeholder="Ingrese su contraseña:" required />
                                             <div class="input-group-append">
                                                 <button type="button" id="showPasswordBtn" class="btn btn-outline-secondary" onclick="togglePasswordVisibility()">
                                                     <i id="eyeIcon" class="fas fa-eye"></i>
@@ -44,7 +45,8 @@
                                         </div>
                                         <label class="small mb-1" for="inputConfirm">Confirmar Contraseña</label>
                                         <div class="input-group">
-                                            <input class="form-control py-4" name="inputConfirm" id="inputConfirm" type="password" aria-describedby="emailHelp" placeholder="Confirmar Contraseña:" required/>
+                                            <input class="form-control py-4" name="inputConfirm" id="inputConfirm" type="password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':\\\|,.<>\/?]).+$"
+                                            aria-describedby="emailHelp" placeholder="Confirmar Contraseña:" required/>
                                             <div class="input-group-append">
                                                 <button type="button" id="showConfirmPasswordBtn" class="btn btn-outline-secondary" onclick="toggleConfirmPasswordVisibility()">
                                                     <i id="confirmEyeIcon" class="fas fa-eye"></i>

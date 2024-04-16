@@ -10,19 +10,19 @@ $conn = $conexion->Conexion();
 
 if (!empty($_POST)) { //verificar si se recibio el metodo post
     $email = $_POST['inputEmail'];
-    $usuario = $_POST['inputUsuario'];
 
     if ($conn) {// Verificar si la conexión se estableció correctamente
         // Verificar si el correo electrónico y usuario existen en la base de datos
-        $sql = "SELECT * FROM tbl_ms_usuario WHERE CORREO_ELECTRONICO = '$email' and USUARIO = '$usuario'";
+        $sql = "SELECT * FROM tbl_ms_usuario WHERE CORREO_ELECTRONICO = '$email'";
         $stmt = $conn->query($sql);
         $num = $stmt->rowCount();
+        $use1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($num > 0) {
             $token = new recuperar();
 
             //cosulta de id_usuario
-            $sql = "SELECT ID_USUARIO FROM tbl_ms_usuario WHERE CORREO_ELECTRONICO = '$email' and USUARIO = '$usuario'";
+            $sql = "SELECT ID_USUARIO FROM tbl_ms_usuario WHERE CORREO_ELECTRONICO = '$email'";
         	$idusuario = $conn->query($sql);
 
             //genera token y guarda en la base de datos
@@ -34,6 +34,7 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
 
             $row = $idusuario->fetch(PDO::FETCH_ASSOC);
             $id_usuario = $row['ID_USUARIO'];
+            $usuario = $use1['USUARIO'];
 
             //guardar datos en sesión
             $_SESSION['token'] = $tokeng;

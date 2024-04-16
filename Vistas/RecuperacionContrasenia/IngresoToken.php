@@ -32,15 +32,19 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Recuperación por Correo</h3><img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"></div>
+                                    <div class="card-header"><img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"></div>
                                     <div class="card-body">
                                         <div class="small mb-3 text-muted">Ingrese el token que se le ha enviado a su correo: </div>
                                         <form id="formchektoken" action= "../../Controladores/RecuperacionContrasenia/IngresoToken.php" name="formchektoken" method="POST">
-                                            <div class="form-group"><label class="small mb-1" for="inputToken">Token</label>
-                                            <input class="form-control py-4" name="inputToken" id="inputToken" type= "password" aria-describedby="emailHelp" placeholder="Ingrese el Token" required/></div>
-                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="small" href="../../InicioSesion/login.php">Regresar al Inicio de Sesión</a>
-                                            <a class="small" href="SeleccionarMetodo.php">Probar otro metodo</a></div>
+                                        <label class="small mb-1" for="inputToken">Token</label>    
+                                        <div class="input-group">
+                                                <input class="form-control py-4" name="inputToken" id="inputToken" type= "password" aria-describedby="emailHelp" placeholder="Ingrese el Token" required/>
+                                                <div class="input-group-append">
+                                                <button type="button" id="showPasswordBtn" class="btn btn-outline-secondary" onclick="togglePasswordVisibility()">
+                                                    <i id="eyeIcon" class="fas fa-eye"></i>
+                                                </button>
+                                                </div>
+                                            </div>
                                             <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
                                             <button class="btn btn-primary" type="submit">Verificar</button>
                                             </div>
@@ -68,5 +72,20 @@
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
+        <script>
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById("inputToken");
+            var eyeIcon = document.getElementById("eyeIcon");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            }
+        }
+        </script>
     </body>
 </html>

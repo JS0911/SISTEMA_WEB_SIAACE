@@ -14,7 +14,7 @@ $sql = "SELECT ID_PREGUNTA, PREGUNTA FROM tbl_ms_preguntas";
 $preguntas = $conn->query($sql);
 
 if (!empty($_POST)) { //verificar si se recibio el metodo post
-    $usuario = $_POST['inputUsuarios'];
+    $usuario = $_POST['inputUsuarios2'];
     $pregunta = $_POST['cmbPreguntas'];
     $respuesta = $_POST['inputRespuesta'];
 
@@ -49,19 +49,13 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
                 </script>";
                 exit;
             }else{
-                echo $usuario;
-            echo $id_usuario;
-            echo $pregunta;
-            echo $id_pregunta;
-            echo $respuesta;
-            echo $respuesta2;
-                /*echo "<script type='text/javascript'>
+                echo "<script type='text/javascript'>
                 alert('¡El Usuario, Pregunta o Respuesta no son correctos.!');
                 setTimeout(function() {
                 window.location.href = '../../Vistas/RecuperacionContrasenia/RecuperacionPregunta.php';
                 }, 0);
                 </script>";
-                exit;*/
+                exit;
             }   
         } else {
             
