@@ -41,7 +41,7 @@ Sahori Garcia             09/02/2024                   Modificaciones en permiso
 Khaterine Ordoñez         09/03/2024                   Modificacion de validaciones
 Ashley Matamoros          10/03/2024                   Modificacion de validaciones
 khaterine Ordoñez         06/04/2024                   Modificacion de validaciones tamano de campos, agregar en la sentencia de roles solo llamar los roles activos. cambio de pocision de los botones. quitar interaccion al switch
-
+khaterine Ordoñez         16/04/2024                   Modificacion de validaciones, se agrego campo de editar cobtrase;a 
 ------------------------------------------------------------------------->
 
 <?php
@@ -588,7 +588,7 @@ if (!isset($_SESSION['usuario'])) {
 
                                 <label for="estado">Contraseña</label>
                                 <div class="input-group">
-                                <input type="password" maxlength="9" class="form-control" id="agregar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
+                                <input type="password" maxlength="8" class="form-control" id="agregar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
                                <div class="input-group-append">
                                  <button onclick="ver_contrasena_nueva()" class="btn btn-primary" type="button">
                              <i class="fa fa-eye" aria-hidden="true"></i>
@@ -599,7 +599,7 @@ if (!isset($_SESSION['usuario'])) {
 
                               <label for="estado">Confirmar Contraseña</label>
                              <div class="input-group">
-                              <input type="password" maxlength="9" class="form-control" id="confirmar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
+                              <input type="password" maxlength="8" class="form-control" id="confirmar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
                                 <div class="input-group-append">
                                   <button onclick="ver_contrasena_confirmar()" class="btn btn-primary" type="button">
                                       <i class="fa fa-eye" aria-hidden="true"></i>
@@ -646,11 +646,11 @@ if (!isset($_SESSION['usuario'])) {
                                         <label for="nombre">Id Usuario</label>
                                         <input type="text" class="form-control" id="editar-id-usuario" disabled>
                                         <label for="nombre">Usuario</label>
-
                                         <input type="text" maxlength="15" class="form-control" id="editar-usuario" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
-
+  <div id="mensaje6"></div>
                                         <label for="nombre">Nombre</label>
                                         <input type="text" maxlength="50" class="form-control" id="editar-nombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje7"></div>
 
                                         <label for="estado">Estado</label>
                                         <select class="form-control" id="editar-estado" name="IdEstado" required>
@@ -663,7 +663,7 @@ if (!isset($_SESSION['usuario'])) {
 
                                         <label for="estado">Correo Electronico</label>
                                         <input type="text" maxlength="50" class="form-control" id="editar-correo" required pattern="/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/" title="Ingrese una dirección de correo electrónico válida" />
-                                        <div id="mensaje6"></div>
+                                        <div id="mensaje8"></div>
                                         <?php
                                         //---------TRAER ROLES Y ESTADOS --------
                                         // Crear una instancia de la clase Conectar
@@ -684,6 +684,28 @@ if (!isset($_SESSION['usuario'])) {
                                                 <option value="<?php echo $rol['id_rol']; ?>"><?php echo $rol['rol']; ?></option>
                                             <?php endforeach; ?>
                                         </select>
+
+                                        <label for="estado">Nueva Contraseña</label>
+                                <div class="input-group">
+                                <input type="password" maxlength="8" class="form-control" id="editar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
+                               <div class="input-group-append">
+                                 <button onclick="ver_contrasena_nueva()" class="btn btn-primary" type="button">
+                             <i class="fa fa-eye" aria-hidden="true"></i>
+                            </button>
+                             </div>
+                             </div>
+                             <div id="mensaje9"></div>
+
+                              <label for="estado">Confirmar Contraseña</label>
+                             <div class="input-group">
+                              <input type="password" maxlength="8" class="form-control" id="editarConfirmar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
+                                <div class="input-group-append">
+                                  <button onclick="ver_contrasena_confirmar()" class="btn btn-primary" type="button">
+                                      <i class="fa fa-eye" aria-hidden="true"></i>
+                                   </button>
+                                    </div>
+                                    </div>
+                                    <div id="mensaje10"></div>
                                     </div>
                                 </form>
                             </div>
@@ -1057,22 +1079,43 @@ if (!isset($_SESSION['usuario'])) {
         }
 
         function ver_contrasena_nueva() {
-    var tipo = document.getElementById("agregar-contrasena");
-    if (tipo.type === "password") {
-        tipo.type = "text";
+    var contrasena = document.getElementById("agregar-contrasena");
+    var editarContrasena = document.getElementById("editar-contrasena");
+   
+    // Cambiar el tipo de entrada de texto a contraseña y viceversa
+    if (contrasena.type === "password") {
+        contrasena.type = "text";
     } else {
-        tipo.type = "password";
+        contrasena.type = "password";
+    }
+    
+    // También cambiamos el tipo de confirmar-contrasena si es necesario
+    if (editarContrasena.type === "password") {
+        editarContrasena.type = "text";
+    } else {
+        editarContrasena.type = "password";
     }
 }
 
 function ver_contrasena_confirmar() {
-    var tipo = document.getElementById("confirmar-contrasena");
-    if (tipo.type === "password") {
-        tipo.type = "text";
+    var contrasena = document.getElementById("confirmar-contrasena");
+    var editarContrasena = document.getElementById("editarConfirmar-contrasena");
+
+    // Cambiar el tipo de entrada de texto a contraseña y viceversa
+    if (contrasena.type === "password") {
+        contrasena.type = "text";
     } else {
-        tipo.type = "password";
+        contrasena.type = "password";
+    }
+
+    // También cambiamos el tipo de editarConfirmar-contrasena si es necesario
+    if (editarContrasena.type === "password") {
+        editarContrasena.type = "text";
+    } else {
+        editarContrasena.type = "password";
     }
 }
+
 
 
 
@@ -1114,63 +1157,76 @@ function ver_contrasena_confirmar() {
         }
 
         function updateUsuario() {
-            // Obtén el ID del usuario 
-            var idUsuario = document.getElementById('editar-id-usuario').value;
-            // Obtén los valores de los campos de edición
-            var usuario = document.getElementById('editar-usuario').value;
-            var nombre = document.getElementById('editar-nombre').value;
-            var estado = document.getElementById('editar-estado').value;
-            var correo = document.getElementById('editar-correo').value;
-            var rol = document.getElementById('editar-rol').value;
+    // Obtener los valores de los campos de edición
+    var idUsuario = document.getElementById('editar-id-usuario').value;
+    var usuario = document.getElementById('editar-usuario').value;
+    var nombre = document.getElementById('editar-nombre').value;
+    var estado = document.getElementById('editar-estado').value;
+    var correo = document.getElementById('editar-correo').value;
+    var rol = document.getElementById('editar-rol').value;
+    var contrasena = document.getElementById('editar-contrasena').value; // Obtener el valor de la contraseña
+    var confirmarContrasena = document.getElementById('editarConfirmar-contrasena').value; // Obtener el valor de la confirmación de la contraseña
 
-            // Realiza una solicitud FETCH para actualizar los datos del usuario
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=updateUsuario', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "ID_USUARIO": idUsuario,
-                        "USUARIO": usuario,
-                        "NOMBRE_USUARIO": nombre,
-                        "ID_ESTADO_USUARIO": estado,
-                        "CORREO_ELECTRONICO": correo,
-                        "ID_ROL": rol,
+    // Verificar que las contraseñas coincidan y no estén vacías
+    if (contrasena.trim() !== confirmarContrasena.trim()) {
+        // Mostrar mensaje de error si las contraseñas no coinciden
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Las contraseñas no coinciden.'
+        });
+        return;
+    }
 
-                    }) // Convierte los datos en formato JSON
-                })
-                .then(function(response) {
-                    if (response.ok) {
-                        // Cerrar la modal después de guardar
-                        $('#editarModal').modal('hide');
+    // Realizar una solicitud FETCH para actualizar los datos del usuario
+    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=updateUsuario', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "ID_USUARIO": idUsuario,
+            "USUARIO": usuario,
+            "NOMBRE_USUARIO": nombre,
+            "ID_ESTADO_USUARIO": estado,
+            "CORREO_ELECTRONICO": correo,
+            "ID_ROL": rol,
+            "CONTRASENA": contrasena // Agregar la contraseña al cuerpo de la solicitud
+        }) // Convertir los datos en formato JSON
+    })
+    .then(function(response) {
+        if (response.ok) {
+            // Cerrar la modal después de guardar
+            $('#editarModal').modal('hide');
 
-                        // Mostrar SweetAlert de éxito
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Actualización exitosa',
-                            text: 'Los datos se han actualizado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
-                        });
+            // Mostrar SweetAlert de éxito
+            Swal.fire({
+                icon: 'success',
+                title: 'Actualización exitosa',
+                text: 'Los datos se han actualizado correctamente.'
+            }).then(function() {
+                // Recargar la página para mostrar los nuevos datos
+                location.reload();
+            });
 
-                    } else {
-                        throw new Error('El registro ya existe en la Base de Datos');
-                    }
-                })
-                .catch(function(error) {
-                    // Manejar el error aquí
-                    console.log(error.message);
-
-                    // Mostrar SweetAlert de error
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error al actualizar los datos del usuario: ' + error.message
-                    });
-                });
+        } else {
+            throw new Error('El registro ya existe en la Base de Datos');
         }
+    })
+    .catch(function(error) {
+        // Manejar el error aquí
+        console.log(error.message);
+
+        // Mostrar SweetAlert de error
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al actualizar los datos del usuario: ' + error.message
+        });
+    });
+}
+
 
         //FUNCION CON EL SWEETALERT
         function eliminarUsuario(idUsuario) {
@@ -1238,7 +1294,13 @@ function ver_contrasena_confirmar() {
             correo = document.getElementById("agregar-correo");
             contrasena = document.getElementById("agregar-contrasena");
             confirmarContrasena = document.getElementById("confirmar-contrasena");
+            usuarioEditar = document.getElementById("editar-usuario");
+            nombreEditar = document.getElementById("editar-nombre");
             correoEditar = document.getElementById('editar-correo');
+            contrasenaEditar = document.getElementById("editar-contrasena");
+            confirmarContrasenaEditar = document.getElementById("editarConfirmar-contrasena");
+
+            
 
             function clearMessage(messageElement, inputElement) {
                 messageElement.innerHTML = ""; // Elimina el contenido del mensaje
@@ -1301,7 +1363,22 @@ function ver_contrasena_confirmar() {
             handleInputAndBlurEvents(confirmarContrasena, expresionValidadora4, mensaje5, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
 
             var mensaje6 = document.getElementById("mensaje6");
-            handleInputAndBlurEvents(correoEditar, expresionValidadora3, mensaje6, "Ingrese una dirección de correo electrónico válida");
+            handleInputAndBlurEvents(usuarioEditar, expresionValidadora1, mensaje7, "Solo se permiten Letras Mayusculas");
+
+            var mensaje7 = document.getElementById("mensaje7");
+            handleInputAndBlurEvents(nombreEditar, expresionValidadora2, mensaje7, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
+            handleDescriptionKeypressEvent(nombre);
+
+            var mensaje8 = document.getElementById("mensaje8");
+            handleInputAndBlurEvents(correoEditar, expresionValidadora3, mensaje8, "Ingrese una dirección de correo electrónico válida");
+
+            var mensaje9 = document.getElementById("mensaje9");
+            handleInputAndBlurEvents(contrasenaEditar, expresionValidadora4, mensaje9, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
+
+            var mensaje10 = document.getElementById("mensaje10");
+            handleInputAndBlurEvents(confirmarContrasenaEditar, expresionValidadora4, mensaje10, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
+
+            
 
         }
         $(document).ready(function() {
@@ -1351,27 +1428,42 @@ function ver_contrasena_confirmar() {
     </script>
 
     <script>
-        // Obtén los campos de entrada y el botón "Guardar de Editar"
-        const usuarioInput1 = document.getElementById("editar-usuario");
-        const nombreInput1 = document.getElementById("editar-nombre");
-        const estadoInput1 = document.getElementById("editar-estado");
-        const correoInput1 = document.getElementById("editar-correo");
-        const rolInput1 = document.getElementById("editar-rol");
-        const guardarButton1 = document.getElementById('btn-editar');
+        // Obtener los campos de entrada y el botón "Guardar de Editar"
+const usuarioInput1 = document.getElementById("editar-usuario");
+const nombreInput1 = document.getElementById("editar-nombre");
+const estadoInput1 = document.getElementById("editar-estado");
+const correoInput1 = document.getElementById("editar-correo");
+const rolInput1 = document.getElementById("editar-rol");
+const contrasenaInput1 = document.getElementById("editar-contrasena");
+const confirmarContrasenaInput1 = document.getElementById("editarConfirmar-contrasena");
+const guardarButton1 = document.getElementById('btn-editar');
 
-        // Función para verificar si todos los campos están llenos
-        function checkForm() {
-            const isFormValid = usuarioInput1.value.trim() !== '' && nombreInput1.value.trim() !== '' && estadoInput1.value !== '' &&
-                estadoInput1.value.trim() !== '' && correoInput1.value.trim() !== '' && rolInput1.value !== '';
-            guardarButton1.disabled = !isFormValid;
-        }
+// Agregar eventos input a los campos de contraseña y otros campos de entrada
+contrasenaInput1.addEventListener('input', checkForm);
+confirmarContrasenaInput1.addEventListener('input', checkPassword);
+usuarioInput1.addEventListener('input', checkForm);
+nombreInput1.addEventListener('input', checkForm);
+estadoInput1.addEventListener('input', checkForm);
+correoInput1.addEventListener('input', checkForm);
+rolInput1.addEventListener('input', checkForm);
 
-        // Agrega un evento input a cada campo de entrada
-        usuarioInput1.addEventListener('input', checkForm);
-        nombreInput1.addEventListener('input', checkForm);
-        estadoInput1.addEventListener('input', checkForm);
-        correoInput1.addEventListener('input', checkForm);
-        rolInput1.addEventListener('input', checkForm);
+// Función para verificar si se ingresó una contraseña
+function checkPassword() {
+    const isPasswordValid = confirmarContrasenaInput1.value.trim() !== '' && contrasenaInput1.value.trim() !== '';
+    guardarButton1.disabled = !isPasswordValid;
+}
+
+// Función para verificar si todos los campos (excepto la contraseña) están llenos
+function checkForm() {
+    const isFormValid = usuarioInput1.value.trim() !== '' && 
+                        nombreInput1.value.trim() !== '' && 
+                        estadoInput1.value.trim() !== '' && 
+                        correoInput1.value.trim() !== '' && 
+                        rolInput1.value.trim() !== '';
+    guardarButton1.disabled = !isFormValid;
+}
+
+
     </script>
     <script>
         // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
