@@ -1152,7 +1152,8 @@ if (!isset($_SESSION['usuario'])) {
                                     // Si la solicitud fue exitosa y el código de respuesta es 200 (OK), muestra mensaje de éxito
                                     return response.json().then(function(data) {
                                         //console.log(data.ID_EMPLEADO);
-
+                                        // Acceder al ID_EMPLEADO
+                                         var idEmpleado = data.ID_EMPLEADO;
                                         // Cerrar la modal después de guardar
                                         $('#crearModal').modal('hide');
                                         // Mostrar SweetAlert de éxito
@@ -1162,7 +1163,7 @@ if (!isset($_SESSION['usuario'])) {
                                             text: data.message
                                         }).then(function() {
                                              // Llamar a la función cuentaAutomatica con el ID_EMPLEADO creado
-                                            cuentaAutomatica(data.ID_EMPLEADO);
+                                            cuentaAutomatica(idEmpleado);
                                             // Recargar la página para mostrar los nuevos datos
                                             location.reload();
                                         });
@@ -1202,7 +1203,7 @@ if (!isset($_SESSION['usuario'])) {
 
 
         function cuentaAutomatica(id) {
-            console.log("entra cuenta Aumtomatica", id)
+            console.log("entra cuenta Aumtomatica:", id)
             var datos = {
                 ID_EMPLEADO: id
             };

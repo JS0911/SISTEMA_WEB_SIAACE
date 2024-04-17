@@ -48,25 +48,25 @@ class Prestamo extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-
-
+    
         $sql = "SELECT P.*, T.TIPO_PRESTAMO, F.FORMA_DE_PAGO
-        FROM siaace.tbl_mp_prestamos AS P
-        INNER JOIN siaace.tbl_mp_tipo_prestamo AS T ON P.ID_TIPO_PRESTAMO = T.ID_TIPO_PRESTAMO
-        INNER JOIN siaace.tbl_formapago AS F ON P.ID_FPAGO = F.ID_FPAGO 
-                WHERE ID_EMPLEADO = :ID_EMPLEADO";
+                FROM siaace.tbl_mp_prestamos AS P
+                INNER JOIN siaace.tbl_mp_tipo_prestamo AS T ON P.ID_TIPO_PRESTAMO = T.ID_TIPO_PRESTAMO
+                INNER JOIN siaace.tbl_formapago AS F ON P.ID_FPAGO = F.ID_FPAGO 
+                WHERE ID_EMPLEADO = :ID_EMPLEADO
+                ORDER BY P.ID_PRESTAMO DESC"; // Ordenar por ID_PRESTAMO de mayor a menor
         $sql = $conectar->prepare($sql);
         $sql->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
         $sql->execute();
-        //echo $sql;
+    
         // Verificar si se obtuvieron resultados
         if ($sql->rowCount() > 0) {
-            // echo "Si se obtuvieron resultados";
             return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
         } else {
-            return "No existe ";
+            return "No existen préstamos para este empleado.";
         }
     }
+    
 
     // //INSERTA UN PRESTAMO
     public function insert_prestamo($ID_EMPLEADO, $ID_TIPO_PRESTAMO, $ID_FPAGO, $TASA, $PLAZO, $MONTO_SOLICITADO, $ESTADO_PRESTAMO)

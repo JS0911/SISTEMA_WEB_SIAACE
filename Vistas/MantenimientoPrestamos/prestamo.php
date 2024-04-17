@@ -417,7 +417,7 @@ if (!isset($_SESSION['usuario'])) {
                             <thead>
                                 <tr>
                                    
-                                    <th style="display: none;">Id Prestamo</th>
+                                    <th>Id Prestamo</th>
                                     <th>Empleado</th>
                                     <th style="display: none;"> Id Tipo Prestamo</th>
                                     <th>Tipo Prestamo</th>
@@ -503,7 +503,7 @@ if (!isset($_SESSION['usuario'])) {
                     data.forEach(function(prestamo) {
                         var nombre = prestamo.PRIMER_NOMBRE + ' ' + prestamo.PRIMER_APELLIDO;
                         var row = '<tr>' +
-                            '<td style="display:none;">' + prestamo.ID_PRESTAMO + '</td>' +
+                            '<td>' + prestamo.ID_PRESTAMO + '</td>' +
                             '<td>' + nombre + '</td>' +
                             '<td style="display:none;">' + prestamo.ID_TIPO_PRESTAMO + '</td>' +
                             '<td >' + prestamo.TIPO_PRESTAMO + '</td>' +

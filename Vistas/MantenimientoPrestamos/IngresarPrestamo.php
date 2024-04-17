@@ -484,7 +484,7 @@ if (!isset($_SESSION['usuario'])) {
                                             <table class="table table-bordered mx-auto" id="Lista-Prestamos" style="margin-top: 20px; margin-bottom: 20px">
                                                 <thead>
                                                     <tr>
-                                                       <th scope="col">Id</th>
+                                                        <th scope="col">Id</th>
                                                         <th scope="col">Plazo Prestamo</th>
                                                         <th scope="col">Forma Pago</th>
                                                         <th scope="col">Monto</th>
@@ -711,7 +711,7 @@ if (!isset($_SESSION['usuario'])) {
         </div>
     </div>
 
-<!-- Modal Alerta Re -->
+    <!-- Modal Alerta Re -->
 
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
@@ -737,9 +737,9 @@ if (!isset($_SESSION['usuario'])) {
                     }
                 })
                 .then(function(data) {
-                    // Ordenar los datos por fecha de aprobación (asumiendo que FECHA_APROBACION es la clave para la fecha)
+                    // Ordenar los datos por ID_PRESTAMO de mayor a menor
                     data.sort(function(a, b) {
-                        return new Date(b.FECHA_APROBACION) - new Date(a.FECHA_APROBACION);
+                        return b.ID_PRESTAMO - a.ID_PRESTAMO;
                     });
 
                     var tbody = document.querySelector('#Lista-Prestamos tbody');
@@ -770,7 +770,6 @@ if (!isset($_SESSION['usuario'])) {
                     console.error('Error al cargar los datos: ' + error.message);
                 });
         }
-
 
         function Insertar_Prestamo() {
 
@@ -860,7 +859,7 @@ if (!isset($_SESSION['usuario'])) {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error!',
-                                    text: 'Su monto maximo es de Lps.' + montoMaximo + ' ,Pero tiene prestamos activos, su saldo restante a prestar es de Lps. '+ cantidadRestante
+                                    text: 'Su monto maximo es de Lps.' + montoMaximo + ' ,Pero tiene prestamos activos, su saldo restante a prestar es de Lps. ' + cantidadRestante
                                 });
                             }
                         })
@@ -905,7 +904,6 @@ if (!isset($_SESSION['usuario'])) {
                 return 0; // o podrías devolver NaN o cualquier otro valor predeterminado
             }
         }
-
 
         //FUNCIONES PARA CUENTAS
         function Lista_Cuentas() {

@@ -30,7 +30,7 @@ switch ($_GET["op"]) {
     break;
 
     case "InsertEmpleado":
-       
+        // Capturar los datos del cuerpo de la solicitud
         $DNI = $body["DNI"];
         $PRIMER_NOMBRE = $body["PRIMER_NOMBRE"];
         $SEGUNDO_NOMBRE = $body["SEGUNDO_NOMBRE"];
@@ -44,19 +44,32 @@ switch ($_GET["op"]) {
         $DIRECCION2 = $body["DIRECCION2"];
         $ID_SUCURSAL = $body["ID_SUCURSAL"];
         $ID_CARGO = $body["ID_CARGO"];
-
-
+    
+        // Verificar si el empleado ya existe
         if (verificarExistenciaEmpleado($DNI) > 0){
             http_response_code(409);
             echo json_encode(["error" => "El DNI ya existe en la base de datos."]);
         } else {
+            // Insertar el empleado
             $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-7 hours");
-        $dateNew = $dateMod->format("Y-m-d H:i:s");
-        $datos = $com->insert_empleado($DNI, $PRIMER_NOMBRE, $SEGUNDO_NOMBRE, $PRIMER_APELLIDO, $SEGUNDO_APELLIDO, $EMAIL, $SALARIO, $ID_ESTADO_USUARIO, $TELEFONO, $DIRECCION1, $DIRECCION2, $ID_SUCURSAL, $ID_CARGO, $_SESSION['usuario'], $dateNew);
-        echo json_encode(["message" => "Empleado insertado Exitosamente."]);
-        $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL EMPLEADO: $PRIMER_NOMBRE $SEGUNDO_NOMBRE $PRIMER_APELLIDO $SEGUNDO_APELLIDO", $_SESSION['id_usuario'], 7, $_SESSION['usuario'], $dateNew);
-}
+            $dateMod = $date->modify("-7 hours");
+            $dateNew = $dateMod->format("Y-m-d H:i:s");
+            $datos = $com->insert_empleado($DNI, $PRIMER_NOMBRE, $SEGUNDO_NOMBRE, $PRIMER_APELLIDO, $SEGUNDO_APELLIDO, $EMAIL, $SALARIO, $ID_ESTADO_USUARIO, $TELEFONO, $DIRECCION1, $DIRECCION2, $ID_SUCURSAL, $ID_CARGO, $_SESSION['usuario'], $dateNew);
+    
+            // Manejar la respuesta de la inserción del empleado
+            if (is_array($datos) && isset($datos['ID_EMPLEADO'])) {
+                // Si la inserción fue exitosa, mostrar el ID del empleado insertado
+                echo json_encode(["message" => "Empleado insertado exitosamente.", "ID_EMPLEADO" => $datos['ID_EMPLEADO']]);
+            } else {
+                // Si hubo un error en la inserción, mostrar el mensaje de error
+                http_response_code(500);
+                echo json_encode(["error" => "Error al insertar el empleado."]);
+            }
+    
+            // Insertar en la bitácora
+            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL EMPLEADO: $PRIMER_NOMBRE $SEGUNDO_NOMBRE $PRIMER_APELLIDO $SEGUNDO_APELLIDO", $_SESSION['id_usuario'], 7, $_SESSION['usuario'], $dateNew);
+        }
+    
     
 
         break;

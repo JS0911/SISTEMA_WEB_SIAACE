@@ -16,8 +16,8 @@ class cuenta extends Conectar
     }
 
     //TRAE SOLO UNA CUENTA 
-     public function get_cuenta($ID_CUENTA)
-     {
+    public function get_cuenta($ID_CUENTA)
+    {
         $conectar = parent::conexion();
         parent::set_names();
         $sql = "SELECT * FROM siaace.tbl_mc_cuenta where ID_CUENTA = :ID";
@@ -25,7 +25,7 @@ class cuenta extends Conectar
         $stmt->bindParam(':ID', $ID_CUENTA, PDO::PARAM_INT);
         $stmt->execute();
         return $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-     } 
+    }
 
     //TRAE SOLO LAS CUENTAS PERTENECIENTES A UN EMPLEADO
     public function get_cuentas_emp($ID_EMPLEADO)
@@ -73,54 +73,58 @@ class cuenta extends Conectar
     }
 
     //INSERTA CUENTA AUTOMATICA
-//INSERTA CUENTA
-public function insert_cuentaAutomatica($ID_EMPLEADO, $CREADO_POR, $FECHA_CREACION)
-{
-    $saldo = 0;
-    $estado = "ACTIVO";
-    $tipoCuenta = 1;
-    
-    // Genera un número de cuenta único
-    $numeroCuenta = $this->generarNumeroCuentaUnico($ID_EMPLEADO);
+    public function insert_cuentaAutomatica($ID_EMPLEADO, $CREADO_POR, $FECHA_CREACION)
+    {
+        $saldo = 0;
+        $estado = "ACTIVO";
+        $tipoCuenta = 1;
 
-    try {
-        $conectar = parent::conexion();
-        parent::set_names();
-        
-        // Utiliza el número de cuenta generado en la consulta SQL
-        $sql = "INSERT INTO `siaace`.`tbl_mc_cuenta` (`ID_EMPLEADO`, `ID_TIPOCUENTA`, `SALDO`, `NUMERO_CUENTA`, `ESTADO`, `CREADO_POR`, `FECHA_CREACION`) VALUES (:ID_EMPLEADO, :ID_TIPOCUENTA, :SALDO, :NUMERO_CUENTA, :ESTADO, :CREADO_POR, :FECHA_CREACION)";
+        // Genera un número de cuenta único
+        $numeroCuenta = $this->generarNumeroCuentaUnico($ID_EMPLEADO);
 
-        $stmt = $conectar->prepare($sql);
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
 
-        $stmt->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
-        $stmt->bindParam(':ID_TIPOCUENTA', $tipoCuenta, PDO::PARAM_INT);
-        $stmt->bindParam(':SALDO', $saldo, PDO::PARAM_INT);
-        $stmt->bindParam(':NUMERO_CUENTA', $numeroCuenta, PDO::PARAM_INT);
-        $stmt->bindParam(':ESTADO', $estado, PDO::PARAM_STR);
-        $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
-        $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
-        $stmt->execute();
+            // Utiliza el número de cuenta generado en la consulta SQL
+            $sql = "INSERT INTO `siaace`.`tbl_mc_cuenta` (`ID_EMPLEADO`, `ID_TIPOCUENTA`, `SALDO`, `NUMERO_CUENTA`, `ESTADO`, `CREADO_POR`, `FECHA_CREACION`) VALUES (:ID_EMPLEADO, :ID_TIPOCUENTA, :SALDO, :NUMERO_CUENTA, :ESTADO, :CREADO_POR, :FECHA_CREACION)";
 
-        if ($stmt->rowCount() > 0) {
-            return "Cuenta Insertada";
-        } else {
-            return "Error al insertar la cuenta";
+            $stmt = $conectar->prepare($sql);
+
+            $stmt->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
+            $stmt->bindParam(':ID_TIPOCUENTA', $tipoCuenta, PDO::PARAM_INT);
+            $stmt->bindParam(':SALDO', $saldo, PDO::PARAM_INT);
+            $stmt->bindParam(':NUMERO_CUENTA', $numeroCuenta, PDO::PARAM_INT);
+            $stmt->bindParam(':ESTADO', $estado, PDO::PARAM_STR);
+            $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+            $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                return "Cuenta Insertada";
+            } else {
+                return "Error al insertar la cuenta";
+            }
+        } catch (PDOException $e) {
+            return "Error al insertar el usuario: " . $e->getMessage();
         }
-    } catch (PDOException $e) {
-        return "Error al insertar el usuario: " . $e->getMessage();
     }
-}
 
-private function generarNumeroCuentaUnico($idEmpleado) {
-    // Obtiene la fecha actual en formato Unix timestamp
-    $timestamp = time();
+    private function generarNumeroCuentaUnico($idEmpleado)
+    {
+        // Obtiene la fecha actual en formato Unix timestamp
+        $timestamp = time();
 
-    // Genera un número de cuenta concatenando la fecha actual y el ID del empleado
-    // Asegura que el número de cuenta tenga 8 dígitos truncando los caracteres sobrantes
-    $numeroCuenta = substr($timestamp, -5) . substr($idEmpleado, -3);
+        // Convierte el ID del empleado a una cadena de longitud fija de 3 dígitos (puedes ajustar la longitud si es necesario)
+        $idEmpleadoStr = str_pad($idEmpleado, 3, '0', STR_PAD_LEFT);
 
-    return $numeroCuenta;
-}
+        // Genera un número de cuenta concatenando el ID del empleado y la fecha actual
+        // Asegura que el número de cuenta tenga 8 dígitos truncando los caracteres sobrantes
+        $numeroCuenta = substr($idEmpleadoStr, -3) . substr($timestamp, -5);
+
+        return $numeroCuenta;
+    }
+
 
 
 
@@ -156,24 +160,24 @@ private function generarNumeroCuentaUnico($idEmpleado) {
     //HISTORIAL DE LA CUENTA
     public function historial_cuenta($ID_CUENTA)
     {
-         
+
         $conectar = parent::conexion();
         parent::set_names();
-  
+
         // Consulta SQL para actualizar los campos del usuario
         $sql = "SELECT  T.ID_CUENTA, T.ID_TRANSACCION, T.FECHA, T.MONTO, TT.TIPO_TRANSACCION FROM tbl_transacciones AS T
         INNER JOIN tbl_tipo_transaccion AS TT ON T.ID_TIPO_TRANSACCION = TT.ID_TIPO_TRANSACCION
         WHERE T.ID_CUENTA = :ID_CUENTA";
-  
+
         $stmt = $conectar->prepare($sql);
         $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
         $stmt->execute();
         return $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-          
     }
-    
+
     //HACE DEPOSITO EN CUENTA
-    public function deposito_cuenta($ID_CUENTA, $DEPOSITO){
+    public function deposito_cuenta($ID_CUENTA, $DEPOSITO)
+    {
         $conectar = parent::conexion();
         parent::set_names();
 
@@ -198,7 +202,8 @@ private function generarNumeroCuentaUnico($idEmpleado) {
         }
     }
 
-    public function reembolso_cuenta($ID_CUENTA, $REEMBOLSO){
+    public function reembolso_cuenta($ID_CUENTA, $REEMBOLSO)
+    {
         $conectar = parent::conexion();
         parent::set_names();
 
@@ -207,9 +212,9 @@ private function generarNumeroCuentaUnico($idEmpleado) {
         $stmtV = $conectar->prepare($sqlV);
         $stmtV->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
         $stmtV->execute();
-        $saldo = $stmtV->fetchColumn();        
+        $saldo = $stmtV->fetchColumn();
 
-        if ($REEMBOLSO>$saldo){
+        if ($REEMBOLSO > $saldo) {
             return "El Monto De Reembolso es mayor al saldo";
         } else {
             $sql = "UPDATE tbl_mc_cuenta SET SALDO = SALDO - :SALDO  WHERE ID_CUENTA = :ID_CUENTA";
@@ -234,7 +239,8 @@ private function generarNumeroCuentaUnico($idEmpleado) {
     }
 
 
-    public function anular($ID_CUENTA,$ID_TRANSACCION){
+    public function anular($ID_CUENTA, $ID_TRANSACCION)
+    {
         $conectar = parent::conexion();
         parent::set_names();
 
@@ -271,8 +277,8 @@ private function generarNumeroCuentaUnico($idEmpleado) {
             $stmt3->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
             $stmt3->bindParam(':MONTO', $MONTO, PDO::PARAM_INT);
             $stmt3->execute();
-        }    
-      
+        }
+
         if ($stmt->rowCount() > 0) {
             return "ANULACION REALIZADA";
         } else {
@@ -280,4 +286,3 @@ private function generarNumeroCuentaUnico($idEmpleado) {
         }
     }
 }
-
