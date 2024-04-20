@@ -48,7 +48,7 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_parametros($PARAMETRO, $VALOR,$_SESSION['usuario'], $dateNew);
             echo json_encode(["message" => "Parametro insertado exitosamente."]);
-            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL PARAMETRO: $PARAMETRO", $_SESSION['id_usuario'], 4, $_SESSION['usuario'], $dateNew);
+            $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 4, "INSERTAR");
 
         }
        break;
@@ -67,13 +67,28 @@ switch ($_GET["op"]) {
         $dateMod = $date->modify("-8 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
 
-        $datos = $com->update_parametro($ID_PARAMETRO,$PARAMETRO,$VALOR,$_SESSION['usuario'],$dateNew);
+        $valoresAntiguos = $com -> get_parametro($ID_PARAMETRO);
+        $ParametroAntes = $valoresAntiguos['PARAMETRO'];
+        $ValorAntes = $valoresAntiguos['VALOR'];
+
+        $datos = $com->update_parametro($ID_PARAMETRO,
+        $PARAMETRO,
+        $VALOR,$_SESSION['usuario'],
+        $dateNew);
 
         
         echo json_encode($datos);
-        $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL PARAMETRO # $ID_PARAMETRO", $_SESSION['id_usuario'], 4, $_SESSION['usuario'], $dateNew);
+       
+        //-------------------------------------------------Decisiones-----------------------------------------------
+        if(strcmp($ParametroAntes, $PARAMETRO) != 0 ){
+            $bit->insert_bitacoraModificacion($dateNew, $ParametroAntes, $PARAMETRO, $_SESSION['id_usuario'], 4, "PARAMETRO", $ID_PARAMETRO, "MODIFICAR");
+        }
 
+        if(strcmp($ValorAntes, $VALOR) != 0 ){
+            $bit->insert_bitacoraModificacion($dateNew, $ValorAntes, $VALOR, $_SESSION['id_usuario'], 4, "VALOR", $ID_PARAMETRO, "MODIFICAR");
+        }
         break;
+
     case "eliminarParametro":
         $ID_PARAMETRO = $body["ID_PARAMETRO"];
         $datos = $com->eliminar_parametro($ID_PARAMETRO);
@@ -81,7 +96,7 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-8 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-        $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL PARAMETRO # $ID_PARAMETRO", $_SESSION['id_usuario'], 4);
+        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 4, $ID_PARAMETRO, "ELIMINAR");
         break;
 
     }  

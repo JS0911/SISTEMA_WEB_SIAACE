@@ -45,8 +45,9 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s"); 
             $datos = $com->insert_region($REGION, $DESCRIPCION, $_SESSION['usuario'], $dateNew, $ESTADO);
             echo json_encode(["message" => "Region insertada exitosamente."]);
-            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO LA REGION: $REGION", $_SESSION['id_usuario'], 8, $_SESSION['usuario'], $dateNew);
+            $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 8, "INSERTAR");
         }
+        
 
     break;
 
@@ -69,6 +70,12 @@ switch ($_GET["op"]) {
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
 
+        $valoresAntiguos = $com -> get_region($ID_REGION);
+        $RegionAntes = $valoresAntiguos['REGION'];
+        $DescripcionAntes = $valoresAntiguos['DESCRIPCION'];
+        $EstadoAntes = $valoresAntiguos['ESTADO'];
+
+
         $datos = $com->update_region(
             $ID_REGION,
             $REGION,
@@ -78,7 +85,20 @@ switch ($_GET["op"]) {
             $ESTADO
         );
         echo json_encode(["message" => "Region editado Exitosamente."]);
-        $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO LA REGION # $ID_REGION", $_SESSION['id_usuario'], 8, $_SESSION['usuario'], $dateNew);
+        
+
+        //----------------------------------------------------Decisiones------------------------------------------------
+        if(strcmp($RegionAntes, $REGION) != 0){
+            $bit-> insert_bitacoraModificacion($dateNew, $RegionAntes, $REGION, $_SESSION['id_usuario'], 8, "REGIÓN", $ID_REGION, "MODIFICAR");
+        }
+
+        if(strcmp($DescripcionAntes, $DESCRIPCION) != 0 ){
+            $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 8, "DESCRIPCIÓN", $ID_REGION, "MODIFICAR");
+        }
+
+        if(strcmp($EstadoAntes, $ESTADO) != 0 ){
+            $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 8, "ESTADO", $ID_REGION, "MODIFICAR");
+        }
     }
     break;
 
@@ -89,7 +109,7 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-        $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO LA REGION # $ID_REGION", $_SESSION['id_usuario'], 8);
+        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 8, $ID_REGION, "ELIMINAR");
     break;
 }
 function verificarExistenciaRegion($region) {

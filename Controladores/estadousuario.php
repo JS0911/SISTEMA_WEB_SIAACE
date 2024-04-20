@@ -44,7 +44,7 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_estado($NOMBRE, $DESCRIPCION);
             echo json_encode(["message" => "Estado insertado exitosamente."]);
-            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL ESTADO: $NOMBRE", $_SESSION['id_usuario'], 6, $_SESSION['usuario'], $dateNew);
+            $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 6, "INSERTAR");
 
         }
     
@@ -64,13 +64,26 @@ switch ($_GET["op"]) {
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s");
 
+        $valoresAntiguos = $com ->get_estado ($ID_ESTADO_USUARIO);
+        $NombreAntes = $valoresAntiguos['NOMBRE'];
+        $DescripcionAntes = $valoresAntiguos['DESCRIPCION'];
+
         $datos = $com->update_estado(
             $ID_ESTADO_USUARIO,
             $NOMBRE,
             $DESCRIPCION
         );
         echo json_encode($datos);
-        $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL ESTADO # $ID_ESTADO_USUARIO", $_SESSION['id_usuario'], 6, $_SESSION['usuario'], $dateNew);
+        
+        //---------------------------------------------------Decisiones-----------------------------------------------
+        if(strcmp($NombreAntes, $NOMBRE) != 0 ){
+            $bit->insert_bitacoraModificacion($dateNew, $NombreAntes, $NOMBRE, $_SESSION['id_usuario'], 6, "NOMBRE", $ID_ESTADO_USUARIO, "MODIFICAR");
+ 
+        }
+
+        if(strcmp($DescripcionAntes, $DESCRIPCION) != 0 ){
+            $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 6, "DESCRIPCIÓN", $ID_ESTADO_USUARIO, "MODIFICAR");
+        }
 
     break;
 
@@ -81,7 +94,7 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-        $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL ESTADO # $ID_ESTADO_USUARIO", $_SESSION['id_usuario'], 6);
+        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 6, $ID_ESTADO_USUARIO, "ELIMINAR");
     break;
 }
     function verificarExistenciaEstado($nombre) {

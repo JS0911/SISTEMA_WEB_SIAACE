@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-require_once("../config/conexion.php");
+require_once("../Config/conexion.php");
 require_once("../Modelos/bitacora.php");
 
 $com = new bitacora();
@@ -22,6 +22,11 @@ switch ($_GET["op"]) {
  
     case "GetBitacora":
         $datos = $com->get_bitacora();
+        echo json_encode($datos);
+    break;
+
+    case "LimpiarBitacora":
+        $datos = $com->limpiar_bitacora();
         echo json_encode($datos);
     break;
 }

@@ -45,7 +45,7 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_objeto($OBJETO, $DESCRIPCION, $TIPO_OBJETO, $_SESSION['usuario'], $dateNew);
             echo json_encode(["message" => "Objeto insertado exitosamente."]);
-            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL OBJETO: $OBJETO", $_SESSION['id_usuario'], 5, $_SESSION['usuario'], $dateNew);
+            $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 5, "INSERTAR");
 
         }
 
@@ -66,6 +66,11 @@ switch ($_GET["op"]) {
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
 
+        $valoresAntiguos = $com -> get_objeto ($ID_OBJETO);
+        $ObjetoAntes = $valoresAntiguos['OBJETO'];
+        $DescripcionAntes = $valoresAntiguos['DESCRIPCION'];
+        $TipoObjetoAntes = $valoresAntiguos['TIPO_OBJETO'];
+
         $datos = $com->update_objeto(
             $ID_OBJETO,
             $OBJETO,
@@ -75,8 +80,20 @@ switch ($_GET["op"]) {
             $dateNew
         );
         echo json_encode($datos);
-        $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL OBJETO # $ID_OBJETO", $_SESSION['id_usuario'], 5, $_SESSION['usuario'], $dateNew);
+        
 
+        //-----------------------------------------------------Decisiones----------------------------------------------------
+        if(strcmp($ID_Antes, $DNI) != 0){
+            $bit-> insert_bitacoraModificacion($dateNew, $ObjetoAntes, $OBJETO, $_SESSION['id_usuario'], 5, "OBJETO", $ID_OBJETO, "MODIFICAR");
+        }
+
+        if(strcmp($DescripcionAntes, $DESCRIPCION) != 0 ){
+            $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 5, "DESCRIPCIÓN", $ID_OBJETO, "MODIFICAR");
+        }
+
+        if(strcmp($TipoObjetoAntes, $TIPO_OBJETO) != 0 ){
+            $bit->insert_bitacoraModificacion($dateNew, $TipoObjetoAntes, $TIPO_OBJETO, $_SESSION['id_usuario'], 5, "TIPO OBJETO", $ID_OBJETO, "MODIFICAR");
+        }
     break;
 
     case "EliminarObjeto":
@@ -86,7 +103,7 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-        $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL OBJETO # $ID_OBJETO", $_SESSION['id_usuario'], 5);
+        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 5 , $ID_OBJETO, "ELIMINAR");
     break;
 }
 function verificarExistenciaObjeto($objeto) {

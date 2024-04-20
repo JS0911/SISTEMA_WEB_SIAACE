@@ -45,8 +45,7 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_tipoCuenta($TIPO_CUENTA, $DESCRIPCION,$TASA,$ESTADO, $_SESSION['usuario'], $dateNew);
             echo json_encode(["message" => "Rol insertado exitosamente."]);
-            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL TIPO DE CUENTA: $TIPO_CUENTA", $_SESSION['id_usuario'], 28, $_SESSION['usuario'], $dateNew);
-       
+            $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 28, "INSERTAR");
         }
 
 
@@ -74,6 +73,12 @@ switch ($_GET["op"]) {
             $date = new DateTime(date("Y-m-d H:i:s"));
             $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s");
+
+            $valoresAntiguos = $com-> get_tipoCuenta($ID_TIPOCUENTA);
+            $TipoCuentaAntes = $valoresAntiguos['TIPO_CUENTA'];
+            $DescripcionAntes = $valoresAntiguos['DESCRIPCION'];
+            $TasaAntes = $valoresAntiguos['TASA'];
+            $EstadoAntes = $valoresAntiguos['ESTADO'];
     
             $datos = $com->update_tipoCuenta(
                 $ID_TIPOCUENTA,
@@ -87,7 +92,24 @@ switch ($_GET["op"]) {
         
             );
             echo json_encode($datos);
-            $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL TIPO DE CUENTA # $ID_TIPOCUENTA", $_SESSION['id_usuario'], 28, $_SESSION['usuario'], $dateNew);
+            
+
+            //----------------------------------------------------------------------------Decisiones-----------------------------------------------------------
+            if(strcmp($TipoCuentaAntes, $TIPO_CUENTA) != 0){
+                $bit->insert_bitacoraModificacion($dateNew, $TipoCuentaAntes, $TIPO_CUENTA, $_SESSION['id_usuario'], 28, "TIPO CUENTA", $ID_TIPOCUENTA, "MODIFICAR");    
+            }
+            
+            if(strcmp($DescripcionAntes, $DESCRIPCION) != 0){
+                $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 28, "DESCRIPCIÓN", $ID_TIPOCUENTA, "MODIFICAR");    
+            }
+
+            if(strcmp($TasaAntes, $TASA) != 0){
+                $bit->insert_bitacoraModificacion($dateNew, $TasaAntes, $TASA, $_SESSION['id_usuario'], 28, "TASA", $ID_TIPOCUENTA, "MODIFICAR");    
+            }
+
+            if(strcmp($EstadoAntes, $ESTADO) != 0){
+                $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 28, "ESTADO", $ID_TIPOCUENTA, "MODIFICAR");    
+            }
         }
             break;
 
@@ -98,7 +120,7 @@ switch ($_GET["op"]) {
             $date = new DateTime(date("Y-m-d H:i:s"));
             $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-            $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL TIPO DE CUENTA # $ID_TIPOCUENTA", $_SESSION['id_usuario'], 28);
+            $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 28, $ID_TIPOCUENTA, "ELIMINAR");
         
             break;
 }

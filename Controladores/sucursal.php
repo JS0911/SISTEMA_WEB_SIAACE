@@ -52,8 +52,7 @@ switch ($_GET["op"]) {
 
              $datos = $com->insert_sucursal($SUCURSAL, $DESCRIPCION, $DIRECCION, $ID_REGION, $TELEFONO,$ESTADO);
              echo json_encode(["message" => "Sucursal insertada exitosamente."]);
-             $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO LA SUCURSAL: $SUCURSAL", $_SESSION['id_usuario'], 9, $_SESSION['usuario'], $dateNew);
-
+             $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 9, "INSERTAR");
          }
         break;
 
@@ -79,9 +78,41 @@ switch ($_GET["op"]) {
         $dateMod = $date->modify("-8 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
 
+        $valoresAntiguos = $com -> get_sucursal($ID_SUCURSAL);
+        $SucursalAntes = $valoresAntiguos['SUCURSAL'];
+        $DescripcionAntes = $valoresAntiguos['DESCRIPCION'];
+        $DireccionAntes = $valoresAntiguos['DIRECCION'];
+        $RegionAntes = $valoresAntiguos['ID_REGION'];
+        $TelefonoAntes = $valoresAntiguos['TELEFONO'];
+        $EstadoAntes = $valoresAntiguos['ESTADO'];
+
         $datos = $com->update_sucursal($ID_SUCURSAL, $SUCURSAL, $DESCRIPCION , $DIRECCION,$ID_REGION,$TELEFONO, $ESTADO, $_SESSION['usuario'],$dateNew);
         echo json_encode($datos);
-        $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO LA SUCURSAL # $ID_SUCURSAL", $_SESSION['id_usuario'], 9, $_SESSION['usuario'], $dateNew);
+        
+         //-----------------------------------------------------Decisiones-------------------------------------------------
+         if(strcmp($SucursalAntes, $SUCURSAL) != 0){
+            $bit-> insert_bitacoraModificacion($dateNew, $SucursalAntes, $SUCURSAL, $_SESSION['id_usuario'], 9, "SUCURSAL", $ID_SUCURSAL, "MODIFICAR");
+        }
+
+        if(strcmp($DescripcionAntes, $DESCRIPCION) != 0 ){
+            $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 9, "DESCRIPCIÓN", $ID_SUCURSAL, "MODIFICAR");
+        }
+
+        if(strcmp($DireccionAntesoAntes, $DIRECCION) != 0 ){
+            $bit->insert_bitacoraModificacion($dateNew, $DireccionAntes, $DIRECCION, $_SESSION['id_usuario'], 9, "DIRECCIÓN", $ID_SUCURSAL, "MODIFICAR");
+        }
+
+        if(strcmp($RegionAntes, $ID_REGION) != 0){
+            $bit-> insert_bitacoraModificacion($dateNew, $RegionAntes, $ID_REGION, $_SESSION['id_usuario'], 9, "REGIÓN", $ID_REGION, "MODIFICAR");
+        }
+
+        if(strcmp($TelefonoAntes, $TELEFONO) != 0){
+            $bit-> insert_bitacoraModificacion($dateNew, $TelefonoAntes, $TELEFONO, $_SESSION['id_usuario'], 9, "TELEFONO", $ID_SUCURSAL, "MODIFICAR");
+        }
+
+        if(strcmp($EstadoAntes, $ESTADO) != 0 ){
+            $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 9, "ESTADO", $ID_SUCURSAL, "MODIFICAR");
+        }
         }
         break;
     case "eliminarSucursal":
@@ -91,7 +122,7 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-8 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-        $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO LA SUCURSAL # $ID_SUCURSAL", $_SESSION['id_usuario'], 26);
+        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 9, $ID_SUCURSAL, "ELIMINAR");
         break;
 }
 

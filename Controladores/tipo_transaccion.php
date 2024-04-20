@@ -46,7 +46,8 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_tipoTransaccion($TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION, $_SESSION['usuario'], $dateNew, $ESTADO);
             echo json_encode(["message" => "Transacción insertada exitosamente."]);
-            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL TIPO TRANSACCION: $TIPO_TRANSACCION", $_SESSION['id_usuario'], 11, $_SESSION['usuario'], $dateNew);
+            $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 11, "INSERTAR");
+        
         }
 
     break;
@@ -62,14 +63,16 @@ switch ($_GET["op"]) {
         $DESCRIPCION = $body["DESCRIPCION"];
         $SIGNO_TRANSACCION = $body["SIGNO_TRANSACCION"];
         $ESTADO =  $body["ESTADO"];
-        if (verificarExistenciaTransaccion($TIPO_TRANSACCION) > 0 &&  !esMismaTransaccion($ID_TIPO_TRANSACCION, $TIPO_TRANSACCION))  {
-            // Envía una respuesta de conflicto (409) si el Tipo de cuenta ya existe
-            http_response_code(409);
-            echo json_encode(["error" => "El Tipo de cuenta ya existe en la base de datos."]);
-        } else {
+
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s");
+
+        $valoresAntiguos = $com -> get_tipoTransaccion($ID_TIPO_TRANSACCION);
+        $TipoTransaccionAntes = $valoresAntiguos['TIPO_TRANSACCION'];
+        $DescripcionAntes = $valoresAntiguos['DESCRIPCION'];
+        $SignoAntes = $valoresAntiguos['SIGNO_TRANSACCION'];
+        $EstadoAntes = $valoresAntiguos['ESTADO'];
 
         $datos = $com->update_tipoTransaccion(
             $ID_TIPO_TRANSACCION,
@@ -81,8 +84,23 @@ switch ($_GET["op"]) {
             $ESTADO
         );
         echo json_encode($datos);
-        $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL TIPO DE TRANSACCION # $ID_TIPO_TRANSACCION", $_SESSION['id_usuario'], 11, $_SESSION['usuario'], $dateNew);
-    }
+        
+        //--------------------------------------------------------------------Decisiones-------------------------------------------------------
+        if(strcmp($TipoTransaccionAntes, $TIPO_TRANSACCION) != 0){
+            $bit->insert_bitacoraModificacion($dateNew, $TipoTransaccionAntes, $TIPO_TRANSACCION, $_SESSION['id_usuario'], 11, "TIPO TRANSACCIÓN", $ID_TIPO_TRANSACCION, "MODIFICAR");  
+          }
+          
+          if(strcmp($DescripcionAntes, $DESCRIPCION) != 0){
+              $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 11, "DESCRIPCIÓN", $ID_TIPO_TRANSACCION, "MODIFICAR");  
+          }
+  
+          if(strcmp($SignoAntes, $SIGNO_TRANSACCION) != 0){
+              $bit->insert_bitacoraModificacion($dateNew, $SignoAntes, $SIGNO_TRANSACCION, $_SESSION['id_usuario'], 11, "SIGNO TRANSACCIÓN", $ID_TIPO_TRANSACCION, "MODIFICAR");  
+          }
+  
+          if(strcmp($EstadoAntes, $ESTADO) != 0 ){
+              $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 11 , "ESTADO", $ID_TIPO_TRANSACCION, "MODIFICAR");
+          }
     break;
 
     case "EliminarTipoTransaccion":
@@ -92,7 +110,7 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-        $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL TIPO DE TRANSACCION # $ID_TIPO_TRANSACCION", $_SESSION['id_usuario'], 11);
+        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 11, $ID_TIPO_TRANSACCION,"ELIMINAR");
 
     break;
 
@@ -179,22 +197,4 @@ function verificarExistenciaTransaccion($TIPO_TRANSACCION)
     // Devuelve el número de resultados encontrados
     return $row['count'];
 }
-
-function esMismaTransaccion($ID_TIPO_TRANSACCION, $TIPO_TRANSACCION) {
-    // Realiza una consulta en la base de datos para verificar si la transacción tiene el mismo id_tipocuenta y nombre de tipo de cuenta
-    $sql = "SELECT COUNT(*) as count FROM tbl_tipo_transaccion WHERE id_tipo_transaccion = :id_tipo_transaccion AND tipo_transaccion = :tipo_transaccion";
-
-    // Realiza la conexión a la base de datos y ejecuta la consulta
-    $conexion = new Conectar();
-    $conn = $conexion->Conexion();
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id_tipo_transaccion', $ID_TIPO_TRANSACCION);
-    $stmt->bindParam(':tipo_transaccion', $TIPO_TRANSACCION);
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Si el número de resultados encontrados es mayor que 0, significa que la transacción tiene el mismo id_tipo_transaccion y nombre de tipo de transacción
-    return $row['count'] > 0;
-}
-
 ?>
