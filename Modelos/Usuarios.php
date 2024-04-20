@@ -9,7 +9,8 @@ class Usuario extends Conectar
         $sql = "SELECT U.*, R.ROL, E.NOMBRE
         FROM tbl_ms_usuario U
         INNER JOIN tbl_ms_roles R ON U.ID_ROL = R.ID_ROL
-        INNER JOIN tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO";
+        INNER JOIN tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO
+        ORDER BY U.ID_USUARIO DESC";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

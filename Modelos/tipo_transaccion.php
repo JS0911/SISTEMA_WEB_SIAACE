@@ -6,7 +6,7 @@ class tipoTransaccion extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_tipo_transaccion;";
+        $sql = "SELECT * FROM tbl_tipo_transaccion;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -30,7 +30,7 @@ class tipoTransaccion extends Conectar
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_tipo_transaccion` ( `TIPO_TRANSACCION`, `DESCRIPCION`, `SIGNO_TRANSACCION`, `CREADO_POR`, `FECHA_CREACION`, `ESTADO`) VALUES ( :TIPO_TRANSACCION, :DESCRIPCION, :SIGNO_TRANSACCION, :CREADO_POR, :FECHA_CREACION, :ESTADO)";
+            $sql = "INSERT INTO `tbl_tipo_transaccion` ( `TIPO_TRANSACCION`, `DESCRIPCION`, `SIGNO_TRANSACCION`, `CREADO_POR`, `FECHA_CREACION`, `ESTADO`) VALUES ( :TIPO_TRANSACCION, :DESCRIPCION, :SIGNO_TRANSACCION, :CREADO_POR, :FECHA_CREACION, :ESTADO)";
 
             $stmt = $conectar->prepare($sql);
 

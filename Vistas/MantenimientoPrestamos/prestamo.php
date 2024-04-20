@@ -509,17 +509,18 @@ if (!isset($_SESSION['usuario'])) {
                             '<td >' + prestamo.TIPO_PRESTAMO + '</td>' +
                             '<td style="display:none;">' + prestamo.ID_FPAGO + '</td>' +
                             '<td style="display:none;">' + prestamo.FORMA_DE_PAGO + '</td>' +
+                            '<td>' + prestamo.TASA + '%</td>' +
                             '<td>' + prestamo.PLAZO + '</td>' +
-                            '<td>' + prestamo.TASA + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + prestamo.FECHA_SOLICITUD + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + prestamo.FECHA_APROBACION + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + prestamo.FECHA_DE_CANCELACION + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + prestamo.FECHA_DE_DESEMBOLSO + '</td>' +
-                            '<td class="texto-derecha">' + formatoNumero(parseFloat(prestamo.MONTO_SOLICITADO)) + '</td>' +
+                            '<td class="texto-derecha">L. ' + formatoNumero(parseFloat(prestamo.MONTO_SOLICITADO)) + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_DESEMBOLSO + '</td>' +
                             '<td style="display:none;">' + prestamo.MONTO_ADEUDADO + '</td>' +
                             '<td>' + prestamo.ESTADO_PRESTAMO + '</td>' +
                             '<td>';
+
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {

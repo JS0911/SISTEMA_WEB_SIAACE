@@ -6,7 +6,7 @@ class Sucursal extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "   SELECT S.*, R.REGION
+        $sql = "SELECT S.*, R.REGION
         FROM siaace.tbl_me_sucursal S
         INNER JOIN siaace.tbl_me_region R ON S.ID_REGION = R.ID_REGION;";
         $sql = $conectar->prepare($sql);
@@ -31,7 +31,7 @@ class Sucursal extends Conectar
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_me_sucursal` ( `SUCURSAL`, `DESCRIPCION`, `DIRECCION`, `ID_REGION`, `TELEFONO`,`ESTADO` ) VALUES ( :SUCURSAL,:DESCRIPCION, :DIRECCION, :ID_REGION, :TELEFONO,:ESTADO)";
+            $sql = "INSERT INTO `tbl_me_sucursal` ( `SUCURSAL`, `DESCRIPCION`, `DIRECCION`, `ID_REGION`, `TELEFONO`,`ESTADO` ) VALUES ( :SUCURSAL,:DESCRIPCION, :DIRECCION, :ID_REGION, :TELEFONO,:ESTADO)";
     
             $stmt = $conectar->prepare($sql);
           

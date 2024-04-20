@@ -8,10 +8,11 @@ class Prestamo extends Conectar
         parent::set_names();
 
         $sql = "SELECT P.*, T.TIPO_PRESTAMO, F.FORMA_DE_PAGO, E.PRIMER_NOMBRE, E.PRIMER_APELLIDO
-        FROM siaace.tbl_mp_prestamos AS P
-        INNER JOIN siaace.tbl_mp_tipo_prestamo AS T ON P.ID_TIPO_PRESTAMO = T.ID_TIPO_PRESTAMO
-        INNER JOIN siaace.tbl_me_empleados AS E ON P.ID_EMPLEADO = E.ID_EMPLEADO
-        INNER JOIN siaace.tbl_formapago AS F ON P.ID_FPAGO = F.ID_FPAGO";
+        FROM tbl_mp_prestamos AS P
+        INNER JOIN tbl_mp_tipo_prestamo AS T ON P.ID_TIPO_PRESTAMO = T.ID_TIPO_PRESTAMO
+        INNER JOIN tbl_me_empleados AS E ON P.ID_EMPLEADO = E.ID_EMPLEADO
+        INNER JOIN tbl_formapago AS F ON P.ID_FPAGO = F.ID_FPAGO
+        ORDER BY P.ID_PRESTAMO DESC;";
 
         $sql = $conectar->prepare($sql);
 
@@ -29,7 +30,7 @@ class Prestamo extends Conectar
         $conectar = parent::conexion();
         parent::set_names();
         $sql = "SELECT SUM((MONTO_ADEUDADO_ITS) + (MONTO_ADEUDADO_CAP)) AS SALDO_TOTAL
-                FROM siaace.tbl_mp_planp 
+                FROM tbl_mp_planp 
                 WHERE ID_PRESTAMO = :ID_PRESTAMO";
 
         $sql = $conectar->prepare($sql);
@@ -50,9 +51,9 @@ class Prestamo extends Conectar
         parent::set_names();
     
         $sql = "SELECT P.*, T.TIPO_PRESTAMO, F.FORMA_DE_PAGO
-                FROM siaace.tbl_mp_prestamos AS P
-                INNER JOIN siaace.tbl_mp_tipo_prestamo AS T ON P.ID_TIPO_PRESTAMO = T.ID_TIPO_PRESTAMO
-                INNER JOIN siaace.tbl_formapago AS F ON P.ID_FPAGO = F.ID_FPAGO 
+                FROM tbl_mp_prestamos AS P
+                INNER JOIN tbl_mp_tipo_prestamo AS T ON P.ID_TIPO_PRESTAMO = T.ID_TIPO_PRESTAMO
+                INNER JOIN tbl_formapago AS F ON P.ID_FPAGO = F.ID_FPAGO 
                 WHERE ID_EMPLEADO = :ID_EMPLEADO
                 ORDER BY P.ID_PRESTAMO DESC"; // Ordenar por ID_PRESTAMO de mayor a menor
         $sql = $conectar->prepare($sql);
@@ -76,7 +77,7 @@ class Prestamo extends Conectar
             $conectar = parent::conexion();
             parent::set_names();
             $ESTADO_PRESTAMO = "PENDIENTE";
-            $sql = "INSERT INTO `siaace`.`tbl_mp_prestamos` ( `ID_EMPLEADO`, `ID_TIPO_PRESTAMO`, `ID_FPAGO`, `PLAZO`, `TASA`, `MONTO_SOLICITADO`, `FECHA_SOLICITUD`, `ESTADO_PRESTAMO`) 
+            $sql = "INSERT INTO `tbl_mp_prestamos` ( `ID_EMPLEADO`, `ID_TIPO_PRESTAMO`, `ID_FPAGO`, `PLAZO`, `TASA`, `MONTO_SOLICITADO`, `FECHA_SOLICITUD`, `ESTADO_PRESTAMO`) 
             VALUES ( :ID_EMPLEADO, :ID_TIPO_PRESTAMO, :ID_FPAGO, :PLAZO, :TASA, :MONTO_SOLICITADO, NOW(), :ESTADO_PRESTAMO)";
 
             $stmt = $conectar->prepare($sql);

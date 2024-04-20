@@ -6,7 +6,7 @@ class TipoPrestamo extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_mp_tipo_prestamo;";
+        $sql = "SELECT * FROM tbl_mp_tipo_prestamo;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -33,7 +33,7 @@ class TipoPrestamo extends Conectar
             $fecha_actual = date("Y-m-d");
             // Convertir el valor de APLICA_SEGUROS a 0 o 1
             $aplica_seguros_db = ($APLICA_SEGUROS === "Sí") ? 1 : 0;
-            $sql = "INSERT INTO `siaace`.`tbl_mp_tipo_prestamo` ( `TIPO_PRESTAMO`, `DESCRIPCION`, `APLICA_SEGUROS`, `MONTO_MAXIMO`, `MONTO_MINIMO`, `TASA_MAXIMA`, `TASA_MINIMA`, `PLAZO_MAXIMO`, `PLAZO_MINIMO` ,`ESTADO` , `FECHA_CREACION`) VALUES ( :TIPO_PRESTAMO,:DESCRIPCION, :APLICA_SEGUROS, :MONTO_MAXIMO, :MONTO_MINIMO, :TASA_MAXIMA,:TASA_MINIMA, :PLAZO_MAXIMO, :PLAZO_MINIMO, :ESTADO,:FECHA_CREACION)";
+            $sql = "INSERT INTO `tbl_mp_tipo_prestamo` ( `TIPO_PRESTAMO`, `DESCRIPCION`, `APLICA_SEGUROS`, `MONTO_MAXIMO`, `MONTO_MINIMO`, `TASA_MAXIMA`, `TASA_MINIMA`, `PLAZO_MAXIMO`, `PLAZO_MINIMO` ,`ESTADO` , `FECHA_CREACION`) VALUES ( :TIPO_PRESTAMO,:DESCRIPCION, :APLICA_SEGUROS, :MONTO_MAXIMO, :MONTO_MINIMO, :TASA_MAXIMA,:TASA_MINIMA, :PLAZO_MAXIMO, :PLAZO_MINIMO, :ESTADO,:FECHA_CREACION)";
     
             $stmt = $conectar->prepare($sql);
     

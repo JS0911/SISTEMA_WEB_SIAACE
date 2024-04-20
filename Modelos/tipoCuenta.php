@@ -6,7 +6,7 @@ class Cuentas extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_mc_tipocuenta;";
+        $sql = "SELECT * FROM tbl_mc_tipocuenta;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -30,7 +30,7 @@ class Cuentas extends Conectar
             $conectar = parent::conexion();
             parent::set_names();
            
-            $sql = "INSERT INTO `siaace`.`tbl_mc_tipocuenta` (`TIPO_CUENTA`, `DESCRIPCION`, `TASA`, `ESTADO`,`CREADO_POR`,`FECHA_CREACION`) VALUES (:TIPO_CUENTA, :DESCRIPCION, :TASA, :ESTADO,:CREADO_POR,:FECHA_CREACION)";
+            $sql = "INSERT INTO `tbl_mc_tipocuenta` (`TIPO_CUENTA`, `DESCRIPCION`, `TASA`, `ESTADO`,`CREADO_POR`,`FECHA_CREACION`) VALUES (:TIPO_CUENTA, :DESCRIPCION, :TASA, :ESTADO,:CREADO_POR,:FECHA_CREACION)";
 
             $stmt = $conectar->prepare($sql);
     

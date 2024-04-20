@@ -6,7 +6,7 @@ class Region extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_me_region;";
+        $sql = "SELECT * FROM tbl_me_region;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -30,7 +30,7 @@ class Region extends Conectar
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_me_region` ( `REGION`, `DESCRIPCION`, `CREADO_POR`, `FECHA_CREACION`, `ESTADO`) VALUES ( :REGION, :DESCRIPCION, :CREADO_POR, :FECHA_CREACION, :ESTADO)";
+            $sql = "INSERT INTO `tbl_me_region` ( `REGION`, `DESCRIPCION`, `CREADO_POR`, `FECHA_CREACION`, `ESTADO`) VALUES ( :REGION, :DESCRIPCION, :CREADO_POR, :FECHA_CREACION, :ESTADO)";
 
             $stmt = $conectar->prepare($sql);
             $stmt->bindParam(':REGION', $REGION, PDO::PARAM_STR);
