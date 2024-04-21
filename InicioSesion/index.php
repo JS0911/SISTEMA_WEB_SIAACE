@@ -81,6 +81,7 @@ $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Emplead
 $permisos1 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 $permisos3 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos);
+
 $datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
 $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 

@@ -15,7 +15,7 @@
             $id_usuario = isset($_SESSION['id_usuario']) ? $_SESSION['id_usuario'] : 0;
             $usuario = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : 'Usuario Desconocido';
 
-            $sql = "INSERT INTO `tbl_ms_bitacora` (`FECHA`, `ACCION`, `DESCRIPCION`, `ID_USUARIO`, `ID_OBJETO`, `CREADO_POR`, `FECHA_CREACION`) VALUES ('$dateNew', 'CIERRE DE SESION', 'CERRO SESION EL USUARIO: $usuario', '$id_usuario', 2, '$usuario', '$dateNew')";
+            $sql = "INSERT INTO tbl_ms_bitacora (FECHA,ID_USUARIO, TABLA, OPERACION) VALUES ('$dateNew','$id_usuario', 2, 'CIERRE DE SESION')";
             $stmt = $conectar->prepare($sql);
             $stmt->execute();
 

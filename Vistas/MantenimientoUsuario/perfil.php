@@ -1,19 +1,9 @@
 <?php
-
 session_start();
 
-require "../../Config/conexion.php";
 require_once "../../Controladores/perfil.php";
-require_once '../../Modelos/permisoUsuario.php';
-require_once '../../Modelos/Usuarios.php';
-require_once "../../Modelos/error.php";
-
-$permisosUsuarios = new PermisosUsuarios();
-$usuario_obj = new Usuario();
 
 $id_usuario = $_SESSION['id_usuario'];
-$usuario = $_SESSION['usuario'];
-$id_rol = $_SESSION['id_rol'];
 
 $perfil = obtenerPerfil($id_usuario);
 
@@ -37,28 +27,27 @@ $id3 = $preg3['ID_PREGUNTA'];
 $pregunta3 = $preg3['PREGUNTA'];
 $respuesta3 = $preg3['RESPUESTAS'];
 
-if(isset($_POST['respuesta1']))
-{
+if (isset($_POST['respuesta1'])) {
   require_once "../../Controladores/perfil.php";
 
   $id_usuario = $_SESSION['id_usuario'];
-  $idPregunta1 = $_POST['pregunta_secreta1']; 
+  $idPregunta1 = $_POST['pregunta_secreta1'];
   $respuesta1 = $_POST['respuesta1'];
   $idPregunta2 = $_POST['pregunta_secreta2'];
   $respuesta2 = $_POST['respuesta2'];
   $idPregunta3 = $_POST['pregunta_secreta3'];
   $respuesta3 = $_POST['respuesta3'];
   $correoP = $_POST['correo'];
-  $nombreUsuarioP = $_POST['nombre_usuario'];
+  
+
 
   actualizarRespuestas($id_usuario, $id1, $respuesta1, $id2, $respuesta2, $id3, $respuesta3);
-  actualizarDatos($id_usuario, $correoP, $nombreUsuarioP);
+  actualizarDatos($id_usuario, $correoP);
 
   header("Location: perfil.php");
 }
 
-if(isset($_POST['contrasena']))
-{
+if (isset($_POST['contrasena'])) {
   require_once "../../Controladores/perfil.php";
 
   $id_usuario = $_SESSION['id_usuario'];
@@ -66,93 +55,6 @@ if(isset($_POST['contrasena']))
   $hashed_password = password_hash($contrasena, PASSWORD_DEFAULT);
 
   cambiarContrasena($id_usuario, $hashed_password);
-}
-
-//---------------------PERMISOS DE LOS MANTENIMIENTOS----------------------
-$id_usuario_Usuario = "2";
-$id_objeto_Bitacora = "14";
-$id_objeto_Error = "33";
-$id_objeto_Estados = "6";
-$id_objeto_Historial = "34";
-$id_objeto_Objetos = "5";
-$id_objeto_Parametro = "4";
-$id_objeto_Permisos = "3";
-$id_objeto_Roles = "1";
-
-//------OBJETOS DE MANT.EMPLEADOS-------------
-$id_objeto_Sucursal = "9";
-$id_objeto_Region = "8";
-$id_objeto_Empleado = "7";
-$id_objeto_Cargos = "26";
-
-//------OBJETOS DE MANT.PRESTAMO-----------------------
-$id_objeto_Forma_Pago = "12";
-$id_objeto_PrestamoMantenimiento = "30";
-$id_objeto_Tipoprestamo = "13";
-
-//------------OBJETOS DE MANT.CUENTAS------------------
-$id_objeto_Transaccion = "11";
-$id_objeto_Tipo_cuenta = "28";
-$id_objeto_MantCuenta = "29";
-//------------------PERMISOS DE LAS PESTAÑAS-------------------------------------
-$id_objeto_Seguridad = "25";
-$id_objeto_PestaniaEmpleado = "27";
-$id_objeto_Cuentas = "36";
-$id_objeto_Prestamos = "35";
-
-//-------------------------------------------------------------------------------
-$permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_usuario_Usuario);
-$permisosBitacora = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacora);
-$permisosError = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Error);
-$permisosEstados = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Estados);
-$permisosHistorial = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Historial);
-$permisosObjetos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos);
-$permisosParametro = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Parametro);
-$permisosRoles = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
-$permisosPermiso = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos);
-//---------------------------Mant.Empleado----------
-$permisosSucursal = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Sucursal);
-$permisosRegion = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Region);
-$permisosEmpleado = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
-$permisosCargo = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
-//---------------------Mant.Cuentas----------------------
-$permisosTransaccion = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Transaccion);
-$permisosTipoCuenta = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_cuenta);
-$permisosMantCuenta = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_MantCuenta);
-
-//---------------------Mant.Prestamo----------------------
-$permisosFormaPago = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Forma_Pago);
-$permisosPresMantenimiento = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_PrestamoMantenimiento);
-$permisosTipoPrestamo = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Tipoprestamo);
-//------------------------------------------------------------------------------
-
-$permisos1 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
-$permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_PestaniaEmpleado);
-$permisos3 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
-$permisos4 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos);
-$datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
-$nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
-
-//---------CONEXION A LA TABLA ROLES --------
-// Crear una instancia de la clase Conectar
-$conexion = new Conectar();
-$conn = $conexion->Conexion();
-// Consultar la contraseña actual del usuario desde la base de datos
-$sql = "SELECT id_rol ,rol FROM tbl_ms_roles";
-$sql1 = "SELECT ID_ESTADO_USUARIO, NOMBRE FROM tbl_ms_estadousuario";
-$stmt = $conn->prepare($sql);
-$stmt1 = $conn->prepare($sql1);
-
-$stmt->execute();
-$stmt1->execute();
-
-// Obtener los resultados en un array asociativo
-$roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
-
-if (!isset($_SESSION['usuario'])) {
-  header("Location: ../../InicioSesion/login.php");
-  exit();
 }
 
 ?>
@@ -265,12 +167,22 @@ if (!isset($_SESSION['usuario'])) {
     <a href="javascript:history.back()" class="icono"><i class="fas fa-chevron-circle-left"></i></a>
     <!-- Icono de Adelante -->
     <a href="javascript:history.forward()" class="icono"><i class="fas fa-chevron-circle-right"></i></a>
+    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <div class="input-group">
+        <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+    </form>
     <!-- Navbar-->
-    <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
+    <ul class="navbar-nav ml-auto ml-md-0">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-          <a class="dropdown-item" href="perfil.php">Perfil</a>
+          <a class="dropdown-item" href="../../InicioSesion/cambiocontrasena.php">Cambiar Contraseña</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="./perfil.php">Perfil de Usuario</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="../../InicioSesion/logout.php">Salir</a>
         </div>
@@ -291,7 +203,7 @@ if (!isset($_SESSION['usuario'])) {
             if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
               echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
-                                    Seguridad
+                                    Modulo Seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
               echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
@@ -316,7 +228,7 @@ if (!isset($_SESSION['usuario'])) {
             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
               echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                                    Empleados
+                                    Modulo Empleado
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
               echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
@@ -336,7 +248,7 @@ if (!isset($_SESSION['usuario'])) {
             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
               echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
                             <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
-                            Cuentas
+                            Modulo Cuenta
                          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                           </a>';
               echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
@@ -355,7 +267,7 @@ if (!isset($_SESSION['usuario'])) {
             if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
               echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
                             <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
-                            Prestamos
+                            Modulo Prestamo
                          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                           </a>';
               echo '<div class="collapse" id="collapseMantenimientoPrestamo" aria-labelledby="headingMantenimientoPrestamo" data-parent="#sidenavAccordion">';
@@ -385,7 +297,7 @@ if (!isset($_SESSION['usuario'])) {
       <div class="container-fluid">
         <h1 class="mt-4">Perfil de Usuario</h1>
         <ol class="breadcrumb mb-4">
-          <li class="breadcrumb-item active">Perfil de Usuario</li>
+           <li class="breadcrumb-item active">Perfil de Usuario</li> 
         </ol>
         <div class="card mb-4">
           <div class="card-body">
@@ -408,15 +320,13 @@ if (!isset($_SESSION['usuario'])) {
                     <input type="text" class="form-control" id="usuario" name="usuario" value="<?php echo $usuario; ?>" disabled>
                   </div>
                   <div class="form-group">
-                      <label for="nombre_usuario">Nombre de Usuario</label>
-                      <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario" value="<?php echo $nombre_usuario; ?>" pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                    <label for="nombre_usuario">Nombre de Usuario</label>
+                    <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario" value="<?php echo $nombre_usuario; ?>" disabled>
                   </div>
-                  <div id="mensaje1"></div>
                   <div class="form-group">
-                      <label for="correo">Correo Electrónico</label>
-                      <input type="email" class="form-control" id="correo" name="correo" value="<?php echo $correo; ?>" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida">
+                    <label for="correo">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="correo" name="correo" value="<?php echo $correo; ?>">
                   </div>
-                  <div id="mensaje2"></div>
                   <div class="form-group">
                     <label for="pregunta_secreta1">Pregunta Secreta 1</label>
                     <select class="form-control" id="pregunta_secreta1" name="pregunta_secreta1" disabled>
@@ -431,7 +341,7 @@ if (!isset($_SESSION['usuario'])) {
                           <input type="password" class="form-control" id="respuesta1" name="respuesta1" value="<?php echo $respuesta1; ?>">
                         </td>
                         <td>
-                          <button onclick="ver_respuesta1()" class="btn btn-primary" ><i class="fa fa-eye" aria-hidden="true"></i></button>
+                          <button onclick="ver_respuesta1()" class="btn btn-primary"><i class="fa fa-eye" aria-hidden="true" style="height: 24px;"></i></button>
                         </td>
                       </tr>
                     </table>
@@ -451,7 +361,7 @@ if (!isset($_SESSION['usuario'])) {
                           <input type="password" class="form-control" id="respuesta2" name="respuesta2" value="<?php echo $respuesta2; ?>">
                         </td>
                         <td>
-                          <button onclick="ver_respuesta2()" class="btn btn-primary"> <i class="fa fa-eye" aria-hidden="true"></i></button>
+                          <button onclick="ver_respuesta2()" class="btn btn-primary"> <i class="fa fa-eye" aria-hidden="true" style="height: 24px;"></i></button>
                         </td>
                       </tr>
                     </table>
@@ -471,418 +381,257 @@ if (!isset($_SESSION['usuario'])) {
                           <input type="password" class="form-control" id="respuesta3" name="respuesta3" value="<?php echo $respuesta3; ?>">
                         </td>
                         <td>
-                          <button onclick="ver_respuesta3()" class="btn btn-primary"><i class="fa fa-eye" aria-hidden="true"></i> </button>
+                          <button onclick="ver_respuesta3()" class="btn btn-primary"><i class="fa fa-eye" aria-hidden="true" style="height: 24px;"></i> </button>
                         </td>
                       </tr>
                     </table>
                   </div>
                   <button onclick="actualizarRespuestas()" class="btn btn-primary">Actualizar</submit>
-                  <!--<button class="btn btn-danger" style="margin-left: 5px;"><a href="../../InicioSesion/index.php">Cancelar</a></button>-->
+                    <!--<button class="btn btn-danger" style="margin-left: 5px;"><a href="../../../InicioSesion/index.php">Cancelar</a></button>-->
                 </form>
               </div>
               <div class="vl" style="border-left: 2px solid #C0C0C0; height: 815px; margin-left: 20px; margin-right: 10px;"></div>
               <div class="col-md-4">
                 <!-- CAMBIO DE CONTRASEÑA -->
                 <form id="form-cambio-contrasena" action="./perfil.php" method="POST">
-                <div class="form-group">
-                  <label for="contrasena_actual">Contraseña Actual</label>
+                  <div class="form-group">
+                    <label for="contrasena_actual">Contraseña Actual</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="contrasena_actual" name="contrasena_actual">
-                        <div class="input-group-append">
-                            <button onclick="ver_contrasena()" class="btn btn-primary ml-2" type="button">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
-                            </button>
-                        </div>
+                      <input type="password" class="form-control" id="contrasena_actual" name="contrasena_actual">
+                      <div class="input-group-append">
+                        <button onclick="ver_contrasena()" class="btn btn-primary ml-1" type="button">
+                          <i class="fa fa-eye" aria-hidden="true"></i>
+                        </button>
+                      </div>
                     </div>
-                </div>
-                 
-                <div class="form-group">
-                  <label for="contrasena">Nueva Contraseña</label>
-                  <div class="input-group">
-                      <input type="password" class="form-control" id="contrasena" name="contrasena"
-                            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$"
-                            title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial"
-                            required>
-                      <div class="input-group-append">
-                          <button onclick="ver_contrasena_nueva()" class="btn btn-primary ml-2" type="button">
-                              <i class="fa fa-eye" aria-hidden="true"></i>
-                          </button>
-                      </div>
-                      <div id="mensaje3"></div>
                   </div>
-               </div>
 
-                <div class="form-group">
-                  <label for="confirmar_contrasena">Confirmar Contraseña</label>
-                  <div class="input-group">
-                      <input type="password" class="form-control" id="confirmar_contrasena" name="confirmar_contrasena"
-                            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$"
-                            title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial"
-                            required>
+                  <div class="form-group">
+                    <label for="contrasena">Nueva Contraseña</label>
+                    <div class="input-group">
+                      <input type="password" class="form-control" id="contrasena" name="contrasena">
                       <div class="input-group-append">
-                          <button onclick="ver_contrasena_confirmar()" class="btn btn-primary ml-2" type="button">
-                              <i class="fa fa-eye" aria-hidden="true"></i>
-                          </button>
+                        <button onclick="ver_contrasena_nueva()" class="btn btn-primary ml-1" type="button">
+                          <i class="fa fa-eye" aria-hidden="true"></i>
+                        </button>
                       </div>
-                      <div id="mensaje4"></div>
+                    </div>
                   </div>
-                </div>
-                <button id="botonCambiarContrasena" onclick="cambiarContrasena()" class="btn btn-primary">Cambiar Contraseña</button>
+
+                  <div class="form-group">
+                    <label for="confirmar_contrasena">Confirmar Contraseña</label>
+                    <div class="input-group">
+                      <input type="password" class="form-control" id="confirmar_contrasena" name="confirmar_contrasena">
+                      <div class="input-group-append">
+                        <button onclick="ver_contrasena_confirmar()" class="btn btn-primary ml-1" type="button">
+                          <i class="fa fa-eye" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <br>
+                    <button onclick="cambiarContrasena()" class="btn btn-primary">Cambiar Contraseña</button>
+                    </br>
+                  </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- FIN -->
-      <footer class="py-4 bg-light mt-auto">
-        <div class="container-fluid">
-          <div class="d-flex align-items-start justify-content-center small">
-            <div class="text-muted">Copyright &copy; IA-UNAH 2023</div>
+
+
+
+
+
+        <!-- FIN -->
+
+        <footer class="py-4 bg-light mt-auto">
+          <div class="container-fluid">
+            <div class="d-flex align-items-start justify-content-center small">
+              <div class="text-muted">Copyright &copy; IA-UNAH 2023</div>
+            </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </div>
-  </div>
-            
-  <script>
-    // FUNCION PARA VER LA RESPUESTA 1
-    function ver_respuesta1() {
-      var form = document.getElementById("form-perfil");
-      var tipo = document.getElementById("respuesta1");
-      if (tipo.type == "password") {
+
+    <script>
+      // FUNCION PARA VER LA RESPUESTA 1
+      function ver_respuesta1() {
+        var form = document.getElementById("form-perfil");
+        var tipo = document.getElementById("respuesta1");
+        if (tipo.type == "password") {
           form.addEventListener("submit", function(event) {
             event.preventDefault();
           });
-        tipo.type = "text";
-      } else {
-        tipo.type = "password";
+          tipo.type = "text";
+        } else {
+          tipo.type = "password";
+        }
       }
-    }
 
-    // FUNCION PARA VER LA RESPUESTA 2
-    function ver_respuesta2() {
-      var form = document.getElementById("form-perfil");
-      var tipo = document.getElementById("respuesta2");
-      if (tipo.type == "password") {
+      // FUNCION PARA VER LA RESPUESTA 2
+      function ver_respuesta2() {
+        var form = document.getElementById("form-perfil");
+        var tipo = document.getElementById("respuesta2");
+        if (tipo.type == "password") {
+          form.addEventListener("submit", function(event) {
+            event.preventDefault();
+          });
+          tipo.type = "text";
+        } else {
+          tipo.type = "password";
+        }
+      }
+
+      // FUNCION PARA VER LA RESPUESTA 3
+      function ver_respuesta3() {
+        var form = document.getElementById("form-perfil");
+        var tipo = document.getElementById("respuesta3");
+        if (tipo.type == "password") {
+          form.addEventListener("submit", function(event) {
+            event.preventDefault();
+          });
+          tipo.type = "text";
+        } else {
+          tipo.type = "password";
+        }
+      }
+
+      function actualizarRespuestas() {
+        form = document.getElementById("form-perfil");
         form.addEventListener("submit", function(event) {
-            event.preventDefault();
-          });
-        tipo.type = "text";
-      } else {
-        tipo.type = "password";
-      }
-    }
+          event.preventDefault();
+        });
 
-    // FUNCION PARA VER LA RESPUESTA 3
-    function ver_respuesta3() {
-      var form = document.getElementById("form-perfil");
-      var tipo = document.getElementById("respuesta3");
-      if (tipo.type == "password") {
+        Swal.fire({
+          title: '¿Está seguro de actualizar sus respuestas?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: '¡Sí, actualizar!',
+          cancelButtonText: "Cancelar"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById("form-perfil").submit();
+          }
+        })
+      }
+
+      function actualizarDatos() {
+        form = document.getElementById("form-perfil");
         form.addEventListener("submit", function(event) {
-            event.preventDefault();
-          });
-        tipo.type = "text";
-      } else {
-        tipo.type = "password";
-      }
-    }
-    
-    function actualizarRespuestas()
-    {
-      form = document.getElementById("form-perfil");
-      form.addEventListener("submit", function(event) {
-        event.preventDefault();
-      });
+          event.preventDefault();
+        });
 
-      Swal.fire({
-        title: '¿Está seguro de actualizar sus respuestas?',
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: '¡Sí, actualizar!',
-        cancelButtonText: "Cancelar"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          document.getElementById("form-perfil").submit();
-          window.location.href = '../../InicioSesion/index.php';
-        }
-      })
-    }
-
-    function actualizarDatos()
-    {
-      form = document.getElementById("form-perfil");
-      form.addEventListener("submit", function(event) {
-        event.preventDefault();
-      });
-
-      Swal.fire({
-        title: '¿Está seguro de actualizar sus respuestas?',
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: '¡Sí, actualizar!',
-        cancelButtonText: "Cancelar"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          document.getElementById("form-perfil").submit();
-          window.location.href = '../../InicioSesion/index.php';
-        }
-      })
-    }
-
-    function cambiarContrasena()
-    {
-      form = document.getElementById("form-cambio-contrasena");
-      form.addEventListener("submit", function(event) {
-        event.preventDefault();
-      });
-
-      // Obtener los valores de las contraseñas
-    
-      var contrasena = document.getElementById('contrasena').value;
-      var confirmar_contrasena = document.getElementById('confirmar_contrasena').value;
-      var contraActual = document.getElementById('contrasena_actual');
-
-      // Validamos que las contraseñas nuevas sean iguales en los 2 campos
-      if (!validarContraseñas(contrasena, confirmar_contrasena)) {
-        return;
-      }
-
-      Swal.fire({
-        title: '¿Está seguro de cambiar su contraseña?',
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: '¡Sí, cambiar!',
-        cancelButtonText: "Cancelar"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          document.getElementById("form-cambio-contrasena").submit();
-          window.location.href = '../../InicioSesion/index.php';
-        }
-        else
-        {
-          //Limpiar los input de contrasena
-          contraActual = document.getElementById('contrasena_actual');
-          contra = document.getElementById('contrasena');
-          confirmar = document.getElementById('confirmar_contrasena');
-          contraActual.value = "";
-          contra.value = "";
-          confirmar.value = "";
-        }
-      })
-    }
-
-    function ver_contrasena() {
-      var form = document.getElementById("form-cambio-contrasena");
-      var tipo = document.getElementById("contrasena_actual");
-      if (tipo.type == "password") {
-          form.addEventListener("submit", function(event) {
-            event.preventDefault();
-          });
-        tipo.type = "text";
-      } else {
-        tipo.type = "password";
-      }
-    }
-
-    function ver_contrasena_nueva() {
-      var form = document.getElementById("form-cambio-contrasena");
-      var tipo = document.getElementById("contrasena");
-      if (tipo.type == "password") {
-          form.addEventListener("submit", function(event) {
-            event.preventDefault();
-          });
-        tipo.type = "text";
-      } else {
-        tipo.type = "password";
-      }
-    }
-
-    function ver_contrasena_confirmar() {
-      var form = document.getElementById("form-cambio-contrasena");
-      var tipo = document.getElementById("confirmar_contrasena");
-      if (tipo.type == "password") {
-          form.addEventListener("submit", function(event) {
-            event.preventDefault();
-          });
-        tipo.type = "text";
-      } else {
-        tipo.type = "password";
-      }
-    }
-
-    //Validaciones y Mensajes Para El Cambio De Contraseña
-    function validarContraseñas(contrasena, confirmar_contrasena) {
-      if (contrasena !== confirmar_contrasena) {
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Las contraseñas no coinciden.'
-        });
-        return false;
+          title: '¿Está seguro de actualizar sus respuestas?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: '¡Sí, actualizar!',
+          cancelButtonText: "Cancelar"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById("form-perfil").submit();
+          }
+        })
       }
-      return true;
-    }
 
-    function validarContraseñasA(contrasenaA, confirmar_contrasena) {
-      if (contrasenaA == confirmar_contrasena) {
+      function cambiarContrasena() {
+        form = document.getElementById("form-cambio-contrasena");
+        form.addEventListener("submit", function(event) {
+          event.preventDefault();
+        });
+
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'La contraseña nueva debe ser diferente de la anterior.'
-        });
-        return false;
+          title: '¿Está seguro de cambiar su contraseña?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: '¡Sí, cambiar!',
+          cancelButtonText: "Cancelar"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById("form-cambio-contrasena").submit();
+          } else {
+            //Limpiar los input de contrasena
+            contraActual = document.getElementById('contrasena_actual');
+            contra = document.getElementById('contrasena');
+            confirmar = document.getElementById('confirmar_contrasena');
+            contraActual.value = "";
+            contra.value = "";
+            confirmar.value = "";
+          }
+        })
       }
-      return true;
-    }
-    
-    function validarNombre() {
-            nombre = document.getElementById("nombre_usuario");
-            correo = document.getElementById("correo");
-            contrasena = document.getElementById("contrasena");
-            confirmar_contrasena = document.getElementById("confirmar_contrasena");
 
-            function clearMessage(messageElement, inputElement) {
-                messageElement.innerHTML = ""; // Elimina el contenido del mensaje
-                inputElement.style.borderColor = ""; // Restablece el borde
-                inputElement.style.boxShadow = ""; // Restablece la sombra
-            }
-
-            function validateInput(inputElement, expression, messageElement, message) {
-                if (inputElement.value === "") {
-                    clearMessage(messageElement, inputElement);
-                } else if (!expression.test(inputElement.value)) {
-                    inputElement.style.borderColor = "red";
-                    inputElement.style.boxShadow = "0 0 10px red";
-                    messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
-                    messageElement.style.color = "red";
-                } else {
-                    clearMessage(messageElement, inputElement); // Restablece los estilos
-                    messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
-                    messageElement.style.color = "green";
-                }
-            }
-
-            function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
-                inputElement.addEventListener("input", function() {
-                    validateInput(inputElement, expression, messageElement, message);
-                });
-
-                inputElement.addEventListener("blur", function() {
-                    clearMessage(messageElement, inputElement);
-                });
-            }
-
-            function handleDescriptionKeypressEvent(inputElement) {
-                inputElement.addEventListener("keypress", function(e) {
-                    var currentDescription = inputElement.value;
-                    if (e.key === " " && currentDescription.endsWith(" ")) {
-                        e.preventDefault();
-                    }
-                });
-            }
-
-            var expresionValidadora1 = /^[A-Z0-9\s]+$/;
-            var mensaje1 = document.getElementById("mensaje1");
-            handleInputAndBlurEvents(nombre_usuario, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas & un espacio entre palabra");
-            handleDescriptionKeypressEvent(nombre_usuario);
-
-            var expresionValidadora2 = /^[A-Za-z0-9.!@#$%^&*]+$/;
-            var mensaje2 = document.getElementById("mensaje2");
-            handleInputAndBlurEvents(correo, expresionValidadora2, mensaje2, "Ingrese una dirección de correo electrónico válida");
-
-            var expresionValidadora3 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
-            var mensaje3 = document.getElementById("mensaje3");
-            handleInputAndBlurEvents(contrasena, expresionValidadora3, mensaje3, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
-
-            var mensaje4 = document.getElementById("mensaje4");
-            handleInputAndBlurEvents(confirmar_contrasena, expresionValidadora3, mensaje4, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
+      function ver_contrasena() {
+        var form = document.getElementById("form-cambio-contrasena");
+        var tipo = document.getElementById("contrasena_actual");
+        if (tipo.type == "password") {
+          form.addEventListener("submit", function(event) {
+            event.preventDefault();
+          });
+          tipo.type = "text";
+        } else {
+          tipo.type = "password";
         }
-        $(document).ready(function() {
-            validarNombre();
-        });
+      }
 
-        // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#nombre_usuario, #contrasena, #confirmar_contrasena').on('input', function() {
-            var input = $(this);
-            var trimmedValue = input.val().trim();
-            input.val(trimmedValue);
-
-            if (trimmedValue === '') {
-                Swal.fire({
-                    title: 'Advertencia',
-                    text: 'El campo no puede estar vacío',
-                    icon: 'warning',
-                });
-            }
-        });
-
-        // Escuchar eventos de cambio en los campos de entrada para eliminar espacios en blanco al principio y al final
-        $('#correo').on('input', function() {
-            var input = $(this);
-            var trimmedValue = input.val().trim();
-            input.val(trimmedValue);
-
-            if (trimmedValue === '') {
-                Swal.fire({
-                    title: 'Advertencia',
-                    text: 'El campo no puede estar vacío',
-                    icon: 'warning',
-                });
-            }
-        });
-
-        const contrasenaActualInput = document.getElementById("contrasena_actual");
-        const contrasenaInput = document.getElementById("contrasena");
-        const confirmarContrasenaInput = document.getElementById("confirmar_contrasena");
-        const cambiarContrasenaBtn = document.getElementById('botonCambiarContrasena');
-        cambiarContrasenaBtn.disabled = true; // Lo deshabilitamos inicialmente
-
-        // Función para verificar si todos los campos están llenos
-        function checkForm() {
-            const isFormValid = contrasenaActualInput.value !== '' &&
-                contrasenaInput.value.trim() !== '' && confirmarContrasenaInput.value.trim() !== '';
-
-            cambiarContrasenaBtn.disabled = !isFormValid;
+      function ver_contrasena_nueva() {
+        var form = document.getElementById("form-cambio-contrasena");
+        var tipo = document.getElementById("contrasena");
+        if (tipo.type == "password") {
+          form.addEventListener("submit", function(event) {
+            event.preventDefault();
+          });
+          tipo.type = "text";
+        } else {
+          tipo.type = "password";
         }
+      }
 
-        // Agrega un evento input a cada campo de entrada
-        contrasenaActualInput.addEventListener('input', checkForm);
-        contrasenaInput.addEventListener('input', checkForm);
-        confirmarContrasenaInput.addEventListener('input', checkForm);
-
-        function regresar()
-        {
-          window.location.replace('../../InicioSesion/index.php');
+      function ver_contrasena_confirmar() {
+        var form = document.getElementById("form-cambio-contrasena");
+        var tipo = document.getElementById("confirmar_contrasena");
+        if (tipo.type == "password") {
+          form.addEventListener("submit", function(event) {
+            event.preventDefault();
+          });
+          tipo.type = "text";
+        } else {
+          tipo.type = "password";
         }
+      }
 
-  </script>
 
-  <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-  <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
-  <!--<script src="../../Config/constantes.js"></script> -->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-  <script src="../../js/scripts.js"></script>
+      function regresar() {
+        window.location.replace('../../InicioSesion/index.php');
+      }
+    </script>
+
+    <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+    <script src="../../Config/constantes.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="../../js/scripts.js"></script>
 
 </body>
 

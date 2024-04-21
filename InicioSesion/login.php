@@ -14,7 +14,7 @@ if ($_POST) {
     $contrasena = $_POST['contrasena'];
 
     if ($conn) {
-        $sql = "SELECT id_usuario, usuario, contrasena, id_estado_usuario, id_rol, preguntas_contestadas, auto_registro, primer_ingreso FROM tbl_ms_usuario WHERE usuario = :usuario";
+        $sql = "SELECT id_usuario, usuario, contrasena, id_estado_usuario, id_rol, preguntas_contestadas FROM tbl_ms_usuario WHERE usuario = :usuario";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':usuario', $usuario);
         $stmt->execute();
@@ -31,10 +31,10 @@ if ($_POST) {
                 
                 if ($row['id_estado_usuario'] == 1) {
                     $date = new DateTime(date("Y-m-d H:i:s"));
-                    $dateMod = $date->modify("-7 hours");
+                    $dateMod = $date->modify("-6 hours");
                     $dateNew = $dateMod->format("Y-m-d H:i:s"); 
                     $bitacora = new bitacora();
-                    $bitacora->insert_bitacora($dateNew, "INICIO DE SESION", "INGRESO EL USUARIO: " . $_SESSION['usuario'], $_SESSION['id_usuario'], 2, $_SESSION['usuario'], $dateNew);  
+                    $bitacora->insert_bitacora($dateNew, $_SESSION['id_usuario'], 2, "INICIO DE SESION"); 
                     if (isset($_SESSION['usuario'])) {
                         header("Location: index.php");
                         exit();
@@ -42,13 +42,12 @@ if ($_POST) {
                 } elseif ($row['id_estado_usuario'] == 2) {
                     $mensajeEstado = 'Su usuario se encuentra inactivo';
                     header("refresh: 2; url=login.php");
-                } elseif ($row['id_estado_usuario'] == 4) { 
+                } elseif ($row['id_estado_usuario'] == 3) {
+                   // header("Location: ../Vistas/MantenimientoUsuario/Contestar_preguntas.php");
+                    header("Location: cambiocontrasena.php");
+                } elseif ($row['id_estado_usuario'] == 4) {
                     $mensajeEstado = 'Su usuario se encuentra bloqueado.';
                     header("refresh: 2; url=login.php");
-                }  elseif ($row['auto_registro'] < 1) { 
-                    header("refresh: 2; url= ../InicioSesion/cambiocontrasena.php");
-                } elseif ($row['preguntas_contestadas'] == 0) { 
-                    header("refresh: 2; url= ../Vistas/MantenimientoUsuario/Contestar_preguntas.php");
                 }
             } else {
 
@@ -141,19 +140,12 @@ if ($_POST) {
                                 </div>
                                 <div class="card-body">
                                     <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                                        <label class="small mb-1" for="inputEmailAddress">Usuario</label>
-                                        <div class="form-group"><input class="form-control py-4" id="inputEmailAddress" name="usuario" type="text" maxlength="15" placeholder="Ingresa tu usuario:" 
-                                        required pattern="^(?!.*\s).*$" title="No se permiten espacios en blanco o campos vacios." oninput="this.value = this.value.toUpperCase()" />
+                                        <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Usuario</label><input class="form-control py-4" id="inputEmailAddress" name="usuario" type="text" maxlength="15" placeholder="Ingresa tu usuario:" 
+                                        required pattern="^(?!.*\s).*$" title="No se permiten espacios en blanco o campos vacios." oninput="this.value = this.value.toUpperCase()" /></div>
                                         
-                                        </div>
-                                        <label class="small mb-1" for="inputPassword">Contraseña</label>
-                                        <div class="input-group"><input class="form-control py-4" id="inputPassword" name="contrasena" type="password" maxlength="100" placeholder="Ingresa tu contraseña:" 
-                                        required pattern="^[^\s]{1,100}$" title="No se permiten espacios en blanco o campos vacios." />
-                                        <button type="button" id="showPasswordBtn" class="btn btn-outline-secondary" onclick="togglePasswordVisibility()">
-                                                    <i id="eyeIcon" class="fas fa-eye"></i>
-                                        </button>
-                                        </div>
-                                        <div style="text-align: center; margin-top: 15px;">
+                                        <div class="form-group"><label class="small mb-1" for="inputPassword">Contraseña</label><input class="form-control py-4" id="inputPassword" name="contrasena" type="password" maxlength="100" placeholder="Ingresa tu contraseña:" 
+                                        required pattern="^[^\s]{1,100}$" title="No se permiten espacios en blanco o campos vacios." /></div>
+                                        <div style="text-align: center;">
                                             <button type="submit" class="btn btn-primary">Ingresar</button>
                                         </div>
                                         <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><a class="small" href="../Vistas/RecuperacionContrasenia/SeleccionarMetodo.php">¿Olvido su contraseña? Recuperar aquí</a>
@@ -217,20 +209,6 @@ if ($_POST) {
         });  
     });
     </script>
-    <script>
-        function togglePasswordVisibility() {
-        var passwordInput = document.getElementById("inputPassword");
-        var eyeIcon = document.getElementById("eyeIcon");
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                eyeIcon.classList.remove("fa-eye");
-                eyeIcon.classList.add("fa-eye-slash");
-            } else {
-                passwordInput.type = "password";
-                eyeIcon.classList.remove("fa-eye-slash");
-                eyeIcon.classList.add("fa-eye");
-            }
-        }</script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../js/scripts.js"></script>

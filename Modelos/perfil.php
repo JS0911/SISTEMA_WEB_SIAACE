@@ -69,15 +69,14 @@ class Perfil
         return $stmt;
     }
 
-    public function actualizarDatos($id_usuario, $correo, $nombreUsuarioP)
+    public function actualizarDatos($id_usuario, $correo)
     {
-        $sql = "UPDATE tbl_ms_usuario SET CORREO_ELECTRONICO = :correo, NOMBRE_USUARIO=:nombreUsuarioP WHERE ID_USUARIO = :id_usuario" ;
+        $sql = "UPDATE tbl_ms_usuario SET CORREO_ELECTRONICO = :correo WHERE ID_USUARIO = :id_usuario" ;
         $conexion = new Conectar();
         $conn = $conexion->Conexion();
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':id_usuario', $id_usuario);
         $stmt->bindParam(':correo', $correo);
-        $stmt->bindParam(':nombreUsuarioP', $nombreUsuarioP);
         $stmt->execute();
         return $stmt;
     }

@@ -37,10 +37,10 @@ function actualizarRespuestas($id_usuario, $idPregunta1, $respuesta1, $idPregunt
     return $row;
 }
 
-function actualizarDatos($id_usuario, $correo, $nombreUsuarioP)
+function actualizarDatos($id_usuario, $correo)
 {
     $modeloPerfil = new Perfil();
-    $row = $modeloPerfil->actualizarDatos($id_usuario, $correo, $nombreUsuarioP);
+    $row = $modeloPerfil->actualizarDatos($id_usuario, $correo);
 }
 
 function cambiarContrasena($id_usuario, $contrasena)
