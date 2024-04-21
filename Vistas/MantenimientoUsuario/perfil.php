@@ -1,7 +1,57 @@
+<!-- -----------------------------------------------------------------------
+	Universidad Nacional Autonoma de Honduras (UNAH)
+		Facultad de Ciencias Economicas
+	Departamento de Informatica administrativa
+         Analisis, Programacion y Evaluacion de Sistemas
+                    Tercer Periodo 2023
+
+
+Equipo:
+Sahory Garcia          sahori.garcia@unah.hn
+Jairo Garcia           jairo.lagos@unah.hn
+Ashley Matamoros       Ashley.matamoros@unah.hn
+Lester Padilla         Lester.padilla@unah.hn
+Khaterine Ordoñez      khaterine.ordonez@unah.hn
+Yeniffer Velasquez     yeniffer.velasquez@unah.hn
+Kevin Zuniga           kgzuniga@unah.hn
+
+Catedratico analisis y diseño: Lic. Giancarlos Martini Scalici Aguilar
+Catedratico programacion e implementacion: Lic. Karla Melisa Garcia Pineda 
+Catedratico evaluacion de sistemas:  Lic. Karla Melisa Garcia Pineda
+
+
+---------------------------------------------------------------------
+
+Programa:         Pantalla de Perfil
+Fecha:           
+Programador:      
+descripcion:      Pantalla que muestra y actualiza la informacion de usuario
+-----------------------------------------------------------------------
+
+                Historial de Cambio
+
+-----------------------------------------------------------------------
+
+Programador               Fecha                      Descripcion
+
+
+Kevin Zuniga              22-abril-2024             Se agrego alertas y validaciones, ademas de algunos detalles esteticos
+------------------------------------------------------------------------->
+
 <?php
 session_start();
 
+require "../../Config/conexion.php";
+require_once '../../Modelos/permisoUsuario.php';
+require_once '../../Modelos/Usuarios.php';
 require_once "../../Controladores/perfil.php";
+
+$permisosUsuarios = new PermisosUsuarios();
+$usuario_obj = new Usuario();
+
+$id_usuario = $_SESSION['id_usuario'];
+$usuario = $_SESSION['usuario'];
+$id_rol = $_SESSION['id_rol'];
 
 $id_usuario = $_SESSION['id_usuario'];
 
@@ -39,8 +89,6 @@ if (isset($_POST['respuesta1'])) {
   $respuesta3 = $_POST['respuesta3'];
   $correoP = $_POST['correo'];
   
-
-
   actualizarRespuestas($id_usuario, $id1, $respuesta1, $id2, $respuesta2, $id3, $respuesta3);
   actualizarDatos($id_usuario, $correoP);
 
@@ -56,6 +104,94 @@ if (isset($_POST['contrasena'])) {
 
   cambiarContrasena($id_usuario, $hashed_password);
 }
+
+//---------------------PERMISOS DE LOS MANTENIMIENTOS----------------------
+$id_usuario_Usuario = "2";
+$id_objeto_Bitacora = "14";
+$id_objeto_Error = "33";
+$id_objeto_Estados = "6";
+$id_objeto_Historial = "34";
+$id_objeto_Objetos = "5";
+$id_objeto_Parametro = "4";
+$id_objeto_Permisos = "3";
+$id_objeto_Roles = "1";
+
+//------OBJETOS DE MANT.EMPLEADOS-------------
+$id_objeto_Sucursal = "9";
+$id_objeto_Region = "8";
+$id_objeto_Empleado = "7";
+$id_objeto_Cargos = "26";
+
+//------OBJETOS DE MANT.PRESTAMO-----------------------
+$id_objeto_Forma_Pago = "12";
+$id_objeto_PrestamoMantenimiento = "30";
+$id_objeto_Tipoprestamo = "13";
+
+//------------OBJETOS DE MANT.CUENTAS------------------
+$id_objeto_Transaccion = "11";
+$id_objeto_Tipo_cuenta = "28";
+$id_objeto_MantCuenta = "29";
+//------------------PERMISOS DE LAS PESTAÑAS-------------------------------------
+$id_objeto_Seguridad = "25";
+$id_objeto_PestaniaEmpleado = "27";
+$id_objeto_Cuentas = "36";
+$id_objeto_Prestamos = "35";
+
+//-------------------------------------------------------------------------------
+$permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_usuario_Usuario);
+$permisosBitacora = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacora);
+$permisosError = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Error);
+$permisosEstados = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Estados);
+$permisosHistorial = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Historial);
+$permisosObjetos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos);
+$permisosParametro = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Parametro);
+$permisosRoles = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
+$permisosPermiso = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos);
+//---------------------------Mant.Empleado----------
+$permisosSucursal = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Sucursal);
+$permisosRegion = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Region);
+$permisosEmpleado = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
+$permisosCargo = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cargos);
+//---------------------Mant.Cuentas----------------------
+$permisosTransaccion = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Transaccion);
+$permisosTipoCuenta = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_cuenta);
+$permisosMantCuenta = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_MantCuenta);
+
+//---------------------Mant.Prestamo----------------------
+$permisosFormaPago = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Forma_Pago);
+$permisosPresMantenimiento = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_PrestamoMantenimiento);
+$permisosTipoPrestamo = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Tipoprestamo);
+//------------------------------------------------------------------------------
+
+$permisos1 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
+$permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_PestaniaEmpleado);
+$permisos3 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
+$permisos4 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos);
+$datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
+$nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
+
+//---------CONEXION A LA TABLA ROLES --------
+// Crear una instancia de la clase Conectar
+$conexion = new Conectar();
+$conn = $conexion->Conexion();
+// Consultar la contraseña actual del usuario desde la base de datos
+$sql = "SELECT id_rol ,rol FROM tbl_ms_roles WHERE ID_ESTADO_USUARIO = 1";
+$sql1 = "SELECT ID_ESTADO_USUARIO, NOMBRE FROM tbl_ms_estadousuario";
+$stmt = $conn->prepare($sql);
+$stmt1 = $conn->prepare($sql1);
+
+$stmt->execute();
+$stmt1->execute();
+
+// Obtener los resultados en un array asociativo
+$roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$Estados = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
+if (!isset($_SESSION['usuario'])) {
+  header("Location: ../../InicioSesion/login.php");
+  exit();
+}
+
 
 ?>
 
@@ -180,9 +316,7 @@ if (isset($_POST['contrasena'])) {
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-          <a class="dropdown-item" href="../../InicioSesion/cambiocontrasena.php">Cambiar Contraseña</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="./perfil.php">Perfil de Usuario</a>
+          <a class="dropdown-item" href="./perfil.php">Perfil</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="../../InicioSesion/logout.php">Salir</a>
         </div>
@@ -203,7 +337,7 @@ if (isset($_POST['contrasena'])) {
             if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
               echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento" aria-expanded="false" aria-controls="collapseMantenimiento">
                                     <div class="sb-nav-link-icon"><i class="fas fa-lock"></i></div>
-                                    Modulo Seguridad
+                                    Seguridad
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
               echo '<div class="collapse" id="collapseMantenimiento" aria-labelledby="headingMantenimiento" data-parent="#sidenavAccordion">';
@@ -228,7 +362,7 @@ if (isset($_POST['contrasena'])) {
             if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
               echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoEmpleado" aria-expanded="false" aria-controls="collapseMantenimientoEmpleado">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                                    Modulo Empleado
+                                    Empleado
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>';
               echo '<div class="collapse" id="collapseMantenimientoEmpleado" aria-labelledby="headingMantenimientoEmpleado" data-parent="#sidenavAccordion">';
@@ -248,7 +382,7 @@ if (isset($_POST['contrasena'])) {
             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
               echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoCuentas" aria-expanded="false" aria-controls="collapseMantenimientoCuentas">
                             <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
-                            Modulo Cuenta
+                            Cuenta
                          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                           </a>';
               echo '<div class="collapse" id="collapseMantenimientoCuentas" aria-labelledby="headingMantenimientoCuentas" data-parent="#sidenavAccordion">';
@@ -267,7 +401,7 @@ if (isset($_POST['contrasena'])) {
             if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
               echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamo" aria-expanded="false" aria-controls="collapseMantenimientoPrestamo">
                             <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
-                            Modulo Prestamo
+                            Prestamo
                          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                           </a>';
               echo '<div class="collapse" id="collapseMantenimientoPrestamo" aria-labelledby="headingMantenimientoPrestamo" data-parent="#sidenavAccordion">';
@@ -325,8 +459,9 @@ if (isset($_POST['contrasena'])) {
                   </div>
                   <div class="form-group">
                     <label for="correo">Correo Electrónico</label>
-                    <input type="email" class="form-control" id="correo" name="correo" value="<?php echo $correo; ?>">
+                    <input type="email" maxlength="30" class="form-control" id="correo" name="correo" required pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" title="Ingrese una dirección de correo electrónico válida" value="<?php echo $correo; ?>">
                   </div>
+                  <div id="mensaje1"></div>
                   <div class="form-group">
                     <label for="pregunta_secreta1">Pregunta Secreta 1</label>
                     <select class="form-control" id="pregunta_secreta1" name="pregunta_secreta1" disabled>
@@ -338,7 +473,7 @@ if (isset($_POST['contrasena'])) {
                     <table width="108%">
                       <tr>
                         <td>
-                          <input type="password" class="form-control" id="respuesta1" name="respuesta1" value="<?php echo $respuesta1; ?>">
+                          <input type="password" maxlength="30" class="form-control" id="respuesta1" name="respuesta1" value="<?php echo $respuesta1; ?>">
                         </td>
                         <td>
                           <button onclick="ver_respuesta1()" class="btn btn-primary"><i class="fa fa-eye" aria-hidden="true" style="height: 24px;"></i></button>
@@ -358,7 +493,7 @@ if (isset($_POST['contrasena'])) {
                     <table width="108%">
                       <tr>
                         <td>
-                          <input type="password" class="form-control" id="respuesta2" name="respuesta2" value="<?php echo $respuesta2; ?>">
+                          <input type="password" maxlength="30" class="form-control" id="respuesta2" name="respuesta2" value="<?php echo $respuesta2; ?>">
                         </td>
                         <td>
                           <button onclick="ver_respuesta2()" class="btn btn-primary"> <i class="fa fa-eye" aria-hidden="true" style="height: 24px;"></i></button>
@@ -378,7 +513,7 @@ if (isset($_POST['contrasena'])) {
                     <table width="108%">
                       <tr>
                         <td>
-                          <input type="password" class="form-control" id="respuesta3" name="respuesta3" value="<?php echo $respuesta3; ?>">
+                          <input type="password" maxlength="30" class="form-control" id="respuesta3" name="respuesta3" value="<?php echo $respuesta3; ?>">
                         </td>
                         <td>
                           <button onclick="ver_respuesta3()" class="btn btn-primary"><i class="fa fa-eye" aria-hidden="true" style="height: 24px;"></i> </button>
@@ -409,24 +544,26 @@ if (isset($_POST['contrasena'])) {
                   <div class="form-group">
                     <label for="contrasena">Nueva Contraseña</label>
                     <div class="input-group">
-                      <input type="password" class="form-control" id="contrasena" name="contrasena">
+                      <input type="password" maxlength="30" class="form-control" id="contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" name="contrasena">
                       <div class="input-group-append">
                         <button onclick="ver_contrasena_nueva()" class="btn btn-primary ml-1" type="button">
                           <i class="fa fa-eye" aria-hidden="true"></i>
                         </button>
                       </div>
+                      <div id="mensaje2"></div>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="confirmar_contrasena">Confirmar Contraseña</label>
                     <div class="input-group">
-                      <input type="password" class="form-control" id="confirmar_contrasena" name="confirmar_contrasena">
+                      <input type="password" maxlength="30" class="form-control" id="confirmar_contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" name="confirmar_contrasena">
                       <div class="input-group-append">
                         <button onclick="ver_contrasena_confirmar()" class="btn btn-primary ml-1" type="button">
                           <i class="fa fa-eye" aria-hidden="true"></i>
                         </button>
                       </div>
+                      <div id="mensaje3"></div>
                     </div>
                     <br>
                     <button onclick="cambiarContrasena()" class="btn btn-primary">Cambiar Contraseña</button>
@@ -436,10 +573,6 @@ if (isset($_POST['contrasena'])) {
             </div>
           </div>
         </div>
-
-
-
-
 
         <!-- FIN -->
 
@@ -546,6 +679,20 @@ if (isset($_POST['contrasena'])) {
           event.preventDefault();
         });
 
+        var contraActual = document.getElementById('contrasena_actual').value;
+        var contra = document.getElementById('contrasena').value;
+        var confirmar = document.getElementById('confirmar_contrasena').value;
+
+        // Verificar que las contraseñas coincidan y no estén vacías
+        if (contra.trim() !== confirmar.trim()) {
+            // Mostrar mensaje de error si las contraseñas no coinciden
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Las contraseñas no coinciden.'
+            });
+            return;
+        }
         Swal.fire({
           title: '¿Está seguro de cambiar su contraseña?',
           text: "¡No podrás revertir esto!",
@@ -609,7 +756,105 @@ if (isset($_POST['contrasena'])) {
         }
       }
 
+      function validarNombre() {
+            correo = document.getElementById("correo");
+            contrasena = document.getElementById("contrasena");
+            confirmarContrasena = document.getElementById("confirmar_contrasena");
 
+            function clearMessage(messageElement, inputElement) {
+                messageElement.innerHTML = ""; // Elimina el contenido del mensaje
+                inputElement.style.borderColor = ""; // Restablece el borde
+                inputElement.style.boxShadow = ""; // Restablece la sombra
+            }
+
+            function validateInput(inputElement, expression, messageElement, message) {
+                if (inputElement.value === "") {
+                    clearMessage(messageElement, inputElement);
+                } else if (!expression.test(inputElement.value)) {
+                    inputElement.style.borderColor = "red";
+                    inputElement.style.boxShadow = "0 0 10px red";
+                    messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
+                    messageElement.style.color = "red";
+                } else {
+                    clearMessage(messageElement, inputElement); // Restablece los estilos
+                    messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
+                    messageElement.style.color = "green";
+                }
+            }
+
+            function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
+                inputElement.addEventListener("input", function() {
+                    validateInput(inputElement, expression, messageElement, message);
+                });
+
+                inputElement.addEventListener("blur", function() {
+                    clearMessage(messageElement, inputElement);
+                });
+            }
+
+            function handleDescriptionKeypressEvent(inputElement) {
+                inputElement.addEventListener("keypress", function(e) {
+                    var currentDescription = inputElement.value;
+                    if (e.key === " " && currentDescription.endsWith(" ")) {
+                        e.preventDefault();
+                    }
+                });
+            }
+
+            var expresionValidadora1 = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+            var mensaje1 = document.getElementById("mensaje1");
+            handleInputAndBlurEvents(correo, expresionValidadora1, mensaje1, "Ingrese una dirección de correo electrónico válida");
+
+            var expresionValidadora2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
+            var mensaje2 = document.getElementById("mensaje2");
+            handleInputAndBlurEvents(contrasena, expresionValidadora2, mensaje2, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
+        
+            var mensaje3 = document.getElementById("mensaje3");
+            handleInputAndBlurEvents(confirmarContrasena, expresionValidadora2, mensaje3, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
+          }
+
+          // Función para verificar si todos los campos están llenos
+          function checkForm() {
+              const isNombreValido = !contieneCaracteresNoValidos();
+              const isFormValid = dniInput.value.trim() !== '' && PnombreInput.value.trim() !== '' && SnombreInput.value !== '' &&
+                  PapellidoInput.value.trim() !== '' && SapellidoInput.value.trim() !== '' && emailInput.value !== '' &&
+                  salarioInput.value.trim() !== '' && telefonoInput.value.trim() !== '' && direccion1Input.value.trim() !== '' &&
+                  direccion2Input.value.trim() !== '' && sucursalInput.value.trim() !== '' && cargoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
+
+              guardarButton.disabled = !isFormValid || !isNombreValido;
+          }
+
+          // Agrega un evento input a cada campo de entrada
+          dniInput.addEventListener('input', checkForm);
+          PnombreInput.addEventListener('input', checkForm);
+          SnombreInput.addEventListener('input', checkForm);
+          PapellidoInput.addEventListener('input', checkForm);
+          SapellidoInput.addEventListener('input', checkForm);
+          emailInput.addEventListener('input', checkForm);
+          salarioInput.addEventListener('input', checkForm);
+          telefonoInput.addEventListener('input', checkForm);
+          direccion1Input.addEventListener('input', checkForm);
+          direccion2Input.addEventListener('input', checkForm);
+          sucursalInput.addEventListener('input', checkForm);
+          cargoInput.addEventListener('input', checkForm);
+          estadoInput.addEventListener('input', checkForm)
+
+          $('#respuesta1, #respuesta2, #respuesta3, #correo, #contrasena_actual, #contrasena, #confirmar_contrasena').on('input', function() {
+            var input = $(this);
+            var trimmedValue = input.val().trim();
+            input.val(trimmedValue);
+
+            if (trimmedValue === '') {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'El campo no puede estar vacío',
+                    icon: 'warning',
+                });
+            }
+        });
+        $(document).ready(function() {
+          validarNombre();
+        });
       function regresar() {
         window.location.replace('../../InicioSesion/index.php');
       }
