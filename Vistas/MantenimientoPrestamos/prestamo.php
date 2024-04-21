@@ -416,7 +416,7 @@ if (!isset($_SESSION['usuario'])) {
                         <table class="table table-bordered mx-auto" id="Lista-prestamo" style="margin-top: 20px; margin-bottom: 20px">
                             <thead>
                                 <tr>
-                                   
+
                                     <th>Id Prestamo</th>
                                     <th>Empleado</th>
                                     <th style="display: none;"> Id Tipo Prestamo</th>
@@ -524,24 +524,27 @@ if (!isset($_SESSION['usuario'])) {
 
                         // Validar si PERMISOS_ACTUALIZACION es igual a 1 para mostrar el botón de editar
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
-                            row += '<button class="btn btn-danger" id="AnularButton" onclick="AnularPrestamo(' + prestamo.ID_PRESTAMO + ')">Anular</button>';
-                            row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ',' + prestamo.MONTO_SOLICITADO + ',' + prestamo.PLAZO + ',' + prestamo.TASA + ',' + prestamo.ESTADO_PRESTAMO + ')">Aprobar</button>';
-                           
+                            row += '<i class="fas fa-times text-danger icono icon-lg" id="AnularButton" onclick="AnularPrestamo(' + prestamo.ID_PRESTAMO + ')" title="Anular"></i>';
+
+row += '<i class="fas fa-check text-primary icono icon-lg" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ',' + prestamo.MONTO_SOLICITADO + ',' + prestamo.PLAZO + ',' + prestamo.TASA + ',' + prestamo.ESTADO_PRESTAMO + ')" title="Aprobar"></i>';
+
+
                         }
 
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                            row += '<button class="btn btn-success" id="DesembolsoButton" onclick="DesembolsoPrestamo(' + prestamo.ID_PRESTAMO + ')">Desembolso</button>';
+                            row += '<i class="fas fa-money-bill-wave text-success icono icon-lg" id="DesembolsoButton" onclick="DesembolsoPrestamo(' + prestamo.ID_PRESTAMO + ')" title="Desembolso"></i>';
+
                         }
 
 
-                       
 
                         // if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                         //     row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ')">Aprobar</button>';
                         // }
 
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
-                            row += '<button class="btn btn-secondary crear-movimiento" data-id="' + prestamo.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + prestamo.ID_EMPLEADO + ')">Movimiento</button>';
+                            row += '<i class="fas fa-money-check-alt text-secondary icono icon-lg crear-movimiento" data-id="' + prestamo.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + prestamo.ID_EMPLEADO + ')" title="Movimiento"></i>';
+
                         }
 
                         row += '</td>' +
@@ -705,9 +708,9 @@ if (!isset($_SESSION['usuario'])) {
                 .then(response => response.json())
                 .then(data => {
                     console.log("estado:", data);
-                    if (data === 'PENDIENTE' || data === 'APROBADO') {  
+                    if (data === 'PENDIENTE' || data === 'APROBADO') {
                         //NO ESTA LEYENDO EL ESTADO FINALIZADO O EN CURSO 
-                        if ((data === APROBADO) || (data === FINALIZADO) || (data=== ENCURSO)) {
+                        if ((data === APROBADO) || (data === FINALIZADO) || (data === ENCURSO)) {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
@@ -843,43 +846,43 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
-/* ESTE ESTA FUNCIONANDO BIEN 
-        function DesembolsoPrestamo(ID_PRESTAMO) {
-            // Realiza una solicitud FETCH al servidor para anular el préstamo
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=desembolsoPrestamo', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "ID_PRESTAMO": ID_PRESTAMO
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // La solicitud se completó con éxito
-                        document.getElementById('DesembolsoButton').classList.remove('btn-success');
-                        document.getElementById('DesembolsoButton').classList.add('btn-secondary');
-                        document.getElementById('DesembolsoButton').disabled = true;
-                        // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
-                        //location.reload();
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Desembolso Realizado',
-                            text: 'El Desembolso ha sido realizado exitosamente.'
+        /* ESTE ESTA FUNCIONANDO BIEN 
+                function DesembolsoPrestamo(ID_PRESTAMO) {
+                    // Realiza una solicitud FETCH al servidor para anular el préstamo
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=desembolsoPrestamo', {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                "ID_PRESTAMO": ID_PRESTAMO
+                            })
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                // La solicitud se completó con éxito
+                                document.getElementById('DesembolsoButton').classList.remove('btn-success');
+                                document.getElementById('DesembolsoButton').classList.add('btn-secondary');
+                                document.getElementById('DesembolsoButton').disabled = true;
+                                // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
+                                //location.reload();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Desembolso Realizado',
+                                    text: 'El Desembolso ha sido realizado exitosamente.'
+                                });
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 5000)
+                            } else {
+                                console.error('Error en la solicitud');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
                         });
-                        setTimeout(function() {
-                            location.reload();
-                        }, 5000)
-                    } else {
-                        console.error('Error en la solicitud');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        } */
+                } */
 
 
         function DesembolsoPrestamo(ID_PRESTAMO) {

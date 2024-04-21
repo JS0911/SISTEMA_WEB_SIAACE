@@ -947,7 +947,7 @@ if (!isset($_SESSION['usuario'])) {
 
                         // Validar si PERMISOS_INSERCION es igual a 1 para mostrar el botón de ingreso de préstamo
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
-                            row += '<i class="fas fa-credit-card text-secondary cursor-pointer icon-lg" data-id="' + empleado.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + empleado.ID_EMPLEADO + ')" title="Movimiento" data-toggle="tooltip" data-placement="top"></i>';
+                            row += '<i class="fas fa-money-check-alt text-secondary cursor-pointer icon-lg" data-id="' + empleado.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + empleado.ID_EMPLEADO + ')" title="Movimiento" data-toggle="tooltip" data-placement="top"></i>';
                         }
 
 

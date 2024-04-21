@@ -683,7 +683,7 @@ if (!isset($_SESSION['usuario'])) {
                        // }
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
 
-                            row += '<i class="fas fa-credit-card text-secondary cursor-pointer icon-lg" data-id="'  + cuenta.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + cuenta.ID_EMPLEADO + ')" title="Movimiento" data-toggle="tooltip" data-placement="top"></i>';
+                            row += '<i class="fas fa-money-check-alt text-secondary cursor-pointer icon-lg" data-id="'  + cuenta.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + cuenta.ID_EMPLEADO + ')" title="Movimiento" data-toggle="tooltip" data-placement="top"></i>';
                         }
                         row += '</td>' +
                             '</tr>';

@@ -267,7 +267,7 @@ if (isset($_SESSION['id_estado_usuario'])) {
                             echo '</div>';
                         }
                         //-------------------------------MODULO DE PRESTAMOS--------------------------------------
-                        if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                        if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                             echo '<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimientoPrestamos" aria-expanded="false" aria-controls="collapseMantenimientoPrestamos">
                                         <div class="sb-nav-link-icon"><i class="fas fa-money-check"></i></div>
                                         Prestamos
@@ -276,7 +276,7 @@ if (isset($_SESSION['id_estado_usuario'])) {
                             echo '<div class="collapse" id="collapseMantenimientoPrestamos" aria-labelledby="headingMantenimientoPrestamos" data-parent="#sidenavAccordion">';
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
-                            if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
+                            if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
                                 if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) { 
                                 echo '<a class="nav-link" href="../Vistas/MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
                             }

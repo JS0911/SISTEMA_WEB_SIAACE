@@ -247,7 +247,7 @@ if (!isset($_SESSION['usuario'])) {
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="../../InicioSesion/cambiocontrasena.php">Cambiar Contraseña</a>
+                    <a class="dropdown-item" href="perfil.php">Perfil</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="../../InicioSesion/logout.php">Salir</a>
                 </div>

@@ -90,6 +90,7 @@ $permisos1 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Segurida
 $permisos2 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_PestaniaEmpleado);
 $permisos3 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 $permisos4 = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos);
+
 $datos_usuario = $usuario_obj->get_usuario($_SESSION['id_usuario']);
 $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 ?>
@@ -113,7 +114,7 @@ $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Rol y Permisos</title>
+    <title>Lista de Rol Y Permiso</title>
     <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -510,13 +511,13 @@ $nombre_usuario = $datos_usuario['NOMBRE_USUARIO'];
 
                         var tbody = document.querySelector('#Lista-rolPermiso tbody');
                         tbody.innerHTML = '';
-
+                        var contador = 1;
                         permisos.forEach(function(permiso) {
                             var idRol = permiso.ID_ROL || '';
                             var rol = permiso.ROL || '';
                             var idObjeto = permiso.ID_OBJETO || '';
                              var objeto = permiso.OBJETO || '';
-                            var contador =1;
+                         
                             var row = '<tr>' +
                              '<td>' + contador++ + '</td>' +
                                 '<td style="display:none;">' + idRol + '</td>' +
