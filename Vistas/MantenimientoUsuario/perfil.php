@@ -813,32 +813,6 @@ if (!isset($_SESSION['usuario'])) {
             handleInputAndBlurEvents(confirmarContrasena, expresionValidadora2, mensaje3, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
           }
 
-          // Función para verificar si todos los campos están llenos
-          function checkForm() {
-              const isNombreValido = !contieneCaracteresNoValidos();
-              const isFormValid = dniInput.value.trim() !== '' && PnombreInput.value.trim() !== '' && SnombreInput.value !== '' &&
-                  PapellidoInput.value.trim() !== '' && SapellidoInput.value.trim() !== '' && emailInput.value !== '' &&
-                  salarioInput.value.trim() !== '' && telefonoInput.value.trim() !== '' && direccion1Input.value.trim() !== '' &&
-                  direccion2Input.value.trim() !== '' && sucursalInput.value.trim() !== '' && cargoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
-
-              guardarButton.disabled = !isFormValid || !isNombreValido;
-          }
-
-          // Agrega un evento input a cada campo de entrada
-          dniInput.addEventListener('input', checkForm);
-          PnombreInput.addEventListener('input', checkForm);
-          SnombreInput.addEventListener('input', checkForm);
-          PapellidoInput.addEventListener('input', checkForm);
-          SapellidoInput.addEventListener('input', checkForm);
-          emailInput.addEventListener('input', checkForm);
-          salarioInput.addEventListener('input', checkForm);
-          telefonoInput.addEventListener('input', checkForm);
-          direccion1Input.addEventListener('input', checkForm);
-          direccion2Input.addEventListener('input', checkForm);
-          sucursalInput.addEventListener('input', checkForm);
-          cargoInput.addEventListener('input', checkForm);
-          estadoInput.addEventListener('input', checkForm)
-
           $('#respuesta1, #respuesta2, #respuesta3, #correo, #contrasena_actual, #contrasena, #confirmar_contrasena').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
