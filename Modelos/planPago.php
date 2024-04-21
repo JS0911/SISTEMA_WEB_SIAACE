@@ -85,7 +85,7 @@ class PlanPago extends Conectar
 
 
             // Consulta SQL para realizar el INSERT repetido
-            $sql = "INSERT INTO `siaace`.`tbl_mp_planp` (
+            $sql = "INSERT INTO `tbl_mp_planp` (
             ID_PRESTAMO,
             FECHA_VENC_C,
             NUMERO_CUOTA,

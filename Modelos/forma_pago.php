@@ -15,7 +15,7 @@ class Fpago extends Conectar
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_formapago` (`FORMA_DE_PAGO`, `DESCRIPCION`, `CREADO_POR`, `FECHA_CREACION`, `ESTADO`) VALUES (:FORMA_DE_PAGO, :DESCRIPCION, :CREADO_POR, :FECHA_CREACION, :ESTADO)";
+            $sql = "INSERT INTO `tbl_formapago` (`FORMA_DE_PAGO`, `DESCRIPCION`, `CREADO_POR`, `FECHA_CREACION`, `ESTADO`) VALUES (:FORMA_DE_PAGO, :DESCRIPCION, :CREADO_POR, :FECHA_CREACION, :ESTADO)";
             
             $stmt = $conectar->prepare($sql);
             $stmt->bindParam(':FORMA_DE_PAGO', $FORMA_DE_PAGO, PDO::PARAM_STR);

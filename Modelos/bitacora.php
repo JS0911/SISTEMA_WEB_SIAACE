@@ -7,9 +7,9 @@ class bitacora extends Conectar
         $conectar = parent::Conexion();
         parent::set_names();
         $sql = "SELECT b.FECHA, b.ANTES, b.DESPUES, u.NOMBRE_USUARIO, o.OBJETO AS TABLA, b.CAMPO, b.ID_REGISTRO, b.OPERACION 
-        FROM siaace.tbl_ms_bitacora AS b 
-        JOIN siaace.tbl_ms_usuario AS u ON b.ID_USUARIO = u.ID_USUARIO 
-        LEFT JOIN siaace.tbl_ms_objetos AS o ON b.TABLA = o.ID_OBJETO;";
+        FROM tbl_ms_bitacora AS b 
+        JOIN tbl_ms_usuario AS u ON b.ID_USUARIO = u.ID_USUARIO 
+        LEFT JOIN tbl_ms_objetos AS o ON b.TABLA = o.ID_OBJETO;";
 
         $sql = $conectar->prepare($sql);
         $sql->execute();
@@ -21,7 +21,7 @@ class bitacora extends Conectar
         try {
             $conectar = parent::Conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_bitacora` (`FECHA`, `ID_USUARIO`, `TABLA`, `OPERACION`) VALUES (:FECHA, :ID_USUARIO, :TABLA, :OPERACION);";
+            $sql = "INSERT INTO `tbl_ms_bitacora` (`FECHA`, `ID_USUARIO`, `TABLA`, `OPERACION`) VALUES (:FECHA, :ID_USUARIO, :TABLA, :OPERACION);";
 
             $stmt = $conectar->prepare($sql);
 
@@ -47,7 +47,7 @@ class bitacora extends Conectar
         try {
             $conectar = parent::Conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_bitacora` (`FECHA`, `ANTES`, `DESPUES`, `ID_USUARIO`, `TABLA`, `CAMPO`, `ID_REGISTRO`, `OPERACION`) VALUES (:FECHA, :ANTES, :DESPUES, :ID_USUARIO, :TABLA, :CAMPO, :ID_REGISTRO, :OPERACION)";
+            $sql = "INSERT INTO `tbl_ms_bitacora` (`FECHA`, `ANTES`, `DESPUES`, `ID_USUARIO`, `TABLA`, `CAMPO`, `ID_REGISTRO`, `OPERACION`) VALUES (:FECHA, :ANTES, :DESPUES, :ID_USUARIO, :TABLA, :CAMPO, :ID_REGISTRO, :OPERACION)";
 
             $stmt = $conectar->prepare($sql);
 
@@ -77,7 +77,7 @@ class bitacora extends Conectar
         try {
             $conectar = parent::Conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_bitacora` (`FECHA`, `ID_USUARIO`, `TABLA`, `ID_REGISTRO`, `OPERACION`) VALUES (:FECHA, :ID_USUARIO, :TABLA, :ID_REGISTRO, :OPERACION)";
+            $sql = "INSERT INTO `tbl_ms_bitacora` (`FECHA`, `ID_USUARIO`, `TABLA`, `ID_REGISTRO`, `OPERACION`) VALUES (:FECHA, :ID_USUARIO, :TABLA, :ID_REGISTRO, :OPERACION)";
 
             $stmt = $conectar->prepare($sql);
 
@@ -104,7 +104,7 @@ class bitacora extends Conectar
         try {
             $conectar = parent::Conexion();
             parent::set_names();
-            $sql = "DELETE FROM `siaace`.`tbl_ms_bitacora` WHERE 1";
+            $sql = "DELETE FROM `tbl_ms_bitacora` WHERE 1";
 
             $stmt = $conectar->prepare($sql);
             $stmt->execute();

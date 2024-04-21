@@ -6,7 +6,7 @@ class Estados extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_ms_estadousuario;";
+        $sql = "SELECT * FROM tbl_ms_estadousuario;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -29,7 +29,7 @@ class Estados extends Conectar
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_estadousuario` ( `NOMBRE`, `DESCRIPCION`) VALUES ( :NOMBRE, :DESCRIPCION)";
+            $sql = "INSERT INTO `tbl_ms_estadousuario` ( `NOMBRE`, `DESCRIPCION`) VALUES ( :NOMBRE, :DESCRIPCION)";
     
             $stmt = $conectar->prepare($sql);
           

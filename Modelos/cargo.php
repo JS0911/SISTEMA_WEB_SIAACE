@@ -6,7 +6,7 @@ class Cargos extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_me_cargo;";
+        $sql = "SELECT * FROM tbl_me_cargo;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -30,7 +30,7 @@ class Cargos extends Conectar
             $conectar = parent::conexion();
             parent::set_names();
           
-            $sql = "INSERT INTO `siaace`.`tbl_me_cargo` (`CARGO`, `DESCRIPCION`, `ESTADO`,`CREADO_POR`,`FECHA_CREACION`) VALUES (:CARGO, :DESCRIPCION, :ESTADO,:CREADO_POR,:FECHA_CREACION)";
+            $sql = "INSERT INTO `tbl_me_cargo` (`CARGO`, `DESCRIPCION`, `ESTADO`,`CREADO_POR`,`FECHA_CREACION`) VALUES (:CARGO, :DESCRIPCION, :ESTADO,:CREADO_POR,:FECHA_CREACION)";
     
             $stmt = $conectar->prepare($sql);
             $stmt->bindParam(':CARGO', $CARGO, PDO::PARAM_STR);

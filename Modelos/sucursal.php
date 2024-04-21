@@ -7,8 +7,8 @@ class Sucursal extends Conectar
         $conectar = parent::conexion();
         parent::set_names();
         $sql = "SELECT S.*, R.REGION
-        FROM siaace.tbl_me_sucursal S
-        INNER JOIN siaace.tbl_me_region R ON S.ID_REGION = R.ID_REGION;";
+        FROM tbl_me_sucursal S
+        INNER JOIN tbl_me_region R ON S.ID_REGION = R.ID_REGION;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

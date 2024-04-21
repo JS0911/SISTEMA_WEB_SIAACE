@@ -6,7 +6,7 @@ class Objetos extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_ms_objetos;";
+        $sql = "SELECT * FROM tbl_ms_objetos;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -29,7 +29,7 @@ class Objetos extends Conectar
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_objetos` ( `OBJETO`, `DESCRIPCION`, `TIPO_OBJETO`, `CREADO_POR`, `FECHA_CREACION`) VALUES ( :OBJETO, :DESCRIPCION, :TIPO_OBJETO, :CREADO_POR, :FECHA_CREACION)";
+            $sql = "INSERT INTO `tbl_ms_objetos` ( `OBJETO`, `DESCRIPCION`, `TIPO_OBJETO`, `CREADO_POR`, `FECHA_CREACION`) VALUES ( :OBJETO, :DESCRIPCION, :TIPO_OBJETO, :CREADO_POR, :FECHA_CREACION)";
     
             $stmt = $conectar->prepare($sql);
             $stmt->bindParam(':OBJETO', $OBJETO, PDO::PARAM_STR);

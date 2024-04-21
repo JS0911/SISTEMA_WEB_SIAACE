@@ -6,7 +6,7 @@ class Parametro extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_ms_parametros;";
+        $sql = "SELECT * FROM tbl_ms_parametros;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -29,7 +29,7 @@ class Parametro extends Conectar
     try {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "INSERT INTO `siaace`.`tbl_ms_parametros` (`PARAMETRO`, `VALOR`, `CREADO_POR`,`FECHA_CREACION`) VALUES ( :PARAMETRO, :VALOR ,:CREADO_POR, :FECHA_CREACION)";
+        $sql = "INSERT INTO `tbl_ms_parametros` (`PARAMETRO`, `VALOR`, `CREADO_POR`,`FECHA_CREACION`) VALUES ( :PARAMETRO, :VALOR ,:CREADO_POR, :FECHA_CREACION)";
 
         $stmt = $conectar->prepare($sql);
       

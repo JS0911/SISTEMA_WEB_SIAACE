@@ -5,7 +5,7 @@ class Errores extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_ms_error;";
+        $sql = "SELECT * FROM tbl_ms_error;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -16,7 +16,7 @@ class Errores extends Conectar
         {
             $conectar = parent::Conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_ms_error` (`ERROR`, `CODIGO`, `MENSAJE`, `FECHA`) VALUES (:ERROR, :CODIGO, :MENSAJE, :FECHA)";
+            $sql = "INSERT INTO `tbl_ms_error` (`ERROR`, `CODIGO`, `MENSAJE`, `FECHA`) VALUES (:ERROR, :CODIGO, :MENSAJE, :FECHA)";
 
             $stmt = $conectar->prepare($sql);
 

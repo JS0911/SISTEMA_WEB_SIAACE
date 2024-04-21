@@ -7,9 +7,9 @@ class cuenta extends Conectar
         $conectar = parent::conexion();
         parent::set_names();
         $sql = "SELECT C.*,E.PRIMER_NOMBRE, E.PRIMER_APELLIDO, T.TIPO_CUENTA
-        FROM siaace.tbl_mc_cuenta AS C
-        INNER JOIN siaace.tbl_me_empleados AS E ON C.ID_EMPLEADO = E.ID_EMPLEADO
-        INNER JOIN siaace.tbl_mc_tipocuenta AS T ON C.ID_TIPOCUENTA = T.ID_TIPOCUENTA;";
+        FROM tbl_mc_cuenta AS C
+        INNER JOIN tbl_me_empleados AS E ON C.ID_EMPLEADO = E.ID_EMPLEADO
+        INNER JOIN tbl_mc_tipocuenta AS T ON C.ID_TIPOCUENTA = T.ID_TIPOCUENTA;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -20,7 +20,7 @@ class cuenta extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM siaace.tbl_mc_cuenta where ID_CUENTA = :ID";
+        $sql = "SELECT * FROM tbl_mc_cuenta where ID_CUENTA = :ID";
         $stmt = $conectar->prepare($sql);
         $stmt->bindParam(':ID', $ID_CUENTA, PDO::PARAM_INT);
         $stmt->execute();
@@ -33,8 +33,8 @@ class cuenta extends Conectar
         $conectar = parent::conexion();
         parent::set_names();
         $sql = "SELECT C.*, T.TIPO_CUENTA
-        FROM siaace.tbl_mc_cuenta AS C
-        INNER JOIN siaace.tbl_mc_tipocuenta AS T ON C.ID_TIPOCUENTA = T.ID_TIPOCUENTA
+        FROM tbl_mc_cuenta AS C
+        INNER JOIN tbl_mc_tipocuenta AS T ON C.ID_TIPOCUENTA = T.ID_TIPOCUENTA
         WHERE C.ID_EMPLEADO = :ID";
         $stmt = $conectar->prepare($sql);
         $stmt->bindParam(':ID', $ID_EMPLEADO, PDO::PARAM_INT);
@@ -48,7 +48,7 @@ class cuenta extends Conectar
         try {
             $conectar = parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO `siaace`.`tbl_mc_cuenta` (`ID_EMPLEADO`, `ID_TIPOCUENTA`, `SALDO`, `NUMERO_CUENTA`, `ESTADO`, `CREADO_POR`, `FECHA_CREACION`) VALUES ( :ID_EMPLEADO, :ID_TIPOCUENTA, :SALDO, :NUMERO_CUENTA, :ESTADO, :CREADO_POR, :FECHA_CREACION)";
+            $sql = "INSERT INTO `tbl_mc_cuenta` (`ID_EMPLEADO`, `ID_TIPOCUENTA`, `SALDO`, `NUMERO_CUENTA`, `ESTADO`, `CREADO_POR`, `FECHA_CREACION`) VALUES ( :ID_EMPLEADO, :ID_TIPOCUENTA, :SALDO, :NUMERO_CUENTA, :ESTADO, :CREADO_POR, :FECHA_CREACION)";
 
             $stmt = $conectar->prepare($sql);
 
@@ -87,7 +87,7 @@ class cuenta extends Conectar
             parent::set_names();
 
             // Utiliza el número de cuenta generado en la consulta SQL
-            $sql = "INSERT INTO `siaace`.`tbl_mc_cuenta` (`ID_EMPLEADO`, `ID_TIPOCUENTA`, `SALDO`, `NUMERO_CUENTA`, `ESTADO`, `CREADO_POR`, `FECHA_CREACION`) VALUES (:ID_EMPLEADO, :ID_TIPOCUENTA, :SALDO, :NUMERO_CUENTA, :ESTADO, :CREADO_POR, :FECHA_CREACION)";
+            $sql = "INSERT INTO `tbl_mc_cuenta` (`ID_EMPLEADO`, `ID_TIPOCUENTA`, `SALDO`, `NUMERO_CUENTA`, `ESTADO`, `CREADO_POR`, `FECHA_CREACION`) VALUES (:ID_EMPLEADO, :ID_TIPOCUENTA, :SALDO, :NUMERO_CUENTA, :ESTADO, :CREADO_POR, :FECHA_CREACION)";
 
             $stmt = $conectar->prepare($sql);
 
