@@ -960,7 +960,7 @@ row += '<i class="fas fa-check text-primary icono icon-lg" id="AprobarButton" on
                         } else {
                             location.reload();
                         }
-                    }, 5000);
+                    }, 3000);
                 })
                 .catch(error => {
                     console.error('Error en la solicitud de desembolso:', error);

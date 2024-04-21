@@ -112,6 +112,11 @@ if ($datosPrestamo) {
         <div class="firma-espacio"></div> <!-- Espacio para firmar -->
         <hr class="firma-linea"> <!-- Línea para la firma -->
     </div>
+    <script>
+        window.onload = function() {
+            window.print();
+        };
+    </script>
 </body>
 </html>
 
