@@ -50,6 +50,10 @@ switch ($_GET["op"]) {
         $datos = $com->get_Prestamo($body["ID_EMPLEADO"]);
         echo json_encode($datos);
     break;
+    case "get_PrestamoRecibo":
+        $datos = $com->get_PrestamoRecibo($body["ID_PRESTAMO"]);
+        echo json_encode($datos);
+    break;
 
     case "anularPrestamo":
         $ID_PRESTAMO = $body["ID_PRESTAMO"];

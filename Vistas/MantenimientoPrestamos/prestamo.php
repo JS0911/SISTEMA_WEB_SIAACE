@@ -537,7 +537,6 @@ row += '<i class="fas fa-check text-primary icono icon-lg" id="AprobarButton" on
                         }
 
 
-
                         // if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                         //     row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ')">Aprobar</button>';
                         // }

@@ -1,23 +1,38 @@
 <?php
 session_start();
 require "../../Config/conexion.php";
-//require_once "../../Modelos/permisoUsuario.php";
-
+require_once "../../Modelos/prestamo.php"; // Asegúrate de incluir el archivo correcto
 
 if (isset($_GET['ID_PRESTAMO'])) {
     $ID_PRESTAMO = $_GET['ID_PRESTAMO'];
-    // $MONTO_SOLICITADO = $_GET['MONTO_SOLICITADO'];
-    // $PLAZO = $_GET['PLAZO'];
-    // $TASA = $_GET['TASA'];
-    // echo "ID_PRESTAMOP: " . $ID_PRESTAMOP;
-    // echo "MONTO_SOLICITADO: " . $MONTO_SOLICITADO;
-    // echo "PLAZO: " . $PLAZO;
-    // echo "TASA: " . $TASA;
 } else {
     echo "No se proporcionó el ID_PRESTAMO en la URL.";
+    exit; // Salir del script si no hay ID_PRESTAMO
 }
 
+// Crear una instancia del modelo de préstamo
+$modeloPrestamo = new prestamo();
+
+// Obtener los datos del préstamo
+$datosPrestamo = $modeloPrestamo->get_PrestamoRecibo($ID_PRESTAMO);
+
+// Verificar si se obtuvieron los datos del préstamo
+if ($datosPrestamo) {
+    // Obtener el primer elemento del array (el único en este caso)
+    $Prestamo = $datosPrestamo[0];
+
+    // Mostrar los datos del préstamo
+    //echo "ID del Préstamo: " . $Prestamo['ID_PRESTAMO'];
+    // echo "Fecha de Desembolso: " . $Prestamo['FECHA_DE_DESEMBOLSO'];
+    // echo "Monto Solicitado: " . $Prestamo['MONTO_SOLICITADO'];
+   // echo "Nombre del Empleado: " . $Prestamo['PRIMER_NOMBRE'] . " " . $Prestamo['PRIMER_APELLIDO'] . "<br>";
+    // Puedes mostrar otros datos del préstamo aquí
+} else {
+    echo "No se encontraron datos del préstamo con el ID_PRESTAMO proporcionado.";
+}
 ?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,53 +45,75 @@ if (isset($_GET['ID_PRESTAMO'])) {
             margin: 0;
             padding: 20px;
         }
+
         .recibo {
             max-width: 600px;
             margin: 0 auto;
             border: 1px solid #ccc;
             padding: 20px;
             border-radius: 8px;
+            text-align: center; /* Alinea el contenido al centro */
         }
+
         .titulo {
-            text-align: center;
-            font-size: 24px;
+            font-size: 28px;
             margin-bottom: 20px;
+            font-family: 'Arial Black', sans-serif; /* Tipo de letra */
+            text-decoration: underline; /* Subrayado */
         }
+
         .detalle {
             margin-bottom: 10px;
+            font-size: 18px;
         }
+
         .detalle span {
             font-weight: bold;
+        }
+
+        .firma-label {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .logo img {
+            width: 100px; /* Ajusta el ancho del logo */
+            height: auto; /* Mantiene la proporción de aspecto */
+            margin-bottom: 20px; /* Espacio entre el logo y el título */
+        }
+
+        .firma-espacio {
+            height: 100px; /* Altura del espacio para firmar */
         }
     </style>
 </head>
 <body>
     <div class="recibo">
+        <div class="logo">
+            <img src="../../src/IconoIDH.ico" alt="Logo de la empresa">
+        </div>
         <div class="titulo">Recibo de Desembolso</div>
+
         <div class="detalle">
-            <span>Fecha de Desembolso:</span> <span id="fechaDesembolso"></span>
+            <span>ID del Préstamo:</span> <span id="idPrestamo"><?php echo $Prestamo['ID_PRESTAMO']; ?></span>
         </div>
         <div class="detalle">
-            <span>ID del Préstamo:</span> <span id="idPrestamo"></span>
+            <span>Nombre del Empleado:</span> <?php echo $Prestamo['PRIMER_NOMBRE'] . ' ' . $Prestamo['PRIMER_APELLIDO']; ?>
         </div>
         <div class="detalle">
-            <span>Monto Desembolsado:</span> <span id="montoDesembolsado"></span>
+            <span>Monto Desembolsado:</span> <span id="montoDesembolsado"><?php echo $Prestamo['MONTO_SOLICITADO']; ?></span>
+        </div>
+        <div class="detalle">
+            <span>Fecha de Desembolso:</span> <span id="fechaDesembolso"><?php echo $Prestamo['FECHA_DE_DESEMBOLSO']; ?></span>
         </div>
         <!-- Otros detalles del desembolso -->
+
+        <div class="firma-label">Firma de la Tesorera:</div>
+        <div class="firma-espacio"></div> <!-- Espacio para firmar -->
+        <hr class="firma-linea"> <!-- Línea para la firma -->
     </div>
-
-    <script>
-        // Aquí puedes llenar dinámicamente los datos del desembolso utilizando JavaScript
-        const datosDesembolso = {
-            fechaDesembolso: '2024-03-15',
-            idPrestamo: $ID_PRESTAMO,
-            montoDesembolsado: '$1000.00' // Puedes llenar con los datos reales obtenidos del backend
-        };
-
-        // Llenar los datos en la plantilla
-        document.getElementById('fechaDesembolso').textContent = datosDesembolso.fechaDesembolso;
-        document.getElementById('idPrestamo').textContent = datosDesembolso.idPrestamo;
-        document.getElementById('montoDesembolsado').textContent = datosDesembolso.montoDesembolsado;
-    </script>
 </body>
 </html>
+
+
+
