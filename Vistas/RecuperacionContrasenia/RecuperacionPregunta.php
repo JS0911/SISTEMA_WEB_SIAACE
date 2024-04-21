@@ -47,7 +47,7 @@ require("../../Controladores/RecuperacionContrasenia/RecuperacionPregunta.php");
                                             
                                             <div id="preguntasid" style="display: none; ">
                                                 <div class="form-group"><label class="small mb-1" for="pregunta">Preguntas de Seguridad</label>
-                                                <select id="cmbPreguntas"  name="cmbPreguntas" class="form-select form-control form-control" style="width:400px">
+                                                <select id="cmbPreguntas" require name="cmbPreguntas" class="form-select form-control form-control" style="width:400px">
                                                     
                                                     <?php
                                                         if (isset($_POST['verPreguntas'])) {
@@ -134,6 +134,7 @@ require("../../Controladores/RecuperacionContrasenia/RecuperacionPregunta.php");
                                 var option = document.createElement("option");
                                 option.text = datos[i];
                                 comboBox.add(option);
+                                
                             }
                         }
                     };

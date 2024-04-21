@@ -39,7 +39,7 @@
                                             required pattern="^(?!.*\s).*$" title="No se permiten espacios en blanco o campos vacios." oninput="this.value = this.value.toUpperCase()" /></div>
                                         -->
                                             <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Correo:</label>
-                                            <input class="form-control py-4" name="inputEmail" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Ingrese su Correo:" required/></div>
+                                            <input class="form-control py-4" maxlength="70" name="inputEmail" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Ingrese su Correo:" required/></div>
                                             <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
                                             <button class="btn btn-primary" type="submit">Enviar Token</button>
                                             </div>  <!-- href="../../Controladores/Recuperacion.php" -->

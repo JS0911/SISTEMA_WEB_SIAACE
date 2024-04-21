@@ -17,7 +17,6 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
     $usuario = $_POST['inputUsuarios2'];
     $pregunta = $_POST['cmbPreguntas'];
     $respuesta = $_POST['inputRespuesta'];
-
     if ($conn) {// Verificar si la conexión se estableció correctamente
         // Verificar si la pregunta y respuesta existe en la base de datos
         $sql = "SELECT ID_USUARIO FROM tbl_ms_usuario WHERE USUARIO = '$usuario'";
@@ -54,6 +53,7 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
                 setTimeout(function() {
                 window.location.href = '../../Vistas/RecuperacionContrasenia/RecuperacionPregunta.php';
                 }, 0);
+                return;
                 </script>";
                 exit;
             }   

@@ -120,14 +120,32 @@ if (isset($_POST['submit'])) {
 
                                         <div class="form-row">
                                             <div class="col-md-6">
-                                                <div class="form-group"><label class="small mb-1" for="inputPassword">Contraseña</label><input class="form-control py-4" id="inputPassword" name="contrasena" type="password" maxlength="100" placeholder="Ingrese su contraseña:" 
+                                                <div class="form-group"><label class="small mb-1" for="inputPassword">Contraseña</label>
+                                                <div class="input-group">
+                                                <input class="form-control py-4" id="inputPassword" name="contrasena" type="password" maxlength="15" placeholder="Ingrese su contraseña:" 
                                                 pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" required 
-                                                value="<?php echo isset($_POST['contrasena']) ? $_POST['contrasena'] : ''; ?>"/></div>
+                                                value="<?php echo isset($_POST['contrasena']) ? $_POST['contrasena'] : ''; ?>"/>
+                                                <div class="input-group-append">
+                                                    <button type="button" id="showPasswordBtn" class="btn btn-outline-secondary" onclick="toggleConfirmPasswordVisibility1()">
+                                                        <i id="EyeIcon1" class="fas fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                                </div>
+                                            </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group"><label class="small mb-1" for="inputConfirmPassword">Confirmar Contraseña</label><input class="form-control py-4" id="inputConfirmPassword" name="confirmar_contrasena" type="password" maxlength="100" placeholder="Confirme su contraseña:"
+                                                <div class="form-group"><label class="small mb-1" for="inputConfirmPassword">Confirmar Contraseña</label>
+                                                <div class="input-group">
+                                                <input class="form-control py-4" id="inputConfirmPassword" name="confirmar_contrasena" type="password" maxlength="15" placeholder="Confirme su contraseña:"
                                                 pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" required 
-                                                value="<?php echo isset($_POST['confirmar_contrasena']) ? $_POST['confirmar_contrasena'] : ''; ?>"/></div>
+                                                value="<?php echo isset($_POST['confirmar_contrasena']) ? $_POST['confirmar_contrasena'] : ''; ?>"/>
+                                                <div class="input-group-append">
+                                                    <button type="button" id="showConfirmPasswordBtn" class="btn btn-outline-secondary" onclick="toggleConfirmPasswordVisibility2()">
+                                                        <i id="EyeIcon2" class="fas fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            </div>
                                             </div>
                                         </div>
 
@@ -215,6 +233,34 @@ if (isset($_POST['submit'])) {
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../js/scripts.js"></script>
+    <script>
+        function toggleConfirmPasswordVisibility1() {
+            var confirmInput = document.getElementById("inputPassword");
+            var confirmEyeIcon = document.getElementById("EyeIcon1");
+            if (confirmInput.type === "password") {
+                confirmInput.type = "text";
+                confirmEyeIcon.classList.remove("fa-eye");
+                confirmEyeIcon.classList.add("fa-eye-slash");
+            } else {
+                confirmInput.type = "password";
+                confirmEyeIcon.classList.remove("fa-eye-slash");
+                confirmEyeIcon.classList.add("fa-eye");
+            }
+        }
+        function toggleConfirmPasswordVisibility2() {
+            var confirmInput = document.getElementById("inputConfirmPassword");
+            var confirmEyeIcon = document.getElementById("EyeIcon2");
+            if (confirmInput.type === "password") {
+                confirmInput.type = "text";
+                confirmEyeIcon.classList.remove("fa-eye");
+                confirmEyeIcon.classList.add("fa-eye-slash");
+            } else {
+                confirmInput.type = "password";
+                confirmEyeIcon.classList.remove("fa-eye-slash");
+                confirmEyeIcon.classList.add("fa-eye");
+            }
+        }
+    </script>
 </body>
 
 </html>

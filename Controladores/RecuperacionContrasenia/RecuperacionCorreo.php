@@ -74,7 +74,7 @@ if (!empty($_POST)) { //verificar si se recibio el metodo post
             }
         } else {
             echo "<script>
-                alert('¡El Usuario o Correo electronico no son correctos.!');
+                alert('¡El Correo electronico no es correcto.!');
                 setTimeout(function() {
                     window.location.href = '../../Vistas/RecuperacionContrasenia/RecuperacionCorreo.php';
                 }, 0);

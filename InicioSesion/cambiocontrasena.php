@@ -237,32 +237,45 @@ if (!isset($_SESSION['usuario'])) {
                                         <!-- input para Contraseña Actual -->
                                         <div class="wrap-input mb-3" id="grupo__password">
                                             <label><b>Contraseña Actual</b></label>
-                                            <span class="lock conteiner-icon">
-                                                <i class="icon type-lock fa fa-eye-solid  fa fa-eye-slash"></i>
-                                            </span>
-                                            <input type="password" class="form-control input" name="contrasenaActual" id="passwordActual" maxlength="15" placeholder="Contraseña Actual">
+                                            <div class="input-group">
+                                            <input type="password" maxlength="50" class="form-control input" name="contrasenaActual" id="passwordActual" maxlength="15" placeholder="Contraseña Actual">
+                                            <div class="input-group-append">
+                                                <button type="button" id="showPasswordBtn" class="btn btn-outline-secondary" onclick="toggleConfirmPasswordVisibility()">
+                                                    <i id="EyeIcon" class="fas fa-eye"></i>
+                                                </button>
+                                            </div>
+                                            </div>
                                             <p class="mensaje"></p>
                                             <br>
                                         </div>
                                         <!-- input para Contraseña -->
                                         <div class="wrap-input mb-3" id="grupo__password">
                                             <label><b>Contraseña</b></label>
-                                            <span class="lock conteiner-icon">
-                                                <i class="icon type-lock fa fa-eye-solid  fa fa-eye-slash"></i>
-                                            </span>
-                                            <input type="password" class="form-control input" name="contraseña" id="password" maxlength="15" placeholder="Contraseña">
+                                            <div class="input-group">
+                                            <input type="password" maxlength="50" class="form-control input" name="contraseña" id="password" maxlength="15" placeholder="Contraseña" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" 
+                                            title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
                                             <!--  <i class="form-control__validacion-estado fas fa-times-circle"></i> -->
+                                            <div class="input-group-append">
+                                                <button type="button" id="showConfirmPasswordBtn" class="btn btn-outline-secondary" onclick="toggleConfirmPasswordVisibility1()">
+                                                    <i id="EyeIcon1" class="fas fa-eye"></i>
+                                                </button>
+                                            </div></div>
+
                                             <p class="mensaje"></p>
                                             <br>
                                         </div>
                                         <!-- input para confirmación Contraseña -->
                                         <div class="wrap-input mb-3" id="grupo__password2">
                                             <label><b>Confirmar contraseña</b></label>
-                                            <span class="lock conteiner-icon">
-                                                <i class="icon type-lock fa-eye-solid  fa fa-eye-slash"></i>
-                                            </span>
-                                            <input type="password" class="form-control input" name="confirmarContraseña" id="password2" maxlength="15" placeholder="Confirmar Contraseña">
+                                            <div class="input-group">
+                                            <input type="password" maxlength="50" class="form-control input" name="confirmarContraseña" id="password2" maxlength="15" placeholder="Confirmar Contraseña">
                                             <!-- <i class="form-control__validacion-estado fas fa-times-circle"></i> -->
+                                            <div class="input-group-append">
+                                                <button type="button" id="showConfirmPasswordBtn" class="btn btn-outline-secondary" onclick="toggleConfirmPasswordVisibility2()">
+                                                    <i id="confirmEyeIcon" class="fas fa-eye"></i>
+                                                </button>
+                                            </div></div>
+
                                             <p class="mensaje"></p>
                                             <button type="button" class="btn btn-danger" name="cancelar" id="clickCancelar">Cancelar</button>
                                             <button type="submit" class="btn btn-primary" name="submit" id="click" disabled>Guardar</button>
@@ -368,5 +381,46 @@ if (!isset($_SESSION['usuario'])) {
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
     <!-- <script src="../assets/demo/datatables-demo.js"></script>                     -->
+    <script>
+            function toggleConfirmPasswordVisibility() {
+            var confirmInput = document.getElementById("passwordActual");
+            var confirmEyeIcon = document.getElementById("EyeIcon");
+            if (confirmInput.type === "password") {
+                confirmInput.type = "text";
+                confirmEyeIcon.classList.remove("fa-eye");
+                confirmEyeIcon.classList.add("fa-eye-slash");
+            } else {
+                confirmInput.type = "password";
+                confirmEyeIcon.classList.remove("fa-eye-slash");
+                confirmEyeIcon.classList.add("fa-eye");
+            }
+        }
+        function toggleConfirmPasswordVisibility1() {
+            var confirmInput = document.getElementById("password");
+            var confirmEyeIcon = document.getElementById("EyeIcon1");
+            if (confirmInput.type === "password") {
+                confirmInput.type = "text";
+                confirmEyeIcon.classList.remove("fa-eye");
+                confirmEyeIcon.classList.add("fa-eye-slash");
+            } else {
+                confirmInput.type = "password";
+                confirmEyeIcon.classList.remove("fa-eye-slash");
+                confirmEyeIcon.classList.add("fa-eye");
+            }
+        }
+        function toggleConfirmPasswordVisibility2() {
+            var confirmInput = document.getElementById("password2");
+            var confirmEyeIcon = document.getElementById("EyeIcon2");
+            if (confirmInput.type === "password") {
+                confirmInput.type = "text";
+                confirmEyeIcon.classList.remove("fa-eye");
+                confirmEyeIcon.classList.add("fa-eye-slash");
+            } else {
+                confirmInput.type = "password";
+                confirmEyeIcon.classList.remove("fa-eye-slash");
+                confirmEyeIcon.classList.add("fa-eye");
+            }
+        }
+    </script>
 </body>
 <html>
