@@ -55,9 +55,7 @@ $id_rol = $_SESSION['id_rol'];
 //---------------------PERMISOS DE LOS MANTENIMIENTOS----------------------
 $id_objeto_Usuario = "2";
 $id_objeto_Bitacora = "14";
-$id_objeto_Error = "33";
 $id_objeto_Estados = "6";
-$id_objeto_Historial = "34";
 $id_objeto_Objetos = "5";
 $id_objeto_Parametro = "4";
 $id_objeto_Permisos = "3";
@@ -85,9 +83,7 @@ $id_objeto_Prestamos = "35";
 //------------------------------------------------------------------------------
 $permisosUsuario = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario);
 $permisosBitacora = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacora);
-$permisosError = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Error);
 $permisosEstados = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Estados);
-$permisosHistorial = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Historial);
 $permisosObjetos = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos);
 $permisosParametro = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Parametro);
 $permisosRoles = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
@@ -101,7 +97,7 @@ $permisosCargo = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_
 
 //---------------------Mant.Prestamo----------------------
 $permisosFormaPago = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Forma_Pago);
-$permisosPresMantenimiento = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_PrestamoMantenimiento);
+$permisosPresMantenimiento = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol,$id_objeto_PrestamoMantenimiento);
 $permisosTipoPrestamo = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Tipoprestamo);
 //---------------------Mant.Cuentas----------------------
 $permisosTransaccion = $permisosTipoCuenta->get_Permisos_Usuarios($id_rol, $id_objeto_Transaccion);
@@ -358,12 +354,6 @@ if (!isset($_SESSION['usuario'])) {
                                 }
                                 if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
-                                }
-                                if (!empty($permisosError) && $permisosError[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
-                                }
-                                if (!empty($permisosHistorial) && $permisosHistorial[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
                                 }
                            
                             }

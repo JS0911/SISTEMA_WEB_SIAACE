@@ -55,9 +55,7 @@ $id_rol = $_SESSION['id_rol'];
 //---------------------PERMISOS DE LOS MANTENIMIENTOS----------------------
 $id_objeto_Usuario = "2";
 $id_objeto_Bitacora = "14";
-$id_objeto_Error = "33";
 $id_objeto_Estados = "6";
-$id_objeto_Historial = "34";
 $id_objeto_Objetos = "5";
 $id_objeto_Parametro = "4";
 $id_objeto_Permisos = "3";
@@ -86,9 +84,7 @@ $id_objeto_Prestamos = "35";
 
 $permisosUsuario = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario);
 $permisosBitacora = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacora);
-$permisosError = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Error);
 $permisosEstados = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Estados);
-$permisosHistorial = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Historial);
 $permisosObjetos = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos);
 $permisosParametro = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Parametro);
 $permisosRoles = $permisosObjeto->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
@@ -355,12 +351,6 @@ if (!isset($_SESSION['usuario'])) {
                                 }
                                 if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
-                                }
-                                if (!empty($permisosError) && $permisosError[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
-                                }
-                                if (!empty($permisosHistorial) && $permisosHistorial[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
                                 }
                             }
 
@@ -936,7 +926,7 @@ if (!isset($_SESSION['usuario'])) {
                 };
 
                 // Hacer una solicitud para verificar si el permiso ya existe
-                fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=verificarPermisoExistente`, {
+                fetch(`http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=verificarPermisoExistente`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -977,7 +967,7 @@ if (!isset($_SESSION['usuario'])) {
                             };
 
                             // Realizar la solicitud de inserciÃ³n despuÃ©s de verificar
-                            fetch(`${constants.HOST}/Controladores/permisosUsuario.php?op=InsertPermiso`, {
+                            fetch(`http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/permisosUsuario.php?op=InsertPermiso`, {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'

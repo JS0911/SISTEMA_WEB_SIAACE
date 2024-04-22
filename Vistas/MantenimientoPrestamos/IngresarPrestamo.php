@@ -56,9 +56,7 @@ $id_rol = $_SESSION['id_rol'];
 //---------------------PERMISOS DE LOS MANTENIMIENTOS----------------------
 $id_objeto_Usuario = "2";
 $id_objeto_Bitacora = "14";
-$id_objeto_Error = "33";
 $id_objeto_Estados = "6";
-$id_objeto_Historial = "34";
 $id_objeto_Objetos = "5";
 $id_objeto_Parametro = "4";
 $id_objeto_Permisos = "3";
@@ -86,9 +84,7 @@ $id_objeto_Prestamos = "35";
 //------------------------------------------------------------------------------
 $permisosUsuario = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Usuario);
 $permisosBitacora = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacora);
-$permisosError = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Error);
 $permisosEstados = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Estados);
-$permisosHistorial = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Historial);
 $permisosObjetos = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos);
 $permisosParametro = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Parametro);
 $permisosRoles = $permisosPrestamo1->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
@@ -341,12 +337,6 @@ if (!isset($_SESSION['usuario'])) {
                                 }
                                 if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
-                                }
-                                if (!empty($permisosError) && $permisosError[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoUsuario/error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
-                                }
-                                if (!empty($permisosHistorial) && $permisosHistorial[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="../MantenimientoUsuario/historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
                                 }
                             }
                             echo '</nav>';

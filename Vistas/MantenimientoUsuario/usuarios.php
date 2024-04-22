@@ -63,9 +63,7 @@ $id_rol = $_SESSION['id_rol'];
 //---------------------PERMISOS DE LOS MANTENIMIENTOS----------------------
 $id_usuario_Usuario = "2";
 $id_objeto_Bitacora = "14";
-$id_objeto_Error = "33";
 $id_objeto_Estados = "6";
-$id_objeto_Historial = "34";
 $id_objeto_Objetos = "5";
 $id_objeto_Parametro = "4";
 $id_objeto_Permisos = "3";
@@ -95,9 +93,7 @@ $id_objeto_Prestamos = "35";
 //-------------------------------------------------------------------------------
 $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_usuario_Usuario);
 $permisosBitacora = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacora);
-$permisosError = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Error);
 $permisosEstados = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Estados);
-$permisosHistorial = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Historial);
 $permisosObjetos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos);
 $permisosParametro = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Parametro);
 $permisosRoles = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
@@ -405,12 +401,6 @@ if (!isset($_SESSION['usuario'])) {
                                 if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i></i><span style="margin-left: 5px;"> Bitacora </a>';
                                 }
-                                if (!empty($permisosError) && $permisosError[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
-                                }
-                                if (!empty($permisosHistorial) && $permisosHistorial[0]['PERMISOS_CONSULTAR'] == 1) {
-                                    echo '<a class="nav-link" href="historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
-                                }
                             }
                             echo '</nav>';
                             echo '</div>';
@@ -588,7 +578,7 @@ if (!isset($_SESSION['usuario'])) {
 
                                 <label for="estado">Contraseña</label>
                                 <div class="input-group">
-                                <input type="password" maxlength="8" class="form-control" id="agregar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
+                                <input type="password" maxlength="15" class="form-control" id="agregar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
                                <div class="input-group-append">
                                  <button onclick="ver_contrasena_nueva()" class="btn btn-primary" type="button">
                              <i class="fa fa-eye" aria-hidden="true"></i>
@@ -599,7 +589,7 @@ if (!isset($_SESSION['usuario'])) {
 
                               <label for="estado">Confirmar Contraseña</label>
                              <div class="input-group">
-                              <input type="password" maxlength="8" class="form-control" id="confirmar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
+                              <input type="password" maxlength="15" class="form-control" id="confirmar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
                                 <div class="input-group-append">
                                   <button onclick="ver_contrasena_confirmar()" class="btn btn-primary" type="button">
                                       <i class="fa fa-eye" aria-hidden="true"></i>
@@ -843,9 +833,9 @@ if (!isset($_SESSION['usuario'])) {
                         text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
 
                         exportOptions: {
-                            columns: [1, 2],
+                            columns: [':visible'],
                             modifier: {
-                                page: 'current'
+                                page: 'all'
                             },
                         }
                     },
@@ -854,9 +844,9 @@ if (!isset($_SESSION['usuario'])) {
                         text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
 
                         exportOptions: {
-                            columns: [2, 4, 6, 7, 8],
+                            columns: [':visible'],
                             modifier: {
-                                page: 'current'
+                                page: 'all'
                             }
                         },
                         customize: function(doc) {
@@ -920,9 +910,9 @@ if (!isset($_SESSION['usuario'])) {
 
                         autoPrint: true,
                         exportOptions: {
-                            columns: [2, 4, 6, 7, 8, 9],
+                            columns: [':visible'],
                             modifier: {
-                                page: 'current'
+                                page: 'all'
                             },
                         }
                     },
@@ -954,17 +944,33 @@ if (!isset($_SESSION['usuario'])) {
                 }
             });
         }
-         function validarContraseñas(contrasena, confirmarContrasena) {
-            if (contrasena !== confirmarContrasena) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Las contraseñas no coinciden.'
-                });
-                return false;
+        function validarContraseñas(contrasena, confirmarContrasena) {
+                    // Expresión regular para validar que la contraseña tenga al menos 8 caracteres,
+                    // una letra mayúscula, una minúscula, un número y un carácter especial
+                    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+                
+                if (!regex.test(contrasena)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'La contraseña debe tener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una minúscula, un número y un carácter especial.'
+                    });
+                    return false;
+                }
+
+                if (contrasena !== confirmarContrasena) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Las contraseñas no coinciden.'
+                    });
+                    return false;
+                }
+
+
+                return true;
             }
-            return true;
-        }
 
         function Insertar_Usuario() {
             $("#btn-agregar").click(function() {
@@ -1167,14 +1173,7 @@ function ver_contrasena_confirmar() {
     var contrasena = document.getElementById('editar-contrasena').value; // Obtener el valor de la contraseña
     var confirmarContrasena = document.getElementById('editarConfirmar-contrasena').value; // Obtener el valor de la confirmación de la contraseña
 
-    // Verificar que las contraseñas coincidan y no estén vacías
-    if (contrasena.trim() !== confirmarContrasena.trim()) {
-        // Mostrar mensaje de error si las contraseñas no coinciden
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Las contraseñas no coinciden.'
-        });
+    if (!validarContraseñas(contrasena, confirmarContrasena)) {
         return;
     }
 

@@ -88,7 +88,7 @@ if (isset($_POST['respuesta1'])) {
   $idPregunta3 = $_POST['pregunta_secreta3'];
   $respuesta3 = $_POST['respuesta3'];
   $correoP = $_POST['correo'];
-  
+
   actualizarRespuestas($id_usuario, $id1, $respuesta1, $id2, $respuesta2, $id3, $respuesta3);
   actualizarDatos($id_usuario, $correoP);
 
@@ -108,9 +108,7 @@ if (isset($_POST['contrasena'])) {
 //---------------------PERMISOS DE LOS MANTENIMIENTOS----------------------
 $id_usuario_Usuario = "2";
 $id_objeto_Bitacora = "14";
-$id_objeto_Error = "33";
 $id_objeto_Estados = "6";
-$id_objeto_Historial = "34";
 $id_objeto_Objetos = "5";
 $id_objeto_Parametro = "4";
 $id_objeto_Permisos = "3";
@@ -140,9 +138,7 @@ $id_objeto_Prestamos = "35";
 //-------------------------------------------------------------------------------
 $permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_usuario_Usuario);
 $permisosBitacora = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Bitacora);
-$permisosError = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Error);
 $permisosEstados = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Estados);
-$permisosHistorial = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Historial);
 $permisosObjetos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Objetos);
 $permisosParametro = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Parametro);
 $permisosRoles = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
@@ -344,16 +340,29 @@ if (!isset($_SESSION['usuario'])) {
               echo '<nav class="sb-sidenav-menu-nested nav">';
 
               if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
-                echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
-                echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
-                echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
-                echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
-                echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
-                echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
-                echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i></i><span style="margin-left: 5px;"> Bitacora </a>';
-                echo '<a class="nav-link" href="error.php"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i><span style="margin-left: 5px;"> Error </a>';
-                echo '<a class="nav-link" href="historial_contrasena.php"><i class="fas fa-history" aria-hidden="true"></i><span style="margin-left: 5px;"> H. Contraseña </a>';
+                if (!empty($permisosUsuario) && $permisosUsuario[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
+                }
+                if (!empty($permisosRoles) && $permisosRoles[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
+                }
+                if (!empty($permisosEstados) && $permisosEstados[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="estadousuario.php"><i class="fas fa-user-shield"></i><span style="margin-left: 5px;"> Estado Usuario</a>';
+                }
+                if (!empty($permisosPermiso) && $permisosPermiso[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="permisos.php"><i class="fas fa-key"> </i><span style="margin-left: 5px;">   Permisos</a>';
+                }
+                if (!empty($permisosObjetos) && $permisosObjetos[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="objetos.php"><i class="fas fa-object-group"> </i><span style="margin-left: 5px;">    Objetos</a>';
+                }
+                if (!empty($permisosParametro) && $permisosParametro[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="parametros.php"><i class="fas fa-cogs"></i><span style="margin-left: 5px;"> Parámetros</a>';
+                }
+                if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                }
               }
+
               echo '</nav>';
               echo '</div>';
             }
@@ -369,10 +378,18 @@ if (!isset($_SESSION['usuario'])) {
               echo '<nav class="sb-sidenav-menu-nested nav">';
 
               if (!empty($permisos2) && $permisos2[0]['PERMISOS_CONSULTAR'] == 1) {
-                echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
-                echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
-                echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
-                echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+                if (!empty($permisosEmpleado) && $permisosEmpleado[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="../MantenimientoEmpleado/empleado.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Empleado</a>';
+              }
+              if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
+              }
+              if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {  
+                  echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
+              }
+              if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="../MantenimientoEmpleado/sucursal.php"><i class="fas fa-building"></i></i><span style="margin-left: 5px;"> Sucursal</a>';
+              }
               }
               echo '</nav>';
               echo '</div>';
@@ -389,9 +406,15 @@ if (!isset($_SESSION['usuario'])) {
               echo '<nav class="sb-sidenav-menu-nested nav">';
 
               if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
-                echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
-                echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
-                echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
+                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) { 
+                  echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
+              }
+              if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
+                  echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
+              }
+              if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
+                  echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
+              }
               }
               echo '</nav>';
               echo '</div>';
@@ -408,9 +431,15 @@ if (!isset($_SESSION['usuario'])) {
               echo '<nav class="sb-sidenav-menu-nested nav">';
 
               if (!empty($permisos4) && $permisos4[0]['PERMISOS_CONSULTAR'] == 1) {
-                echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
-                echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoPrestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
-                echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
+                if (!empty($permisosFormaPago) && $permisosFormaPago[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="../MantenimientoPrestamos/forma_pago.php"><i class="fas fa-hand-holding-usd"></i><span style="margin-left: 5px;"> Forma de Pago</a>';
+              }
+              if (!empty($permisosTipoPrestamo) && $permisosTipoPrestamo[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="../MantenimientoPrestamos/tipoprestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Prestamo</a>';
+              }
+              if (!empty($permisosPresMantenimiento) && $permisosPresMantenimiento[0]['PERMISOS_CONSULTAR'] == 1) {
+                  echo '<a class="nav-link" href="../MantenimientoPrestamos/prestamo.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Prestamos</a>';
+              }
               }
               echo '</nav>';
               echo '</div>';
@@ -431,7 +460,7 @@ if (!isset($_SESSION['usuario'])) {
       <div class="container-fluid">
         <h1 class="mt-4">Perfil de Usuario</h1>
         <ol class="breadcrumb mb-4">
-           <li class="breadcrumb-item active">Perfil de Usuario</li> 
+          <li class="breadcrumb-item active">Perfil de Usuario</li>
         </ol>
         <div class="card mb-4">
           <div class="card-body">
@@ -544,7 +573,7 @@ if (!isset($_SESSION['usuario'])) {
                   <div class="form-group">
                     <label for="contrasena">Nueva Contraseña</label>
                     <div class="input-group">
-                      <input type="password" maxlength="30" class="form-control" id="contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" name="contrasena">
+                      <input type="password" maxlength="15" class="form-control" id="contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" name="contrasena">
                       <div class="input-group-append">
                         <button onclick="ver_contrasena_nueva()" class="btn btn-primary ml-1" type="button">
                           <i class="fa fa-eye" aria-hidden="true"></i>
@@ -557,7 +586,7 @@ if (!isset($_SESSION['usuario'])) {
                   <div class="form-group">
                     <label for="confirmar_contrasena">Confirmar Contraseña</label>
                     <div class="input-group">
-                      <input type="password" maxlength="30" class="form-control" id="confirmar_contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" name="confirmar_contrasena">
+                      <input type="password" maxlength="15" class="form-control" id="confirmar_contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial" name="confirmar_contrasena">
                       <div class="input-group-append">
                         <button onclick="ver_contrasena_confirmar()" class="btn btn-primary ml-1" type="button">
                           <i class="fa fa-eye" aria-hidden="true"></i>
@@ -685,13 +714,13 @@ if (!isset($_SESSION['usuario'])) {
 
         // Verificar que las contraseñas coincidan y no estén vacías
         if (contra.trim() !== confirmar.trim()) {
-            // Mostrar mensaje de error si las contraseñas no coinciden
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Las contraseñas no coinciden.'
-            });
-            return;
+          // Mostrar mensaje de error si las contraseñas no coinciden
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Las contraseñas no coinciden.'
+          });
+          return;
         }
         Swal.fire({
           title: '¿Está seguro de cambiar su contraseña?',
@@ -757,78 +786,79 @@ if (!isset($_SESSION['usuario'])) {
       }
 
       function validarNombre() {
-            correo = document.getElementById("correo");
-            contrasena = document.getElementById("contrasena");
-            confirmarContrasena = document.getElementById("confirmar_contrasena");
+        correo = document.getElementById("correo");
+        contrasena = document.getElementById("contrasena");
+        confirmarContrasena = document.getElementById("confirmar_contrasena");
 
-            function clearMessage(messageElement, inputElement) {
-                messageElement.innerHTML = ""; // Elimina el contenido del mensaje
-                inputElement.style.borderColor = ""; // Restablece el borde
-                inputElement.style.boxShadow = ""; // Restablece la sombra
-            }
+        function clearMessage(messageElement, inputElement) {
+          messageElement.innerHTML = ""; // Elimina el contenido del mensaje
+          inputElement.style.borderColor = ""; // Restablece el borde
+          inputElement.style.boxShadow = ""; // Restablece la sombra
+        }
 
-            function validateInput(inputElement, expression, messageElement, message) {
-                if (inputElement.value === "") {
-                    clearMessage(messageElement, inputElement);
-                } else if (!expression.test(inputElement.value)) {
-                    inputElement.style.borderColor = "red";
-                    inputElement.style.boxShadow = "0 0 10px red";
-                    messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
-                    messageElement.style.color = "red";
-                } else {
-                    clearMessage(messageElement, inputElement); // Restablece los estilos
-                    messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
-                    messageElement.style.color = "green";
-                }
-            }
-
-            function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
-                inputElement.addEventListener("input", function() {
-                    validateInput(inputElement, expression, messageElement, message);
-                });
-
-                inputElement.addEventListener("blur", function() {
-                    clearMessage(messageElement, inputElement);
-                });
-            }
-
-            function handleDescriptionKeypressEvent(inputElement) {
-                inputElement.addEventListener("keypress", function(e) {
-                    var currentDescription = inputElement.value;
-                    if (e.key === " " && currentDescription.endsWith(" ")) {
-                        e.preventDefault();
-                    }
-                });
-            }
-
-            var expresionValidadora1 = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-            var mensaje1 = document.getElementById("mensaje1");
-            handleInputAndBlurEvents(correo, expresionValidadora1, mensaje1, "Ingrese una dirección de correo electrónico válida");
-
-            var expresionValidadora2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
-            var mensaje2 = document.getElementById("mensaje2");
-            handleInputAndBlurEvents(contrasena, expresionValidadora2, mensaje2, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
-        
-            var mensaje3 = document.getElementById("mensaje3");
-            handleInputAndBlurEvents(confirmarContrasena, expresionValidadora2, mensaje3, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
+        function validateInput(inputElement, expression, messageElement, message) {
+          if (inputElement.value === "") {
+            clearMessage(messageElement, inputElement);
+          } else if (!expression.test(inputElement.value)) {
+            inputElement.style.borderColor = "red";
+            inputElement.style.boxShadow = "0 0 10px red";
+            messageElement.innerHTML = "<i class='fas fa-times-circle'></i> " + message;
+            messageElement.style.color = "red";
+          } else {
+            clearMessage(messageElement, inputElement); // Restablece los estilos
+            messageElement.innerHTML = "<i class='fas fa-check-circle'></i> Campo Válido!";
+            messageElement.style.color = "green";
           }
+        }
 
-          $('#respuesta1, #respuesta2, #respuesta3, #correo, #contrasena_actual, #contrasena, #confirmar_contrasena').on('input', function() {
-            var input = $(this);
-            var trimmedValue = input.val().trim();
-            input.val(trimmedValue);
+        function handleInputAndBlurEvents(inputElement, expression, messageElement, message) {
+          inputElement.addEventListener("input", function() {
+            validateInput(inputElement, expression, messageElement, message);
+          });
 
-            if (trimmedValue === '') {
-                Swal.fire({
-                    title: 'Advertencia',
-                    text: 'El campo no puede estar vacío',
-                    icon: 'warning',
-                });
+          inputElement.addEventListener("blur", function() {
+            clearMessage(messageElement, inputElement);
+          });
+        }
+
+        function handleDescriptionKeypressEvent(inputElement) {
+          inputElement.addEventListener("keypress", function(e) {
+            var currentDescription = inputElement.value;
+            if (e.key === " " && currentDescription.endsWith(" ")) {
+              e.preventDefault();
             }
-        });
-        $(document).ready(function() {
-          validarNombre();
-        });
+          });
+        }
+
+        var expresionValidadora1 = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+        var mensaje1 = document.getElementById("mensaje1");
+        handleInputAndBlurEvents(correo, expresionValidadora1, mensaje1, "Ingrese una dirección de correo electrónico válida");
+
+        var expresionValidadora2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
+        var mensaje2 = document.getElementById("mensaje2");
+        handleInputAndBlurEvents(contrasena, expresionValidadora2, mensaje2, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
+
+        var mensaje3 = document.getElementById("mensaje3");
+        handleInputAndBlurEvents(confirmarContrasena, expresionValidadora2, mensaje3, "La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial");
+      }
+
+      $('#respuesta1, #respuesta2, #respuesta3, #correo, #contrasena_actual, #contrasena, #confirmar_contrasena').on('input', function() {
+        var input = $(this);
+        var trimmedValue = input.val().trim();
+        input.val(trimmedValue);
+
+        if (trimmedValue === '') {
+          Swal.fire({
+            title: 'Advertencia',
+            text: 'El campo no puede estar vacío',
+            icon: 'warning',
+          });
+        }
+      });
+      $(document).ready(function() {
+        validarNombre();
+      });
+
       function regresar() {
         window.location.replace('../../InicioSesion/index.php');
       }
