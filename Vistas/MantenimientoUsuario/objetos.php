@@ -877,7 +877,7 @@ if (!isset($_SESSION['usuario'])) {
                             });
 
                         } else {
-                            throw new Error('Error en la solicitud de actualización');
+                            throw new Error('El registro ya existe en la Base de Datos.');
                         }
                     })
                     .catch(function(error) {

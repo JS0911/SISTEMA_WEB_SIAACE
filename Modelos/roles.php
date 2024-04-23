@@ -9,7 +9,7 @@ class Roles extends Conectar
         //$sql = "SELECT * tbl_ms_roles;"
         $sql = "SELECT U.*, E.NOMBRE
         FROM tbl_ms_roles U
-        INNER JOIN tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO";
+        INNER JOIN tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO ORDER BY FECHA_CREACION DESC";
 
         $sql = $conectar->prepare($sql);
         $sql->execute();

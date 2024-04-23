@@ -12,7 +12,7 @@ class Prestamo extends Conectar
         INNER JOIN tbl_mp_tipo_prestamo AS T ON P.ID_TIPO_PRESTAMO = T.ID_TIPO_PRESTAMO
         INNER JOIN tbl_me_empleados AS E ON P.ID_EMPLEADO = E.ID_EMPLEADO
         INNER JOIN tbl_formapago AS F ON P.ID_FPAGO = F.ID_FPAGO
-        ORDER BY P.ID_PRESTAMO DESC;";
+        ORDER BY FECHA_SOLICITUD DESC;";
 
         $sql = $conectar->prepare($sql);
 

@@ -8,7 +8,8 @@ class Sucursal extends Conectar
         parent::set_names();
         $sql = "SELECT S.*, R.REGION
         FROM tbl_me_sucursal S
-        INNER JOIN tbl_me_region R ON S.ID_REGION = R.ID_REGION;";
+        INNER JOIN tbl_me_region R ON S.ID_REGION = R.ID_REGION 
+        ORDER BY FECHA_CREACION DESC;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -27,32 +28,46 @@ class Sucursal extends Conectar
     }
     
     // INSERTA 
-    public function insert_sucursal( $SUCURSAL,$DESCRIPCION,$DIRECCION,$ID_REGION,$TELEFONO,$ESTADO) {
-        try {
-            $conectar = parent::conexion();
-            parent::set_names();
-            $sql = "INSERT INTO `tbl_me_sucursal` ( `SUCURSAL`, `DESCRIPCION`, `DIRECCION`, `ID_REGION`, `TELEFONO`,`ESTADO` ) VALUES ( :SUCURSAL,:DESCRIPCION, :DIRECCION, :ID_REGION, :TELEFONO,:ESTADO)";
-    
-            $stmt = $conectar->prepare($sql);
-          
-            $stmt->bindParam(':SUCURSAL', $SUCURSAL, PDO::PARAM_STR);
-            $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
-            $stmt->bindParam(':DIRECCION', $DIRECCION, PDO::PARAM_STR);
-            $stmt->bindParam(':ID_REGION', $ID_REGION, PDO::PARAM_INT);
-            $stmt->bindParam(':TELEFONO', $TELEFONO, PDO::PARAM_STR);
-            $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
+    // Modelo
 
-            $stmt->execute();
-    
-            if ($stmt->rowCount() > 0) {
-                return "Sucursal Insertada";
-            } else {
-                return "Error al insertar la sucursal"; 
-            }
-        } catch (PDOException $e) {
-            return "Error al insertar la sucursal: " . $e->getMessage();
+public function insert_sucursal($SUCURSAL, $DESCRIPCION, $DIRECCION, $ID_REGION, $TELEFONO, $ESTADO, $CREADO_POR, $FECHA_CREACION) {
+    try {
+        // Conectar a la base de datos
+        $conectar = parent::conexion();
+        parent::set_names();
+        
+        // Preparar la consulta SQL para la inserción
+        $sql = "INSERT INTO `tbl_me_sucursal` (`SUCURSAL`, `DESCRIPCION`, `DIRECCION`, `ID_REGION`, `TELEFONO`, `ESTADO`, `CREADO_POR`, `FECHA_CREACION`) 
+                VALUES (:SUCURSAL, :DESCRIPCION, :DIRECCION, :ID_REGION, :TELEFONO, :ESTADO, :CREADO_POR, :FECHA_CREACION)";
+        
+        // Preparar la sentencia SQL
+        $stmt = $conectar->prepare($sql);
+        
+        // Vincular los parámetros
+        $stmt->bindParam(':SUCURSAL', $SUCURSAL, PDO::PARAM_STR);
+        $stmt->bindParam(':DESCRIPCION', $DESCRIPCION, PDO::PARAM_STR);
+        $stmt->bindParam(':DIRECCION', $DIRECCION, PDO::PARAM_STR);
+        $stmt->bindParam(':ID_REGION', $ID_REGION, PDO::PARAM_INT);
+        $stmt->bindParam(':TELEFONO', $TELEFONO, PDO::PARAM_STR);
+        $stmt->bindParam(':ESTADO', $ESTADO, PDO::PARAM_STR);
+        $stmt->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+        $stmt->bindParam(':FECHA_CREACION', $FECHA_CREACION, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Verificar si se insertó correctamente
+        if ($stmt->rowCount() > 0) {
+            return "Sucursal insertada";
+        } else {
+            return "Error al insertar la sucursal"; 
         }
+    } catch (PDOException $e) {
+        // Capturar cualquier excepción y devolver un mensaje de error
+        return "Error al insertar la sucursal: " . $e->getMessage();
     }
+}
+
 
     // EDITA 
     public function update_sucursal($ID_SUCURSAL, $SUCURSAL, $DESCRIPCION,$DIRECCION,$ID_REGION,$TELEFONO,$ESTADO, $MODIFICADO_POR, $FECHA_MODIFICACION ) {

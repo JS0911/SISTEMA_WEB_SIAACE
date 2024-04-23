@@ -6,7 +6,7 @@ class tipoTransaccion extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM tbl_tipo_transaccion;";
+        $sql = "SELECT * FROM tbl_tipo_transaccion ORDER BY FECHA_CREACION DESC;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

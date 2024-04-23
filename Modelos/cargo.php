@@ -6,7 +6,7 @@ class Cargos extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM tbl_me_cargo;";
+        $sql = "SELECT * FROM tbl_me_cargo ORDER BY FECHA_CREACION DESC;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

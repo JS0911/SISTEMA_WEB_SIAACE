@@ -37,7 +37,7 @@ switch ($_GET["op"]) {
         $VALOR = $body["VALOR"];
         
 
-        if (verificarExistenciaParametro($PARAMETRO) > 0) {
+        if (verificarExistenciaParametro($PARAMETRO) > 0 ) {
             // Envía una respuesta de conflicto (409) si la region ya existe
             http_response_code(409);
             echo json_encode(["error" => "El parametro ya existe en la base de datos."]);
@@ -62,7 +62,11 @@ switch ($_GET["op"]) {
         $ID_PARAMETRO = $body["ID_PARAMETRO"];
         $PARAMETRO = $body["PARAMETRO"];
         $VALOR = $body["VALOR"];
-
+        if (verificarExistenciaParametro($PARAMETRO) > 0 && !esMismoParametro($ID_PARAMETRO, $PARAMETRO)) {
+            // Envía una respuesta de conflicto (409) si la region ya existe
+            http_response_code(409);
+            echo json_encode(["error" => "El parametro ya existe en la base de datos."]);
+        } else {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-8 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
@@ -88,7 +92,7 @@ switch ($_GET["op"]) {
             $bit->insert_bitacoraModificacion($dateNew, $ValorAntes, $VALOR, $_SESSION['id_usuario'], 4, "VALOR", $ID_PARAMETRO, "MODIFICAR");
         }
         break;
-
+    }
     case "eliminarParametro":
         $ID_PARAMETRO = $body["ID_PARAMETRO"];
         $datos = $com->eliminar_parametro($ID_PARAMETRO);
@@ -115,4 +119,22 @@ switch ($_GET["op"]) {
             // Devuelve el número de resultados encontrados
             return $row['count'];
         }
+        function esMismoParametro($ID_PARAMETRO, $PARAMETRO) {
+            // Realiza una consulta en la base de datos para verificar si el parámetro tiene el mismo ID y nombre
+            $sql = "SELECT COUNT(*) AS count FROM tbl_ms_parametros WHERE ID_PARAMETRO = :id_parametro AND PARAMETRO = :parametro";
+            
+            // Realiza la conexión a la base de datos y ejecuta la consulta
+            $conexion = new Conectar();
+            $conn = $conexion->Conexion();
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':id_parametro', $ID_PARAMETRO); 
+            $stmt->bindParam(':parametro', $PARAMETRO); 
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Devuelve true si el número de resultados encontrados es mayor que 0, lo que significa que el parámetro tiene el mismo ID y nombre
+            return $row['count'] > 0;
+        }
+        
+
 ?>

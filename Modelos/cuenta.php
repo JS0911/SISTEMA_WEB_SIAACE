@@ -9,7 +9,8 @@ class cuenta extends Conectar
         $sql = "SELECT C.*,E.PRIMER_NOMBRE, E.PRIMER_APELLIDO, T.TIPO_CUENTA
         FROM tbl_mc_cuenta AS C
         INNER JOIN tbl_me_empleados AS E ON C.ID_EMPLEADO = E.ID_EMPLEADO
-        INNER JOIN tbl_mc_tipocuenta AS T ON C.ID_TIPOCUENTA = T.ID_TIPOCUENTA;";
+        INNER JOIN tbl_mc_tipocuenta AS T ON C.ID_TIPOCUENTA = T.ID_TIPOCUENTA
+        ORDER BY FECHA_CREACION DESC;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

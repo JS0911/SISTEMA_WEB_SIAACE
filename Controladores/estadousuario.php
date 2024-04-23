@@ -60,6 +60,11 @@ switch ($_GET["op"]) {
         $NOMBRE = $body["NOMBRE"];
         $DESCRIPCION = $body["DESCRIPCION"];
 
+        if (verificarExistenciaEstado($NOMBRE) > 0 && !esMismoEstado($ID_ESTADO_USUARIO, $NOMBRE)) {
+            // Envía una respuesta de conflicto (409) si el objeto ya existe
+            http_response_code(409);
+            echo json_encode(["error" => "El estado ya existe en la base de datos."]);
+        } else {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s");
@@ -74,7 +79,7 @@ switch ($_GET["op"]) {
             $DESCRIPCION
         );
         echo json_encode($datos);
-        
+    
         //---------------------------------------------------Decisiones-----------------------------------------------
         if(strcmp($NombreAntes, $NOMBRE) != 0 ){
             $bit->insert_bitacoraModificacion($dateNew, $NombreAntes, $NOMBRE, $_SESSION['id_usuario'], 6, "NOMBRE", $ID_ESTADO_USUARIO, "MODIFICAR");
@@ -84,7 +89,7 @@ switch ($_GET["op"]) {
         if(strcmp($DescripcionAntes, $DESCRIPCION) != 0 ){
             $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 6, "DESCRIPCIÓN", $ID_ESTADO_USUARIO, "MODIFICAR");
         }
-
+    }
     break;
 
     case "EliminarEstado":
@@ -112,5 +117,24 @@ switch ($_GET["op"]) {
         // Devuelve el número de resultados encontrados
         return $row['count'];
     }
+
+    function esMismoEstado($ID_ESTADO_USUARIO, $NOMBRE) {
+        // Realiza una consulta en la base de datos para verificar si el estado de usuario tiene el mismo ID y nombre
+        $sql = "SELECT COUNT(*) AS count FROM tbl_ms_estadousuario WHERE id_estado_usuario = :id_estado_usuario AND nombre = :nombre";
+    
+        // Realiza la conexión a la base de datos y ejecuta la consulta
+        $conexion = new Conectar();
+        $conn = $conexion->Conexion();
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_estado_usuario', $ID_ESTADO_USUARIO);
+        $stmt->bindParam(':nombre', $NOMBRE);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        // Si el número de resultados encontrados es mayor que 0, significa que el estado de usuario tiene el mismo ID y nombre
+        return $row['count'] > 0;
+    }
+    
+    
 
 ?>

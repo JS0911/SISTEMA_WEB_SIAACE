@@ -63,7 +63,11 @@ switch ($_GET["op"]) {
         $DESCRIPCION = $body["DESCRIPCION"];
         $SIGNO_TRANSACCION = $body["SIGNO_TRANSACCION"];
         $ESTADO =  $body["ESTADO"];
-
+        if (verificarExistenciaTransaccion($TIPO_TRANSACCION) > 0 && !esMismoTransaccion($ID_TIPO_TRANSACCION, $TIPO_TRANSACCION)) {
+            // Envía una respuesta de conflicto (409) si la transacción ya existe
+            http_response_code(409);
+            echo json_encode(["error" => "La transacción ya existe en la base de datos."]);
+        } else {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s");
@@ -101,6 +105,7 @@ switch ($_GET["op"]) {
           if(strcmp($EstadoAntes, $ESTADO) != 0 ){
               $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 11 , "ESTADO", $ID_TIPO_TRANSACCION, "MODIFICAR");
           }
+        }
     break;
 
     case "EliminarTipoTransaccion":
@@ -197,4 +202,21 @@ function verificarExistenciaTransaccion($TIPO_TRANSACCION)
     // Devuelve el número de resultados encontrados
     return $row['count'];
 }
+function esMismoTransaccion($ID_TIPO_TRANSACCION, $TIPO_TRANSACCION) {
+    // Realiza una consulta en la base de datos para verificar si el tipo de transacción tiene el mismo id_tipo_transaccion y nombre de transacción
+    $sql = "SELECT COUNT(*) as count FROM tbl_tipo_transaccion WHERE id_tipo_transaccion = :id_tipo_transaccion AND tipo_transaccion = :tipo_transaccion";
+
+    // Realiza la conexión a la base de datos y ejecuta la consulta
+    $conexion = new Conectar();
+    $conn = $conexion->Conexion();
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id_tipo_transaccion', $ID_TIPO_TRANSACCION);
+    $stmt->bindParam(':tipo_transaccion', $TIPO_TRANSACCION);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Si el número de resultados encontrados es mayor que 0, significa que el tipo de transacción tiene el mismo id_tipo_transaccion y nombre de transacción
+    return $row['count'] > 0;
+}
+
 ?>

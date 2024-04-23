@@ -39,21 +39,29 @@ switch ($_GET["op"]) {
          $ID_REGION = $body["ID_REGION"];
          $TELEFONO = $body["TELEFONO"];
          $ESTADO = $body["ESTADO"];
-        
-         if (verificarExistenciaSucursal($SUCURSAL) > 0 ) {
-             // Envía una respuesta de conflicto (409) si la region ya existe
-             http_response_code(409);
-             echo json_encode(["error" => "La Sucursal ya existe en la base de datos."]);
-         } else {
-             // Inserta una region en la base de datos
-             $date = new DateTime(date("Y-m-d H:i:s"));
-             $dateMod = $date->modify("-8 hours");
-             $dateNew = $dateMod->format("Y-m-d H:i:s");
+        // Controlador
 
-             $datos = $com->insert_sucursal($SUCURSAL, $DESCRIPCION, $DIRECCION, $ID_REGION, $TELEFONO,$ESTADO);
-             echo json_encode(["message" => "Sucursal insertada exitosamente."]);
-             $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 9, "INSERTAR");
-         }
+// Verificar la existencia de la sucursal
+if (verificarExistenciaSucursal($SUCURSAL) > 0 ) {
+    // Envía una respuesta de conflicto (409) si la sucursal ya existe
+    http_response_code(409);
+    echo json_encode(["error" => "La sucursal ya existe en la base de datos."]);
+} else {
+    // Insertar una sucursal en la base de datos
+    $date = new DateTime(date("Y-m-d H:i:s"));
+    $dateMod = $date->modify("-8 hours");
+    $dateNew = $dateMod->format("Y-m-d H:i:s");
+
+    // Obtener el usuario creado por (suponiendo que está en $_SESSION['id_usuario'])
+    $CREADO_POR = $_SESSION['usuario'];
+
+    // Llamar a la función insert_sucursal con todos los parámetros requeridos
+    $datos = $com->insert_sucursal($SUCURSAL, $DESCRIPCION, $DIRECCION, $ID_REGION, $TELEFONO, $ESTADO, $CREADO_POR, $dateNew);
+    
+    // Devolver una respuesta JSON indicando el éxito de la inserción
+    echo json_encode(["message" => "Sucursal insertada exitosamente."]);
+}
+
         break;
 
     case "GetSucursal":
@@ -69,7 +77,7 @@ switch ($_GET["op"]) {
         $ID_REGION = $body["ID_REGION"];
         $TELEFONO = $body["TELEFONO"];
         $ESTADO = $body["ESTADO"];
-        if (verificarExistenciaSucursal($SUCURSAL) > 0 &&  !esMismoRegion($ID_SUCURSAL, $SUCURSAL)) {
+        if (verificarExistenciaSucursal($SUCURSAL) > 0 && !esMismoSucursal($ID_SUCURSAL, $SUCURSAL)) {
             // Envía una respuesta de conflicto (409) si la region ya existe
             http_response_code(409);
             echo json_encode(["error" => "La Sucursal ya existe en la base de datos."]);
@@ -142,22 +150,23 @@ function verificarExistenciaSucursal($SUCURSAL) {
     // Devuelve el número de resultados encontrados
     return $row['count'];
 }
-function esMismoRegion($id_sucursal, $sucursal) {
+function esMismoSucursal($ID_SUCURSAL, $SUCURSAL) {
     // Realiza una consulta en la base de datos para verificar si la sucursal tiene el mismo id_sucursal y nombre de sucursal
-    $sql = "SELECT COUNT(*) as count FROM tbl_ms_sucursales WHERE id_sucursal = :id_sucursal AND sucursal = :sucursal";
+    $sql = "SELECT COUNT(*) AS count FROM tbl_me_sucursal WHERE id_sucursal = :id_sucursal AND sucursal = :sucursal";
 
     // Realiza la conexión a la base de datos y ejecuta la consulta
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id_sucursal', $id_sucursal);
-    $stmt->bindParam(':sucursal', $sucursal);
+    $stmt->bindParam(':id_sucursal', $ID_SUCURSAL); // Corregido el nombre de la variable
+    $stmt->bindParam(':sucursal', $SUCURSAL); // Corregido el nombre de la variable
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Si el número de resultados encontrados es mayor que 0, significa que la sucursal tiene el mismo id_sucursal y nombre de sucursal
     return $row['count'] > 0;
 }
+
 
 
 ?>

@@ -42,7 +42,7 @@ switch ($_GET["op"]) {
          $PLAZO_MINIMO = $body["PLAZO_MINIMO"];
          $ESTADO = $body["ESTADO"];
        
-         if (verificarExistenciaTipoprestamo($TIPO_PRESTAMO) > 0) {
+         if (verificarExistenciaTipoprestamo($TIPO_PRESTAMO) > 0 && !esMismoPrestamo($ID_TIPO_PRESTAMO, $TIPO_PRESTAMO))  {
              // Envía una respuesta de conflicto (409) si el tipo prestamo ya existe
              http_response_code(409);
              echo json_encode(["error" => "El Tipo Prestamo ya existe en la base de datos."]);
@@ -70,7 +70,11 @@ switch ($_GET["op"]) {
         $PLAZO_MAXIMO = $body["PLAZO_MAXIMO"];
         $PLAZO_MINIMO = $body["PLAZO_MINIMO"];
         $ESTADO = $body["ESTADO"];
-
+        if (verificarExistenciaTipoprestamo($TIPO_PRESTAMO) > 0) {
+            // Envía una respuesta de conflicto (409) si el tipo prestamo ya existe
+            http_response_code(409);
+            echo json_encode(["error" => "El Tipo Prestamo ya existe en la base de datos."]);
+        } else {
         $datos = $com->update_tipoprestamo(
             $ID_TIPO_PRESTAMO,
             $TIPO_PRESTAMO, 
@@ -84,6 +88,7 @@ switch ($_GET["op"]) {
             $PLAZO_MINIMO,
             $ESTADO );
         echo json_encode($datos);
+        }
         break;
 
         
@@ -109,4 +114,23 @@ function verificarExistenciaTipoprestamo($TIPO_PRESTAMO) {
     // Devuelve el número de resultados encontrados
     return $row['count'];
 }
+
+function esMismoPrestamo($ID_TIPO_PRESTAMO, $TIPO_PRESTAMO) {
+    // Realiza una consulta en la base de datos para verificar si el tipo de préstamo tiene el mismo ID y nombre
+    $sql = "SELECT COUNT(*) AS count FROM tbl_mp_tipo_prestamo WHERE id_tipo_prestamo = :id_tipo_prestamo AND tipo_prestamo = :tipo_prestamo";
+
+    // Realiza la conexión a la base de datos y ejecuta la consulta
+    $conexion = new Conectar();
+    $conn = $conexion->Conexion();
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id_tipo_prestamo', $ID_TIPO_PRESTAMO); // Corregido el nombre de la variable
+    $stmt->bindParam(':tipo_prestamo', $TIPO_PRESTAMO); // Corregido el nombre de la variable
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Si el número de resultados encontrados es mayor que 0, significa que el tipo de préstamo tiene el mismo ID y nombre
+    return $row['count'] > 0;
+}
+
+
 ?>

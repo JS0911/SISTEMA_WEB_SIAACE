@@ -10,7 +10,7 @@ class Usuario extends Conectar
         FROM tbl_ms_usuario U
         INNER JOIN tbl_ms_roles R ON U.ID_ROL = R.ID_ROL
         INNER JOIN tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO
-        ORDER BY U.ID_USUARIO DESC";
+        ORDER BY FECHA_CREACION DESC";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

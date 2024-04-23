@@ -9,7 +9,8 @@ class bitacora extends Conectar
         $sql = "SELECT b.FECHA, b.ANTES, b.DESPUES, u.NOMBRE_USUARIO, o.OBJETO AS TABLA, b.CAMPO, b.ID_REGISTRO, b.OPERACION 
         FROM tbl_ms_bitacora AS b 
         JOIN tbl_ms_usuario AS u ON b.ID_USUARIO = u.ID_USUARIO 
-        LEFT JOIN tbl_ms_objetos AS o ON b.TABLA = o.ID_OBJETO;";
+        LEFT JOIN tbl_ms_objetos AS o ON b.TABLA = o.ID_OBJETO
+        ORDER BY b.FECHA DESC;";
 
         $sql = $conectar->prepare($sql);
         $sql->execute();

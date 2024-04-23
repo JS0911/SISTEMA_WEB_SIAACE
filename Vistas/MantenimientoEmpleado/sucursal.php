@@ -1,4 +1,4 @@
-<!-- -----------------------------------------------------------------------
+<!-------------------------------------------------------------------------
 	Universidad Nacional Autonoma de Honduras (UNAH)
 		Facultad de Ciencias Economicas
 	Departamento de Informatica administrativa
@@ -152,7 +152,7 @@ if (!isset($_SESSION['usuario'])) {
     <meta name="author" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento Empleado</title>
+    <title>Mantenimiento Sucursal</title>
     <link rel="shortcut icon" href="../../src/IconoIDH.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -491,6 +491,10 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Region</th>
                                     <th>Telefono</th>
                                     <th>Estado</th>
+                                    <th class="direccion-column" style="display:none;">Creado por</th>
+                                    <th class="direccion-column" style="display:none;">Modificado Por</th>
+                                    <th class="direccion-column" style="display:none;">Fecha Creacion</th>
+                                    <th class="direccion-column" style="display:none;">Fecha Modificacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -537,7 +541,7 @@ if (!isset($_SESSION['usuario'])) {
                                         </select>
 
                                         <label for="nombre">Telefono</label>
-                                        <input type="text" maxlength="45" class="form-control" id="agregar-telefono" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <input type="text" maxlength="10" class="form-control" id="agregar-telefono" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje4"></div>
 
                                         <label for="nombre">Estado</label>
@@ -580,7 +584,7 @@ if (!isset($_SESSION['usuario'])) {
                                       
 
                                         <label for="nombre">Sucursal</label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-sucursal" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="15" class="form-control" id="editar-sucursal" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje5"></div>
 
                                         <label for="nombre">Descripcion</label>
@@ -588,7 +592,7 @@ if (!isset($_SESSION['usuario'])) {
                                         <div id="mensaje6"></div>
 
                                         <label for="nombre">Direccion</label>
-                                        <textarea maxlength="100" class="form-control" id="editar-direccion" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()"></textarea>
+                                        <textarea maxlength="45" class="form-control" id="editar-direccion" required pattern="^(?!\s)(?!.*\s$).*$" title="Solo se permiten Letras Mayúsculas & un espacio entre palabra" oninput="this.value = this.value.toUpperCase()"></textarea>
                                     <div id="mensaje7"></div>
 
 
@@ -619,7 +623,7 @@ if (!isset($_SESSION['usuario'])) {
                                         </select>
 
                                         <label for="nombre">Telefono</label>
-                                        <input type="text" maxlength="45" class="form-control" id="editar-telefono" required pattern="[0-9]+" title="Solo se permiten números">
+                                        <input type="text" maxlength="10" class="form-control" id="editar-telefono" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje9"></div>
 
 
@@ -714,6 +718,10 @@ if (!isset($_SESSION['usuario'])) {
                             '<td>' + sucursal.TELEFONO + '</td>' +
                             //'<td>' + sucursal.ESTADO + '</td>' +
                             '<td>' + estadoBtn + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + sucursal.CREADO_POR + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + sucursal.MODIFICADO_POR + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + sucursal.FECHA_CREACION + '</td>' +
+                            '<td class="direccion-column" style="display:none;">' + sucursal.FECHA_MODIFICACION + '</td>' +
                            
                             '<td>';
 
@@ -1293,7 +1301,7 @@ telefonoInput.addEventListener('input', checkForm);
         });
 
         // Escuchar eventos de cambio en los campos de entrada deshabilitados para eliminar espacios en blanco al principio y al final
-        $('#agregar-sucursal, #editar-sucursal, #agregar-estado, #editar-estado,, #agregar-telefono #editar-telefono').on('input', function() {
+        $('#agregar-sucursal, #editar-sucursal, #agregar-estado, #editar-estado, #agregar-telefono, #editar-telefono').on('input', function() {
             var input = $(this);
             var trimmedValue = input.val().trim();
             input.val(trimmedValue);

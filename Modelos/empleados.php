@@ -9,7 +9,8 @@ class Empleados extends Conectar
         //$sql = "SELECT * FROM tbl_me_empleados";
         $sql = "SELECT U.*, E.NOMBRE
         FROM tbl_me_empleados U
-        INNER JOIN tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO";
+        INNER JOIN tbl_ms_estadousuario E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO 
+        ORDER BY FECHA_CREACION DESC;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
