@@ -34,7 +34,7 @@ switch ($_GET["op"]) {
         $FORMA_DE_PAGO = $body["FORMA_DE_PAGO"];
         $DESCRIPCION = $body["DESCRIPCION"];
         $ESTADO =  $body["ESTADO"];
-        if (verificarExistenciaFpago($FORMA_DE_PAGO) > 0 && ! esMismoPago($ID_FPAGO, $FORMA_DE_PAGO)) {
+        if (verificarExistenciaFpago($FORMA_DE_PAGO) > 0 ) {
             // Envía una respuesta de conflicto (409) si la Forma de pago ya existe
             http_response_code(409);
             echo json_encode(["error" => "La Forma de Pago ya existe en la base de datos."]);
@@ -60,7 +60,7 @@ switch ($_GET["op"]) {
         $FORMA_DE_PAGO = $body["FORMA_DE_PAGO"];
         $DESCRIPCION = $body["DESCRIPCION"];
         $ESTADO =  $body["ESTADO"];
-        if (verificarExistenciaFpago($FORMA_DE_PAGO) > 0) {
+        if (verificarExistenciaFpago($FORMA_DE_PAGO) > 0 && ! esMismoPago($ID_FPAGO, $FORMA_DE_PAGO)) {
             // Envía una respuesta de conflicto (409) si la Forma de pago ya existe
             http_response_code(409);
             echo json_encode(["error" => "La Forma de Pago ya existe en la base de datos."]);
