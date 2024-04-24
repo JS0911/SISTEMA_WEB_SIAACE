@@ -505,6 +505,7 @@ if (!isset($_SESSION['usuario'])) {
                                     <th style="display: none;">Id Sucursal</th>
                                     <th style="display: none;">Id Cargo</th>
                                     <th style="display: none;">Id Estado</th>
+                                    <th style="display: none;">Estado</th>
                                     <th>Estado</th>
                                     <th class="direccion-column" style="display: none;">Creado por</th>
                                     <th class="direccion-column" style="display: none;">Fecha Creación</th>
@@ -918,7 +919,7 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + empleado.ID_SUCURSAL + '</td>' +
                             '<td style="display:none;">' + empleado.ID_CARGO + '</td>' +
                             '<td style="display:none;">' + empleado.ID_ESTADO_USUARIO + '</td>' +
-                            //'<td>' + empleado.NOMBRE + '</td>' +
+                            '<td style="display:none;">' + empleado.NOMBRE + '</td>' +
                             '<td>' + estadoBtn + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + empleado.CREADO_POR + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + empleado.FECHA_CREACION + '</td>' +
@@ -982,7 +983,7 @@ if (!isset($_SESSION['usuario'])) {
             extend: 'excel',
             text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
             exportOptions: {
-                columns: '*', // Exporta todas las columnas
+                columns:[0, 1, 2, 3, 4,5, 6, 7, 8, 9,10,11, 12 ,13,15, 16, 17,18],
                 modifier: {
                     page: 'all' // Exporta todas las páginas
                 }
@@ -992,7 +993,7 @@ if (!isset($_SESSION['usuario'])) {
             extend: 'pdfHtml5',
             text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
             exportOptions: {
-                columns: '*', // Exporta todas las columnas
+                columns:[0, 1, 2, 3, 4,5, 6, 7, 8, 9,10,11, 12 ,13,15, 16, 17,18],
                 modifier: {
                     page: 'all' // Exporta todas las páginas
                 }
@@ -1003,7 +1004,7 @@ if (!isset($_SESSION['usuario'])) {
 
     // Resto del código de personalización
     doc.pageOrientation = 'landscape'; // Establece la orientación como horizontal
-    doc.pageSize = 'LEGAL'; // Tamaño de página oficio
+    doc.pageSize = 'A3'; // Tamaño de página oficio
     var now = new Date();
     var date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
     var horas = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
@@ -1064,7 +1065,7 @@ if (!isset($_SESSION['usuario'])) {
             text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
             autoPrint: true,
             exportOptions: {
-                columns: '*', // Exporta todas las columnas
+                columns:[0, 1, 2, 3, 4,5, 6, 7, 8, 9,10,11, 12 ,13,15, 16, 17,18],
                 modifier: {
                     page: 'all' // Exporta todas las páginas
                 }
