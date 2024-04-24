@@ -477,6 +477,8 @@ if (!isset($_SESSION['usuario'])) {
                                     <th class="direccion-column" style="display:none;">Fecha creacion</th>
                                     <th class="direccion-column" style="display:none;">Modificado por</th>
                                     <th class="direccion-column" style="display:none;">Fecha Modificacion</th>
+                                    <th style="display:none;">Estado</th> 
+                                    <!-- se duplico para que salga el estado en los reportes -->
                                     <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -641,7 +643,7 @@ if (!isset($_SESSION['usuario'])) {
                             '<td class="direccion-column" style="display:none;">' + pago.FECHA_CREACION + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + pago.MODIFICADO_POR + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + pago.FECHA_MODIFICACION + '</td>' +
-                            //'<td>' + pago.ESTADO + '</td>' +
+                            '<td style="display:none;">' + pago.ESTADO + '</td>' +
                             '<td>' + estadoBtn + '</td>' +
                             '<td>';
 
@@ -689,7 +691,7 @@ if (!isset($_SESSION['usuario'])) {
             extend: 'excel',
             text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
             exportOptions: {
-                columns: ':not(:last-child)', // Exporta todas las columnas excepto la última (Acción)
+                columns:[0, 1, 2, 3, 4, 5 , 6, 7, 8],
                 modifier: {
                     page: 'all' // Exporta todas las páginas
                 },
@@ -699,10 +701,10 @@ if (!isset($_SESSION['usuario'])) {
             extend: 'pdfHtml5',
             text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
             exportOptions: {
-                columns: ':not(:last-child)', // Exporta todas las columnas excepto la última (Acción)
-                modifier: {
+                columns:[0, 1, 2, 3, 4, 5, 6, 7, 8],
+                modifier: { 
                     page: 'all' // Exporta todas las páginas
-                },
+                }, 
             },
             customize: function(doc) {
                 var usuario = "<?php echo $usuario; ?>"; // Obtener el nombre de usuario desde PHP
@@ -770,7 +772,7 @@ if (!isset($_SESSION['usuario'])) {
             text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
             autoPrint: true,
             exportOptions: {
-                columns: ':not(:last-child)', // Exporta todas las columnas excepto la última (Acción)
+                columns:[0, 1, 2, 3, 4,5, 6, 7, 8],
                 modifier: {
                     page: 'all' // Exporta todas las páginas
                 },

@@ -38,6 +38,7 @@ Kevin Zuniga              25-nov-2023                 Se agrego reporteria y rut
 Sahori Garcia             29-11-2023                   Agregar boton atra y adelante 
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 khaterine Ordoñez         10/04/2024                   cambio de posicion de los botones. se agrego switch en tabla
+Ashley Matamoros          24/04/2024                   correcion en repotes
 ------------------------------------------------------------------------->
 
 <?php
@@ -480,6 +481,8 @@ if (!isset($_SESSION['usuario'])) {
                                     <th class="direccion-column" style="display:none;">Tasa Minima</th>
                                     <th class="direccion-column" style="display:none;">Plazo Máximo</th>
                                     <th class="direccion-column" style="display:none;">Plazo Minimo</th>
+                                    <!-- se duplico para que salga el estado en los reportes -->
+                                    <th  style="display:none;">Estado</th>
                                     <th>Estado </th>
                                     <th class="direccion-column" style="display:none;">Creado por</th>
                                     <th class="direccion-column" style="display:none;">Fecha Creacion</th>
@@ -743,7 +746,7 @@ if (!isset($_SESSION['usuario'])) {
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.TASA_MINIMA + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.PLAZO_MAXIMO + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.PLAZO_MINIMO + '</td>' +
-                            //'<td>' + tipoprestamo.ESTADO + '</td>' +
+                            '<td  style="display:none;">' + tipoprestamo.ESTADO + '</td>' + //se activo para que salga en reportes
                             '<td>' + estadoBtn + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.CREADO_POR + '</td>' +
                             '<td class="direccion-column" style="display:none;">' + tipoprestamo.FECHA_CREACION + '</td>' +
@@ -794,9 +797,9 @@ if (!isset($_SESSION['usuario'])) {
                         extend: 'excel',
                         text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
-                            columns: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                            columns:[0, 1, 2, 3, 4, 5 , 6, 7, 8, 9,10, 11,13,14, 15, 16],
                             modifier: {
-                                page: 'current'
+                                page: 'all' // Exporta todas las páginas
                             },
                         }
                     },
@@ -804,89 +807,96 @@ if (!isset($_SESSION['usuario'])) {
                         extend: 'pdfHtml5',
                         text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
-                            columns: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14,15, 16],
                             modifier: {
-                                page: 'current'
+                                page: 'all' // Exporta todas las páginas
                             }
                         },
                         customize: function(doc) {
-                            doc.pageOrientation = 'portrait';
-                            doc.pageSize = 'LETTER';
-
-                            var now = new Date();
-                            var date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
-                            var horas = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
-
-                            doc.content.splice(0, 1);
-                            doc.content.unshift({
-                                margin: [0, 0, 0, 0],
-                                alignment: 'center',
-                                text: 'IDH-Microfinanciera',
-                                fontSize: 20,
-                                bold: true,
-                                color: '#063970',
-                                margin: [0, 0, 0, 20]
-                            }, {
-                                margin: [0, 0, 0, 0],
-                                alignment: 'center',
-                                text: 'Reporte de Tipos de Prestamos',
-                                fontSize: 20,
+                            var usuario = "<?php echo $usuario; ?>"; // Obtener el nombre de usuario desde PHP
+                // Resto del código de personalización
+                doc.pageOrientation = 'landscape';
+                doc.pageSize = 'LEGAL';
+                var now = new Date();
+                var date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
+                var horas = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+                doc.content.splice(0, 1);
+                doc.content.unshift({
+                    margin: [0, 0, 0, 0],
+                    alignment: 'center',
+                    text: 'IDH-Microfinanciera',
+                    fontSize: 20,
+                    bold: true,
+                    color: '#063970',
+                    margin: [0, 0, 0, 20]
+                }, {
+                    margin: [0, 0, 0, 0],
+                    alignment: 'center',
+                    text: 'Reporte de Tipo Prestamo',
+                    fontSize: 20,
+                    bold: true
+                }, {
+                    margin: [0, -60, 0, 20],
+                    alignment: 'right',
+                    image: LogoBase64,
+                    width: 70,
+                    height: 70,
+                }, {
+                    margin: [0, -20, 0, 20],
+                    alignment: 'left',
+                    text: 'Fecha: ' + date + '\nHora: ' + horas,
+                    fontSize: 10,
+                    bold: true
+                }, {
+                    margin: [0, 0, 0, 20],
+                    alignment: 'left',
+                    text: "Descargado por: " + usuario, // Agregar el nombre de usuario
+                    fontSize: 10,
+                    bold: true
+                });
+                doc.footer = function(currentPage, pageCount) {
+                    return {
+                        margin: 10,
+                        columns: [{
+                            fontSize: 10,
+                            text: [{
+                                text: "Página " +
+                                    currentPage.toString() +
+                                    " de " +
+                                    pageCount,
+                                alignment: "center",
                                 bold: true
-                            }, {
-                                margin: [0, -60, 0, 20],
-                                alignment: 'right',
-                                image: LogoBase64,
-                                width: 70,
-                                height: 70,
-                            }, {
-                                margin: [0, -20, 0, 20],
-                                alignment: 'left',
-                                text: 'Fecha: ' + date + '\nHora: ' + horas,
-                                fontSize: 10,
-                                bold: true
-                            });
-                            doc.footer = function(currentPage, pageCount) {
-                                return {
-                                    margin: 10,
-                                    columns: [{
-                                        fontSize: 10,
-                                        text: [{
-                                            text: "Página " +
-                                                currentPage.toString() +
-                                                " de " +
-                                                pageCount,
-                                            alignment: "center",
-                                            bold: true
-                                        }, ],
-                                        alignment: "center",
-                                    }, ],
-                                };
-                            };
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
-                        autoPrint: true,
-                        exportOptions: {
-                            columns: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                            modifier: {
-                                page: 'current'
-                            },
-                        },
-                    },
-                    {
-                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
-                        action: function() {
-                            ocultarCampos();
-                        }
-                    }
-                ],
-                "lengthMenu": [10, 20, 30, 50, 100],
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                            }, ],
+                            alignment: "center",
+                        }, ],
+                    };
+                };
+            }
+        }, 
+        {
+            extend: 'print',
+            text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
+            autoPrint: true,
+            exportOptions: {
+                columns:[0, 1, 2, 3, 4,5, 6, 7, 8, 9,10,11,13,14, 15, 16],
+                modifier: {
+                    page: 'all' // Exporta todas las páginas
                 },
-            });
+            }
+        },
+        {
+            text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+            action: function() {
+                ocultarCampos();
+            }
+        }
+    ],
+    "lengthMenu": [10, 20, 30, 50, 100],
+    "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+    },
+});
+
         }
 
         function ocultarCampos() {
