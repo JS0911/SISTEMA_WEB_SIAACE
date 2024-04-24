@@ -39,6 +39,7 @@ Sahori Garcia              29-11-2023                  Agregar boton atra y adel
 Sahori Garcia             30-11-2023                   Cambio de permisos y objetos
 Sahori Garcia             09/02/2024                   Modificaciones en permisos 
 khaterine Ordoñez         06/04/2024                  Modificacion en validaciones, cambio de posicion de los botones. quitar interaccion al switch
+Ashley Matamoros          23/04/2024                  Correcion en reportes
 ----------------------------------------------------------------------- -->
 <?php
 
@@ -472,6 +473,8 @@ if (!isset($_SESSION['usuario'])) {
                                     <th>Cargo</th>
                                     <th>Descripcion</th>
                                     <th>Estado</th>
+                                    <!-- se duplico para que se vea en los resportes  -->
+                                    <th style="display: none;">Estado</th> 
                                     <th style="display: none;">Fecha Creacion</th>
                                     <th style="display: none;">Fecha Modificacion</th>
                                     <th style="display: none;">Creado por</th>
@@ -634,7 +637,7 @@ if (!isset($_SESSION['usuario'])) {
                             '<td style="display:none;">' + cargo.ID_CARGO + '</td>' +
                             '<td>' + cargo.CARGO + '</td>' +
                             '<td>' + cargo.DESCRIPCION + '</td>' +
-                           // '<td>' + cargo.ESTADO + '</td>' +
+                            '<td style="display: none;">' + cargo.ESTADO + '</td>' + //se activo para que salga el estado en los reportes
                             '<td>' + estadoBtn + '</td>' +
                             '<td style="display:none;">' + cargo.FECHA_CREACION + '</td>' +
                             '<td style="display:none;">' + cargo.FECHA_MODIFICACION + '</td>' +
@@ -687,9 +690,9 @@ if (!isset($_SESSION['usuario'])) {
                         extend: 'excel',
                       text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
-                            columns: [1, 2, 3],
+                            columns:[0, 1, 2, 3, 4, 6, 7, 8,9],
                             modifier: {
-                                page: 'current'
+                                page: 'all' // Exporta todas las páginas
                             },
                         }
                     },
@@ -697,91 +700,109 @@ if (!isset($_SESSION['usuario'])) {
                         extend: 'pdfHtml5',
                           text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
-                            columns: [1, 2, 3],
+                            columns:[0, 1, 2, 3, 4, 6, 7, 8,9],
                             modifier: {
-                                page: 'current'
+                                page: 'all' // Exporta todas las páginas
                             }
                         },
                         customize: function(doc) {
-                            doc.pageOrientation = 'portrait';
-                            doc.pageSize = 'LETTER';
+                            var usuario = "<?php echo $usuario; ?>"; // Obtener el nombre de usuario desde PHP
 
-                            var now = new Date();
-                            var date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
-                            var horas = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
-
-                            doc.content.splice(0, 1);
-                            doc.content.unshift({
-                                margin: [0, 0, 0, 0],
-                                alignment: 'center',
-                                text: 'IDH-Microfinanciera',
-                                fontSize: 20,
-                                bold: true,
-                                color: '#063970',
-                                margin: [0, 0, 0, 20]
-                            }, {
-                                margin: [0, 0, 0, 0],
-                                alignment: 'center',
-                                text: 'Reporte de Tipos de Cargos',
-                                fontSize: 20,
-                                bold: true
-                            }, {
-                                margin: [0, -60, 0, 20],
-                                alignment: 'right',
-                                image: LogoBase64,
-                                width: 70,
-                                height: 70,
-                            }, {
-                                margin: [0, -20, 0, 20],
-                                alignment: 'left',
-                                text: 'Fecha: ' + date + '\nHora: ' + horas,
+                    // Resto del código de personalización
+                    doc.pageOrientation = 'landscape'; // Establece la orientación como horizontal
+                    doc.pageSize = 'LEGAL'; // Tamaño de página oficio
+                    var now = new Date();
+                    var date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
+                    var horas = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+                    doc.content.splice(0, 1);
+                    doc.content.unshift({
+                        margin: [0, 0, 0, 0],
+                        alignment: 'center',
+                        text: 'IDH-Microfinanciera',
+                        fontSize: 20,
+                        bold: true,
+                        color: '#063970',
+                        margin: [0, 0, 0, 20]
+                    }, {
+                        margin: [0, 0, 0, 0],
+                        alignment: 'center',
+                        text: 'Reporte de Cargos',
+                        fontSize: 20,
+                        bold: true
+                    }, {
+                        margin: [0, -60, 0, 20],
+                        alignment: 'right',
+                        image: LogoBase64,
+                        width: 70,
+                        height: 70,
+                    }, {
+                        margin: [0, -20, 0, 20],
+                        alignment: 'left',
+                        text: 'Fecha: ' + date + '\nHora: ' + horas,
+                        fontSize: 10,
+                        bold: true
+                    }, {
+                        margin: [0, 0, 0, 20],
+                        alignment: 'left',
+                        text: "Descargado por: " + usuario, // Agregar el nombre de usuario
+                        fontSize: 10,
+                        bold: true
+                    });
+                    doc.footer = function(currentPage, pageCount) {
+                        return {
+                            margin: 10,
+                            columns: [{
                                 fontSize: 10,
-                                bold: true
-                            });
-                            doc.footer = function(currentPage, pageCount) {
-                                return {
-                                    margin: 10,
-                                    columns: [{
-                                        fontSize: 10,
-                                        text: [{
-                                            text: "Página " +
-                                                currentPage.toString() +
-                                                " de " +
-                                                pageCount,
-                                            alignment: "center",
-                                            bold: true
-                                        }, ],
-                                        alignment: "center",
-                                    }, ],
-                                };
-                            };
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
-                        autoPrint: true,
-                        exportOptions: {
-                            columns: [1, 2, 3],
-                            modifier: {
-                                page: 'current'
-                            },
-                        }
-                    },
-                    {
-                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
-
-
-                        action: function() {
-                            ocultarCampos();
-                        }
+                                text: [{
+                                    text: "Página " +
+                                        currentPage.toString() +
+                                        " de " +
+                                        pageCount,
+                                    alignment: "center",
+                                    bold: true
+                                }, ],
+                                alignment: "center",
+                            }, ],
+                        };
+                    };
                     }
-                ],
-                "lengthMenu": [10, 20, 30, 50, 100],
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-                },
-            });
+                    },    {
+                            extend: 'print',
+                            text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
+                            autoPrint: true,
+                            exportOptions: {
+                                columns:[0, 1, 2, 3, 4, 6, 7, 8,9],
+                                modifier: {
+                                    page: 'all' // Exporta todas las páginas
+                                }
+                            },
+                            customize: function(win) {
+                                $(win.document.body).find('table').addClass('display').css('font-size', '9px');
+                                $(win.document.body).find('table th').css('background-color', '#f7f7f7');
+                                $(win.document.body).find('table td').css('text-align', 'center');
+                                $(win.document.body).find('h1').css('text-align', 'center');
+                                $(win.document.body).find('h1').css('font-size', '14px');
+                                $(win.document.body).find('table').css('width', '100%');
+                                $(win.document.body).find('table').css('border-collapse', 'collapse');
+                                $(win.document.body).find('table').css('border', '1px solid black');
+                                $(win.document.body).find('table td, table th').css('border', '1px solid black');
+                                $(win.document.body).css('width', '100%');
+                                $(win.document.body).css('margin', 'auto');
+                                $(win.document.body).css('padding', '20px');
+                                $(win.document.body).css('font-family', '"Times New Roman", Times, serif');
+                            }
+                        },{
+                            text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+                            action: function() {
+                                ocultarCampos();
+                            }
+                        }
+                    ],
+                    "lengthMenu": [10, 20, 30, 50, 100],
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                    },
+});
         }
 
         function ocultarCampos() {
