@@ -234,6 +234,10 @@ if (!isset($_SESSION['usuario'])) {
             font-size: 2.5em;
             /* Ajusta e tamaño según tus necesidades */
         }
+
+        .text-orange {
+            color: orange;
+        }
     </style>
 
     </style>
@@ -517,7 +521,8 @@ if (!isset($_SESSION['usuario'])) {
                         if (parseInt(permisos[0]['PERMISOS_ELIMINACION']) === 1) {
                             row += '<i class="fas fa-times text-danger icono icon-lg" id="AnularButton" onclick="AnularPrestamo(' + prestamo.ID_PRESTAMO + ')" title="Anular"></i>';
 
-row += '<i class="fas fa-check text-primary icono icon-lg" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ',' + prestamo.MONTO_SOLICITADO + ',' + prestamo.PLAZO + ',' + prestamo.TASA + ',' + prestamo.ESTADO_PRESTAMO + ')" title="Aprobar"></i>';
+
+                            row += '<i class="fas fa-check text-primary icono icon-lg" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ',' + prestamo.MONTO_SOLICITADO + ',' + prestamo.PLAZO + ',' + prestamo.TASA + ',' + prestamo.ESTADO_PRESTAMO + ')" title="Aprobar"></i>';
 
 
                         }
@@ -528,13 +533,11 @@ row += '<i class="fas fa-check text-primary icono icon-lg" id="AprobarButton" on
                         }
 
 
-                        // if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
-                        //     row += '<button class="btn btn-primary" id="AprobarButton" onclick="AprobarPrestamo(' + prestamo.ID_PRESTAMO + ')">Aprobar</button>';
-                        // }
-
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
                             row += '<i class="fas fa-money-check-alt text-secondary icono icon-lg crear-movimiento" data-id="' + prestamo.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + prestamo.ID_EMPLEADO + ')" title="Movimiento"></i>';
 
+
+                            row += '<i class="fas fa-receipt text-orange icono icon-lg" id="ReciboButton" onclick="redirectToReciboPrestamo(' + prestamo.ID_PRESTAMO + ')" title="Recibo"></i>';
                         }
 
                         row += '</td>' +
@@ -839,44 +842,6 @@ row += '<i class="fas fa-check text-primary icono icon-lg" id="AprobarButton" on
                     console.error('Error:', error);
                 });
         }
-
-        /* ESTE ESTA FUNCIONANDO BIEN 
-                function DesembolsoPrestamo(ID_PRESTAMO) {
-                    // Realiza una solicitud FETCH al servidor para anular el préstamo
-                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=desembolsoPrestamo', {
-                            method: 'POST',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                "ID_PRESTAMO": ID_PRESTAMO
-                            })
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                // La solicitud se completó con éxito
-                                document.getElementById('DesembolsoButton').classList.remove('btn-success');
-                                document.getElementById('DesembolsoButton').classList.add('btn-secondary');
-                                document.getElementById('DesembolsoButton').disabled = true;
-                                // Recargar la página para mostrar los nuevos datos PARA QUITAR LOS MENSAJES
-                                //location.reload();
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Desembolso Realizado',
-                                    text: 'El Desembolso ha sido realizado exitosamente.'
-                                });
-                                setTimeout(function() {
-                                    location.reload();
-                                }, 5000)
-                            } else {
-                                console.error('Error en la solicitud');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-                } */
 
 
         function DesembolsoPrestamo(ID_PRESTAMO) {

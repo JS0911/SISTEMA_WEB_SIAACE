@@ -166,7 +166,8 @@ class cuenta extends Conectar
         parent::set_names();
 
         // Consulta SQL para actualizar los campos del usuario
-        $sql = "SELECT  T.ID_CUENTA, T.ID_TRANSACCION, T.FECHA, T.MONTO, TT.TIPO_TRANSACCION FROM tbl_transacciones AS T
+        $sql = "SELECT  T.ID_CUENTA, T.ID_TRANSACCION, T.FECHA, T.MONTO, T.CREADO_POR, TT.DESCRIPCION 
+        FROM tbl_transacciones AS T
         INNER JOIN tbl_tipo_transaccion AS TT ON T.ID_TIPO_TRANSACCION = TT.ID_TIPO_TRANSACCION
         WHERE T.ID_CUENTA = :ID_CUENTA";
 
@@ -177,23 +178,24 @@ class cuenta extends Conectar
     }
 
     //HACE DEPOSITO EN CUENTA
-    public function deposito_cuenta($ID_CUENTA, $DEPOSITO)
+    public function deposito_cuenta($ID_CUENTA, $DEPOSITO, $CREADO_POR)
     {
         $conectar = parent::conexion();
         parent::set_names();
 
         // Consulta SQL para actualizar los campos del usuario
         $sql = "UPDATE tbl_mc_cuenta SET SALDO = SALDO + :SALDO  WHERE ID_CUENTA = :ID_CUENTA";
-        $sql2 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`) VALUES (:SALDO_D,:ID_CUENTA_D, 1, NOW())";
+        $sql2 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`,`CREADO_POR`) VALUES (:SALDO_D,:ID_CUENTA_D, 1, NOW(),:CREADO_POR)";
 
         $stmt = $conectar->prepare($sql);
         $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
-        $stmt->bindParam(':SALDO', $DEPOSITO, PDO::PARAM_INT);
+        $stmt->bindParam(':SALDO', $DEPOSITO, PDO::PARAM_STR);
         $stmt->execute();
 
         $stmt2 = $conectar->prepare($sql2);
         $stmt2->bindParam(':ID_CUENTA_D', $ID_CUENTA, PDO::PARAM_INT);
-        $stmt2->bindParam(':SALDO_D', $DEPOSITO, PDO::PARAM_INT);
+        $stmt2->bindParam(':SALDO_D', $DEPOSITO, PDO::PARAM_STR);
+        $stmt2->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
         $stmt2->execute();
 
         if ($stmt->rowCount() > 0) {
@@ -203,7 +205,7 @@ class cuenta extends Conectar
         }
     }
 
-    public function reembolso_cuenta($ID_CUENTA, $REEMBOLSO)
+    public function reembolso_cuenta($ID_CUENTA, $REEMBOLSO, $CREADO_POR)
     {
         $conectar = parent::conexion();
         parent::set_names();
@@ -219,16 +221,17 @@ class cuenta extends Conectar
             return "El Monto De Reembolso es mayor al saldo";
         } else {
             $sql = "UPDATE tbl_mc_cuenta SET SALDO = SALDO - :SALDO  WHERE ID_CUENTA = :ID_CUENTA";
-            $sql2 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`) VALUES (:SALDO_R,:ID_CUENTA_R, 2, NOW())";
+            $sql2 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`,`CREADO_POR`) VALUES (:SALDO_R,:ID_CUENTA_R, 2, NOW(),:CREADO_POR)";
 
             $stmt = $conectar->prepare($sql);
             $stmt->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
-            $stmt->bindParam(':SALDO', $REEMBOLSO, PDO::PARAM_INT);
+            $stmt->bindParam(':SALDO', $REEMBOLSO, PDO::PARAM_STR);
             $stmt->execute();
 
             $stmt2 = $conectar->prepare($sql2);
             $stmt2->bindParam(':ID_CUENTA_R', $ID_CUENTA, PDO::PARAM_INT);
-            $stmt2->bindParam(':SALDO_R', $REEMBOLSO, PDO::PARAM_INT);
+            $stmt2->bindParam(':SALDO_R', $REEMBOLSO, PDO::PARAM_STR);
+            $stmt2->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
             $stmt2->execute();
 
             if ($stmt->rowCount() > 0) {
@@ -240,7 +243,7 @@ class cuenta extends Conectar
     }
 
 
-    public function anular($ID_CUENTA, $ID_TRANSACCION)
+    public function anular($ID_CUENTA, $ID_TRANSACCION, $CREADO_POR)
     {
         $conectar = parent::conexion();
         parent::set_names();
@@ -262,9 +265,10 @@ class cuenta extends Conectar
             $stmt2->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
             $stmt2->execute();
 
-            $sql3 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`) VALUES (:MONTO,:ID_CUENTA, 3, NOW())";
+            $sql3 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`, `CREADO_POR`) VALUES (:MONTO,:ID_CUENTA, 3, NOW(),:CREADO_POR)";
             $stmt3 = $conectar->prepare($sql3);
             $stmt3->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
+            $stmt3->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
             $stmt3->bindParam(':MONTO', $MONTO, PDO::PARAM_INT);
             $stmt3->execute();
         } else {
@@ -273,9 +277,10 @@ class cuenta extends Conectar
             $stmt2->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
             $stmt2->execute();
 
-            $sql3 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`) VALUES (:MONTO,:ID_CUENTA, 4, NOW())";
+            $sql3 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`,`CREADO_POR` ) VALUES (:MONTO,:ID_CUENTA, 4, NOW(),:CREADO_POR)";
             $stmt3 = $conectar->prepare($sql3);
             $stmt3->bindParam(':ID_CUENTA', $ID_CUENTA, PDO::PARAM_INT);
+            $stmt3->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
             $stmt3->bindParam(':MONTO', $MONTO, PDO::PARAM_INT);
             $stmt3->execute();
         }
@@ -285,5 +290,18 @@ class cuenta extends Conectar
         } else {
             return "ERRRRRRRRORR";
         }
+    }
+
+
+    public function ReporteAnulaciones (){
+        $conectar = parent::conexion();
+        parent::set_names();
+
+        $sql = "SELECT CREADO_POR, FECHA, MONTO, DESCRIPCION FROM TBL_TRANSACCIONES WHERE ID_TIPO_TRANSACCION  IN (3, 4);";
+        $stmt = $conectar->prepare($sql);
+        $stmt->execute();
+        $reporte = $stmt->fetchColumn();
+
+        return $reporte;
     }
 }

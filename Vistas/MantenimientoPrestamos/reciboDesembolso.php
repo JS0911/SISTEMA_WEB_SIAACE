@@ -15,18 +15,14 @@ $modeloPrestamo = new prestamo();
 
 // Obtener los datos del préstamo
 $datosPrestamo = $modeloPrestamo->get_PrestamoRecibo($ID_PRESTAMO);
+date_default_timezone_set('America/Tegucigalpa'); // Establece la zona horaria 
+
+$fechaActual = date("Y-m-d H:i:s"); // Obtén la fecha y hora actual
 
 // Verificar si se obtuvieron los datos del préstamo
 if ($datosPrestamo) {
     // Obtener el primer elemento del array (el único en este caso)
     $Prestamo = $datosPrestamo[0];
-
-    // Mostrar los datos del préstamo
-    //echo "ID del Préstamo: " . $Prestamo['ID_PRESTAMO'];
-    // echo "Fecha de Desembolso: " . $Prestamo['FECHA_DE_DESEMBOLSO'];
-    // echo "Monto Solicitado: " . $Prestamo['MONTO_SOLICITADO'];
-   // echo "Nombre del Empleado: " . $Prestamo['PRIMER_NOMBRE'] . " " . $Prestamo['PRIMER_APELLIDO'] . "<br>";
-    // Puedes mostrar otros datos del préstamo aquí
 } else {
     echo "No se encontraron datos del préstamo con el ID_PRESTAMO proporcionado.";
 }
@@ -35,6 +31,7 @@ if ($datosPrestamo) {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,14 +49,17 @@ if ($datosPrestamo) {
             border: 1px solid #ccc;
             padding: 20px;
             border-radius: 8px;
-            text-align: center; /* Alinea el contenido al centro */
+            text-align: center;
+            /* Alinea el contenido al centro */
         }
 
         .titulo {
             font-size: 28px;
             margin-bottom: 20px;
-            font-family: 'Arial Black', sans-serif; /* Tipo de letra */
-            text-decoration: underline; /* Subrayado */
+            font-family: 'Arial Black', sans-serif;
+            /* Tipo de letra */
+            text-decoration: underline;
+            /* Subrayado */
         }
 
         .detalle {
@@ -77,16 +77,21 @@ if ($datosPrestamo) {
         }
 
         .logo img {
-            width: 100px; /* Ajusta el ancho del logo */
-            height: auto; /* Mantiene la proporción de aspecto */
-            margin-bottom: 20px; /* Espacio entre el logo y el título */
+            width: 100px;
+            /* Ajusta el ancho del logo */
+            height: auto;
+            /* Mantiene la proporción de aspecto */
+            margin-bottom: 20px;
+            /* Espacio entre el logo y el título */
         }
 
         .firma-espacio {
-            height: 100px; /* Altura del espacio para firmar */
+            height: 100px;
+            /* Altura del espacio para firmar */
         }
     </style>
 </head>
+
 <body>
     <div class="recibo">
         <div class="logo">
@@ -104,21 +109,36 @@ if ($datosPrestamo) {
             <span>Monto Desembolsado:</span> <span id="montoDesembolsado"><?php echo $Prestamo['MONTO_SOLICITADO']; ?></span>
         </div>
         <div class="detalle">
+            <span>Estado del Prestamo:</span> <span id="estado"><?php echo $Prestamo['ESTADO_PRESTAMO']; ?></span>
+        </div>
+        <div class="detalle">
             <span>Fecha de Desembolso:</span> <span id="fechaDesembolso"><?php echo $Prestamo['FECHA_DE_DESEMBOLSO']; ?></span>
+        </div>
+
+        <div class="detalle">
+            <span>Desembolsado Por:</span> <span id="DesembolsadoPor"><?php echo $Prestamo['DESEMBOLSADO_POR']; ?></span>
+        </div>
+        <div class="detalle">
+            <span>Fecha de Impresión del Recibo:</span> <?php echo $fechaActual; ?>
         </div>
         <!-- Otros detalles del desembolso -->
 
         <div class="firma-label">Firma de la Tesorera:</div>
         <div class="firma-espacio"></div> <!-- Espacio para firmar -->
         <hr class="firma-linea"> <!-- Línea para la firma -->
+
+      
+
     </div>
     <script>
+
+          // Obtener la hora actual del dispositivo del usuario
+    var horaActual = new Date().toLocaleTimeString(); 
+
         window.onload = function() {
             window.print();
         };
     </script>
 </body>
+
 </html>
-
-
-

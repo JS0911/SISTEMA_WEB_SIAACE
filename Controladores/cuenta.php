@@ -71,17 +71,17 @@ switch ($_GET["op"]) {
     break;
 
     case "DepositoCuenta":
-        $datos = $com->deposito_cuenta($body["ID_CUENTA"],$body["DEPOSITO"]);
+        $datos = $com->deposito_cuenta($body["ID_CUENTA"],$body["DEPOSITO"],$_SESSION['usuario']);
         echo json_encode($datos);
     break;
 
     case "ReembolsoCuenta":
-        $datos = $com->reembolso_cuenta($body["ID_CUENTA"],$body["REEMBOLSO"]);
+        $datos = $com->reembolso_cuenta($body["ID_CUENTA"],$body["REEMBOLSO"],$_SESSION['usuario']);
         echo json_encode($datos);
     break;
 
     case "Anulacion_Dep_Ret":
-        $datos = $com->anular($body["ID_CUENTA"],$body["ID_TRANSACCION"]);
+        $datos = $com->anular($body["ID_CUENTA"],$body["ID_TRANSACCION"],$_SESSION['usuario']);
         echo json_encode($datos);
     break;
 

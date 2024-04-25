@@ -416,11 +416,52 @@ if (!isset($_SESSION['usuario'])) {
                                                 <thead>
                                                     <tr>
                                                         <th scope="col">Fecha</th>
+                                                        <th scope="col">Usuario</th>
                                                         <th scope="col">Monto</th>
                                                         <th scope="col">Descripcion</th>
                                                         <th scope="col">Acciones</th>
                                                     </tr>
                                                 </thead>
+
+             <!-- Modal De Descripcion De Anulaciones-->
+                <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="crearModalLabel">Motivo De Anulacion</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Formulario de creación -->
+                                <form>
+                                    <div class="form-group">
+                                        <label for="estado">Describe el motivo de la anulacion</label>
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
+                                        <div id="mensaje2"></div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
+                                <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                                             
+
+
+
+
+
+
+
+
+
+
                                                 <tbody>
                                                     <?php
                                                     $consulta = new cuenta();
@@ -436,9 +477,10 @@ if (!isset($_SESSION['usuario'])) {
                                                             foreach ($result as $row) {
                                                                 echo "<tr>";
                                                                 echo "<td>" . $row["FECHA"] . "</td>";
-                                                                echo "<td class='texto-derecha'>" . formatoNumero($row["MONTO"]) . "</td>";
-                                                                echo "<td>" . $row["TIPO_TRANSACCION"] . "</td>";
-                                                                echo "<td><button type='button' id='btn-anular' class='btn btn-outline-danger' onclick='Anular({$ID_CUENTA}, {$row["ID_TRANSACCION"]})'>Anular</button></td>";
+                                                                echo "<td>" . $row["CREADO_POR"] . "</td>";
+                                                                echo "<td class='texto-derecha'>" . "L.".formatoNumero($row["MONTO"]) . "</td>";
+                                                                echo "<td>" . $row["DESCRIPCION"] . "</td>";
+                                                                echo "<td><button type='button' id='btn-anular' class='btn btn-outline-danger'>Anular</button></td>";
                                                                 echo "</tr>";
                                                             }
                                                         } else {

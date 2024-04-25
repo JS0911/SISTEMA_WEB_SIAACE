@@ -6,7 +6,7 @@ class PlanPago extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM tbl_mp_planp WHERE ID_PRESTAMO = :ID_PRESTAMO ORDER BY FECHA_CREACION DESC";
+        $sql = "SELECT * FROM tbl_mp_planp WHERE ID_PRESTAMO = :ID_PRESTAMO";
         $stmt = $conectar->prepare($sql);
         $stmt->bindParam(":ID_PRESTAMO", $ID_PRESTAMO, PDO::PARAM_INT);
         $stmt->execute();
@@ -170,8 +170,6 @@ class PlanPago extends Conectar
             return "Error al insertar registros: " . $e->getMessage();
         }
     }
-
-
    
     public function PagoTCuota($ID_PPAGO)
     {

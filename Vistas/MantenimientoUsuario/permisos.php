@@ -542,7 +542,7 @@ if (!isset($_SESSION['usuario'])) {
                                         $conn = $conexion->Conexion();
 
                                         // Consultar la contraseÃ±a actual del usuario desde la base de datos
-                                        $sql = "SELECT id_objeto ,objeto FROM tbl_ms_objetos";
+                                        $sql = "SELECT id_objeto ,objeto FROM tbl_ms_objetos ORDER BY objeto";
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
 

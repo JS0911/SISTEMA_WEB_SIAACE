@@ -449,7 +449,7 @@ if (!isset($_SESSION['usuario'])) {
                                 <form>
                                     <div class="form-group">
                                         <label for="nombre">Objeto</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-objeto" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="agregar-objeto"required pattern="^(?!\s)(?!.*\s$)[A-Z0-9\/]*$"  title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje1"></div>
 
                                         <label for="nombre">Descripcion</label>
@@ -488,7 +488,7 @@ if (!isset($_SESSION['usuario'])) {
                                         <label for="nombre">Id</label>
                                         <input type="text" class="form-control" id="editar-id-objeto" disabled>
                                         <label for="nombre">Objeto</label>
-                                        <input type="text" maxlength="100" class="form-control" id="editar-objeto" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                        <input type="text" maxlength="100" class="form-control" id="editar-objeto" required pattern="^(?!\s)(?!.*\s$)[A-Z0-9\*$"title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje4"></div>
 
                                         <label for="nombre">Descripcion</label>
@@ -1002,10 +1002,9 @@ doc.footer = function(currentPage, pageCount) {
                     }
                 });
             }
-
-            var expresionValidadora1 = /^[A-Z]+$/;
+            var expresionValidadora1 = /^[A-Z\s\/]+$/;
             var mensaje1 = document.getElementById("mensaje1");
-            handleInputAndBlurEvents(nombreObjeto, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas");
+            handleInputAndBlurEvents(nombreObjeto, expresionValidadora1, mensaje1, "Solo se permiten Letras Mayúsculas y simbolo /");
 
             var expresionValidadora2 =/^[A-Z\s]+$/;;
             var mensaje2 = document.getElementById("mensaje2");
@@ -1016,7 +1015,7 @@ doc.footer = function(currentPage, pageCount) {
             handleInputAndBlurEvents(tipoObjeto, expresionValidadora1, mensaje3, "Solo se permiten Letras Mayúsculas");
 
             var mensaje4 = document.getElementById("mensaje4");
-            handleInputAndBlurEvents(nombreObjetoEditar, expresionValidadora1, mensaje4, "Solo se permiten Letras Mayúsculas");
+            handleInputAndBlurEvents(nombreObjetoEditar, expresionValidadora1, mensaje4, "Solo se permiten Letras Mayúsculas y simbolo /");
 
 
             var mensaje5 = document.getElementById("mensaje5");
@@ -1045,7 +1044,7 @@ doc.footer = function(currentPage, pageCount) {
 
 
                        // Expresión regular para validar campos
-                       const expresionValidadora = /^[A-Z\s]+$/; // Expresión regular para rol
+                       const expresionValidadora = /^[A-Z\s\/]+$/; // Expresión regular para rol
                        const expresionValidadoradescripcion = /^[A-Z\s]+$/; // Expresión regular para descripcion
                        const expresionValidadoraTipo = /^[A-Z\s]+$/; // Expresión regular para descripcion
 
@@ -1077,7 +1076,7 @@ doc.footer = function(currentPage, pageCount) {
 
 
                         // Expresión regular para validar campos
-                       const expresionValidadoraeditar = /^[A-Z\s]+$/; // Expresión regular para objeto
+                        const expresionValidadoraeditar = /^[A-Z\s\/]+$/; // Expresión regular para objeto
                        const expresionValidadoradescripcioneditar = /^[A-Z\s]+$/; // Expresión regular para descripcion
                        const expresionValidadoraTipoeditar = /^[A-Z\s]+$/; // Expresión regular para tipo objeto
 
