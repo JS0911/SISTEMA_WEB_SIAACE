@@ -428,42 +428,38 @@ if (!isset($_SESSION['usuario'])) {
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="crearModalLabel">Motivo De Anulacion</h5>
+                                <h5 class="modal-title" id="ModalAnulacion">Motivo De Anulacion</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
+                                <!-- Mostrar el monto y la descripción del registro -->
+                                <p><strong>Monto:</strong> <span id="montoRegistro"></span></p>
+                                <p><strong>Descripción:</strong> <span id="descripcionRegistro"></span></p>
+
                                 <!-- Formulario de creación -->
                                 <form>
                                     <div class="form-group">
-                                        <label for="estado">Describe el motivo de la anulacion</label>
+                                        <label for="estado">Describe el motivo de la anulación</label>
                                         <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
                                         <div id="mensaje2"></div>
                                     </div>
                                 </form>
-                            </div>
+                            </div
                             <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="btn-agregar" disabled>Guardar</button>
-                                <button type="button" class="btn btn-danger" id="btn-cancelarAgregar" data-dismiss="modal">Cancelar</button>
-                                
+                            <button type="button" class="btn btn-primary" id="btn-agregarAnula" disabled>Guardar</button>
+                                <!-- Botón Anular -->
+                            <button type='button' class='btn btn-outline-danger btn-anular' data-toggle='modal' data-target='#crearModal' 
+                                data-monto='<?php echo $row["MONTO"]; ?>' data-descripcion='<?php echo $row["DESCRIPCION"]; ?>'>
+                                Anular
+                            </button>
                             </div>
                         </div>
                     </div>
-                </div>
-                                             
-
-
-
-
-
-
-
-
-
-
-                                                <tbody>
-                                                    <?php
+                </div>                              
+                                 <tbody>
+                                              <?php
                                                     $consulta = new cuenta();
                                                     $result = $consulta->historial_cuenta($ID_CUENTA);
 
@@ -480,7 +476,8 @@ if (!isset($_SESSION['usuario'])) {
                                                                 echo "<td>" . $row["CREADO_POR"] . "</td>";
                                                                 echo "<td class='texto-derecha'>" . "L.".formatoNumero($row["MONTO"]) . "</td>";
                                                                 echo "<td>" . $row["DESCRIPCION"] . "</td>";
-                                                                echo "<td><button type='button' id='btn-anular' class='btn btn-outline-danger'>Anular</button></td>";
+                                                                // Agregar un identificador único al botón de anulación
+                                                                echo "<td><button type='button' class='btn btn-outline-danger btn-anular' data-toggle='modal' data-target='#crearModal'>Anular</button></td>";
                                                                 echo "</tr>";
                                                             }
                                                         } else {
@@ -516,6 +513,7 @@ if (!isset($_SESSION['usuario'])) {
             var datos = {
                 "ID_CUENTA": id_cuenta,
                 "ID_TRANSACCION": id_transaccion,
+                "CREADO_POR": <?php echo json_encode($_SESSION['usuario']); ?>;
             };
 
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=Anulacion_Dep_Ret', {
@@ -547,6 +545,17 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
+                $('#ModalAnulacion').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Botón que activó el modal
+            var monto = button.data('monto'); // Extraer el monto del atributo data-monto
+            var descripcion = button.data('descripcion'); // Extraer la descripción del atributo data-descripcion
+
+            // Actualizar el contenido del modal con los datos del registro
+            var modal = $(this);
+            modal.find('#montoRegistro').text(monto);
+            modal.find('#descripcionRegistro').text(descripcion);
+});
+
         /* Imprime los datos en la tabla
                 if ($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
@@ -561,6 +570,8 @@ if (!isset($_SESSION['usuario'])) {
                     echo "<tr><td colspan='4'>No hay datos</td></tr>";
                 }*/
     </script>
+
+       
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
