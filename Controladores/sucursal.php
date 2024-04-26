@@ -86,13 +86,14 @@ if (verificarExistenciaSucursal($SUCURSAL) > 0 ) {
         $dateMod = $date->modify("-8 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
 
-        $valoresAntiguos = $com -> get_sucursal($ID_SUCURSAL);
+        $valoresAntiguos = $com -> get_sucursal_bitacora($ID_SUCURSAL);
         $SucursalAntes = $valoresAntiguos['SUCURSAL'];
         $DescripcionAntes = $valoresAntiguos['DESCRIPCION'];
         $DireccionAntes = $valoresAntiguos['DIRECCION'];
-        $RegionAntes = $valoresAntiguos['ID_REGION'];
+        $RegionAntes = $valoresAntiguos['REGION'];
         $TelefonoAntes = $valoresAntiguos['TELEFONO'];
         $EstadoAntes = $valoresAntiguos['ESTADO'];
+        $regionNuevo = $com->get_nombreRegion($ID_REGION)['REGION'];
 
         $datos = $com->update_sucursal($ID_SUCURSAL, $SUCURSAL, $DESCRIPCION , $DIRECCION,$ID_REGION,$TELEFONO, $ESTADO, $_SESSION['usuario'],$dateNew);
         echo json_encode($datos);
@@ -111,7 +112,7 @@ if (verificarExistenciaSucursal($SUCURSAL) > 0 ) {
         }
 
         if(strcmp($RegionAntes, $ID_REGION) != 0){
-            $bit-> insert_bitacoraModificacion($dateNew, $RegionAntes, $ID_REGION, $_SESSION['id_usuario'], 9, "REGIÓN", $ID_REGION, "MODIFICAR");
+            $bit-> insert_bitacoraModificacion($dateNew, $RegionAntes, $regionNuevo, $_SESSION['id_usuario'], 9,"REGIÓN", $ID_REGION,"MODIFICAR");
         }
 
         if(strcmp($TelefonoAntes, $TELEFONO) != 0){
@@ -119,7 +120,7 @@ if (verificarExistenciaSucursal($SUCURSAL) > 0 ) {
         }
 
         if(strcmp($EstadoAntes, $ESTADO) != 0 ){
-            $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 9, "ESTADO", $ID_SUCURSAL, "MODIFICAR");
+            $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 9,"ESTADO USUARIO", $ID_SUCURSAL,"MODIFICAR");
         }
         }
         break;

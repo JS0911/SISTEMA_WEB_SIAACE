@@ -73,10 +73,11 @@ switch ($_GET["op"]) {
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s");
 
-        $valoresAntiguos = $com -> get_rol($ID_ROL);
+        $valoresAntiguos = $com -> get_rol_bitacora($ID_ROL);
         $RolAntes = $valoresAntiguos['ROL'];
         $DescripcionAntes = $valoresAntiguos['DESCRIPCION'];
-        $EstadoAntes = $valoresAntiguos['ID_ESTADO_USUARIO'];
+        $EstadoAntes = $valoresAntiguos['NOMBRE'];
+        $estadoUsuarioNuevo = $com->get_EstadoUsuario($ID_ESTADO_USUARIO)['NOMBRE'];
 
         $datos = $com->update_rol(
             $ID_ROL,
@@ -99,7 +100,7 @@ switch ($_GET["op"]) {
         }
 
         if(strcmp($EstadoAntes, $ID_ESTADO_USUARIO) != 0){
-            $bit-> insert_bitacoraModificacion($dateNew, $EstadoAntes, $ID_ESTADO_USUARIO, $_SESSION['id_usuario'], 1, "ESTADO USUARIO", $ID_ROL, "MODIFICAR");
+            $bit-> insert_bitacoraModificacion($dateNew, $EstadoAntes, $estadoUsuarioNuevo, $_SESSION['id_usuario'], 1,"ESTADO USUARIO", $ID_ROL,"MODIFICAR");
         }
     }
 

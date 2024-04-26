@@ -1259,7 +1259,7 @@ function ver_contrasena_confirmar() {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch('http://localhost:90/SISTEMA1/Controladores/usuarios.php?op=eliminarUsuario', {
+                    fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=eliminarUsuario', {
                             method: 'DELETE',
                             headers: {
                                 'Accept': 'application/json',

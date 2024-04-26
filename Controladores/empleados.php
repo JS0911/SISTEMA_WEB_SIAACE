@@ -67,7 +67,8 @@ switch ($_GET["op"]) {
             }
     
             // Insertar en la bitácora
-            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO EL EMPLEADO: $PRIMER_NOMBRE $SEGUNDO_NOMBRE $PRIMER_APELLIDO $SEGUNDO_APELLIDO", $_SESSION['id_usuario'], 7, $_SESSION['usuario'], $dateNew);
+            $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 7,"INSERTAR");
+        
         }
     
     
@@ -95,6 +96,28 @@ switch ($_GET["op"]) {
         $ID_SUCURSAL = $body["ID_SUCURSAL"];
         $ID_CARGO = $body["ID_CARGO"];
 
+        $date = new DateTime(date("Y-m-d H:i:s"));
+        $dateMod = $date->modify("-6 hours");
+        $dateNew = $dateMod->format("Y-m-d H:i:s");
+ 
+        $valoresAntiguos = $com -> get_empleado_bitacora($ID_EMPLEADO);
+        $ID_Antes = $valoresAntiguos['DNI'];
+        $Primer_NombreAntes = $valoresAntiguos['PRIMER_NOMBRE'];
+        $Segundo_NombreAntes = $valoresAntiguos['SEGUNDO_NOMBRE'];
+        $Primer_ApellidoAntes = $valoresAntiguos['PRIMER_APELLIDO'];
+        $Segundo_ApellidoAntes = $valoresAntiguos['SEGUNDO_APELLIDO'];
+        $EmailAntes = $valoresAntiguos['EMAIL'];
+        $SalarioAntes = $valoresAntiguos['SALARIO'];
+        $EstadoAntes = $valoresAntiguos['NOMBRE'];
+        $TelefonoAntes = $valoresAntiguos['TELEFONO'];
+        $DireccionAntes1 = $valoresAntiguos['DIRECCION1'];
+        $DireccionAntes2 = $valoresAntiguos['DIRECCION2'];
+        $SucursalAntes = $valoresAntiguos['SUCURSAL'];
+        $CargoAntes = $valoresAntiguos['CARGO'];
+ 
+        $estadoUsuarioNuevo = $com->get_EstadoUsuario($ID_ESTADO_USUARIO)['NOMBRE'];
+        $nombreSucursalNuevo = $com->get_nombreSucursal($ID_SUCURSAL)['SUCURSAL'];
+        $nombreCargoNuevo = $com ->get_nombreCargo($ID_CARGO)['CARGO'];
 
         if (verificarExistenciaEmpleado($DNI) > 0 && !esMismoEmpleado($ID_EMPLEADO, $DNI)){
             http_response_code(409);
@@ -121,15 +144,61 @@ switch ($_GET["op"]) {
         $dateNew
     );
     echo json_encode(["message" => "Empleado insertado Exitosamente."]);
-    $bit->insert_bitacoraModificacion($dateNew, "MODIFICAR", "SE MODIFICO EL EMPLEADO: $PRIMER_NOMBRE $SEGUNDO_NOMBRE $PRIMER_APELLIDO $SEGUNDO_APELLIDO", $_SESSION['id_usuario'], 7, $_SESSION['usuario'], $dateNew);
-}
-
-
-
-
-       
-       
-        break;
+    //--------------------------------------------------------------------Decisiones--------------------------------------------------------------------
+ 
+    if(strcmp($ID_Antes, $DNI) != 0){
+        $bit-> insert_bitacoraModificacion($dateNew, $ID_Antes, $DNI, $_SESSION['id_usuario'], 7, "DNI", $ID_EMPLEADO, "MODIFICAR");
+    }
+ 
+    if(strcmp($Primer_NombreAntes, $PRIMER_NOMBRE) != 0){
+        $bit->insert_bitacoraModificacion($dateNew, $Primer_NombreAntes, $PRIMER_NOMBRE, $_SESSION['id_usuario'], 7, "PRIMER NOMBRE", $ID_EMPLEADO, "MODIFICAR");
+    }
+   
+    if(strcmp($Segundo_NombreAntes, $SEGUNDO_NOMBRE) != 0){
+        $bit->insert_bitacoraModificacion($dateNew, $Segundo_NombreAntes, $SEGUNDO_NOMBRE, $_SESSION['id_usuario'], 7, "SEGUNDO NOMBRE", $ID_EMPLEADO, "MODIFICAR");
+    }
+ 
+    if(strcmp($Primer_ApellidoAntes, $PRIMER_APELLIDO) != 0){
+        $bit->insert_bitacoraModificacion($dateNew, $Primer_ApellidoAntes, $PRIMER_APELLIDO, $_SESSION['id_usuario'], 7, "PRIMER APELLIDO", $ID_EMPLEADO, "MODIFICAR");
+    }
+ 
+    if(strcmp($Segundo_ApellidoAntes, $SEGUNDO_APELLIDO) != 0){
+        $bit->insert_bitacoraModificacion($dateNew, $Segundo_ApellidoAntes, $SEGUNDO_APELLIDO, $_SESSION['id_usuario'], 7, "SEGUNDO APELLIDO", $ID_EMPLEADO, "MODIFICAR");
+    }
+ 
+    if(strcmp($EmailAntes, $EMAIL) != 0){
+        $bit->insert_bitacoraModificacion($dateNew, $EmailAntes, $EMAIL, $_SESSION['id_usuario'], 7, "EMAIL", $ID_EMPLEADO, "MODIFICAR");
+    }
+ 
+    if(strcmp($SalarioAntes, $SALARIO) != 0){
+        $bit->insert_bitacoraModificacion($dateNew, $SalarioAntes, $SALARIO, $_SESSION['id_usuario'], 7, "SALARIO", $ID_EMPLEADO, "MODIFICAR");
+    }
+ 
+    if(strcmp($EstadoAntes, $ID_ESTADO_USUARIO) != 0){
+        $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $estadoUsuarioNuevo, $_SESSION['id_usuario'], 7, "ESTADO", $ID_EMPLEADO, "MODIFICAR");
+    }
+ 
+    if(strcmp($TelefonoAntes, $TELEFONO) != 0 ){
+        $bit->insert_bitacoraModificacion($dateNew, $TelefonoAntes, $TELEFONO, $_SESSION['id_usuario'], 7, "TELEFONO", $ID_EMPLEADO, "MODIFICAR");
+    }
+ 
+    if(strcmp($DireccionAntes1, $DIRECCION1) != 0){
+        $bit->insert_bitacoraModificacion($dateNew, $DireccionAntes1, $DIRECCION1, $_SESSION['id_usuario'], 7, "DIRECCION 1", $ID_EMPLEADO, "MODIFICAR");
+    }
+ 
+    if(strcmp($DireccionAntes2, $DIRECCION2) != 0 ){
+        $bit->insert_bitacoraModificacion($dateNew, $DireccionAntes2, $DIRECCION2, $_SESSION['id_usuario'], 7, "DIRECCION 2", $ID_EMPLEADO, "MODIFICAR");
+    }
+ 
+    if(strcmp($SucursalAntes, $ID_SUCURSAL) != 0 ){
+        $bit->insert_bitacoraModificacion($dateNew, $SucursalAntes, $nombreSucursalNuevo, $_SESSION['id_usuario'], 7, "SUCURSAL", $ID_EMPLEADO, "MODIFICAR");
+    }
+ 
+    if(strcmp($CargoAntes, $ID_CARGO) != 0 ){
+        $bit->insert_bitacoraModificacion($dateNew, $CargoAntes, $nombreCargoNuevo, $_SESSION['id_usuario'], 7, "CARGO", $ID_EMPLEADO, "MODIFICAR");
+    }
+}   
+    break;
         
     case "eliminarEmpleado":
         $ID_EMPLEADO = $body["ID_EMPLEADO"];
@@ -138,7 +207,7 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-        $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL EMPLEADO: $PRIMER_NOMBRE $SEGUNDO_NOMBRE $PRIMER_APELLIDO $SEGUNDO_APELLIDO", $_SESSION['id_usuario'], 7);
+        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 7, $ID_EMPLEADO,"ELIMINAR");
     break;
 }
 

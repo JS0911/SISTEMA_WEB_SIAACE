@@ -68,9 +68,10 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-
+        
         
         $valoresAntiguos = $com->get_fpago($ID_FPAGO);
+        $formaAntes = $valoresAntiguos['FORMA_DE_PAGO'];
         $descripcionAntes = $valoresAntiguos['DESCRIPCION'];
         $estadoAntes = $valoresAntiguos['ESTADO'];
 
@@ -88,6 +89,11 @@ switch ($_GET["op"]) {
 
         //********************************************************Decisiones*******************/
     
+        if(strcmp($formaAntes, $FORMA_DE_PAGO) != 0)
+        {
+            $bit->insert_bitacoraModificacion($dateNew, $formaAntes, $FORMA_DE_PAGO, $_SESSION['id_usuario'], 12, "FORMA DE PAGO", $ID_FPAGO, "MODIFICAR");
+        }
+
         if(strcmp($descripcionAntes, $DESCRIPCION) != 0)
         {
             $bit->insert_bitacoraModificacion($dateNew, $descripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 12, "DESCRIPCIÓN", $ID_FPAGO, "MODIFICAR");

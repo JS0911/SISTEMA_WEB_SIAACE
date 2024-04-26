@@ -28,6 +28,58 @@ class Empleados extends Conectar
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    //OBTENER NOMBRE DE ESTADO USUARIO
+    public function get_EstadoUsuario($ID_ESTADO_USUARIO)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT NOMBRE FROM tbl_ms_estadousuario WHERE ID_ESTADO_USUARIO = :ID";
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID', $ID_ESTADO_USUARIO, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+ 
+    //OBTENER NOMBRE DE SUCURSAL
+    public function get_nombreSucursal($ID_SUCURSAL)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT SUCURSAL FROM tbl_me_sucursal WHERE ID_SUCURSAL = :ID";
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID', $ID_SUCURSAL, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+ 
+    //OBTENER NOMBRE DE CARGO
+    public function get_nombreCargo($ID_CARGO)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT CARGO FROM tbl_me_cargo WHERE ID_CARGO = :ID";
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID', $ID_CARGO, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+ 
+    //TRAE UN SOLO EMPLEADO PARA BITACORA
+    public function get_empleado_bitacora($ID_EMPLEADO)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT E.ID_EMPLEADO, E.DNI, E.PRIMER_NOMBRE, E.SEGUNDO_NOMBRE, E.PRIMER_APELLIDO, E.SEGUNDO_APELLIDO, E.EMAIL, E.SALARIO, EU.NOMBRE, E.TELEFONO, E.DIRECCION1, E.DIRECCION2, S.SUCURSAL , C.CARGO
+        FROM siaace.tbl_me_empleados AS E join tbl_ms_estadousuario AS EU ON E.ID_ESTADO_USUARIO = EU.ID_ESTADO_USUARIO
+        left join tbl_me_sucursal AS S ON E.ID_SUCURSAL = S.ID_SUCURSAL
+        left join tbl_me_cargo AS C ON E.ID_CARGO = C.ID_CARGO
+        WHERE ID_EMPLEADO = :ID";
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID', $ID_EMPLEADO, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     //INSERTA UN EMPLEADO
     public function insert_empleado($DNI, $PRIMER_NOMBRE, $SEGUNDO_NOMBRE, $PRIMER_APELLIDO, $SEGUNDO_APELLIDO, $EMAIL, $SALARIO, $ID_ESTADO_USUARIO, $TELEFONO, $DIRECCION1, $DIRECCION2, $ID_SUCURSAL, $ID_CARGO, $CREADO_POR, $FECHA_CREACION)
     {

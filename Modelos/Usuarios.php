@@ -27,6 +27,44 @@ class Usuario extends Conectar
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+ 
+    //Encuentra el valor nuevo de ID_ROL
+    public function get_nombreRol($ID_ROL)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT ROL FROM tbl_ms_roles WHERE ID_ROL = :ID";
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID', $ID_ROL, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+ 
+    //Encuentra el valor nuevo para Estado Usuario
+    public function get_EstadoUsuario($ID_ESTADO_USUARIO)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT NOMBRE FROM tbl_ms_estadousuario WHERE ID_ESTADO_USUARIO = :ID";
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID', $ID_ESTADO_USUARIO, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    //TRAE UN SOLO USUARIO PARA LA BITACORA
+    public function get_usuario_bitacora($ID_USUARIO)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT U.ID_USUARIO, U.ID_EMPLEADO, U.USUARIO, U.NOMBRE_USUARIO, E.NOMBRE , U.CONTRASENA, U.CORREO_ELECTRONICO, R.ROL
+        FROM tbl_ms_usuario as U join tbl_ms_roles as R on U.ID_ROL = R.ID_ROL
+        LEFT JOIN tbl_ms_estadousuario as E ON U.ID_ESTADO_USUARIO = E.ID_ESTADO_USUARIO WHERE ID_USUARIO = :ID";
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID', $ID_USUARIO, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
     //INSERTA UN USUARIO
     public function insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CONTRASENA, $CORREO_ELECTRONICO, $ID_ROL, $CREADO_POR, $FECHA_CREACION)

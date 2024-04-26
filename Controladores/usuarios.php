@@ -51,7 +51,7 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s");
            // $AUTO_REGISTRO=1;
            $datos = $com->insert_usuarios($USUARIO, $NOMBRE_USUARIO, $ID_ESTADO_USUARIO, $CONTRASENA, $CORREO_ELECTRONICO, $ID_ROL, $_SESSION['usuario'], $dateNew);
-            
+           $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 2,"INSERTAR");
             if ($datos === "Usuario Insertado") {
                 echo json_encode(["message" => "Usuario insertado exitosamente."]);
             } else {
@@ -85,7 +85,17 @@ switch ($_GET["op"]) {
             $date = new DateTime(date("Y-m-d H:i:s"));
             $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s");
-    
+            
+            //------------------------ValoresAntiguos------------------------
+            $valoresAntiguos = $com->get_usuario_bitacora($ID_USUARIO);
+            $UsuarioAntes = $valoresAntiguos['USUARIO'];
+            $NombreUsuarioAntes = $valoresAntiguos['NOMBRE_USUARIO'];
+            $EstadoUsuarioAntes = $valoresAntiguos['NOMBRE'];
+            $CorreoElectronicoAntes = $valoresAntiguos['CORREO_ELECTRONICO'];
+            $RolAntes = $valoresAntiguos['ROL'];
+ 
+            $estadoUsuarioNuevo = $com ->get_EstadoUsuario($ID_ESTADO_USUARIO)['NOMBRE'];
+            $rolNuevo = $com->get_nombreRol($ID_ROL)['ROL'];
             
             $datos = $com->update_usuario(
                 $ID_USUARIO,
@@ -103,15 +113,27 @@ switch ($_GET["op"]) {
             echo json_encode(["message" => "Usuario editado exitosamente."]);
     
             // Registrar la modificación en la bitácora
-            $bit->insert_bitacoraModificacion(
-                $dateNew,
-                "MODIFICAR",
-                "SE MODIFICÓ EL USUARIO #" . $ID_USUARIO,
-                $_SESSION['id_usuario'],
-                2,
-                $_SESSION['usuario'],
-                $dateNew
-            );
+            //------------------------------------------------------Decisiones-------------------------
+            if(strcmp($UsuarioAntes, $USUARIO) != 0){
+                $bit->insert_bitacoraModificacion($dateNew, $UsuarioAntes, $USUARIO, $_SESSION['id_usuario'], 2, "USUARIO", $ID_USUARIO, "MODIFICAR");
+            }
+    
+            if(strcmp($NombreUsuarioAntes, $NOMBRE_USUARIO) != 0){
+                $bit->insert_bitacoraModificacion($dateNew, $NombreUsuarioAntes, $NOMBRE_USUARIO, $_SESSION['id_usuario'], 2, "NOMBRE USUARIO", $ID_USUARIO, "MODIFICAR");
+            }
+    
+            if(strcmp($EstadoUsuarioAntes, $ID_ESTADO_USUARIO) != 0){
+                $bit->insert_bitacoraModificacion($dateNew, $EstadoUsuarioAntes, $estadoUsuarioNuevo, $_SESSION['id_usuario'], 2, "ESTADO USUARIO", $ID_USUARIO, "MODIFICAR");
+            }
+    
+            if(strcmp($CorreoElectronicoAntes, $CORREO_ELECTRONICO) != 0){
+                $bit->insert_bitacoraModificacion($dateNew, $CorreoElectronicoAntes, $CORREO_ELECTRONICO, $_SESSION['id_usuario'], 2, "CORREO ELECTRONICO", $ID_USUARIO, "MODIFICAR");
+            }
+    
+            if(strcmp($RolAntes, $ID_ROL) != 0){
+                $bit->insert_bitacoraModificacion($dateNew, $RolAntes, $rolNuevo, $_SESSION['id_usuario'], 2, "ROL", $ID_USUARIO, "MODIFICAR");
+            }
+            
         }
         break;
     
@@ -123,7 +145,7 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-        $bit->insert_bitacoraEliminar($dateNew, "ELIMINAR", "SE ELIMINO EL USUARIO # $ID_USUARIO", $_SESSION['id_usuario'], 2);
+        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 2, $ID_USUARIO,"ELIMINAR");
     break;
 }
 function verificarExistenciaUsuario($usuario) {

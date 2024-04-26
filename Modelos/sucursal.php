@@ -27,8 +27,34 @@ class Sucursal extends Conectar
         return $stmt->fetch(PDO::FETCH_ASSOC); 
     }
     
-    // INSERTA 
-    // Modelo
+    //Encuentra el valor nuevo de ID_REGION
+     public function get_nombreRegion($ID_REGION)
+     {
+         $conectar = parent::conexion();
+         parent::set_names();
+         $sql = "SELECT REGION FROM tbl_me_region WHERE ID_REGION = :ID";
+         $stmt = $conectar->prepare($sql);
+         $stmt->bindParam(':ID', $ID_REGION, PDO::PARAM_INT);
+         $stmt->execute();
+         return $stmt->fetch(PDO::FETCH_ASSOC);
+     }
+ 
+ 
+    //TRAE UN SOLO USUARIO PARA LA BITACORA
+    public function get_sucursal_bitacora($ID_SUCURSAL)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+        $sql = "SELECT S.SUCURSAL, S.DESCRIPCION, S.DIRECCION, R.REGION, S.ESTADO, S.TELEFONO
+        FROM tbl_me_sucursal AS S join tbl_me_region AS R ON S.ID_REGION = R.ID_REGION
+        WHERE ID_SUCURSAL = :ID";
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindParam(':ID', $ID_SUCURSAL, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // INSERTA Modelo
 
 public function insert_sucursal($SUCURSAL, $DESCRIPCION, $DIRECCION, $ID_REGION, $TELEFONO, $ESTADO, $CREADO_POR, $FECHA_CREACION) {
     try {

@@ -87,7 +87,7 @@ switch ($_GET["op"]) {
         
 
         //-----------------------------------------------------Decisiones----------------------------------------------------
-        if(strcmp($ID_Antes, $DNI) != 0){
+        if(strcmp($ObjetoAntes, $OBJETO) != 0){
             $bit-> insert_bitacoraModificacion($dateNew, $ObjetoAntes, $OBJETO, $_SESSION['id_usuario'], 5, "OBJETO", $ID_OBJETO, "MODIFICAR");
         }
 

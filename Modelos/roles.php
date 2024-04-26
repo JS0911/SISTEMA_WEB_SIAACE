@@ -29,6 +29,32 @@ class Roles extends Conectar
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+      //OBTENER NOMBRE DE ESTADO USUARIO
+      public function get_EstadoUsuario($ID_ESTADO_USUARIO)
+      {
+          $conectar = parent::conexion();
+          parent::set_names();
+          $sql = "SELECT NOMBRE FROM tbl_ms_estadousuario WHERE ID_ESTADO_USUARIO = :ID";
+          $stmt = $conectar->prepare($sql);
+          $stmt->bindParam(':ID', $ID_ESTADO_USUARIO, PDO::PARAM_INT);
+          $stmt->execute();
+          return $stmt->fetch(PDO::FETCH_ASSOC);
+      }
+   
+      //TRAE UN SOLO EMPLEADO PARA BITACORA
+      public function get_rol_bitacora($ID_ROL)
+      {
+          $conectar = parent::conexion();
+          parent::set_names();
+          $sql = "SELECT R.ROL, R.DESCRIPCION, EU.NOMBRE
+          FROM siaace.tbl_ms_roles AS R join tbl_ms_estadousuario AS EU ON R.ID_ESTADO_USUARIO = EU.ID_ESTADO_USUARIO
+          WHERE ID_ROL = :ID";
+          $stmt = $conectar->prepare($sql);
+          $stmt->bindParam(':ID', $ID_ROL, PDO::PARAM_INT);
+          $stmt->execute();
+          return $stmt->fetch(PDO::FETCH_ASSOC);
+      }
+
     // INSERTA UN ROL
     public function insert_rol($ROL, $DESCRIPCION, $ID_ESTADO_USUARIO, $CREADO_POR, $FECHA_CREACION)
     {

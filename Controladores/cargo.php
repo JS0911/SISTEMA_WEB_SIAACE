@@ -91,11 +91,11 @@ switch ($_GET["op"]) {
             }
 
             if (strcmp($DescripcionAntes, $DESCRIPCION) != 0) {
-                $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 5, "DESCRIPCIÓN", $ID_CARGO, "MODIFICAR");
+                $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 26, "DESCRIPCIÓN", $ID_CARGO, "MODIFICAR");
             }
 
             if (strcmp($EstadoAntes, $ESTADO) != 0) {
-                $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 5, "ESTADO", $ID_CARGO, "MODIFICAR");
+                $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 26, "ESTADO", $ID_CARGO, "MODIFICAR");
             }
         }
         break;
