@@ -1192,9 +1192,7 @@ function ver_contrasena_confirmar() {
     var contrasena = document.getElementById('editar-contrasena').value; // Obtener el valor de la contraseña
     var confirmarContrasena = document.getElementById('editarConfirmar-contrasena').value; // Obtener el valor de la confirmación de la contraseña
 
-    if (!validarContraseñas(contrasena, confirmarContrasena)) {
-        return;
-    }
+   
 
     // Realizar una solicitud FETCH para actualizar los datos del usuario
     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=updateUsuario', {
@@ -1421,6 +1419,8 @@ function ver_contrasena_confirmar() {
         const expresionValidadora = /^[A-Z\s]+$/; // Expresión regular para nombre
         const expresionValidadorausuario = /^[A-Z\s]+$/; // Expresión regular para usuario
         const expresionValidadoraCorreo = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // Expresión regular para correo electrónico
+        
+
 
         // Función para verificar si los campos contiene caracteres no válidos
         function contieneCaracteresNoValidosNombre() {
@@ -1446,7 +1446,7 @@ function ver_contrasena_confirmar() {
     </script>
 
     <script>
-        // Obtener los campos de entrada y el botón "Guardar de Editar"
+  // Obtener los campos de entrada y el botón "Guardar de Editar"
 const usuarioInput1 = document.getElementById("editar-usuario");
 const nombreInput1 = document.getElementById("editar-nombre");
 const estadoInput1 = document.getElementById("editar-estado");
@@ -1456,8 +1456,23 @@ const contrasenaInput1 = document.getElementById("editar-contrasena");
 const confirmarContrasenaInput1 = document.getElementById("editarConfirmar-contrasena");
 const guardarButton1 = document.getElementById('btn-editar');
 
+// Expresiones regulares para validar campos
+const expresionValidadora1 = /^[A-Z\s]+$/; // Expresión regular para nombre
+const expresionValidadorausuario1 = /^[A-Z\s]+$/; // Expresión regular para usuario
+const expresionValidadoraCorreo1 = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // Expresión regular para correo electrónico
+const conta = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; // Expresión regular para contraseña
+
+// Función para verificar si los campos contienen caracteres no válidos
+function contieneCaracteresNoValidosNombreEditar() {
+    return !expresionValidadora1.test(nombreInput1.value.trim()) || !expresionValidadorausuario1.test(usuarioInput1.value.trim()) || !expresionValidadoraCorreo1.test(correoInput1.value.trim());
+}
+
+function contieneCaracteresNoValidoscontra() {
+    return !conta.test(contrasenaInput1.value.trim()) || !conta.test(confirmarContrasenaInput1.value.trim());
+}
+
 // Agregar eventos input a los campos de contraseña y otros campos de entrada
-contrasenaInput1.addEventListener('input', checkForm);
+contrasenaInput1.addEventListener('input', checkPassword);
 confirmarContrasenaInput1.addEventListener('input', checkPassword);
 usuarioInput1.addEventListener('input', checkForm);
 nombreInput1.addEventListener('input', checkForm);
@@ -1467,19 +1482,22 @@ rolInput1.addEventListener('input', checkForm);
 
 // Función para verificar si se ingresó una contraseña
 function checkPassword() {
+    const isNombreValido = !contieneCaracteresNoValidoscontra();
     const isPasswordValid = confirmarContrasenaInput1.value.trim() !== '' && contrasenaInput1.value.trim() !== '';
-    guardarButton1.disabled = !isPasswordValid;
+    guardarButton1.disabled = !isPasswordValid || !isNombreValido;
 }
 
 // Función para verificar si todos los campos (excepto la contraseña) están llenos
 function checkForm() {
+    const isNombreValido = !contieneCaracteresNoValidosNombreEditar();
     const isFormValid = usuarioInput1.value.trim() !== '' && 
                         nombreInput1.value.trim() !== '' && 
                         estadoInput1.value.trim() !== '' && 
                         correoInput1.value.trim() !== '' && 
                         rolInput1.value.trim() !== '';
-    guardarButton1.disabled = !isFormValid;
+    guardarButton1.disabled = !isFormValid || !isNombreValido;
 }
+
 
 
     </script>
