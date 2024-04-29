@@ -1192,7 +1192,16 @@ function ver_contrasena_confirmar() {
     var contrasena = document.getElementById('editar-contrasena').value; // Obtener el valor de la contraseña
     var confirmarContrasena = document.getElementById('editarConfirmar-contrasena').value; // Obtener el valor de la confirmación de la contraseña
 
-   
+    // Verificar que las contraseñas coincidan y no estén vacías
+    if (contrasena.trim() !== confirmarContrasena.trim()) {
+        // Mostrar mensaje de error si las contraseñas no coinciden
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Las contraseñas no coinciden.'
+        });
+        return;
+    }
 
     // Realizar una solicitud FETCH para actualizar los datos del usuario
     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/usuarios.php?op=updateUsuario', {
