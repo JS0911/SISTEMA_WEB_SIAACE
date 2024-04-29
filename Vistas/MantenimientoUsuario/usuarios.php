@@ -679,7 +679,7 @@ if (!isset($_SESSION['usuario'])) {
 
                                         <label for="estado">Nueva Contraseña</label>
                                 <div class="input-group">
-                                <input type="password" maxlength="8" class="form-control" id="editar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
+                                <input type="password" maxlength="15" class="form-control" id="editar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
                                <div class="input-group-append">
                                  <button onclick="ver_contrasena_nueva()" class="btn btn-primary" type="button">
                              <i class="fa fa-eye" aria-hidden="true"></i>
@@ -690,7 +690,7 @@ if (!isset($_SESSION['usuario'])) {
 
                               <label for="estado">Confirmar Contraseña</label>
                              <div class="input-group">
-                              <input type="password" maxlength="8" class="form-control" id="editarConfirmar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
+                              <input type="password" maxlength="15" class="form-control" id="editarConfirmar-contrasena" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial">
                                 <div class="input-group-append">
                                   <button onclick="ver_contrasena_confirmar()" class="btn btn-primary" type="button">
                                       <i class="fa fa-eye" aria-hidden="true"></i>

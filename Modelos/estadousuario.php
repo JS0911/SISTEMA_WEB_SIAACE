@@ -6,7 +6,7 @@ class Estados extends Conectar
     {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "SELECT * FROM tbl_ms_estadousuario ORDER BY ID_ESTADO_USUARIO DESC;";
+        $sql = "SELECT * FROM tbl_ms_estadousuario ;";
         $sql = $conectar->prepare($sql);
         $sql->execute();
         return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
