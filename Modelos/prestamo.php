@@ -208,6 +208,7 @@ class Prestamo extends Conectar
         $stmt = $conectar->prepare($sql);
         $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
         $stmt->bindParam(':FECHA_DE_DESEMBOLSO', $dateNew, PDO::PARAM_STR);
+       // $stmt->bindParam(':DESEMBOLSADO_POR', $DESEMBOLSADO_POR, PDO::PARAM_STR);
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {

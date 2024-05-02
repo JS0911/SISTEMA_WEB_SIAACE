@@ -29,6 +29,7 @@ $id_objeto_Objetos = "5";
 $id_objeto_Parametro = "4";
 $id_objeto_Permisos = "3";
 $id_objeto_Roles = "1";
+$id_objeto_Reporte = "37";
 //------OBJETOS DE MANT.EMPLEADOS-------------
 $id_objeto_Sucursal = "9";
 $id_objeto_Region = "8";
@@ -57,6 +58,7 @@ $permisosObjetos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_
 $permisosParametro = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Parametro);
 $permisosRoles = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Roles);
 $permisosPermiso = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Permisos);
+$permisosReporte = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Reporte);
 
 //-------------------------Mant.Empleado----------
 $permisosSucursal = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Sucursal);
@@ -200,6 +202,9 @@ if (isset($_SESSION['id_estado_usuario'])) {
                                 }
                                 if (!empty($permisosBitacora) && $permisosBitacora[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/bitacora.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Bitacora </a>';
+                                }
+                                if (!empty($permisosReporte) && $permisosReporte[0]['PERMISOS_CONSULTAR'] == 1) {
+                                    echo '<a class="nav-link" href="../Vistas/MantenimientoUsuario/Reportes.php"><i class="fa fa-book" aria-hidden="true"></i><span style="margin-left: 5px;"> Reportes </a>';
                                 }
                             }
                             echo '</nav>';

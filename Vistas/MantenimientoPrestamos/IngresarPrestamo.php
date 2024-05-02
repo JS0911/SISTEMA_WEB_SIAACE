@@ -1198,17 +1198,78 @@ if (!isset($_SESSION['usuario'])) {
             });
         }
 
+        // function Reembolso() {
+        //     $("#btn-enviar-reembolso").click(function() {
+        //         // Obtener los valores de los campos del formulario
+
+        //         var id_cuenta = document.getElementById("id-cuenta-editR").value; // Obtener el valor del select
+        //         var reembolso = document.getElementById("Monto_Reembolso").value; // Obtener el valor del select
+        //         // Crear un objeto con los datos a enviar al servidor
+        //         var datos = {
+        //             ID_CUENTA: id_cuenta,
+        //             REEMBOLSO: reembolso
+        //         }
+        //         fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=ReembolsoCuenta', {
+        //                 method: 'POST',
+        //                 headers: {
+        //                     'Content-Type': 'application/json'
+        //                 },
+        //                 body: JSON.stringify(datos)
+        //             })
+        //             .then(function(response) {
+        //                 if (response.ok) {
+        //                     // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
+        //                     return response.json();
+        //                 } else {
+        //                     // Si hubo un error en la solicitud, maneja el error aquí
+        //                     throw new Error('Error en la solicitud');
+        //                 }
+        //             })
+        //             .then(function(data) {
+        //                 console.log(data);
+
+        //                 // Cerrar la modal después de guardar
+        //                 $('#ReembolsoModal').modal('hide');
+
+        //                 // Mostrar SweetAlert de éxito
+        //                 Swal.fire({
+        //                     icon: 'success',
+        //                     title: 'Guardado exitoso',
+        //                     text: 'Los datos se han guardado correctamente.'
+        //                 }).then(function() {
+        //                     // Recargar la página para mostrar los nuevos datos
+        //                     location.reload();
+
+        //                 });
+
+        //             })
+        //             .catch(function(error) {
+        //                 console.log(error.message);
+
+        //                 // Mostrar SweetAlert de error
+        //                 Swal.fire({
+        //                     icon: 'error',
+        //                     title: 'Error',
+        //                     text: 'Error al guardar los datos: ' + error.message
+        //                 });
+        //             });
+
+        //     });
+        // }
+
+
         function Reembolso() {
             $("#btn-enviar-reembolso").click(function() {
                 // Obtener los valores de los campos del formulario
+                var id_cuenta = document.getElementById("id-cuenta-editR").value;
+                var reembolso = document.getElementById("Monto_Reembolso").value;
 
-                var id_cuenta = document.getElementById("id-cuenta-editR").value; // Obtener el valor del select
-                var reembolso = document.getElementById("Monto_Reembolso").value; // Obtener el valor del select
                 // Crear un objeto con los datos a enviar al servidor
                 var datos = {
                     ID_CUENTA: id_cuenta,
                     REEMBOLSO: reembolso
-                }
+                };
+
                 fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=ReembolsoCuenta', {
                         method: 'POST',
                         headers: {
@@ -1217,43 +1278,42 @@ if (!isset($_SESSION['usuario'])) {
                         body: JSON.stringify(datos)
                     })
                     .then(function(response) {
-                        if (response.ok) {
-                            // Si la solicitud fue exitosa, puedes manejar la respuesta aquí
-                            return response.json();
-                        } else {
-                            // Si hubo un error en la solicitud, maneja el error aquí
-                            throw new Error('Error en la solicitud');
+                        if (!response.ok) {
+                            throw new Error('Error en la solicitud: ' + response.statusText);
                         }
+                        return response.json();
                     })
                     .then(function(data) {
-                        console.log(data);
+                        if (data === "Saldo Actualizado") {
+                            // Cerrar la modal después de guardar
+                            $('#ReembolsoModal').modal('hide');
 
-                        // Cerrar la modal después de guardar
-                        $('#ReembolsoModal').modal('hide');
-
-                        // Mostrar SweetAlert de éxito
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Guardado exitoso',
-                            text: 'Los datos se han guardado correctamente.'
-                        }).then(function() {
-                            // Recargar la página para mostrar los nuevos datos
-                            location.reload();
-
-                        });
-
+                            // Mostrar SweetAlert de éxito
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Guardado exitoso',
+                                text: 'Los datos se han guardado correctamente.'
+                            }).then(function() {
+                                // Recargar la página para mostrar los nuevos datos
+                                location.reload();
+                            });
+                        } else {
+                            // Mostrar SweetAlert de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data // Muestra el mensaje de error devuelto por el servidor
+                            });
+                        }
                     })
                     .catch(function(error) {
-                        console.log(error.message);
-
-                        // Mostrar SweetAlert de error
+                        // Mostrar SweetAlert de error para errores en la solicitud
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'Error al guardar los datos: ' + error.message
+                            text: error.message
                         });
                     });
-
             });
         }
 

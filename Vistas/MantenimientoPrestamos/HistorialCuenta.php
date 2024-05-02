@@ -191,6 +191,10 @@ if (!isset($_SESSION['usuario'])) {
         color: green !important;
         text-decoration: none !important;
     }
+
+    .hidden {
+        display: none;
+    }
 </style>
 
 <!DOCTYPE html>
@@ -418,48 +422,54 @@ if (!isset($_SESSION['usuario'])) {
                                                         <th scope="col">Fecha</th>
                                                         <th scope="col">Usuario</th>
                                                         <th scope="col">Monto</th>
+                                                        <th scope="col">Estado</th>
                                                         <th scope="col">Descripcion</th>
                                                         <th scope="col">Acciones</th>
                                                     </tr>
                                                 </thead>
+                                                <!-- Modal para anular transacción -->
+                                                <div class="modal fade" id="modalAnular" tabindex="-1" role="dialog" aria-labelledby="modalAnularLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="modalAnularLabel">Anular Transacción</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="form-group">
+                                                                    <label for="idCuenta">Numero Cuenta:</label>
+                                                                    <input type="text" class="form-control" id="idCuenta" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="idTransaccion">Numero Transaccion:</label>
+                                                                    <input type="text" class="form-control" id="idTransaccion" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="descripcion">Descripción:</label>
+                                                                    <input type="text" class="form-control" id="descripcion" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="monto">Monto:</label>
+                                                                    <input type="text" class="form-control" id="monto" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="motivoAnulacion">Motivo de Anulación:</label>
+                                                                    <textarea class="form-control" id="motivoAnulacion" rows="3"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                                <button type="button" class="btn btn-danger" onclick="Anular()">Anular</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-             <!-- Modal De Descripcion De Anulaciones-->
-                <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="ModalAnulacion">Motivo De Anulacion</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <!-- Mostrar el monto y la descripción del registro -->
-                                <p><strong>Monto:</strong> <span id="montoRegistro"></span></p>
-                                <p><strong>Descripción:</strong> <span id="descripcionRegistro"></span></p>
 
-                                <!-- Formulario de creación -->
-                                <form>
-                                    <div class="form-group">
-                                        <label for="estado">Describe el motivo de la anulación</label>
-                                        <input type="text" maxlength="100" class="form-control" id="agregar-descripcion" required pattern="^\S+$" title="No se permiten campos vacíos" oninput="this.value = this.value.toUpperCase()">
-                                        <div id="mensaje2"></div>
-                                    </div>
-                                </form>
-                            </div
-                            <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="btn-agregarAnula" disabled>Guardar</button>
-                                <!-- Botón Anular -->
-                            <button type='button' class='btn btn-outline-danger btn-anular' data-toggle='modal' data-target='#crearModal' 
-                                data-monto='<?php echo $row["MONTO"]; ?>' data-descripcion='<?php echo $row["DESCRIPCION"]; ?>'>
-                                Anular
-                            </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>                              
-                                 <tbody>
-                                              <?php
+                                                <tbody>
+                                                    <?php
                                                     $consulta = new cuenta();
                                                     $result = $consulta->historial_cuenta($ID_CUENTA);
 
@@ -472,17 +482,26 @@ if (!isset($_SESSION['usuario'])) {
                                                         if (is_array($result) && count($result) > 0) {
                                                             foreach ($result as $row) {
                                                                 echo "<tr>";
+                                                                echo "<td class='hidden'>" . $row["ID_CUENTA"] . "</td>"; // Columna oculta para ID_CUENTA
+                                                                echo "<td class='hidden'>" . $row["ID_TRANSACCION"] . "</td>";
+                                                                echo "<td class='hidden'>" . $row["ID_TIPO_TRANSACCION"] . "</td>";
                                                                 echo "<td>" . $row["FECHA"] . "</td>";
                                                                 echo "<td>" . $row["CREADO_POR"] . "</td>";
-                                                                echo "<td class='texto-derecha'>" . "L.".formatoNumero($row["MONTO"]) . "</td>";
+                                                                echo "<td class='texto-derecha'>" . "L." . formatoNumero($row["MONTO"]) . "</td>";
+                                                                echo "<td>" . $row["ESTADO"] . "</td>";
                                                                 echo "<td>" . $row["DESCRIPCION"] . "</td>";
-                                                                // Agregar un identificador único al botón de anulación
-                                                                echo "<td><button type='button' class='btn btn-outline-danger btn-anular' data-toggle='modal' data-target='#crearModal'>Anular</button></td>";
+                                                                // Agregar un identificador único al botón de anulación y llamar a la función abrirModalAnular
+                                                                if ($row["ESTADO"] !== 'ACTIVO') {
+                                                                    echo "<td><button type='button' class='btn btn-outline-danger btn-anular' data-toggle='modal' data-target='#modalAnular' onclick='CargarDatos(" . $row["ID_TRANSACCION"] . ")' disabled>Anular</button></td>";
+                                                                } else {
+                                                                    echo "<td><button type='button' class='btn btn-outline-danger btn-anular' data-toggle='modal' data-target='#modalAnular' onclick='CargarDatos(" . $row["ID_TRANSACCION"] . ")'>Anular</button></td>";
+                                                                }
                                                                 echo "</tr>";
                                                             }
                                                         } else {
                                                             echo "<tr><td colspan='4'>No hay datos</td></tr>";
                                                         }
+                                                        
                                                     } else {
                                                         echo "<tr><td colspan='4'>Error en la consulta</td></tr>";
                                                     }
@@ -495,8 +514,6 @@ if (!isset($_SESSION['usuario'])) {
                                                 </tbody>
                                             </table>
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
@@ -506,75 +523,101 @@ if (!isset($_SESSION['usuario'])) {
             </main>
         </div>
     </div>
-    <script>
-        var permisos = <?php echo json_encode($permisos); ?>;
-        //DEBE DE ESTAR VALIDADO LA ANULACION Y LA VISUALIZACION 
-        function Anular(id_cuenta, id_transaccion) {
-            var datos = {
-                "ID_CUENTA": id_cuenta,
-                "ID_TRANSACCION": id_transaccion,
-                "CREADO_POR": <?php echo json_encode($_SESSION['usuario']); ?>;
-            };
 
-            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=Anulacion_Dep_Ret', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(datos) // Convierte el objeto en formato JSON
-                })
-                .then(response => response.json()) // Parsea la respuesta como JSON
-                .then(data => {
-                    console.log('Anulación realizada con éxito:', data);
-
-                    // Mostrar el SweetAlert después de una anulación exitosa
-                    Swal.fire({
-                        title: 'Éxito',
-                        text: 'Anulación Realizada Con Éxito',
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function() {
-                        location.reload();
-                    });
-                })
-                .catch(error => {
-                    console.error('Error al anular la transacción:', error);
-                    // Aquí puedes manejar errores si la anulación falla
-                });
-        }
-
-                $('#ModalAnulacion').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Botón que activó el modal
-            var monto = button.data('monto'); // Extraer el monto del atributo data-monto
-            var descripcion = button.data('descripcion'); // Extraer la descripción del atributo data-descripcion
-
-            // Actualizar el contenido del modal con los datos del registro
-            var modal = $(this);
-            modal.find('#montoRegistro').text(monto);
-            modal.find('#descripcionRegistro').text(descripcion);
-});
-
-        /* Imprime los datos en la tabla
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $row["fecha"] . "</td>";
-                        echo "<td>" . $row["monto"] . "</td>";
-                        echo "<td>" . $row["descripcion"] . "</td>";
-                        echo "<td>Acciones</td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='4'>No hay datos</td></tr>";
-                }*/
-    </script>
-
-       
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
 
 </body>
 <html>
+
+<script>
+    var permisos = <?php echo json_encode($permisos); ?>;
+    //DEBE DE ESTAR VALIDADO LA ANULACION Y LA VISUALIZACION 
+
+    function CargarDatos(ids) {
+        console.log("entra");
+
+        // Configurar los datos a enviar en la solicitud
+        var datos = {
+            "ID_TRANSACCION": ids
+        };
+
+        // Realizar la solicitud fetch
+        fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=transacciones', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Convierte el objeto en formato JSON
+            })
+            .then(response => response.json()) // Parsea la respuesta como JSON
+            .then(data => {
+                // Manejar la respuesta de la función obtenerTransacciones
+                console.log('Datos de transacción cargados:', data);
+                // Actualizar los valores de los campos de entrada de la modal con los detalles de la transacción
+                if (Array.isArray(data) && data.length > 0) {
+                    var transaccion = data[0]; // Suponiendo que solo recibes una transacción
+                    document.getElementById("idTransaccion").value = transaccion.ID_TRANSACCION;
+                    document.getElementById("monto").value = transaccion.MONTO;
+                    document.getElementById("idCuenta").value = transaccion.ID_CUENTA;
+                    document.getElementById("descripcion").value = transaccion.DESCRIPCION;
+                } else {
+                    console.error('No se recibieron datos válidos de la transacción:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar los datos de la transacción:', error);
+                // Manejar errores de la solicitud fetch
+            });
+    }
+
+    function Anular() {
+
+        // Obtener los valores de los campos de la modal
+        var id_cuenta = document.getElementById('idCuenta').value;
+        var id_transaccion = document.getElementById('idTransaccion').value;
+        var descripcion = document.getElementById('motivoAnulacion').value;
+
+        // Configurar los datos a enviar en la solicitud
+        var datos = {
+            "ID_CUENTA": id_cuenta,
+            "ID_TRANSACCION": id_transaccion,
+            "DESCRIPCION": descripcion
+        };
+        console.log("datos", datos);
+        // Realizar la solicitud fetch
+        fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/cuenta.php?op=Anulacion_Dep_Ret', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Convierte el objeto en formato JSON
+            })
+            .then(response => response.json()) // Parsea la respuesta como JSON
+            .then(data => {
+                // console.log('Anulación realizada con éxito:', data);
+
+                // Mostrar el SweetAlert después de una anulación exitosa
+                Swal.fire({
+                    title: 'Éxito',
+                    text: 'Anulación Realizada Con Éxito',
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function() {
+                    location.reload();
+                });
+            })
+            .catch(error => {
+                console.error('Error al anular la transacción:', error);
+                // Manejar errores si la anulación falla
+            });
+    }
+    $(document).ready(function() {
+        Anular();
+        CargarDatos();
+    });
+</script>

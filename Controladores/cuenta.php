@@ -81,9 +81,15 @@ switch ($_GET["op"]) {
     break;
 
     case "Anulacion_Dep_Ret":
-        $datos = $com->anular($body["ID_CUENTA"],$body["ID_TRANSACCION"],$_SESSION['usuario']);
+        $datos = $com->anular($body["ID_CUENTA"],$body["ID_TRANSACCION"],$_SESSION["usuario"],$body['DESCRIPCION']);
         echo json_encode($datos);
     break;
+
+    case "transacciones":
+        $datos = $com->obtenerTransacciones($body["ID_TRANSACCION"]);
+        echo json_encode($datos);
+    break;
+
 
     case "insert_cuentaAutomatica":
         $ID_EMPLEADO = $body["ID_EMPLEADO"];
@@ -98,6 +104,12 @@ switch ($_GET["op"]) {
             echo json_encode(["message" => "Cuenta insertada Exitosamente."]);
             $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO LA CUENTA: $NUMERO_CUENTA", $_SESSION['id_usuario'], 28, $_SESSION['usuario'], $dateNew);
         }
+    
+    case "ReporteAnulaciones":
+            $datos = $com->ReporteAnulaciones();
+            echo json_encode($datos);
+    break;
+
 }
 
 
