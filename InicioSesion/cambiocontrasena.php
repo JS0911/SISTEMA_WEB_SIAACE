@@ -52,63 +52,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($row) {
         $contrasenaBD = $row['contrasena'];
-        
 
         if (password_verify($contrasenaActual, $contrasenaBD)) {
             // Contraseña actual es correcta
-
-            if ($nuevaContraseña === $confirmarContraseña) {
-                // Nuevas contraseñas coinciden
-
-                $conexion = new Conectar();
-                $conn = $conexion->Conexion();
-                $conexion->set_names();
-                $idUsuario = $usuario;
-
-                $hashedPassword = password_hash($nuevaContraseña, PASSWORD_DEFAULT);
-                $sql = "UPDATE tbl_ms_usuario SET CONTRASENA = ? WHERE USUARIO= ?";
-
-                if ($stmt = $conn->prepare($sql)) {
-                    $stmt->bindParam(1, $hashedPassword, PDO::PARAM_STR);
-                    $stmt->bindParam(2, $idUsuario, PDO::PARAM_STR);
-
-                    if ($stmt->execute()) {
-                        //$contrasenaCambiadaExito = "Contraseña Cambiada con exito";
-                        //echo $contrasenaCambiada;
-                        //echo "Contraseña cambiada con éxito.";
-                        // $conn = null;
-                        $date = new DateTime(date("Y-m-d H:i:s"));
-                        $dateMod = $date->modify("-7 hours");
-                        $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-
-                        $sql2 = "INSERT INTO tbl_ms_historial_contrasena(CONTRASENA, ID_USUARIO, FECHA_MODIFICACION) VALUES ('$hashedPassword', '$id_usuario', '$dateNew');";
-                        $stmt2 = $conn->prepare($sql2);
-                        $stmt2->execute();
-
-                        $sql3 = "UPDATE tbl_ms_usuario SET ID_ESTADO_USUARIO = '1' WHERE ID_USUARIO = $id_usuario;";
-                        $stmt3 = $conn->prepare($sql3);
-                        $stmt3->execute();
-
-                        $sql4 = "UPDATE tbl_ms_usuario SET AUTO_REGISTRO = '2' WHERE ID_USUARIO = $id_usuario;";
-                        $stmt4 = $conn->prepare($sql4);
-
-                        $_SESSION['cambio_contrasena'] = true;
-                        //header("refresh: 2; url=login.php");
-                        //exit;
+        
+            if ($nuevaContraseña !== $contrasenaActual) {
+                // Las contraseñas no son iguales
+        
+                if ($nuevaContraseña === $confirmarContraseña) {
+                    // Nuevas contraseñas coinciden
+        
+                    $conexion = new Conectar();
+                    $conn = $conexion->Conexion();
+                    $conexion->set_names();
+                    $idUsuario = $usuario;
+        
+                    $hashedPassword = password_hash($nuevaContraseña, PASSWORD_DEFAULT);
+                    $sql = "UPDATE tbl_ms_usuario SET CONTRASENA = ? WHERE USUARIO= ?";
+        
+                    if ($stmt = $conn->prepare($sql)) {
+                        $stmt->bindParam(1, $hashedPassword, PDO::PARAM_STR);
+                        $stmt->bindParam(2, $idUsuario, PDO::PARAM_STR);
+        
+                        if ($stmt->execute()) {
+                            $date = new DateTime(date("Y-m-d H:i:s"));
+                            $dateMod = $date->modify("-7 hours");
+                            $dateNew = $dateMod->format("Y-m-d H:i:s"); 
+        
+                            $sql2 = "INSERT INTO tbl_ms_historial_contrasena(CONTRASENA, ID_USUARIO, FECHA_MODIFICACION) VALUES ('$hashedPassword', '$id_usuario', '$dateNew');";
+                            $stmt2 = $conn->prepare($sql2);
+                            $stmt2->execute();
+        
+                            $sql3 = "UPDATE tbl_ms_usuario SET ID_ESTADO_USUARIO = '1' WHERE ID_USUARIO = $id_usuario;";
+                            $stmt3 = $conn->prepare($sql3);
+                            $stmt3->execute();
+        
+                            $sql4 = "UPDATE tbl_ms_usuario SET AUTO_REGISTRO = '2' WHERE ID_USUARIO = $id_usuario;";
+                            $stmt4 = $conn->prepare($sql4);
+        
+                            $_SESSION['cambio_contrasena'] = true;
+                            //header("refresh: 2; url=login.php");
+                            //exit;
+                        } else {
+                            echo "Error al cambiar la contraseña: " . $stmt->errorInfo()[2];
+                        }
                     } else {
-
-                        echo "Error al cambiar la contraseña: " . $stmt->errorInfo()[2];
+                        echo "Error en la preparación de la consulta: " . $conn->errorInfo()[2];
                     }
                 } else {
-                    echo "Error en la preparación de la consulta: " . $conn->errorInfo()[2];
+                    $confirmarContrasenaError = "Las contraseñas nuevas no coinciden. Por favor, inténtalo de nuevo.";
                 }
             } else {
-                $confirmarContrasenaError = "Las contraseñas nuevas no coinciden. Por favor, inténtalo de nuevo.";
+                $nuevaContrasenaError = "La nueva contraseña no puede ser igual a la contraseña actual. Por favor, elija una diferente.";
             }
         } else {
-
             $contrasenaActualError = "La contraseña actual no es válida. Por favor, inténtalo de nuevo.";
-            //echo $contrasenaActualError;
         }
     } else {
         echo "Error al obtener la contraseña actual desde la base de datos.";
@@ -116,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Cierra la conexión
     $conn = null;
     //header("refresh:1");
-}
+}    
 
 if (!isset($_SESSION['usuario'])) {
     $stmt4->execute();
@@ -277,8 +275,9 @@ if (!isset($_SESSION['usuario'])) {
                                             </div></div>
 
                                             <p class="mensaje"></p>
-                                            <button type="button" class="btn btn-danger" name="cancelar" id="clickCancelar">Cancelar</button>
                                             <button type="submit" class="btn btn-primary" name="submit" id="click" disabled>Guardar</button>
+                                            <button type="button" class="btn btn-danger" name="cancelar" id="clickCancelar">Cancelar</button>
+                                            
                                             
                                             <script>
                                                 document.getElementById("clickCancelar").addEventListener("click", function() {
