@@ -104,11 +104,6 @@ switch ($_GET["op"]) {
             echo json_encode(["message" => "Cuenta insertada Exitosamente."]);
             $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO LA CUENTA: $NUMERO_CUENTA", $_SESSION['id_usuario'], 28, $_SESSION['usuario'], $dateNew);
         }
-    
-    case "ReporteAnulaciones":
-            $datos = $com->ReporteAnulaciones();
-            echo json_encode($datos);
-    break;
 
 }
 

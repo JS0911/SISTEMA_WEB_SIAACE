@@ -344,20 +344,5 @@ class cuenta extends Conectar
             return "Error al obtener las transacciones: " . $e->getMessage();
         }
     }
-
-    public function ReporteAnulaciones()
-    {
-        $conectar = parent::conexion();
-        parent::set_names();
-
-        $sql = "SELECT CREADO_POR, FECHA, MONTO, DESCRIPCION 
-        FROM TBL_TRANSACCIONES 
-        WHERE ID_TIPO_TRANSACCION IN (3, 4)
-        ORDER BY FECHA DESC;";
-        
-        $stmt = $conectar->prepare($sql);
-        $stmt->execute();
-
-        return $reporte = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    
 }
