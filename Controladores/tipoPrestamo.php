@@ -70,7 +70,7 @@ switch ($_GET["op"]) {
         $PLAZO_MAXIMO = $body["PLAZO_MAXIMO"];
         $PLAZO_MINIMO = $body["PLAZO_MINIMO"];
         $ESTADO = $body["ESTADO"];
-        if (verificarExistenciaTipoprestamo($TIPO_PRESTAMO) > 0) {
+        if (verificarExistenciaTipoprestamo($TIPO_PRESTAMO) > 0 &&  !esMismoPrestamo($ID_TIPO_PRESTAMO, $TIPO_PRESTAMO)) {
             // Envía una respuesta de conflicto (409) si el tipo prestamo ya existe
             http_response_code(409);
             echo json_encode(["error" => "El Tipo Prestamo ya existe en la base de datos."]);

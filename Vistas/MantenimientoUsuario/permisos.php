@@ -517,7 +517,7 @@ if (!isset($_SESSION['usuario'])) {
                                         $conn = $conexion->Conexion();
 
                                         // Consultar la contraseÃ±a actual del usuario desde la base de datos
-                                        $sql = "SELECT id_rol ,rol FROM tbl_ms_roles";
+                                        $sql = "SELECT id_rol ,rol FROM tbl_ms_roles WHERE ID_ESTADO_USUARIO = 1";
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
 

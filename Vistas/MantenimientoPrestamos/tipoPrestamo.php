@@ -542,24 +542,24 @@ if (!isset($_SESSION['usuario'])) {
                                         </div>
                                         <div class="row">
                                        <div class="col-md-6">
-                                        <label for="nombre"> Tasa Maxima</label>
+                                        <label for="nombre"> Tasa Maxima (Meses)</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-tasamaxima" required pattern="\d+(\.\d{1,2})?" title="Solo se permiten números con hasta dos decimales">
                                         <div id="mensaje6"></div>
                                         </div>
                                         <div class="col-md-6">
-                                        <label for="nombre">Tasa Minima</label>
+                                        <label for="nombre">Tasa Minima (Meses)</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-tasaminima"required pattern="\d+(\.\d{1,2})?" title="Solo se permiten números con hasta dos decimales">
                                         <div id="mensaje7"></div>
                                         </div>
                                         </div>
                                         <div class="row">
                                        <div class="col-md-6">
-                                        <label for="nombre"> Plazo Maximo</label>
+                                        <label for="nombre"> Plazo Maximo(Meses)</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-plazomaximo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje8"></div>
                                         </div>
                                         <div class="col-md-6">
-                                        <label for="nombre">Plazo Minimo</label>
+                                        <label for="nombre">Plazo Minimo(Meses)</label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-plazominimo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje9"></div>
                                         </div>
@@ -632,24 +632,24 @@ if (!isset($_SESSION['usuario'])) {
                                         </div>
                                         <div class="row">
                                        <div class="col-md-6">
-                                        <label for="nombre"> Tasa Maxima</label>
+                                        <label for="nombre"> Tasa Maxima (Meses)</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-tasamaxima" required pattern="\d+(\.\d{1,2})?" title="Solo se permiten números con hasta dos decimales">
                                         <div id="mensaje16"></div>
                                         </div>
                                         <div class="col-md-6">
-                                        <label for="nombre">Tasa Minima</label>
+                                        <label for="nombre">Tasa Minima (Meses)</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-tasaminima" required pattern="\d+(\.\d{1,2})?" title="Solo se permiten números con hasta dos decimales">
                                         <div id="mensaje17"></div>
                                         </div>
                                         </div>
                                         <div class="row">
                                        <div class="col-md-6">
-                                        <label for="nombre"> Plazo Maximo</label>
+                                        <label for="nombre"> Plazo Maximo (Meses)</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-plazomaximo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje18"></div>
                                         </div>
                                         <div class="col-md-6">
-                                        <label for="nombre">Plazo Minimo</label>
+                                        <label for="nombre">Plazo Minimo (Meses)</label>
                                         <input type="text" maxlength="45" class="form-control" id="editar-plazominimo" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje19"></div>
                                         </div>

@@ -145,7 +145,7 @@ $nombre_empleado_unido = implode(" ", $nombre_empleado[0]);
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
-$sql = "SELECT id_tipo_prestamo, tipo_prestamo FROM tbl_mp_tipo_prestamo";
+$sql = "SELECT id_tipo_prestamo, tipo_prestamo FROM tbl_mp_tipo_prestamo WHERE ESTADO = 'ACTIVO'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 
@@ -158,7 +158,7 @@ $TipoPrestamo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
-$sql = "SELECT id_fpago, forma_de_pago FROM tbl_formapago";
+$sql = "SELECT id_fpago, forma_de_pago FROM tbl_formapago WHERE ESTADO = 'ACTIVO'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 
@@ -168,10 +168,11 @@ $formaPago = $stmt->fetchAll(PDO::FETCH_ASSOC);
 //------------------------------------------------------------------------------------
 // Traer tipo de cuentas
 
-$sql1 = "SELECT ID_TIPOCUENTA, TIPO_CUENTA FROM tbl_mc_tipocuenta";
+$sql1 = "SELECT ID_TIPOCUENTA, TIPO_CUENTA FROM tbl_mc_tipocuenta WHERE ESTADO = 'ACTIVO'";
 $stmt1 = $conn->prepare($sql1);
 $stmt1->execute();
 $TiposCuentas = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
 
 //---------CONEXION A LA TABLA TIPO PRESTAMO TASA --------
 // Crear una instancia de la clase Conectar

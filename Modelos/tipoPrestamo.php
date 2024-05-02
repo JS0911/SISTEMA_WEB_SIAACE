@@ -62,7 +62,6 @@ class TipoPrestamo extends Conectar
         }
     }
     
-
     // EDITA 
     public function update_tipoprestamo($ID_TIPO_PRESTAMO,$TIPO_PRESTAMO, $DESCRIPCION, $APLICA_SEGUROS, $MONTO_MAXIMO, $MONTO_MINIMO, $TASA_MAXIMA, $TASA_MINIMA, $PLAZO_MAXIMO,$PLAZO_MINIMO, $ESTADO ) {
         try {

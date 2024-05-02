@@ -23,7 +23,16 @@ $com = new Reporte();
 
 switch ($_GET["op"]) {
     case "ReporteAnulaciones":
-        $datos = $com->ReporteAnulaciones();
+        $datos = $com->ReporteAnulaciones($body["fechaInicio"], $body["fechaFin"]);
+        echo json_encode($datos);
+    break;
+
+    case "ReporteDepositos":
+        $datos = $com->ReporteDepositos($body["fechaInicio"], $body["fechaFin"]);
+        echo json_encode($datos);
+    break;
+    case "ReporteRetiros":
+        $datos = $com->ReporteRetiros($body["fechaInicio"], $body["fechaFin"]);
         echo json_encode($datos);
     break;
 }

@@ -773,7 +773,7 @@ if (!isset($_SESSION['usuario'])) {
                                                 $conn = $conexion->Conexion();
 
                                                 // Consultar la contraseña actual del usuario desde la base de datos
-                                                $sql = "SELECT id_sucursal ,sucursal FROM tbl_me_sucursal";
+                                                $sql = "SELECT id_sucursal ,sucursal FROM tbl_me_sucursal WHERE estado = 'ACTIVO'";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
 
@@ -799,7 +799,7 @@ if (!isset($_SESSION['usuario'])) {
                                                 $conn = $conexion->Conexion();
 
                                                 // Consultar la contraseña actual del usuario desde la base de datos
-                                                $sql = "SELECT id_cargo ,cargo FROM tbl_me_cargo ";
+                                                $sql = "SELECT id_cargo ,cargo FROM tbl_me_cargo WHERE estado = 'ACTIVO'";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
 

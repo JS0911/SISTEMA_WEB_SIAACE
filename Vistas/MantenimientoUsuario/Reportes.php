@@ -106,7 +106,8 @@ if (!isset($_SESSION['usuario'])) {
     <style>
         .table-container {
             overflow-y: auto;
-            max-height: 600px; /*  ajustar esta altura */
+            max-height: 600px;
+            /*  ajustar esta altura */
         }
 
         .table {
@@ -147,6 +148,7 @@ if (!isset($_SESSION['usuario'])) {
         .icono:hover {
             color: #4CAF50;
         }
+
         .icon-lg {
             font-size: 24px;
             /* Ajusta el tamaño según tus necesidades */
@@ -159,11 +161,48 @@ if (!isset($_SESSION['usuario'])) {
             font-size: 2.5em;
             /* Ajusta e tamaño según tus necesidades */
         }
+
+        .styled-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
 <body>
-<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <a class="navbar-brand" href="../../InicioSesion/index.php">
             <img src="../../src/Logo.png" alt="Logo SIAACE" class="logo"> SIAACE</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar-->
@@ -248,7 +287,7 @@ if (!isset($_SESSION['usuario'])) {
                                 if (!empty($permisosCargo) && $permisosCargo[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/cargo.php"><i class="fas fa-briefcase"></i></i><span style="margin-left: 5px;"> Cargo</a>';
                                 }
-                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosRegion) && $permisosRegion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoEmpleado/region.php"><i class="fas fa-globe"></i></i><span style="margin-left: 5px;"> Region</a>';
                                 }
                                 if (!empty($permisosSucursal) && $permisosSucursal[0]['PERMISOS_CONSULTAR'] == 1) {
@@ -270,13 +309,13 @@ if (!isset($_SESSION['usuario'])) {
                             echo '<nav class="sb-sidenav-menu-nested nav">';
 
                             if (!empty($permisos3) && $permisos3[0]['PERMISOS_CONSULTAR'] == 1) {
-                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) { 
+                                if (!empty($permisosTransaccion) && $permisosTransaccion[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipo_transaccion.php"><i class="fas fa-money-check-alt"></i><span style="margin-left: 5px;"> Tipo Transaccion</a>';
                                 }
-                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosTipoCuenta) && $permisosTipoCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/tipoCuenta.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Tipo de Cuenta</a>';
                                 }
-                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {  
+                                if (!empty($permisosMantCuenta) && $permisosMantCuenta[0]['PERMISOS_CONSULTAR'] == 1) {
                                     echo '<a class="nav-link" href="../MantenimientoCuentas/MantenimientoCuentas.php"><i class="fa fa-credit-card" aria-hidden="true"></i><span style="margin-left: 5px;"> Lista de Cuentas</a>';
                                 }
                             }
@@ -319,107 +358,115 @@ if (!isset($_SESSION['usuario'])) {
             </nav>
         </div>
         <div id="layoutSidenav_content">
-    <div class="container">
-        <h2>Generador de Reportes</h2>
-        <form id="reporteForm">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="tipoReporte">Seleccione un tipo de reporte:</label>
-                    <select class="form-control" id="tipoReporte">
-                        <option value="ReporteAnulaciones">Reporte de Anulaciones</option>
-                        <!-- Agrega aquí más opciones de reporte según tus necesidades -->
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="fechaInicio">Fecha de inicio:</label>
-                    <input type="date" class="form-control" id="fechaInicio" name="fechaInicio">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="fechaFin">Fecha de fin:</label>
-                    <input type="date" class="form-control" id="fechaFin" name="fechaFin">
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Generar Reporte</button>
-        </form>
+            <div class="container">
 
-        <!-- Contenedor para mostrar el resultado del reporte -->
-        <div id="reporteContainer" class="table-container"></div>
-        <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid">
-                    <div class="d-flex align-items-start justify-content-center small">
-                        <div class="text-muted">Copyright &copy; IA-UNAH 2023</div>
+                <form id="reporteForm" class="styled-form">
+                    <h2>Generador de Reportes</h2>
+                    <div class="form-group">
+                        <label for="tipoReporte">Seleccione un tipo de reporte:</label>
+                        <select class="form-control" id="tipoReporte">
+                            <option value="ReporteAnulaciones">Reporte de Anulaciones</option>
+                            <option value="ReporteDepositos">Reporte de Depositos</option>
+                            <option value="ReporteRetiros">Reporte de Retiros</option>
+                            <!-- Agrega aquí más opciones de reporte según tus necesidades -->
+                        </select>
                     </div>
-                </div>
-            </footer>
-    </div>
+                    <div class="form-group">
+                        <label for="fechaInicio">Fecha de inicio:</label>
+                        <input type="date" class="form-control" id="fechaInicio" name="fechaInicio">
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaFin">Fecha de fin:</label>
+                        <input type="date" class="form-control" id="fechaFin" name="fechaFin">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Generar Reporte</button>
+                </form>
 
-    <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
-    
-    <script>
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('reporteForm').addEventListener('submit', function(event) {
-                event.preventDefault(); // Evitar que se envíe el formulario normalmente
+                <!-- Contenedor para mostrar el resultado del reporte -->
+                <div id="reporteContainer" class="table-container"></div>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid">
+                        <div class="d-flex align-items-start justify-content-center small">
+                            <div class="text-muted">Copyright &copy; IA-UNAH 2023</div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
 
-                // Obtener el tipo de reporte y las fechas del formulario
-                var tipoReporte = document.getElementById('tipoReporte').value;
-                var fechaInicio = document.getElementById('fechaInicio').value;
-                var fechaFin = document.getElementById('fechaFin').value;
+            <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+            <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
 
-                // Realizar la solicitud fetch al servidor
-                fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/reportes.php?op=' + tipoReporte, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            fechaInicio: fechaInicio,
-                            fechaFin: fechaFin
-                        })
-                    })
-                    .then(response => response.json()) // Convertir la respuesta a JSON
-                    .then(data => {
-                        // Crear la tabla con los datos del reporte
-                        var tableHTML = '<table class="table">';
-                        tableHTML += '<thead><tr>';
-                        tableHTML += '<th>ELABORADO POR</th>';
-                        tableHTML += '<th>FECHA</th>';
-                        tableHTML += '<th>MONTO</th>';
-                        tableHTML += '<th>DESCRIPCIÓN</th>';
-                        tableHTML += '</tr></thead>';
-                        tableHTML += '<tbody>';
-                        data.forEach(item => {
-                            tableHTML += '<tr>';
-                            tableHTML += `<td>${item.CREADO_POR}</td>`;
-                            tableHTML += `<td>${item.FECHA}</td>`;
-                            tableHTML += `<td>${item.MONTO}</td>`;
-                            tableHTML += `<td>${item.DESCRIPCION}</td>`;
-                            tableHTML += '</tr>';
-                        });
-                        tableHTML += '</tbody></table>';
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('reporteForm').addEventListener('submit', function(event) {
+                        event.preventDefault(); // Evitar que se envíe el formulario normalmente
 
-                        // Mostrar la tabla en el contenedor
-                        document.getElementById('reporteContainer').innerHTML = tableHTML;
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
+                        // Obtener el tipo de reporte y las fechas del formulario
+                        var tipoReporte = document.getElementById('tipoReporte').value;
+                        var fechaInicio = document.getElementById('fechaInicio').value;
+                        var fechaFin = document.getElementById('fechaFin').value;
+
+                        // Realizar la solicitud fetch al servidor
+                        fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/reportes.php?op=' + tipoReporte, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    fechaInicio: fechaInicio,
+                                    fechaFin: fechaFin
+                                })
+                            })
+                            .then(response => response.json()) // Convertir la respuesta a JSON
+                            .then(data => {
+                                // Crear la tabla con los datos del reporte
+                                var tableHTML = '<table class="table">';
+                                tableHTML += '<thead><tr>';
+                                tableHTML += '<th>ELABORADO POR</th>';
+                                tableHTML += '<th>FECHA</th>';
+                                tableHTML += '<th>MONTO</th>';
+                                tableHTML += '<th>DESCRIPCIÓN</th>';
+                                tableHTML += '</tr></thead>';
+                                tableHTML += '<tbody>';
+                                data.forEach(item => {
+                                    tableHTML += '<tr>';
+                                    tableHTML += `<td>${item.CREADO_POR}</td>`;
+                                    tableHTML += `<td>${item.FECHA}</td>`;
+                                    tableHTML += `<td>${item.MONTO}</td>`;
+                                    // Verificar si la descripción es nula
+                                    if (item.DESCRIPCION !== null) {
+                                        tableHTML += `<td>${item.DESCRIPCION}</td>`;
+                                    } else {
+                                        tableHTML += '<td></td>'; // Si la descripción es nula, asignar una celda vacía
+                                    }
+                                    tableHTML += '</tr>';
+                                });
+                                tableHTML += '</tbody></table>';
+
+                                tableHTML += '</tbody></table>';
+
+                                // Mostrar la tabla en el contenedor
+                                document.getElementById('reporteContainer').innerHTML = tableHTML;
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
                     });
-            });
 
-        });
-    </script>
+                });
+            </script>
 </body>
 
 </html>
