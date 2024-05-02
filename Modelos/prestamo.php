@@ -70,28 +70,28 @@ class Prestamo extends Conectar
 
 
     public function get_PrestamoRecibo($ID_PRESTAMO)
-{
-    $conectar = parent::conexion();
-    parent::set_names();
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
 
-    $sql = "SELECT P.*, T.TIPO_PRESTAMO, F.FORMA_DE_PAGO, P.FECHA_DE_DESEMBOLSO, P.MONTO_SOLICITADO, E.PRIMER_NOMBRE, E.PRIMER_APELLIDO
+        $sql = "SELECT P.*, T.TIPO_PRESTAMO, F.FORMA_DE_PAGO, P.FECHA_DE_DESEMBOLSO, P.MONTO_SOLICITADO, E.PRIMER_NOMBRE, E.PRIMER_APELLIDO
             FROM tbl_mp_prestamos AS P
             INNER JOIN tbl_mp_tipo_prestamo AS T ON P.ID_TIPO_PRESTAMO = T.ID_TIPO_PRESTAMO
             INNER JOIN tbl_formapago AS F ON P.ID_FPAGO = F.ID_FPAGO 
             INNER JOIN tbl_me_empleados AS E ON P.ID_EMPLEADO = E.ID_EMPLEADO
             WHERE ID_PRESTAMO = :ID_PRESTAMO"; // Filtrar por ID_PRESTAMO
 
-    $sql = $conectar->prepare($sql);
-    $sql->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-    $sql->execute();
+        $sql = $conectar->prepare($sql);
+        $sql->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+        $sql->execute();
 
-    // Verificar si se obtuvieron resultados
-    if ($sql->rowCount() > 0) {
-        return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-    } else {
-        return "No se encontró ningún préstamo con el ID_PRESTAMO proporcionado.";
+        // Verificar si se obtuvieron resultados
+        if ($sql->rowCount() > 0) {
+            return $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            return "No se encontró ningún préstamo con el ID_PRESTAMO proporcionado.";
+        }
     }
-}
 
 
     // //INSERTA UN PRESTAMO
@@ -179,47 +179,48 @@ class Prestamo extends Conectar
         }
     }
     public function desembolso_prestamo($ID_PRESTAMO, $DESEMBOLSADO_POR)
-{
-    try {
-        $conectar = parent::conexion();
-        parent::set_names();
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
 
-        // Consulta SQL para obtener la fecha de desembolso del préstamo
-        $sql_fecha_desembolso = "SELECT FECHA_DE_DESEMBOLSO FROM tbl_mp_prestamos WHERE ID_PRESTAMO = :ID_PRESTAMO";
-        $stmt_fecha_desembolso = $conectar->prepare($sql_fecha_desembolso);
-        $stmt_fecha_desembolso->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-        $stmt_fecha_desembolso->execute();
-        $fecha_desembolso = $stmt_fecha_desembolso->fetch(PDO::FETCH_COLUMN);
+            // Consulta SQL para obtener la fecha de desembolso del préstamo
+            $sql_fecha_desembolso = "SELECT FECHA_DE_DESEMBOLSO FROM tbl_mp_prestamos WHERE ID_PRESTAMO = :ID_PRESTAMO";
+            $stmt_fecha_desembolso = $conectar->prepare($sql_fecha_desembolso);
+            $stmt_fecha_desembolso->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmt_fecha_desembolso->execute();
+            $fecha_desembolso = $stmt_fecha_desembolso->fetch(PDO::FETCH_COLUMN);
 
-        // Verificar si la fecha de desembolso está establecida
-        if (!empty($fecha_desembolso)) {
-            // Si la fecha de desembolso está establecida, el préstamo ya ha sido desembolsado
-            echo json_encode(array('message' => 'El préstamo ya ha sido desembolsado anteriormente'));
-            return;
+            // Verificar si la fecha de desembolso está establecida
+            if (!empty($fecha_desembolso)) {
+                // Si la fecha de desembolso está establecida, el préstamo ya ha sido desembolsado
+                echo json_encode(array('message' => 'El préstamo ya ha sido desembolsado anteriormente'));
+                return;
+            }
+
+            // Si la fecha de desembolso no está establecida, proceder con el desembolso
+            $date = new DateTime(date("Y-m-d H:i:s"));
+            $dateMod = $date->modify("-7 hours");
+            $dateNew = $dateMod->format("Y-m-d H:i:s");
+
+            // Consulta SQL para actualizar la fecha de desembolso
+            $sql = "UPDATE tbl_mp_prestamos SET FECHA_DE_DESEMBOLSO = :FECHA_DE_DESEMBOLSO, DESEMBOLSADO_POR = :DESEMBOLSADO_POR WHERE ID_PRESTAMO = :ID_PRESTAMO";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmt->bindParam(':FECHA_DE_DESEMBOLSO', $dateNew, PDO::PARAM_STR);
+            $stmt->bindParam(':DESEMBOLSADO_POR', $DESEMBOLSADO_POR, PDO::PARAM_STR);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                echo json_encode(array('message' => 'Desembolso realizado correctamente'));
+            } else {
+                echo json_encode(array('message' => 'No se realizó ningún desembolso, o el préstamo no existe'));
+            }
+        } catch (PDOException $e) {
+            echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
         }
-
-        // Si la fecha de desembolso no está establecida, proceder con el desembolso
-        $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-7 hours");
-        $dateNew = $dateMod->format("Y-m-d H:i:s");
-
-        // Consulta SQL para actualizar la fecha de desembolso
-        $sql = "UPDATE tbl_mp_prestamos SET FECHA_DE_DESEMBOLSO = :FECHA_DE_DESEMBOLSO WHERE ID_PRESTAMO = :ID_PRESTAMO";
-        $stmt = $conectar->prepare($sql);
-        $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-        $stmt->bindParam(':FECHA_DE_DESEMBOLSO', $dateNew, PDO::PARAM_STR);
-       // $stmt->bindParam(':DESEMBOLSADO_POR', $DESEMBOLSADO_POR, PDO::PARAM_STR);
-        $stmt->execute();
-
-        if ($stmt->rowCount() > 0) {
-            echo json_encode(array('message' => 'Desembolso realizado correctamente'));
-        } else {
-            echo json_encode(array('message' => 'No se realizó ningún desembolso, o el préstamo no existe'));
-        }
-    } catch (PDOException $e) {
-        echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
     }
-}
+
 
     public function obtenerEstadoPrestamo($ID_PRESTAMO)
     {

@@ -3,6 +3,10 @@ session_start();
 require "../../Config/conexion.php";
 require_once "../../Modelos/prestamo.php"; // Asegúrate de incluir el archivo correcto
 
+$id_usuario = $_SESSION['id_usuario'];
+$usuario = $_SESSION['usuario'];
+$id_rol = $_SESSION['id_rol'];
+
 if (isset($_GET['ID_PRESTAMO'])) {
     $ID_PRESTAMO = $_GET['ID_PRESTAMO'];
 } else {

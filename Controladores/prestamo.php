@@ -81,7 +81,7 @@ switch ($_GET["op"]) {
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s");
         $datos = $com->desembolso_prestamo($ID_PRESTAMO , $_SESSION['usuario']);
-        //echo json_encode(["message" => "Desembolso realizado Exitosamente."]);
+       // echo json_encode(["message" => "Desembolso realizado Exitosamente."]);
         $bit->insert_bitacora($dateNew, "DESEMBOLSO", "SE DESEMBOLSO CHEQUE DEL PRESTAMO: $ID_PRESTAMO", $_SESSION['id_usuario'], 30, $_SESSION['usuario'], $dateNew);
     break;
 

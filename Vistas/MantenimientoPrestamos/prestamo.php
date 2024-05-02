@@ -530,13 +530,13 @@ if (!isset($_SESSION['usuario'])) {
                         if (parseInt(permisos[0]['PERMISOS_ACTUALIZACION']) === 1) {
                             row += '<i class="fas fa-money-bill-wave text-success icono icon-lg" id="DesembolsoButton" onclick="DesembolsoPrestamo(' + prestamo.ID_PRESTAMO + ')" title="Desembolso"></i>';
 
+
+                            row += '<i class="fas fa-money-check-alt text-secondary icono icon-lg crear-movimiento" data-id="' + prestamo.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + prestamo.ID_EMPLEADO + ')" title="Movimiento"></i>';
+
                         }
 
 
                         if (parseInt(permisos[0]['PERMISOS_INSERCION']) === 1) {
-                            row += '<i class="fas fa-money-check-alt text-secondary icono icon-lg crear-movimiento" data-id="' + prestamo.ID_EMPLEADO + '" onclick="redirectToIngresarPrestamo(' + prestamo.ID_EMPLEADO + ')" title="Movimiento"></i>';
-
-
                             row += '<i class="fas fa-receipt text-orange icono icon-lg" id="ReciboButton" onclick="redirectToReciboPrestamo(' + prestamo.ID_PRESTAMO + ')" title="Recibo"></i>';
                         }
 
@@ -883,6 +883,7 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
+       // var DESEMBOLSADO_POR = '<?php echo $_SESSION['usuario']; ?>';
         function realizarDesembolso(ID_PRESTAMO) {
             // Realizar una solicitud FETCH al servidor para desembolsar el préstamo
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=desembolsoPrestamo', {
@@ -893,6 +894,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     body: JSON.stringify({
                         "ID_PRESTAMO": ID_PRESTAMO
+                       // "DESEMBOLSADO_POR": DESEMBOLSADO_POR // Enviar el valor de la variable de sesión
                     })
                 })
                 .then(response => {
