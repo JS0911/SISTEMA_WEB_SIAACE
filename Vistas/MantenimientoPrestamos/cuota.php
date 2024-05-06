@@ -537,6 +537,7 @@ if (!isset($_SESSION['usuario'])) {
 
     <script>
         var permisos = <?php echo json_encode($permisos); ?>;
+        var usuarioP = <?php echo json_encode($usuario); ?>;
 
         //FUNCION DE CUOTA ACTUAL                                       
         function Lista_CuotaActual() {
@@ -770,7 +771,6 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
-        
 
         function PagoTotal(ID_PLANP) {
             // Obtener el estado actual del pago
@@ -795,20 +795,14 @@ if (!isset($_SESSION['usuario'])) {
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({
-                                    "ID_PPAGO": ID_PLANP
+                                    "ID_PPAGO": ID_PLANP,
+                                    "CREADO_POR" :  usuarioP
                                 })
                             })
                             .then(response => response.json())
                             .then(data => {
                                 // Verificar si el estado es "PAGADO"
-                                if (data === 'PAGADO') {
-                                    Swal.fire({
-                                        icon: 'warning',
-                                        title: 'Pago ya realizado',
-                                        text: 'Esta cuota ya ha sido pagada.'
-                                    });
-                                } else {
-                                    // Procesar la respuesta del servidor si es necesario
+                                if (data.message === 'Pago De Cuota Total Realizado') {
                                     Swal.fire({
                                         icon: 'success',
                                         title: 'Pago Realizado',
@@ -823,6 +817,7 @@ if (!isset($_SESSION['usuario'])) {
                                                 },
                                                 body: JSON.stringify({
                                                     "ID_PPAGO": ID_PLANP
+                                                    
                                                 })
                                             })
                                             .then(response => response.json())
@@ -840,6 +835,13 @@ if (!isset($_SESSION['usuario'])) {
                                             });
 
                                         location.reload();
+                                    });
+                                } else {
+                                    // Si el pago ya está realizado, mostrar una alerta
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Pago ya realizado',
+                                        text: 'Esta cuota ya ha sido pagada.'
                                     });
                                 }
                             })
@@ -860,8 +862,15 @@ if (!isset($_SESSION['usuario'])) {
                 })
                 .catch(error => {
                     console.error('Error en la solicitud:', error);
+                    // Mostrar un mensaje de error al usuario
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en la solicitud',
+                        text: 'Se produjo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.'
+                    });
                 });
         }
+
 
         /////////////////////////ESTO FUNCIONA BIEN 
         function EstadoFinalizado(ID_PLANP, ESTADO) {
@@ -900,14 +909,14 @@ if (!isset($_SESSION['usuario'])) {
         function tipoPago(ID_PLANP) {
             //console.log(ID_PLANP);
             // Verificar el estado de las casillas de verificación
-           // var pagoInteres = document.getElementById('pagoInteres').checked;
+            // var pagoInteres = document.getElementById('pagoInteres').checked;
             var pagoTotal = document.getElementById('pagoTotal').checked;
 
             // Ejecutar funciones según las casillas de verificación seleccionadas
-           /*  if (pagoInteres) {
-                PagoInteres(ID_PLANP);
-                //console.log("Entra Interes");
-            } */
+            /*  if (pagoInteres) {
+                 PagoInteres(ID_PLANP);
+                 //console.log("Entra Interes");
+             } */
             if (pagoTotal) {
                 PagoTotal(ID_PLANP);
                 //EstadoFinalizado(ID_PLANP);

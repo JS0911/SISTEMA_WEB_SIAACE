@@ -37,7 +37,7 @@ switch ($_GET["op"]) {
         echo json_encode($datos);
     break;
     case "PagoTotalCuota":
-        $datos = $com->PagoTCuota($body["ID_PPAGO"]);
+        $datos = $com->PagoTCuota($body["ID_PPAGO"],$body["CREADO_POR"]);
         echo json_encode($datos);
     break;
     case "PagoCapital":

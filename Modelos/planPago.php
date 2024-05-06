@@ -24,7 +24,7 @@ class PlanPago extends Conectar
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
+
     public function calcularCuota($TASA, $PLAZO, $MONTO_SOLICITADO, $PLAZOQUINCENAS)
     {
         try {
@@ -170,28 +170,38 @@ class PlanPago extends Conectar
             return "Error al insertar registros: " . $e->getMessage();
         }
     }
-   
-    public function PagoTCuota($ID_PPAGO)
+
+    public function PagoTCuota($ID_PPAGO,$CREADO_POR)
     {
         // Conectar a la base de datos
         $conectar = parent::conexion();
         parent::set_names();
 
         try {
+            $sql1 = "UPDATE tbl_mp_planp SET MONTO_PAGADO_CAP = MONTO_ADEUDADO_CAP , MONTO_ADEUDADO_CAP = 0, MONTO_PAGADO_ITS = MONTO_ADEUDADO_ITS, MONTO_ADEUDADO_ITS = 0 WHERE ID_PLANP = :ID_PLANP";
 
-            $sql1 = "UPDATE tbl_mp_planp SET MONTO_PAGADO_CAP = MONTO_ADEUDADO_CAP , MONTO_ADEUDADO_CAP = 0, MONTO_PAGADO_ITS = MONTO_ADEUDADO_ITS, MONTO_ADEUDADO_ITS = 0
-            WHERE ID_PLANP = :ID_PLANP";
+            $sql2 = "INSERT INTO tbl_transacciones (MONTO, CREADO_POR, FECHA, ID_TIPO_TRANSACCION, DESCRIPCION) 
+                 SELECT (MONTO_PAGADO_CAP + MONTO_PAGADO_ITS) AS MONTO, :CREADO_POR, NOW(), 8, CONCAT('Pago total de la cuota ', NUMERO_CUOTA, ' del prestamo ', ID_PRESTAMO) AS DESCRIPCION
+                 FROM tbl_mp_planp 
+                 WHERE ID_PLANP = :ID_PLANP";
 
+           
 
-            // // Preparar la consulta
+            // Preparar la consulta para el primer SQL
             $stmt1 = $conectar->prepare($sql1);
             $stmt1->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
+            $stmt1->execute();
 
-            $stmt1->execute(); // Ejecutar la consulta de actualización
+
+            // // Preparar la consulta para el segundo SQL
+            $stmt2 = $conectar->prepare($sql2);
+            $stmt2->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
+            $stmt2->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR); // Ajusta el tipo de dato según corresponda
+            $stmt2->execute();
+
             return [
                 'message' => 'Pago De Cuota Total Realizado',
             ];
-        
         } catch (PDOException $e) {
             return "Error al hacer pago total de la cuota: " . $e->getMessage();
         }
@@ -255,177 +265,180 @@ class PlanPago extends Conectar
 
 
     public function PAGOT_ESTADO($ID_PPAGO)
-{
-    try {
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+
+            $date = new DateTime(date("Y-m-d H:i:s"));
+            $dateMod = $date->modify("-7 hours");
+            $dateNew = $dateMod->format("Y-m-d H:i:s");
+
+            // Consulta SQL para actualizar el estado del préstamo a "PAGADO" y la fecha de aprobación
+            $sql = "UPDATE tbl_mp_planp SET ESTADO = 'PAGADO', FECHA_R_PAGO = :FECHA_R_PAGO WHERE ID_PLANP = :ID_PLANP";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
+            $stmt->bindParam(':FECHA_R_PAGO', $dateNew, PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                echo json_encode(array('message' => 'Préstamo aprobado correctamente'));
+            } else {
+                echo json_encode(array('message' => 'No se realizó ningún pago, o el pago no existe'));
+            }
+        } catch (PDOException $e) {
+            echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
+        }
+    }
+
+    private function marcarPrestamoComoEnCurso($ID_PRESTAMO)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+
+            // Consulta SQL para actualizar el estado del préstamo a "EN CURSO" en tbl_mp_prestamos
+            $sql = "UPDATE tbl_mp_prestamos SET ESTADO_PRESTAMO = 'EN CURSO' WHERE ID_PRESTAMO = :ID_PRESTAMO";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
+        }
+    }
+
+    public function EstadoFinalizado($ID_PPAGO)
+    {
+        try {
+            // Obtener el ID_PRESTAMO correspondiente al ID_PPAGO
+            $ID_PRESTAMO = $this->obtenerIdPrestamo($ID_PPAGO);
+
+            // Contar cuántas filas están pendientes para el ID_PRESTAMO dado
+            $numero_cuotas_pendientes = $this->contarCuotasPendientes($ID_PRESTAMO);
+            $mensaje1 = "Prestamo Finalizado, No hay cuotas pendientes. ";
+            $mensaje2 = "Marcado como EN CURSO ,Número de cuotas pendientes: $numero_cuotas_pendientes";
+
+            // Si no hay cuotas pendientes, marcar el préstamo como finalizado
+            if ($numero_cuotas_pendientes < 1) {
+                $this->marcarPrestamoComoFinalizado($ID_PRESTAMO);
+                // Si hay cuotas NO HAY pendientes, cambia de estado
+                // echo json_encode(array('message' => $mensaje1));
+                return [
+                    'message1' => $mensaje1,
+                ];
+            } else {
+                // Si hay cuotas pendientes, mostrar el número de cuotas pendientes
+                // Verificar si es la primera cuota y cambiar el estado del préstamo a "EN CURSO"
+                $cuota_pagada = $this->verificarPrimeraCuotaPagada($ID_PRESTAMO);
+                if ($cuota_pagada) {
+                    $this->marcarPrestamoComoEnCurso($ID_PRESTAMO);
+                }
+                // echo json_encode(array('message' => $mensaje2));
+                return [
+                    'message2' => $mensaje2,
+                ];
+            }
+        } catch (PDOException $e) {
+            // Manejar cualquier error de base de datos
+            echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
+        }
+    }
+
+    private function verificarPrimeraCuotaPagada($ID_PRESTAMO)
+    {
         $conectar = parent::conexion();
         parent::set_names();
 
-        $date = new DateTime(date("Y-m-d H:i:s"));
-        $dateMod = $date->modify("-7 hours");
-        $dateNew = $dateMod->format("Y-m-d H:i:s");
+        try {
+            // Consulta SQL para verificar si la primera cuota ha sido pagada
+            $sql = "SELECT COUNT(*) AS cuotas_pagadas FROM tbl_mp_planp WHERE ID_PRESTAMO = :ID_PRESTAMO AND ESTADO = 'PAGADO'";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmt->execute();
 
-        // Consulta SQL para actualizar el estado del préstamo a "PAGADO" y la fecha de aprobación
-        $sql = "UPDATE tbl_mp_planp SET ESTADO = 'PAGADO', FECHA_R_PAGO = :FECHA_R_PAGO WHERE ID_PLANP = :ID_PLANP";
+            // Obtener el resultado como un array asociativo
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Devolver true si la primera cuota ha sido pagada, false en caso contrario
+            return $resultado['cuotas_pagadas'] > 0;
+        } catch (PDOException $e) {
+            // Manejar errores de PDO
+            throw new Exception("Error al verificar si la primera cuota ha sido pagada: " . $e->getMessage());
+        }
+    }
+
+
+    private function obtenerIdPrestamo($ID_PPAGO)
+    {
+        $conectar = parent::conexion();
+        parent::set_names();
+
+        // Consulta SQL para obtener el ID_PRESTAMO correspondiente al ID_PPAGO
+        $sql = "SELECT ID_PRESTAMO FROM tbl_mp_planp WHERE ID_PLANP = :ID_PLANP";
         $stmt = $conectar->prepare($sql);
         $stmt->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
-        $stmt->bindParam(':FECHA_R_PAGO', $dateNew, PDO::PARAM_STR);
-        $stmt->execute();
-        if ($stmt->rowCount() > 0) {
-            echo json_encode(array('message' => 'Préstamo aprobado correctamente'));
-            
-        } else {
-            echo json_encode(array('message' => 'No se realizó ningún pago, o el pago no existe'));
-        }
-    } catch (PDOException $e) {
-        echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
-    }
-}
- 
-private function marcarPrestamoComoEnCurso($ID_PRESTAMO) {
-    try {
-        $conectar = parent::conexion();
-        parent::set_names();
-
-        // Consulta SQL para actualizar el estado del préstamo a "EN CURSO" en tbl_mp_prestamos
-        $sql = "UPDATE tbl_mp_prestamos SET ESTADO_PRESTAMO = 'EN CURSO' WHERE ID_PRESTAMO = :ID_PRESTAMO";
-        $stmt = $conectar->prepare($sql);
-        $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-        $stmt->execute();
-
-    } catch (PDOException $e) {
-        echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
-    }
-}
-
-public function EstadoFinalizado($ID_PPAGO) {
-    try {
-        // Obtener el ID_PRESTAMO correspondiente al ID_PPAGO
-        $ID_PRESTAMO = $this->obtenerIdPrestamo($ID_PPAGO);
-
-        // Contar cuántas filas están pendientes para el ID_PRESTAMO dado
-        $numero_cuotas_pendientes = $this->contarCuotasPendientes($ID_PRESTAMO);
-        $mensaje1="Prestamo Finalizado, No hay cuotas pendientes. ";
-        $mensaje2="Marcado como EN CURSO ,Número de cuotas pendientes: $numero_cuotas_pendientes";
-
-        // Si no hay cuotas pendientes, marcar el préstamo como finalizado
-        if ($numero_cuotas_pendientes < 1) {
-            $this->marcarPrestamoComoFinalizado($ID_PRESTAMO);
-            // Si hay cuotas NO HAY pendientes, cambia de estado
-            // echo json_encode(array('message' => $mensaje1));
-            return [
-                'message1' => $mensaje1,
-            ];
-        } else {
-            // Si hay cuotas pendientes, mostrar el número de cuotas pendientes
-            // Verificar si es la primera cuota y cambiar el estado del préstamo a "EN CURSO"
-            $cuota_pagada = $this->verificarPrimeraCuotaPagada($ID_PRESTAMO);
-            if ($cuota_pagada) {
-                $this->marcarPrestamoComoEnCurso($ID_PRESTAMO);
-            }
-            // echo json_encode(array('message' => $mensaje2));
-            return [
-                'message2' => $mensaje2,
-            ];
-        }
-    } catch (PDOException $e) {
-        // Manejar cualquier error de base de datos
-        echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
-    }
-}
-
-private function verificarPrimeraCuotaPagada($ID_PRESTAMO) {
-    $conectar = parent::conexion();
-    parent::set_names();
-
-    try {
-        // Consulta SQL para verificar si la primera cuota ha sido pagada
-        $sql = "SELECT COUNT(*) AS cuotas_pagadas FROM tbl_mp_planp WHERE ID_PRESTAMO = :ID_PRESTAMO AND ESTADO = 'PAGADO'";
-        $stmt = $conectar->prepare($sql);
-        $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-        $stmt->execute();
-
-        // Obtener el resultado como un array asociativo
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Devolver true si la primera cuota ha sido pagada, false en caso contrario
-        return $resultado['cuotas_pagadas'] > 0;
-    } catch (PDOException $e) {
-        // Manejar errores de PDO
-        throw new Exception("Error al verificar si la primera cuota ha sido pagada: " . $e->getMessage());
-    }
-}
-
-
-private function obtenerIdPrestamo($ID_PPAGO) {
-    $conectar = parent::conexion();
-    parent::set_names();
-
-    // Consulta SQL para obtener el ID_PRESTAMO correspondiente al ID_PPAGO
-    $sql = "SELECT ID_PRESTAMO FROM tbl_mp_planp WHERE ID_PLANP = :ID_PLANP";
-    $stmt = $conectar->prepare($sql);
-    $stmt->bindParam(':ID_PLANP', $ID_PPAGO, PDO::PARAM_INT);
-    $stmt->execute();
-
-    // Obtener el resultado como un array asociativo
-    $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($resultado) {
-        // Devolver el ID_PRESTAMO encontrado
-        return $resultado['ID_PRESTAMO'];
-    } else {
-        // Manejar el caso en que no se encuentre el ID_PRESTAMO
-        throw new Exception("No se encontró el ID_PRESTAMO para el ID_PPAGO proporcionado.");
-    }
-}
-
-private function contarCuotasPendientes($ID_PRESTAMO) {
-    $conectar = parent::conexion();
-    parent::set_names();
-
-    try {
-        // Consulta SQL para contar las cuotas pendientes
-        $sql = "SELECT COUNT(*) AS cuotas_pendientes FROM tbl_mp_planp WHERE ID_PRESTAMO = :ID_PRESTAMO AND ESTADO = 'PENDIENTE'";
-        $stmt = $conectar->prepare($sql);
-        $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
         $stmt->execute();
 
         // Obtener el resultado como un array asociativo
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($resultado) {
-            // Devolver el número de cuotas pendientes
-            return $resultado['cuotas_pendientes'];
+            // Devolver el ID_PRESTAMO encontrado
+            return $resultado['ID_PRESTAMO'];
         } else {
-            // Si no se encuentra ningún resultado, devolver 0
-            return 0;
+            // Manejar el caso en que no se encuentre el ID_PRESTAMO
+            throw new Exception("No se encontró el ID_PRESTAMO para el ID_PPAGO proporcionado.");
         }
-    } catch (PDOException $e) {
-        // Manejar errores de PDO
-        throw new Exception("Error al contar las cuotas pendientes: " . $e->getMessage());
     }
-}
 
-private function marcarPrestamoComoFinalizado($ID_PRESTAMO) {
-    try {
+    private function contarCuotasPendientes($ID_PRESTAMO)
+    {
         $conectar = parent::conexion();
         parent::set_names();
 
-        // Consulta SQL para actualizar el estado del préstamo a "FINALIZADO" en tbl_mp_prestamos
-        $sql1 = "UPDATE tbl_mp_prestamos SET ESTADO_PRESTAMO = 'FINALIZADO' WHERE ID_PRESTAMO = :ID_PRESTAMO";
-        $stmt1 = $conectar->prepare($sql1);
-        $stmt1->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-        $stmt1->execute();
+        try {
+            // Consulta SQL para contar las cuotas pendientes
+            $sql = "SELECT COUNT(*) AS cuotas_pendientes FROM tbl_mp_planp WHERE ID_PRESTAMO = :ID_PRESTAMO AND ESTADO = 'PENDIENTE'";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmt->execute();
 
-        // Consulta SQL para actualizar el estado del préstamo a "FINALIZADO" en tbl_mp_planp
-        $sql2 = "UPDATE tbl_mp_planp SET ESTADO = 'FINALIZADO' WHERE ID_PRESTAMO = :ID_PRESTAMO";
-        $stmt2 = $conectar->prepare($sql2);
-        $stmt2->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
-        $stmt2->execute();
+            // Obtener el resultado como un array asociativo
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    } catch (PDOException $e) {
-        echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
+            if ($resultado) {
+                // Devolver el número de cuotas pendientes
+                return $resultado['cuotas_pendientes'];
+            } else {
+                // Si no se encuentra ningún resultado, devolver 0
+                return 0;
+            }
+        } catch (PDOException $e) {
+            // Manejar errores de PDO
+            throw new Exception("Error al contar las cuotas pendientes: " . $e->getMessage());
+        }
     }
-}
+
+    private function marcarPrestamoComoFinalizado($ID_PRESTAMO)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+
+            // Consulta SQL para actualizar el estado del préstamo a "FINALIZADO" en tbl_mp_prestamos
+            $sql1 = "UPDATE tbl_mp_prestamos SET ESTADO_PRESTAMO = 'FINALIZADO' WHERE ID_PRESTAMO = :ID_PRESTAMO";
+            $stmt1 = $conectar->prepare($sql1);
+            $stmt1->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmt1->execute();
+
+            // Consulta SQL para actualizar el estado del préstamo a "FINALIZADO" en tbl_mp_planp
+            $sql2 = "UPDATE tbl_mp_planp SET ESTADO = 'FINALIZADO' WHERE ID_PRESTAMO = :ID_PRESTAMO";
+            $stmt2 = $conectar->prepare($sql2);
+            $stmt2->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmt2->execute();
+        } catch (PDOException $e) {
+            echo json_encode(array('message' => 'Error en la solicitud: ' . $e->getMessage()));
+        }
+    }
 
     public function PAGOP_ESTADO($ID_PPAGO)
     {

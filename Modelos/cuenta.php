@@ -188,6 +188,7 @@ class cuenta extends Conectar
         $sql = "UPDATE tbl_mc_cuenta SET SALDO = SALDO + :SALDO  WHERE ID_CUENTA = :ID_CUENTA";
         $sql2 = "INSERT INTO tbl_transacciones (`MONTO`, `ID_CUENTA`, `ID_TIPO_TRANSACCION`,`FECHA`,`CREADO_POR`,`ESTADO`) VALUES (:SALDO_D,:ID_CUENTA_D, 1, NOW(),:CREADO_POR,:ESTADO)";
 
+        
         // En sql2 la insercion del estado del deposito esta directamente en el codigo.
 
         $stmt = $conectar->prepare($sql);
