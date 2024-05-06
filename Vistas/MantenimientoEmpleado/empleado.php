@@ -44,6 +44,7 @@ Khaterine Ordoñez         12/03/2024                  cambio de iconos
 Khaterine Ordoñez         25/03/2024                  modificacion de modal agregar y editar
 Khaterine Ordoñez         06/04/2024                  se agrego switch en tabla 
 khaterine Ordoñez         23/04/2024                   correcion en repotes
+khaterine Ordoñez         05/05/2024                   correcion en validadcion y campos requeridos en creacion y edicion 
 ------------------------------------------------------------------------->
 <?php
 
@@ -311,6 +312,11 @@ if (!isset($_SESSION['usuario'])) {
         /* input:checked+.slider:before {
             transform: translateX(26px);
         } */
+
+        .campo-requerido {
+    color: red;
+    margin-left: 5px; 
+}
     </style>
 </head>
 
@@ -537,49 +543,49 @@ if (!isset($_SESSION['usuario'])) {
                                 <!-- Formulario de creación -->
                                 <form>
                                     <div class="form-group">
-                                        <label for="dni">DNI </label>
+                                        <label for="dni">DNI <span class="campo-requerido">*</span> </label>
                                         <input type="text" maxlength="45" class="form-control" id="agregar-dni" required pattern="[0-9]+" title="Solo se permiten números">
                                         <div id="mensaje1"></div>
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="Pnombre">Primer Nombre</label>
+                                                <label for="Pnombre">Primer Nombre <span class="campo-requerido">*</span></label>
                                                 <input type="text" maxlength="15" class="form-control" id="agregar-Pnombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                                 <div id="mensaje2"></div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="Snombre">Segundo Nombre</label>
-                                                <input type="text" maxlength="15" class="form-control" id="agregar-Snombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                                <input type="text" maxlength="15" class="form-control" id="agregar-Snombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" required="false">
                                                 <div id="mensaje3"></div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="Papellido">Primer Apellido</label>
+                                                <label for="Papellido">Primer Apellido <span class="campo-requerido">*</span></label>
                                                 <input type="text" maxlength="15" class="form-control" id="agregar-Papellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                                 <div id="mensaje4"></div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="Sapellido">Segundo Apellido</label>
-                                                <input type="text" maxlength="15" class="form-control" id="agregar-Sapellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
+                                                <input type="text" maxlength="15" class="form-control" id="agregar-Sapellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()" required="false">
                                                 <div id="mensaje5"></div>
                                             </div>
                                         </div>
 
 
-                                        <label for="agregar-email">Email</label>
+                                        <label for="agregar-email">Email <span class="campo-requerido">*</span></label>
                                         <input type="email" maxlength="45" class="form-control" id="agregar-email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida">
                                         <div id="mensaje6"></div>
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="salario">Salario</label>
+                                                <label for="salario">Salario <span class="campo-requerido">*</span></label>
                                                 <input type="text" class="form-control" id="agregar-salario" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (hasta 8 dígitos enteros y 2 decimales)">
                                                 <div id="mensaje7"></div>
                                             </div>
                                             <div class="col-md-6">
 
-                                                <label for="telefono">Teléfono</label>
+                                                <label for="telefono">Teléfono <span class="campo-requerido">*</span></label>
                                                 <input type="text" maxlength="45" class="form-control" id="agregar-telefono" required pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -)">
                                                 <div id="mensaje9"></div>
                                             </div>
@@ -587,14 +593,14 @@ if (!isset($_SESSION['usuario'])) {
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="direccion1">Dirección 1</label>
+                                                <label for="direccion1">Dirección 1 <span class="campo-requerido">*</span></label>
                                                 <textarea maxlength="45" class="form-control" id="agregar-direccion1" required pattern="^[A-Za-z0-9\s.,-]+$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()"></textarea>
 
                                                 <div id="mensaje10"></div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="direccion2">Dirección 2</label>
-                                                <textarea maxlength="45" class="form-control" id="agregar-direccion2" required pattern="^[A-Za-z0-9\s.,-]+$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()"></textarea>
+                                                <textarea maxlength="45" class="form-control" id="agregar-direccion2" required pattern="^[A-Za-z0-9\s.,-]+$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()" required="false"></textarea>
 
                                                 <div id="mensaje11"></div>
                                             </div>
@@ -617,7 +623,7 @@ if (!isset($_SESSION['usuario'])) {
                                                 $sucursales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                                 ?>
-                                                <label for="sucursal">Sucursal</label>
+                                                <label for="sucursal">Sucursal <span class="campo-requerido">*</span></label>
                                                 <select class="form-control" id="agregar-sucursal" name="idSucursal" required>
                                                     <option value="" disabled selected>Selecciona una opción</option>
                                                     <?php foreach ($sucursales as $sucursal) : ?>
@@ -640,7 +646,7 @@ if (!isset($_SESSION['usuario'])) {
                                                 // Obtener los resultados en un array asociativo
                                                 $cargo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 ?>
-                                                <label for="cargo">Cargo</label>
+                                                <label for="cargo">Cargo <span class="campo-requerido">*</span></label>
                                                 <select class="form-control" id="agregar-cargo" name="idCargo" required>
                                                     <option value="" disabled selected>Selecciona una opción</option>
                                                     <?php foreach ($cargo as $cargo) : ?>
@@ -653,7 +659,7 @@ if (!isset($_SESSION['usuario'])) {
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="id-estado">Estado</label>
+                                                <label for="id-estado">Estado <span class="campo-requerido">*</span></label>
                                                 <select class="form-control" id="agregar-estado" name="IdEstado" required>
                                                     <option value="" disabled selected>Selecciona una opción</option>
                                                     <?php foreach ($Estados as $Estado) : ?>
@@ -695,7 +701,7 @@ if (!isset($_SESSION['usuario'])) {
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label for="dni">DNI </label>
+                                                <label for="dni">DNI <span class="campo-requerido">*</span> </label>
                                                 <input type="text" maxlength="45" class="form-control" id="editar-dni" required pattern="[0-9]+" title="Solo se permiten números">
                                                 <div id="mensaje12"></div>
                                             </div>
@@ -703,7 +709,7 @@ if (!isset($_SESSION['usuario'])) {
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="Pnombre">Primer Nombre</label>
+                                                <label for="Pnombre">Primer Nombre <span class="campo-requerido">*</span></label>
                                                 <input type="text" maxlength="15" class="form-control" id="editar-Pnombre" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                                 <div id="mensaje13"></div>
                                             </div>
@@ -717,33 +723,33 @@ if (!isset($_SESSION['usuario'])) {
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="Papellido">Primer Apellido</label>
+                                                <label for="Papellido">Primer Apellido <span class="campo-requerido">*</span></label>
                                                 <input type="text" maxlength="15" class="form-control" id="editar-Papellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                                 <div id="mensaje15"></div>
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label for="Sapellido">Segundo Apellido</label>
+                                                <label for="Sapellido">Segundo Apellido </label>
                                                 <input type="text" maxlength="15" class="form-control" id="editar-Sapellido" required pattern="^(?!\s)(?!.*\s$).*$" title="No se permiten espacios en blanco ni campo vacío" oninput="this.value = this.value.toUpperCase()">
                                                 <div id="mensaje16"></div>
                                             </div>
                                         </div>
 
 
-                                        <label for="agregar-email">Email</label>
+                                        <label for="agregar-email">Email <span class="campo-requerido">*</span></label>
                                         <input type="email" maxlength="45" class="form-control" id="editar-email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingrese una dirección de correo electrónico válida">
                                         <div id="mensaje17"></div>
 
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="salario">Salario</label>
+                                                <label for="salario">Salario <span class="campo-requerido">*</span></label>
                                                 <input type="text" class="form-control" id="editar-salario" required pattern="\d{1,8}(\.\d{0,2})?" title="Ingrese un salario válido (por ejemplo, 1000.00)">
                                                 <div id="mensaje18"></div>
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label for="telefono">Teléfono</label>
+                                                <label for="telefono">Teléfono <span class="campo-requerido">*</span></label>
                                                 <input type="text" maxlength="45" class="form-control" id="editar-telefono" required pattern="^[0-9-]+$" title="Ingrese un número de teléfono válido (solo números y -)">
                                                 <div id="mensaje20"></div>
                                             </div>
@@ -751,7 +757,7 @@ if (!isset($_SESSION['usuario'])) {
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="direccion1">Dirección 1</label>
+                                                <label for="direccion1">Dirección 1 <span class="campo-requerido">*</span></label>
                                                 <textarea maxlength="45" class="form-control" id="editar-direccion1" required pattern="^[A-Za-z0-9\s.,-]*$" title="Ingrese una dirección válida (mayúsculas y caracteres)" oninput="this.value = this.value.toUpperCase()"></textarea>
                                                 <div id="mensaje21"></div>
                                             </div>
@@ -782,7 +788,7 @@ if (!isset($_SESSION['usuario'])) {
 
                                                 ?>
 
-                                                <label for="sucursal">Sucursal</label>
+                                                <label for="sucursal">Sucursal <span class="campo-requerido">*</span></label>
                                                 <select class="form-control" id="editar-sucursal" name="idSucursal" required>
                                                     <option value="" disabled selected>Selecciona una opción</option>
                                                     <?php foreach ($sucursales as $sucursal) : ?>
@@ -806,7 +812,7 @@ if (!isset($_SESSION['usuario'])) {
                                                 // Obtener los resultados en un array asociativo
                                                 $cargo = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 ?>
-                                                <label for="cargo">Cargo</label>
+                                                <label for="cargo">Cargo <span class="campo-requerido">*</span></label>
                                                 <select class="form-control" id="editar-cargo" name="idCargo" required>
                                                     <option value="" disabled selected>Selecciona una opción</option>
                                                     <?php foreach ($cargo as $cargo) : ?>
@@ -817,7 +823,7 @@ if (!isset($_SESSION['usuario'])) {
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="id-estado">Estado</label>
+                                                <label for="id-estado">Estado <span class="campo-requerido">*</span></label>
                                                 <select class="form-control" id="editar-estado" name="IdEstado" required>
                                                     <option value="" disabled selected>Selecciona una opción</option>
                                                     <?php foreach ($Estados as $Estado) : ?>
@@ -1128,8 +1134,8 @@ if (!isset($_SESSION['usuario'])) {
                 var cargo = document.getElementById("agregar-cargo").value; // Obtener el valor del select
                 var estado = document.getElementById("agregar-estado").value; // Obtener el valor del select
 
-                if (dni == "" || Pnombre == "" || Snombre == "" || Papellido == "" || Sapellido == "" || email == "" ||
-                    salario == "" || telefono == "" || direccion1 == "" || direccion2 == "" || estado == "" || sucursal == "" || cargo == "") {
+                if (dni == "" || Pnombre == "" ||  Papellido == "" ||  email == "" ||
+                    salario == "" || telefono == "" || direccion1 == "" ||  estado == "" || sucursal == "" || cargo == "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
@@ -1615,14 +1621,17 @@ if (!isset($_SESSION['usuario'])) {
 
         // Función para verificar si todos los campos están llenos
         function checkForm() {
-            const isNombreValido = !contieneCaracteresNoValidos();
-            const isFormValid = dniInput.value.trim() !== '' && PnombreInput.value.trim() !== '' && SnombreInput.value !== '' &&
-                PapellidoInput.value.trim() !== '' && SapellidoInput.value.trim() !== '' && emailInput.value !== '' &&
-                salarioInput.value.trim() !== '' && telefonoInput.value.trim() !== '' && direccion1Input.value.trim() !== '' &&
-                direccion2Input.value.trim() !== '' && sucursalInput.value.trim() !== '' && cargoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
+    const isNombreValido = !contieneCaracteresNoValidos();
+    const isFormValid = dniInput.value.trim() !== '' && PnombreInput.value.trim() !== '' &&
+        PapellidoInput.value.trim() !== '' && emailInput.value !== '' &&
+        salarioInput.value.trim() !== '' && telefonoInput.value.trim() !== '' &&
+        direccion1Input.value.trim() !== '' && sucursalInput.value.trim() !== '' &&
+        cargoInput.value.trim() !== '' && estadoInput.value.trim() !== '';
 
-            guardarButton.disabled = !isFormValid || !isNombreValido;
-        }
+    // Siempre se habilita el botón de guardar si los campos requeridos están completos
+    guardarButton.disabled = !isFormValid || !isNombreValido;
+}
+
 
         // Agrega un evento input a cada campo de entrada
         dniInput.addEventListener('input', checkForm);
@@ -1674,10 +1683,10 @@ if (!isset($_SESSION['usuario'])) {
         // Función para verificar si todos los campos están llenos
         function checkForm() {
             const isNombreValido1 = !contieneCaracteresNoValidos1();
-            const isFormValid = dniInput1.value.trim() !== '' && PnombreInput1.value.trim() !== '' && SnombreInput1.value.trim() !== '' &&
-                PapellidoInput1.value.trim() !== '' && SapellidoInput1.value.trim() !== '' && emailInput1.value.trim() !== '' &&
+            const isFormValid = dniInput1.value.trim() !== '' && PnombreInput1.value.trim() !== '' && 
+                PapellidoInput1.value.trim() !== '' &&  emailInput1.value.trim() !== '' &&
                 salarioInput1.value.trim() !== '' && telefonoInput1.value.trim() !== '' && direccion1Input1.value.trim() !== '' &&
-                direccion2Input1.value.trim() !== '' && sucursalInput1.value.trim() !== '' && cargoInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
+                 sucursalInput1.value.trim() !== '' && cargoInput1.value.trim() !== '' && estadoInput1.value.trim() !== '';
 
             guardarButton1.disabled = !isFormValid || !isNombreValido1;
         }
