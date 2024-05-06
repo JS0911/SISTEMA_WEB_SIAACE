@@ -45,7 +45,7 @@ require '../../PHPMailer/SMTP.php';
 						$mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 					
 						//Recipients
-						$mail->setFrom('SIAACEpruebaIDH@outlook.com', 'IDH');
+						$mail->setFrom('SIAACEpruebaIDH@outlook.com', 'SIAACE - IDH Microfinanciera');
 						$mail->addAddress($email,'Usuario');
 						//Content
 						$mail->isHTML(true);                                  //Set email format to HTML

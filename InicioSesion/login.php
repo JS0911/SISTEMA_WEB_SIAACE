@@ -34,7 +34,10 @@ if ($_POST) {
                     $dateMod = $date->modify("-6 hours");
                     $dateNew = $dateMod->format("Y-m-d H:i:s"); 
                     $bitacora = new bitacora();
-                    $bitacora->insert_bitacora($dateNew, $_SESSION['id_usuario'], 2, "INICIO DE SESION"); 
+                    if($bitacora->obtenervalorBitacora() == 1)
+                    {
+                        $bitacora->insert_bitacora($dateNew, $_SESSION['id_usuario'], 2, "INICIO DE SESION");
+                    }
                     if (isset($_SESSION['usuario'])) {
                         header("Location: index.php");
                         exit();

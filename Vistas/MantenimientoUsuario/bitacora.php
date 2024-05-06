@@ -401,7 +401,7 @@ if (!isset($_SESSION['usuario'])) {
 
 
                         <!-- Boton para limpiar la bitacora -->
-                        <div class="container">
+                        
                             <div class="row">
                                 <div class="col-md-12">
                                     <button type="button" class="btn btn-danger" style="float: left; margin-bottom: 20px;" onclick="LimpiarBitacora()">Limpiar Bitácora</button>
@@ -427,7 +427,6 @@ if (!isset($_SESSION['usuario'])) {
 
                                 </tbody>
                             </table>
-                        </div>
                     </div>
             </main>
             <!-- AQUI FINALIZA EL MANTENIMIENTO DE OBJETOS -->

@@ -45,7 +45,10 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_cargo($CARGO, $DESCRIPCION, $ESTADO, $_SESSION['usuario'], $dateNew);
             echo json_encode(["message" => "Cargo insertado exitosamente."]);
-            $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 26, "INSERTAR");
+            if($bit->obtenervalorBitacora() == 1)
+            {
+                $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 26, "INSERTAR");
+            }
         }
 
         break;
@@ -85,30 +88,46 @@ switch ($_GET["op"]) {
             );
             echo json_encode(["message" => "cargo editado Exitosamente."]);
 
-            //-----------------------------------Decisiones----------------------------------------
             if (strcmp($cargoAntes, $CARGO) != 0) {
-                $bit->insert_bitacoraModificacion($dateNew, $cargoAntes, $CARGO, $_SESSION['id_usuario'], 26, "CARGO", $ID_CARGO, "MODIFICAR");
+                if($bit->obtenervalorBitacora() == 1)
+                {
+                    $bit->insert_bitacoraModificacion($dateNew, $cargoAntes, $CARGO, $_SESSION['id_usuario'], 26, "CARGO", $ID_CARGO, "MODIFICAR");
+                }
+               
             }
-
+ 
             if (strcmp($DescripcionAntes, $DESCRIPCION) != 0) {
-                $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 26, "DESCRIPCIÓN", $ID_CARGO, "MODIFICAR");
+                if($bit->obtenervalorBitacora() == 1)
+                {
+                  $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 26, "DESCRIPCIÓN", $ID_CARGO, "MODIFICAR");  
+                }
+               
             }
-
+ 
             if (strcmp($EstadoAntes, $ESTADO) != 0) {
-                $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 26, "ESTADO", $ID_CARGO, "MODIFICAR");
+                if($bit->obtenervalorBitacora() == 1)
+                {
+                   $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 26, "ESTADO", $ID_CARGO, "MODIFICAR");
+                }
+
+
             }
-        }
+        } 
         break;
 
-    case "EliminarCargo":
+    case "EliminarCargo": 
         $ID_CARGO = $body["ID_CARGO"];
         $datos = $com->eliminar_cargo($ID_CARGO);
         echo json_encode("Cargo eliminado");
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-6 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s");
-        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 26, $ID_CARGO, "ELIMINAR");
+        if($bit->obtenervalorBitacora() == 1)
+        {
+            $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 26, $ID_CARGO, "ELIMINAR");
+        }
         break;
+        
 }
 
 function verificarExistenciaCargo($cargo)

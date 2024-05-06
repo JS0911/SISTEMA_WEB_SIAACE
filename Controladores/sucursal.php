@@ -57,7 +57,11 @@ if (verificarExistenciaSucursal($SUCURSAL) > 0 ) {
 
     // Llamar a la función insert_sucursal con todos los parámetros requeridos
     $datos = $com->insert_sucursal($SUCURSAL, $DESCRIPCION, $DIRECCION, $ID_REGION, $TELEFONO, $ESTADO, $CREADO_POR, $dateNew);
-    
+
+    if($bit->obtenervalorBitacora() == 1)
+    {
+       $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 9, "INSERTAR");
+    }
     // Devolver una respuesta JSON indicando el éxito de la inserción
     echo json_encode(["message" => "Sucursal insertada exitosamente."]);
 }
@@ -100,27 +104,51 @@ if (verificarExistenciaSucursal($SUCURSAL) > 0 ) {
         
          //-----------------------------------------------------Decisiones-------------------------------------------------
          if(strcmp($SucursalAntes, $SUCURSAL) != 0){
-            $bit-> insert_bitacoraModificacion($dateNew, $SucursalAntes, $SUCURSAL, $_SESSION['id_usuario'], 9, "SUCURSAL", $ID_SUCURSAL, "MODIFICAR");
+            if($bit->obtenervalorBitacora() == 1)
+            {
+                $bit-> insert_bitacoraModificacion($dateNew, $SucursalAntes, $SUCURSAL, $_SESSION['id_usuario'], 9, "SUCURSAL", $ID_SUCURSAL, "MODIFICAR");
+            }
+           
         }
-
+ 
         if(strcmp($DescripcionAntes, $DESCRIPCION) != 0 ){
-            $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 9, "DESCRIPCIÓN", $ID_SUCURSAL, "MODIFICAR");
+            if($bit->obtenervalorBitacora() == 1)
+            {
+              $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 9, "DESCRIPCIÓN", $ID_SUCURSAL, "MODIFICAR");  
+            }
+           
         }
-
-        if(strcmp($DireccionAntesoAntes, $DIRECCION) != 0 ){
-            $bit->insert_bitacoraModificacion($dateNew, $DireccionAntes, $DIRECCION, $_SESSION['id_usuario'], 9, "DIRECCIÓN", $ID_SUCURSAL, "MODIFICAR");
+ 
+        if(strcmp($DireccionAntes, $DIRECCION) != 0 ){
+            if($bit->obtenervalorBitacora() == 1)
+            {
+              $bit->insert_bitacoraModificacion($dateNew, $DireccionAntes, $DIRECCION, $_SESSION['id_usuario'], 9, "DIRECCIÓN", $ID_SUCURSAL, "MODIFICAR");  
+            }
+           
         }
-
-        if(strcmp($RegionAntes, $ID_REGION) != 0){
-            $bit-> insert_bitacoraModificacion($dateNew, $RegionAntes, $regionNuevo, $_SESSION['id_usuario'], 9,"REGIÓN", $ID_REGION,"MODIFICAR");
+ 
+        if(strcmp($RegionAntes, $regionNuevo) != 0){
+            if($bit->obtenervalorBitacora() == 1)
+            {
+              $bit-> insert_bitacoraModificacion($dateNew, $RegionAntes, $regionNuevo, $_SESSION['id_usuario'], 9,"REGIÓN", $ID_REGION,"MODIFICAR");  
+            }
+           
         }
-
+ 
         if(strcmp($TelefonoAntes, $TELEFONO) != 0){
-            $bit-> insert_bitacoraModificacion($dateNew, $TelefonoAntes, $TELEFONO, $_SESSION['id_usuario'], 9, "TELEFONO", $ID_SUCURSAL, "MODIFICAR");
+            if($bit->obtenervalorBitacora() == 1)
+            {
+               $bit-> insert_bitacoraModificacion($dateNew, $TelefonoAntes, $TELEFONO, $_SESSION['id_usuario'], 9, "TELÉFONO", $ID_SUCURSAL, "MODIFICAR");
+            }
+           
         }
-
+ 
         if(strcmp($EstadoAntes, $ESTADO) != 0 ){
-            $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 9,"ESTADO USUARIO", $ID_SUCURSAL,"MODIFICAR");
+            if($bit->obtenervalorBitacora() == 1)
+            {
+               $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 9,"ESTADO USUARIO", $ID_SUCURSAL,"MODIFICAR");
+            }
+           
         }
         }
         break;
@@ -131,7 +159,10 @@ if (verificarExistenciaSucursal($SUCURSAL) > 0 ) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-8 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 9, $ID_SUCURSAL, "ELIMINAR");
+        if($bit->obtenervalorBitacora() == 1)
+        {
+          $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 9, $ID_SUCURSAL, "ELIMINAR");  
+        }
         break;
 }
 

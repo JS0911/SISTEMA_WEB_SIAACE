@@ -1,6 +1,7 @@
 <?php
 
 require_once '../../Modelos/perfil.php';
+require_once '../../Modelos/bitacora.php';
 
 function obtenerPerfil($id_usuario)
 {
@@ -48,6 +49,22 @@ function cambiarContrasena($id_usuario, $contrasena)
     $modeloPerfil = new Perfil();
     $row = $modeloPerfil->cambiarContrasena($id_usuario, $contrasena);
     return $row;
+}
+
+function activarBitacora($valor)
+{
+    $modeloBitacora = new bitacora();
+ 
+    if($valor == 1)
+    {
+        $row = $modeloBitacora->encender_bitacora();
+        return $row;
+    }
+    else
+    {
+        $row = $modeloBitacora->apagar_bitacora();
+        return $row;
+    }
 }
 
 ?>

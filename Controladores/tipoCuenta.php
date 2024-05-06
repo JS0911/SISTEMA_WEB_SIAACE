@@ -45,11 +45,11 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_tipoCuenta($TIPO_CUENTA, $DESCRIPCION,$TASA,$ESTADO, $_SESSION['usuario'], $dateNew);
             echo json_encode(["message" => "Rol insertado exitosamente."]);
-            $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 28, "INSERTAR");
+            if($bit->obtenervalorBitacora() == 1)
+            {
+                $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 28, "INSERTAR");
+            }
         }
-
-
-
         break;
 
     case "GetTipoCuenta":
@@ -96,19 +96,31 @@ switch ($_GET["op"]) {
 
             //----------------------------------------------------------------------------Decisiones-----------------------------------------------------------
             if(strcmp($TipoCuentaAntes, $TIPO_CUENTA) != 0){
-                $bit->insert_bitacoraModificacion($dateNew, $TipoCuentaAntes, $TIPO_CUENTA, $_SESSION['id_usuario'], 28, "TIPO CUENTA", $ID_TIPOCUENTA, "MODIFICAR");    
+                if($bit->obtenervalorBitacora() == 1)
+                {
+                    $bit->insert_bitacoraModificacion($dateNew, $TipoCuentaAntes, $TIPO_CUENTA, $_SESSION['id_usuario'], 28, "TIPO CUENTA", $ID_TIPOCUENTA, "MODIFICAR");
+                }
             }
-            
+           
             if(strcmp($DescripcionAntes, $DESCRIPCION) != 0){
-                $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 28, "DESCRIPCIÓN", $ID_TIPOCUENTA, "MODIFICAR");    
+                if($bit->obtenervalorBitacora() == 1)
+                {
+                   $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 28, "DESCRIPCIÓN", $ID_TIPOCUENTA, "MODIFICAR");
+                }      
             }
-
+ 
             if(strcmp($TasaAntes, $TASA) != 0){
-                $bit->insert_bitacoraModificacion($dateNew, $TasaAntes, $TASA, $_SESSION['id_usuario'], 28, "TASA", $ID_TIPOCUENTA, "MODIFICAR");    
+                if($bit->obtenervalorBitacora() == 1)
+                {
+                    $bit->insert_bitacoraModificacion($dateNew, $TasaAntes, $TASA, $_SESSION['id_usuario'], 28, "TASA", $ID_TIPOCUENTA, "MODIFICAR");
+                }  
             }
-
+ 
             if(strcmp($EstadoAntes, $ESTADO) != 0){
-                $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 28, "ESTADO", $ID_TIPOCUENTA, "MODIFICAR");    
+                if($bit->obtenervalorBitacora() == 1)
+                {
+                    $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 28, "ESTADO", $ID_TIPOCUENTA, "MODIFICAR");
+                }      
             }
         }
             break;
@@ -120,8 +132,10 @@ switch ($_GET["op"]) {
             $date = new DateTime(date("Y-m-d H:i:s"));
             $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-            $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 28, $ID_TIPOCUENTA, "ELIMINAR");
-        
+            if($bit->obtenervalorBitacora() == 1)
+            {
+               $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 28, $ID_TIPOCUENTA, "ELIMINAR");
+            }
             break;
 }
 

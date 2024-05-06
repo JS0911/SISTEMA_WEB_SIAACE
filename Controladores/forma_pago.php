@@ -45,7 +45,10 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s"); 
             $datos = $com->insert_fpago($FORMA_DE_PAGO, $DESCRIPCION, $_SESSION['usuario'], $dateNew, $ESTADO);
             echo json_encode(["message" => "Forma de pago insertada exitosamente."]);
-            $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 12, "INSERTAR");
+            if($bit->obtenervalorBitacora() == 1)
+            {
+                $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 12, "INSERTAR");
+            }  
         }
 
     break;
@@ -91,17 +94,26 @@ switch ($_GET["op"]) {
     
         if(strcmp($formaAntes, $FORMA_DE_PAGO) != 0)
         {
-            $bit->insert_bitacoraModificacion($dateNew, $formaAntes, $FORMA_DE_PAGO, $_SESSION['id_usuario'], 12, "FORMA DE PAGO", $ID_FPAGO, "MODIFICAR");
+            if ($bit->obtenervalorBitacora() == 1)
+            {
+                $bit->insert_bitacoraModificacion($dateNew, $formaAntes, $FORMA_DE_PAGO, $_SESSION['id_usuario'], 12, "FORMA DE PAGO", $ID_FPAGO, "MODIFICAR");
+            }
         }
-
+ 
         if(strcmp($descripcionAntes, $DESCRIPCION) != 0)
         {
-            $bit->insert_bitacoraModificacion($dateNew, $descripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 12, "DESCRIPCIÓN", $ID_FPAGO, "MODIFICAR");
+            if ($bit->obtenervalorBitacora() == 1)
+            {
+              $bit->insert_bitacoraModificacion($dateNew, $descripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 12, "DESCRIPCIÓN", $ID_FPAGO, "MODIFICAR");  
+            }  
         }
-
+ 
         if(strcmp($estadoAntes, $ESTADO) != 0)
         {
-            $bit->insert_bitacoraModificacion($dateNew, $estadoAntes, $ESTADO, $_SESSION['id_usuario'], 12, "ESTADO", $ID_FPAGO, "MODIFICAR");
+            if ($bit->obtenervalorBitacora() == 1)
+            {
+             $bit->insert_bitacoraModificacion($dateNew, $estadoAntes, $ESTADO, $_SESSION['id_usuario'], 12, "ESTADO", $ID_FPAGO, "MODIFICAR");  
+            }
         }
     }
         break;
@@ -113,7 +125,10 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 12, $ID_FPAGO, "ELIMINAR");
+        if ($bit->obtenervalorBitacora() == 1)if ($bit->obtenervalorBitacora() == 1)
+        {
+         $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 12, $ID_FPAGO, "ELIMINAR");
+        }
     break;
 }
 function verificarExistenciaFpago($FORMA_DE_PAGO) {

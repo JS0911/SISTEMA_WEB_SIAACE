@@ -5,6 +5,8 @@
     if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
         if (isset($_SESSION['usuario'])) {
             require_once "../Config/conexion.php";
+            require_once "../Modelos/bitacora.php";
+            $bitacora = new bitacora();
             $date = new DateTime(date("Y-m-d H:i:s"));
             $dateMod = $date->modify("-7 hours");
             $dateNew = $dateMod->format("Y-m-d H:i:s");
@@ -15,9 +17,12 @@
             $id_usuario = isset($_SESSION['id_usuario']) ? $_SESSION['id_usuario'] : 0;
             $usuario = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : 'Usuario Desconocido';
 
-            $sql = "INSERT INTO tbl_ms_bitacora (FECHA,ID_USUARIO, TABLA, OPERACION) VALUES ('$dateNew','$id_usuario', 2, 'CIERRE DE SESION')";
-            $stmt = $conectar->prepare($sql);
-            $stmt->execute();
+            if($bitacora->obtenervalorBitacora() == 1)
+            {
+              $sql = "INSERT INTO tbl_ms_bitacora (FECHA,ID_USUARIO, TABLA, OPERACION) VALUES ('$dateNew','$id_usuario', 2, 'CIERRE DE SESION')";
+              $stmt = $conectar->prepare($sql);
+              $stmt->execute();
+            }
 
             session_destroy();
 

@@ -46,8 +46,10 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_tipoTransaccion($TIPO_TRANSACCION, $DESCRIPCION, $SIGNO_TRANSACCION, $_SESSION['usuario'], $dateNew, $ESTADO);
             echo json_encode(["message" => "Transacción insertada exitosamente."]);
-            $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 11, "INSERTAR");
-        
+            if($bit->obtenervalorBitacora() == 1)
+            {
+               $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 11, "INSERTAR");
+            }
         }
 
     break;
@@ -91,21 +93,34 @@ switch ($_GET["op"]) {
         
         //--------------------------------------------------------------------Decisiones-------------------------------------------------------
         if(strcmp($TipoTransaccionAntes, $TIPO_TRANSACCION) != 0){
-            $bit->insert_bitacoraModificacion($dateNew, $TipoTransaccionAntes, $TIPO_TRANSACCION, $_SESSION['id_usuario'], 11, "TIPO TRANSACCIÓN", $ID_TIPO_TRANSACCION, "MODIFICAR");  
+            if($bit->obtenervalorBitacora() == 1)
+            {
+               $bit->insert_bitacoraModificacion($dateNew, $TipoTransaccionAntes, $TIPO_TRANSACCION, $_SESSION['id_usuario'], 11, "TIPO TRANSACCIÓN", $ID_TIPO_TRANSACCION, "MODIFICAR");
+            }    
           }
-          
+         
           if(strcmp($DescripcionAntes, $DESCRIPCION) != 0){
-              $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 11, "DESCRIPCIÓN", $ID_TIPO_TRANSACCION, "MODIFICAR");  
+            if($bit->obtenervalorBitacora() == 1)
+            {
+               $bit->insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 11, "DESCRIPCIÓN", $ID_TIPO_TRANSACCION, "MODIFICAR");
+            }  
           }
-  
+ 
           if(strcmp($SignoAntes, $SIGNO_TRANSACCION) != 0){
+            if($bit->obtenervalorBitacora() == 1)
+            {
               $bit->insert_bitacoraModificacion($dateNew, $SignoAntes, $SIGNO_TRANSACCION, $_SESSION['id_usuario'], 11, "SIGNO TRANSACCIÓN", $ID_TIPO_TRANSACCION, "MODIFICAR");  
+            }
           }
-  
+ 
           if(strcmp($EstadoAntes, $ESTADO) != 0 ){
-              $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 11 , "ESTADO", $ID_TIPO_TRANSACCION, "MODIFICAR");
-          }
-        }
+            if($bit->obtenervalorBitacora() == 1)
+            {
+              $bit->insert_bitacoraModificacion($dateNew, $EstadoAntes, $ESTADO, $_SESSION['id_usuario'], 11 , "ESTADO", $ID_TIPO_TRANSACCION, "MODIFICAR");  
+            }
+          }    
+    
+    }
     break;
 
     case "EliminarTipoTransaccion":
@@ -115,7 +130,10 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s"); 
-        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 11, $ID_TIPO_TRANSACCION,"ELIMINAR");
+        if($bit->obtenervalorBitacora() == 1)
+        {
+           $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 11, $ID_TIPO_TRANSACCION,"ELIMINAR");
+        }
 
     break;
 

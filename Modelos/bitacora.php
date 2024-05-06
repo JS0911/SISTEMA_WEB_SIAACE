@@ -119,4 +119,66 @@ class bitacora extends Conectar
             return "Error al limpiar la bitacora: " . $e->getMessage();
         }
     }
+
+    public function encender_bitacora()
+    {
+        try
+        {
+            $conectar = parent :: Conexion();
+            parent::set_names();
+            $sql = "UPDATE tbl_ms_parametros SET VALOR = 1 WHERE ID_PARAMETRO = 14;";
+ 
+            $stmt = $conectar->prepare($sql);
+            $stmt->execute();
+ 
+            if ($stmt->rowCount() > 0) {
+                return "Bitacora Encendida";
+            } else {
+                return "Error al encender la Bitacora";
+            }
+ 
+        } catch(PDOException $e)
+        {
+            return "Error al encender la bitacora: " . $e->getMessage();
+        }
+    }
+ 
+    public function apagar_bitacora()
+    {
+        try
+        {
+            $conectar = parent :: Conexion();
+            parent::set_names();
+            $sql = "UPDATE tbl_ms_parametros SET VALOR = 0 WHERE ID_PARAMETRO = 14;";
+ 
+            $stmt = $conectar->prepare($sql);
+            $stmt->execute();
+ 
+            if ($stmt->rowCount() > 0) {
+                return "Bitacora apagada";
+            } else {
+                return "Error al apagar la Bitacora";
+            }
+ 
+        } catch(PDOException $e)
+        {
+            return "Error al apagar la bitacora: " . $e->getMessage();
+        }
+    }
+ 
+    public function obtenervalorBitacora()
+    {
+        $conectar = parent::Conexion();
+        parent::set_names();
+        $sql = "SELECT VALOR FROM tbl_ms_parametros WHERE ID_PARAMETRO = 14;";
+        $sql = $conectar->prepare($sql);
+        $sql->execute();
+        $resultado = $sql->fetch(PDO::FETCH_ASSOC); // Using fetch instead of fetchAll as you're expecting a single row
+        if ($resultado) {
+            return $resultado['VALOR'];
+        } else {
+            return null;
+        }
+    }
+
 }

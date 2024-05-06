@@ -46,7 +46,10 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_rol($ROL, $DESCRIPCION, $ID_ESTADO_USUARIO, $_SESSION['usuario'], $dateNew);
             echo json_encode(["message" => "Rol insertado exitosamente."]);
-            $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 1, "INSERTAR");
+            if($bit->obtenervalorBitacora() == 1)
+            {
+              $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 1, "INSERTAR");  
+            }
             exit; // Detener la ejecución del script después de enviar la respuesta exitosa
         }
 
@@ -92,15 +95,24 @@ switch ($_GET["op"]) {
         
         //--------------------------------------------------Decisiones------------------------------------
         if(strcmp($RolAntes, $ROL) != 0){
-            $bit-> insert_bitacoraModificacion($dateNew, $RolAntes, $ROL, $_SESSION['id_usuario'], 1, "ROL", $ID_ROL, "MODIFICAR");
+            if($bit->obtenervalorBitacora() == 1)
+            {
+              $bit-> insert_bitacoraModificacion($dateNew, $RolAntes, $ROL, $_SESSION['id_usuario'], 1, "ROL", $ID_ROL, "MODIFICAR");  
+            }
         }
-
+ 
         if(strcmp($DescripcionAntes, $DESCRIPCION) != 0){
-            $bit-> insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 1, "DESCRIPCIÓN", $ID_ROL, "MODIFICAR");
+            if($bit->obtenervalorBitacora() == 1)
+            {
+               $bit-> insert_bitacoraModificacion($dateNew, $DescripcionAntes, $DESCRIPCION, $_SESSION['id_usuario'], 1, "DESCRIPCIÓN", $ID_ROL, "MODIFICAR");
+            }
         }
-
-        if(strcmp($EstadoAntes, $ID_ESTADO_USUARIO) != 0){
-            $bit-> insert_bitacoraModificacion($dateNew, $EstadoAntes, $estadoUsuarioNuevo, $_SESSION['id_usuario'], 1,"ESTADO USUARIO", $ID_ROL,"MODIFICAR");
+ 
+        if(strcmp($EstadoAntes, $estadoUsuarioNuevo) != 0){
+            if($bit->obtenervalorBitacora() == 1)
+            {
+               $bit-> insert_bitacoraModificacion($dateNew, $EstadoAntes, $estadoUsuarioNuevo, $_SESSION['id_usuario'], 1,"ESTADO USUARIO", $ID_ROL,"MODIFICAR");
+            }
         }
     }
 
@@ -113,7 +125,10 @@ switch ($_GET["op"]) {
         $date = new DateTime(date("Y-m-d H:i:s"));
         $dateMod = $date->modify("-7 hours");
         $dateNew = $dateMod->format("Y-m-d H:i:s");
-        $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 1, $ID_ROL, "ELIMINAR");
+        if($bit->obtenervalorBitacora() == 1)
+        {
+          $bit->insert_bitacoraEliminar($dateNew, $_SESSION['id_usuario'], 1, $ID_ROL, "ELIMINAR");  
+        }
         break;
         case "get_permisos_por_rol":
             $ID_ROL = $body["ID_ROL"];

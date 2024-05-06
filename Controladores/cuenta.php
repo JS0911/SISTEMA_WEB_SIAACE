@@ -55,7 +55,10 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_cuenta($ID_EMPLEADO, $ID_TIPOCUENTA, $SALDO, $NUMERO_CUENTA, $ESTADO, $_SESSION['usuario'], $dateNew);
             echo json_encode(["message" => "Cuenta insertada Exitosamente."]);
-            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO LA CUENTA: $NUMERO_CUENTA", $_SESSION['id_usuario'], 28, $_SESSION['usuario'], $dateNew);
+            if($bit->obtenervalorBitacora() == 1)
+            {
+                $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 28, "INSERTAR");
+            }
         }
        
     break;
@@ -102,7 +105,10 @@ switch ($_GET["op"]) {
             $dateNew = $dateMod->format("Y-m-d H:i:s");
             $datos = $com->insert_cuentaAutomatica($ID_EMPLEADO, $_SESSION['usuario'], $dateNew);
             echo json_encode(["message" => "Cuenta insertada Exitosamente."]);
-            $bit->insert_bitacora($dateNew, "INSERTAR", "SE INSERTO LA CUENTA: $NUMERO_CUENTA", $_SESSION['id_usuario'], 28, $_SESSION['usuario'], $dateNew);
+            if($bit->obtenervalorBitacora() == 1)
+            {
+                $bit->insert_bitacora($dateNew, $_SESSION['id_usuario'], 28, "INSERTAR");
+            }
         }
 
 }

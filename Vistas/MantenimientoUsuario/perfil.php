@@ -45,9 +45,11 @@ require "../../Config/conexion.php";
 require_once '../../Modelos/permisoUsuario.php';
 require_once '../../Modelos/Usuarios.php';
 require_once "../../Controladores/perfil.php";
+require_once "../../Modelos/bitacora.php";
 
 $permisosUsuarios = new PermisosUsuarios();
 $usuario_obj = new Usuario();
+$bit = new bitacora();
 
 $id_usuario = $_SESSION['id_usuario'];
 $usuario = $_SESSION['usuario'];
@@ -93,6 +95,13 @@ if (isset($_POST['respuesta1'])) {
   actualizarDatos($id_usuario, $correoP);
 
   header("Location: perfil.php");
+}
+
+if(isset($_POST['bitacora']))
+{
+  require_once "../../Controladores/perfil.php";
+  $valor = $_POST['bitacora'];
+  activarBitacora($valor);
 }
 
 if (isset($_POST['contrasena'])) {
@@ -340,9 +349,9 @@ if (!isset($_SESSION['usuario'])) {
               echo '<nav class="sb-sidenav-menu-nested nav">';
 
               if (!empty($permisos1) && $permisos1[0]['PERMISOS_CONSULTAR'] == 1) {
-                if (!empty($permisosUsuario) && $permisosUsuario[0]['PERMISOS_CONSULTAR'] == 1) {
+                if (!empty($permisos) && $permisos[0]['PERMISOS_CONSULTAR'] == 1) {
                   echo '<a class="nav-link" href="usuarios.php"><i class="fas fa-user"></i><span style="margin-left: 5px;"> Usuarios</a>';
-                }
+              }
                 if (!empty($permisosRoles) && $permisosRoles[0]['PERMISOS_CONSULTAR'] == 1) {
                   echo '<a class="nav-link" href="roles.php"><i class="fas fa-user-lock"> </i><span style="margin-left: 5px;">    Roles</a>';
                 }
@@ -474,7 +483,19 @@ if (!isset($_SESSION['usuario'])) {
                     </h5>
                   </div>
                 </div>
-              </div>
+              <br>
+                <form id="activar-bitacora" action="./perfil.php" method="POST">
+                <div class="form-group">
+                    <label for="bitacora">Registrar Bitácora: </label>
+                    <select class="form-control" id="bitacora" name="bitacora" style="width: 130px;">
+                      <option selected disabled><?php echo ($bit->obtenervalorBitacora() == 1 ? 'Si' : 'No') ?></option>
+                      <option value="1">Si</option>
+                      <option value="0">No</option>
+                    </select>
+                  </div>
+                  <button onclick="cambiarestadoBitacora()" class="btn btn-primary">Cambiar estado Bitácora</submit>
+                </form>
+              </div> 
               <div class="vl" style="border-left: 2px solid #C0C0C0; height: 815px; margin-left: -75px; margin-right: 10px;"></div>
               <div class="col-md-4">
                 <form id="form-perfil" action="./perfil.php" method="POST">
@@ -488,7 +509,7 @@ if (!isset($_SESSION['usuario'])) {
                   </div>
                   <div class="form-group">
                     <label for="correo">Correo Electrónico</label>
-                    <input type="email" maxlength="30" class="form-control" id="correo" name="correo" required pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" title="Ingrese una dirección de correo electrónico válida" value="<?php echo $correo; ?>">
+                    <input type="email" maxlength="30" class="form-control" id="correo" name="correo" required pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" title="Ingrese una dirección de correo electrónico válida" value="<?php echo $correo; ?>" disabled>
                   </div>
                   <div id="mensaje1"></div>
                   <div class="form-group">
@@ -676,6 +697,35 @@ if (!isset($_SESSION['usuario'])) {
         }).then((result) => {
           if (result.isConfirmed) {
             document.getElementById("form-perfil").submit();
+          }
+        })
+      }
+
+      function cambiarestadoBitacora()
+      {
+        form = document.getElementById("activar-bitacora");
+        form.addEventListener("submit", function(event) {
+          event.preventDefault();
+        });
+ 
+        Swal.fire({
+          title: '¿Está seguro de Activar/Desactivar la Bitácora?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: '¡Sí, actualizar!',
+          cancelButtonText: "Cancelar"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Actualización exitosa',
+              text: 'Los datos se han actualizado correctamente.'
+            }).then(function() {
+              document.getElementById("activar-bitacora").submit();
+            });
           }
         })
       }
