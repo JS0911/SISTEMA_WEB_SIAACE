@@ -35,4 +35,8 @@ switch ($_GET["op"]) {
         $datos = $com->ReporteRetiros($body["fechaInicio"], $body["fechaFin"]);
         echo json_encode($datos);
     break;
+    case "ReportePagoCuota":
+        $datos = $com->ReportePagoCuota($body["fechaInicio"], $body["fechaFin"]);
+        echo json_encode($datos);
+    break;
 }

@@ -368,6 +368,7 @@ if (!isset($_SESSION['usuario'])) {
                             <option value="ReporteAnulaciones">Reporte de Anulaciones</option>
                             <option value="ReporteDepositos">Reporte de Depositos</option>
                             <option value="ReporteRetiros">Reporte de Retiros</option>
+                            <option value="ReportePagoCuota">Reporte de Pago de Cuotas</option>
                             <!-- Agrega aquí más opciones de reporte según tus necesidades -->
                         </select>
                     </div>
@@ -380,6 +381,8 @@ if (!isset($_SESSION['usuario'])) {
                         <input type="date" class="form-control" id="fechaFin" name="fechaFin">
                     </div>
                     <button type="submit" class="btn btn-primary">Generar Reporte</button>
+                    <button id="exportarPDF">Exportar a PDF</button>
+
                 </form>
 
 
@@ -394,31 +397,30 @@ if (!isset($_SESSION['usuario'])) {
                 </footer>
             </div>
 
-            <!-- EL CODIGO ESTA QUEMADO AQUI, NO FUNCIONA REFERENCIA A LOS ARCHIVOS -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-            <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-            <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-            <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
-            <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+            <!-- jsPDF -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+
+            <!-- html2pdf -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+            <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+            <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-            <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-            <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+
 
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('reporteForm').addEventListener('submit', function(event) {
                         event.preventDefault(); // Evitar que se envíe el formulario normalmente
 
-                        // Obtener el tipo de reporte y las fechas del formulario
                         var tipoReporte = document.getElementById('tipoReporte').value;
                         var fechaInicio = document.getElementById('fechaInicio').value;
                         var fechaFin = document.getElementById('fechaFin').value;
 
-                        // Realizar la solicitud fetch al servidor
                         fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/reportes.php?op=' + tipoReporte, {
                                 method: 'POST',
                                 headers: {
@@ -429,10 +431,9 @@ if (!isset($_SESSION['usuario'])) {
                                     fechaFin: fechaFin
                                 })
                             })
-                            .then(response => response.json()) // Convertir la respuesta a JSON
+                            .then(response => response.json())
                             .then(data => {
-                                // Crear la tabla con los datos del reporte
-                                var tableHTML = '<table class="table">';
+                                var tableHTML = '<table class="table" id="reporteTable">';
                                 tableHTML += '<thead><tr>';
                                 tableHTML += '<th>ELABORADO POR</th>';
                                 tableHTML += '<th>FECHA</th>';
@@ -445,26 +446,39 @@ if (!isset($_SESSION['usuario'])) {
                                     tableHTML += `<td>${item.CREADO_POR}</td>`;
                                     tableHTML += `<td>${item.FECHA}</td>`;
                                     tableHTML += `<td>${item.MONTO}</td>`;
-                                    // Verificar si la descripción es nula
                                     if (item.DESCRIPCION !== null) {
                                         tableHTML += `<td>${item.DESCRIPCION}</td>`;
                                     } else {
-                                        tableHTML += '<td></td>'; // Si la descripción es nula, asignar una celda vacía
+                                        tableHTML += '<td></td>';
                                     }
                                     tableHTML += '</tr>';
                                 });
                                 tableHTML += '</tbody></table>';
 
-                                tableHTML += '</tbody></table>';
-
-                                // Mostrar la tabla en el contenedor
                                 document.getElementById('reporteContainer').innerHTML = tableHTML;
+
+                                // Mostrar el botón de exportar PDF después de generar la tabla
+                                document.getElementById('exportarPDF').style.display = 'inline-block';
                             })
                             .catch(error => {
                                 console.error('Error:', error);
                             });
                     });
 
+                    // Función para exportar la tabla a PDF al hacer clic en el botón "Exportar a PDF"
+                    document.getElementById('exportarPDF').addEventListener('click', function() {
+                        const element = document.getElementById('reporteTable');
+                        html2pdf()
+                            .from(element)
+                            .set({
+                                margin: 1,
+                                filename: 'reporte.pdf',
+                                html2canvas: {
+                                    scale: 2
+                                }
+                            })
+                            .save();
+                    });
                 });
             </script>
 </body>
