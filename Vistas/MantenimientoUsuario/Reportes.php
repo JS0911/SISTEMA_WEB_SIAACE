@@ -354,7 +354,7 @@ if (!isset($_SESSION['usuario'])) {
                 <div class="sb-sidenav-footer">
                     <div class="small">Usuario: <?php echo $nombre_usuario; ?><div>
                             Sesión activa: Conectado(a).
-                        </div>
+                    <div>
             </nav>
         </div>
         <div id="layoutSidenav_content">
@@ -381,21 +381,20 @@ if (!isset($_SESSION['usuario'])) {
                         <input type="date" class="form-control" id="fechaFin" name="fechaFin">
                     </div>
                     <button type="submit" class="btn btn-primary">Generar Reporte</button>
-                    <button id="exportarPDF">Exportar a PDF</button>
+                    <button  type="submit" class="btn btn-primary" id="exportarPDF">Exportar a PDF</button>
 
                 </form>
-
-
+                <hr class="my-4">
                 <!-- Contenedor para mostrar el resultado del reporte -->
                 <div id="reporteContainer" class="table-container"></div>
-                <footer class="py-4 bg-light mt-auto">
+            </div>
+            <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-start justify-content-center small">
                             <div class="text-muted">Copyright &copy; IA-UNAH 2023</div>
                         </div>
                     </div>
-                </footer>
-            </div>
+            </footer>
 
             <!-- jsPDF -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
@@ -410,7 +409,18 @@ if (!isset($_SESSION['usuario'])) {
             <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
             <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
-
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>            
 
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
