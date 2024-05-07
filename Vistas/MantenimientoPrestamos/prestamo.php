@@ -572,7 +572,7 @@ if (!isset($_SESSION['usuario'])) {
                         extend: 'excel',
                         text: '<i class="fas fa-file-excel text-success cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Excel"></i>',
                         exportOptions: {
-                            columns:[0, 1, 2, 3, 4,5, 6, 7, 8, 9,10,11, 12 ,13,14, 15],
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
                             modifier: {
                                 page: 'all' // Exporta todas las páginas
                             },
@@ -582,98 +582,99 @@ if (!isset($_SESSION['usuario'])) {
                         extend: 'pdfHtml5',
                         text: '<i class="fas fa-file-pdf text-danger cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Pdf"></i>',
                         exportOptions: {
-                            columns:[0, 1, 2, 3, 4,5, 6, 7, 8, 9,10,11, 12 ,13,14, 15],
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
                             modifier: {
                                 page: 'all' // Exporta todas las páginas
                             },
-                        },              
-                        
-                            customize: function(doc) {
+                        },
+
+                        customize: function(doc) {
                             var usuario = "<?php echo $usuario; ?>"; // Obtener el nombre de usuario desde PHP
-                // Resto del código de personalización
-                doc.pageOrientation = 'landscape';
-                doc.pageSize = 'A3';
-                var now = new Date();
-                var date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
-                var horas = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
-                doc.content.splice(0, 1);
-                doc.content.unshift({
-                    margin: [0, 0, 0, 0],
-                    alignment: 'center',
-                    text: 'IDH-Microfinanciera',
-                    fontSize: 20,
-                    bold: true,
-                    color: '#063970',
-                    margin: [0, 0, 0, 20]
-                }, {
-                    margin: [0, 0, 0, 0],
-                    alignment: 'center',
-                    text: 'Reporte de Lista Prestamos',
-                    fontSize: 20,
-                    bold: true
-                }, {
-                    margin: [0, -60, 0, 20],
-                    alignment: 'right',
-                    image: LogoBase64,
-                    width: 70,
-                    height: 70,
-                }, {
-                    margin: [0, -20, 0, 20],
-                    alignment: 'left',
-                    text: 'Fecha: ' + date + '\nHora: ' + horas,
-                    fontSize: 10,
-                    bold: true
-                }, {
-                    margin: [0, 0, 0, 20],
-                    alignment: 'left',
-                    text: "Descargado por: " + usuario, // Agregar el nombre de usuario
-                    fontSize: 10,
-                    bold: true
-                });
-                doc.footer = function(currentPage, pageCount) {
-                    return {
-                        margin: 10,
-                        columns: [{
-                            fontSize: 10,
-                            text: [{
-                                text: "Página " +
-                                    currentPage.toString() +
-                                    " de " +
-                                    pageCount,
-                                alignment: "center",
+                            // Resto del código de personalización
+                            doc.pageOrientation = 'landscape';
+                            doc.pageSize = 'A3';
+                            var now = new Date();
+                            var date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
+                            var horas = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+                            doc.content.splice(0, 1);
+                            doc.content.unshift({
+                                margin: [0, 0, 0, 0],
+                                alignment: 'center',
+                                text: 'IDH-Microfinanciera',
+                                fontSize: 20,
+                                bold: true,
+                                color: '#063970',
+                                margin: [0, 0, 0, 20]
+                            }, {
+                                margin: [0, 0, 0, 0],
+                                alignment: 'center',
+                                text: 'Reporte de Lista Prestamos',
+                                fontSize: 20,
                                 bold: true
-                            }, ],
-                            alignment: "center",
-                        }, ],
-                    };
-                };
-            }
-        }, 
-        {
-            extend: 'print',
-            text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
-            autoPrint: true,
-            exportOptions: {
-                columns:[0, 1, 2, 3, 4,5, 6, 7, 8, 9,10,11,13,14, 15],
-                modifier: {
-                    page: 'all' // Exporta todas las páginas
+                            }, {
+                                margin: [0, -60, 0, 20],
+                                alignment: 'right',
+                                image: LogoBase64,
+                                width: 70,
+                                height: 70,
+                            }, {
+                                margin: [0, -20, 0, 20],
+                                alignment: 'left',
+                                text: 'Fecha: ' + date + '\nHora: ' + horas,
+                                fontSize: 10,
+                                bold: true
+                            }, {
+                                margin: [0, 0, 0, 20],
+                                alignment: 'left',
+                                text: "Descargado por: " + usuario, // Agregar el nombre de usuario
+                                fontSize: 10,
+                                bold: true
+                            });
+                            doc.footer = function(currentPage, pageCount) {
+                                return {
+                                    margin: 10,
+                                    columns: [{
+                                        fontSize: 10,
+                                        text: [{
+                                            text: "Página " +
+                                                currentPage.toString() +
+                                                " de " +
+                                                pageCount,
+                                            alignment: "center",
+                                            bold: true
+                                        }, ],
+                                        alignment: "center",
+                                    }, ],
+                                };
+                            };
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fas fa-print text-info cursor-pointer icon-lg" style="font-size: 25px;margin: 0; padding: 0;" title="Imprimir"></i>',
+                        autoPrint: true,
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15],
+                            modifier: {
+                                page: 'all' // Exporta todas las páginas
+                            },
+                        }
+                    },
+                    {
+                        text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
+                        action: function() {
+                            ocultarCampos();
+                        }
+                    }
+                ],
+                "lengthMenu": [10, 20, 30, 50, 100],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
-            }
-        },
-        {
-            text: '<i class="fas fa-eye text-warning cursor-pointer icon-lg" style="font-size: 25px; margin: 0; padding: 0;" title="Mas"></i>',
-            action: function() {
-                ocultarCampos();
-            }
-        }
-    ],
-    "lengthMenu": [10, 20, 30, 50, 100],
-    "language": {
-        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-    },
-});
+            });
 
         }
+
         function ocultarCampos() {
             var celdasDireccion = document.querySelectorAll('.direccion-column'); // Utiliza una clase para identificar todas las celdas de dirección
             celdasDireccion.forEach(function(celda) {
@@ -843,6 +844,129 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
+        function obtenerIdEmpleado(ID_PRESTAMO) {
+            return fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=obtenerIdEmpleado' + ID_PRESTAMO)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al obtener el ID del empleado');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.hasOwnProperty('ID_EMPLEADO')) {
+                        return data.ID_EMPLEADO;
+                    } else {
+                        throw new Error('El servidor no devolvió el ID del empleado');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // function AprobarPrestamo(ID_PRESTAMO, MONTO_SOLICITADO, PLAZO, TASA, ESTADO_PRESTAMO) {
+        //     // Obtener el ID del empleado
+        //     var ID_EMPLEADO = obtenerIdEmpleado(ID_PRESTAMO); // Debes tener una función para obtener el ID del empleado
+
+        //     // Llamar a la función validarMonto para verificar si el monto solicitado es válido
+        //     fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=validarMonto', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Accept': 'application/json',
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({
+        //                 "ID_EMPLEADO": ID_EMPLEADO,
+        //                 "MONTO_SOLICITADO": MONTO_SOLICITADO
+        //             })
+        //         })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             if (data.valido) {
+        //                 // El monto solicitado es válido, proceder con la aprobación del préstamo
+        //                 // Verificar el estado del préstamo antes de aprobar
+        //                 fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=obtenerEstadoPrestamo', {
+        //                         method: 'POST',
+        //                         headers: {
+        //                             'Accept': 'application/json',
+        //                             'Content-Type': 'application/json'
+        //                         },
+        //                         body: JSON.stringify({
+        //                             "ID_PRESTAMO": ID_PRESTAMO
+        //                         })
+        //                     })
+        //                     .then(response => response.json())
+        //                     .then(data => {
+        //                         console.log("estado:", data);
+        //                         if (data === PENDIENTE) {
+        //                             // El préstamo no ha sido aprobado, proceder con la aprobación
+        //                             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=aprobarPrestamo', {
+        //                                     method: 'POST',
+        //                                     headers: {
+        //                                         'Accept': 'application/json',
+        //                                         'Content-Type': 'application/json'
+        //                                     },
+        //                                     body: JSON.stringify({
+        //                                         "ID_PRESTAMO": ID_PRESTAMO
+        //                                     })
+        //                                 })
+        //                                 .then(response => {
+        //                                     if (response.ok) {
+        //                                         // La solicitud se completó con éxito
+        //                                         document.getElementById('AprobarButton').classList.remove('btn-primary');
+        //                                         document.getElementById('AprobarButton').classList.add('btn-secondary');
+        //                                         document.getElementById('AprobarButton').disabled = true;
+        //                                         // Llamar a la función planPago aquí
+        //                                         planPago(ID_PRESTAMO, MONTO_SOLICITADO, PLAZO, TASA);
+        //                                         // Mostrar mensaje de éxito con SweetAlert
+        //                                         Swal.fire({
+        //                                             icon: 'success',
+        //                                             title: 'Préstamo Aprobado',
+        //                                             text: 'El préstamo ha sido aprobado exitosamente.'
+        //                                         });
+        //                                         setTimeout(function() {
+        //                                             location.reload();
+        //                                         }, 5000);
+        //                                     } else {
+        //                                         console.error('Error en la solicitud');
+        //                                     }
+        //                                 })
+        //                                 .catch(error => {
+        //                                     console.error('Error:', error);
+        //                                 });
+        //                         } else {
+        //                             if (data === APROBADO) {
+        //                                 Swal.fire({
+        //                                     icon: 'error',
+        //                                     title: 'Préstamo Aprobado',
+        //                                     text: 'Este préstamo ya ha sido aprobado anteriormente.'
+        //                                 });
+        //                             } else {
+        //                                 Swal.fire({
+        //                                     icon: 'error',
+        //                                     title: 'Préstamo Anulado',
+        //                                     text: 'Este préstamo ya ha sido Anulado.'
+        //                                 });
+        //                             }
+        //                         }
+        //                     })
+        //                     .catch(error => {
+        //                         console.error('Error:', error);
+        //                     });
+        //             } else {
+        //                 // El monto solicitado excede el límite permitido
+        //                 Swal.fire({
+        //                     icon: 'error',
+        //                     title: 'Monto Inválido',
+        //                     text: 'El monto solicitado excede el límite permitido.'
+        //                 });
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error('Error:', error);
+        //         });
+        // }
+
 
         function DesembolsoPrestamo(ID_PRESTAMO) {
             // Realizar una solicitud FETCH al servidor para obtener el estado del préstamo
@@ -883,7 +1007,7 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
-       // var DESEMBOLSADO_POR = '<?php echo $_SESSION['usuario']; ?>';
+        // var DESEMBOLSADO_POR = '<?php echo $_SESSION['usuario']; ?>';
         function realizarDesembolso(ID_PRESTAMO) {
             // Realizar una solicitud FETCH al servidor para desembolsar el préstamo
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/prestamo.php?op=desembolsoPrestamo', {
@@ -894,7 +1018,7 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     body: JSON.stringify({
                         "ID_PRESTAMO": ID_PRESTAMO
-                       // "DESEMBOLSADO_POR": DESEMBOLSADO_POR // Enviar el valor de la variable de sesión
+                        // "DESEMBOLSADO_POR": DESEMBOLSADO_POR // Enviar el valor de la variable de sesión
                     })
                 })
                 .then(response => {

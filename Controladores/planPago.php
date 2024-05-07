@@ -71,4 +71,9 @@ switch ($_GET["op"]) {
         $datos = $com->EstadoFinalizado($ID_PPAGO);
         echo json_encode($datos);
     break;
+
+    case "PagoCuotas":
+        $datos = $com->PagoTotalCuotas($body["ID_PPAGO"],$body["CREADO_POR"]);
+        echo json_encode($datos);
+    break;
 }

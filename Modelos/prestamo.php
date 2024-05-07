@@ -93,7 +93,6 @@ class Prestamo extends Conectar
         }
     }
 
-
     // //INSERTA UN PRESTAMO
     public function insert_prestamo($ID_EMPLEADO, $ID_TIPO_PRESTAMO, $ID_FPAGO, $TASA, $PLAZO, $MONTO_SOLICITADO, $ESTADO_PRESTAMO)
     {
@@ -283,7 +282,7 @@ class Prestamo extends Conectar
             $sqlSumaMontos = "SELECT SUM(MONTO_SOLICITADO) AS SUMA_MONTOS 
             FROM tbl_mp_prestamos 
             WHERE ID_EMPLEADO = :ID_EMPLEADO 
-            AND (ESTADO_PRESTAMO = 'APROBADO' OR ESTADO_PRESTAMO = 'EN CURSO')";
+            AND (ESTADO_PRESTAMO = 'APROBADO' OR ESTADO_PRESTAMO = 'EN CURSO' OR ESTADO_PRESTAMO = 'PENDIENTE')";
 
             $stmtSumaMontos = $conectar->prepare($sqlSumaMontos);
             $stmtSumaMontos->bindParam(':ID_EMPLEADO', $ID_EMPLEADO, PDO::PARAM_INT);
@@ -318,4 +317,34 @@ class Prestamo extends Conectar
             return json_encode($response); // Devolver la respuesta de error en formato JSON
         }
     }
+
+    public function obtenerIdEmpleado($ID_PRESTAMO)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+    
+            // Consulta SQL para obtener el ID_EMPLEADO
+            $sql = "SELECT ID_EMPLEADO FROM tbl_mp_prestamos WHERE ID_PRESTAMO = :ID_PRESTAMO";
+    
+            // Preparar la consulta
+            $stmt = $conectar->prepare($sql);
+    
+            // Asignar el valor del parámetro
+            $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+    
+            // Ejecutar la consulta
+            $stmt->execute();
+    
+            // Obtener el resultado
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            // Devolver el resultado
+            return $result;
+        } catch (PDOException $e) {
+            // Manejo de errores de PDO
+            return array('error' => 'Error al conectar a la base de datos: ' . $e->getMessage());
+        }
+    }
+    
 }

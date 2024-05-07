@@ -503,7 +503,7 @@ if (!isset($_SESSION['usuario'])) {
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="pagoModalLabel">Pago</h5>
+                                            <h5 class="modal-title" id="pagoModalLabel">Pago De Cuota</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -513,12 +513,17 @@ if (!isset($_SESSION['usuario'])) {
                                             <form>
                                                 <div class="form-group">
 
-                                                    <label>Pago de Cuota</label>
 
                                                     <!-- Checkbox para Pago Total -->
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" id="pagoTotal" name="pago_total" value="1">
-                                                        <label class="form-check-label" for="pagoTotal">Pago Total</label>
+                                                        <label class="form-check-label" for="pagoTotal">Pago Cuota</label>
+                                                    </div>
+
+                                                    <!-- Checkbox para Pago Total de Cuotas-->
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="pagoTotalCuotas" name="pago_totalCuotas" value="1">
+                                                        <label class="form-check-label" for="pagoTotalCuotas">Pago Total de Cuotas</label>
                                                     </div>
 
                                                 </div>
@@ -685,8 +690,6 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
-
-
         function PagoInteres(ID_PLANP) {
             // Obtener el estado actual del pago
             fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=obtenerEstadoPago', {
@@ -796,7 +799,7 @@ if (!isset($_SESSION['usuario'])) {
                                 },
                                 body: JSON.stringify({
                                     "ID_PPAGO": ID_PLANP,
-                                    "CREADO_POR" :  usuarioP
+                                    "CREADO_POR": usuarioP
                                 })
                             })
                             .then(response => response.json())
@@ -817,7 +820,7 @@ if (!isset($_SESSION['usuario'])) {
                                                 },
                                                 body: JSON.stringify({
                                                     "ID_PPAGO": ID_PLANP
-                                                    
+
                                                 })
                                             })
                                             .then(response => response.json())
@@ -871,6 +874,58 @@ if (!isset($_SESSION['usuario'])) {
                 });
         }
 
+        function PagoTCuotas(ID_PLANP) {
+            // Realizar la solicitud POST al controlador en el servidor
+            fetch('http://localhost:90/SISTEMA_WEB_SIAACE/Controladores/planPago.php?op=PagoCuotas', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "ID_PPAGO": ID_PLANP,
+                        "CREADO_POR": usuarioP
+                    })
+                })
+                // .then(response => response.json())
+                // .then(data => {
+                //     console.log('Datos recibidos:', data);
+                //     // Verificar si se recibió el monto correctamente en la respuesta
+                //     const monto = data && data.monto ? data.monto : null;
+                //     if (monto !== null) {
+                //         Swal.fire({
+                //             title: 'Pago',
+                //             text: 'Monto a Pagar: ' + monto,
+                //             icon: 'info',
+                //             showCancelButton: true,
+                //             confirmButtonColor: '#3085d6',
+                //             cancelButtonColor: '#d33',
+                //             confirmButtonText: 'Sí, realizar Pago Total'
+                //         });
+                //     } else {
+                //         // Mostrar un mensaje de error si no se recibió el monto correctamente
+                //         Swal.fire({
+                //             title: 'Error',
+                //             text: 'No se recibió el monto correctamente del servidor. Por favor, inténtalo de nuevo más tarde.',
+                //             icon: 'warning',
+                //             confirmButtonText: 'Aceptar'
+                //         });
+                //     }
+                // })
+                // .catch(error => {
+                //     // Manejar errores de la solicitud
+                //     console.error('Error:', error);
+                //     Swal.fire({
+                //         title: 'Error',
+                //         text: 'Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Aceptar'
+                //     });
+
+                // });
+            location.reload();
+        }
+
 
         /////////////////////////ESTO FUNCIONA BIEN 
         function EstadoFinalizado(ID_PLANP, ESTADO) {
@@ -886,7 +941,9 @@ if (!isset($_SESSION['usuario'])) {
                     },
                     body: JSON.stringify({
                         "ID_PPAGO": ID_PLANP
+
                     })
+
                 }).then(response => response.json())
                 .then(responseData => {
                     console.log(responseData);
@@ -911,12 +968,13 @@ if (!isset($_SESSION['usuario'])) {
             // Verificar el estado de las casillas de verificación
             // var pagoInteres = document.getElementById('pagoInteres').checked;
             var pagoTotal = document.getElementById('pagoTotal').checked;
+            var pagoTotalCuotas = document.getElementById('pagoTotalCuotas').checked;
 
             // Ejecutar funciones según las casillas de verificación seleccionadas
-            /*  if (pagoInteres) {
-                 PagoInteres(ID_PLANP);
-                 //console.log("Entra Interes");
-             } */
+            if (pagoTotalCuotas) {
+                PagoTCuotas(ID_PLANP);
+
+            }
             if (pagoTotal) {
                 PagoTotal(ID_PLANP);
                 //EstadoFinalizado(ID_PLANP);
@@ -941,24 +999,48 @@ if (!isset($_SESSION['usuario'])) {
             location.reload();
         });
         document.getElementById('btn-Aceptar').addEventListener('click', function() {
-            // Muestra un mensaje de confirmación con SweetAlert
-            Swal.fire({
-                title: '¿Está seguro?',
-                text: 'Desear realizar el siguiente pago',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, realizar Pago'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    tipoPago(idplanp);
-                    // Si el usuario hace clic en "Sí, recargar", entonces recarga la página
+            // Verificar el tipo de pago seleccionado
+            var pagoTotal = document.getElementById('pagoTotal').checked;
+            var pagoTotalCuotas = document.getElementById('pagoTotalCuotas').checked;
 
-                }
-            });
+            if (pagoTotal) {
+                // Mostrar SweetAlert para pago total
+                Swal.fire({
+                    title: '¿Está seguro?',
+                    text: 'Desear realizar el pago total',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, realizar Pago Total'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        tipoPago(idplanp);
+                        // Si el usuario hace clic en "Sí, recargar", entonces recarga la página
+
+                    }
+                });
+            } else if (pagoTotalCuotas) {
+                // Mostrar SweetAlert para pago total en cuotas
+                Swal.fire({
+                    title: '¿Está seguro de Pagar el Prestamo?',
+                    text: 'Desea pagar todas las cuotas Pendientes',
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí,  Pagar Todas las Cuotas'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Lógica para el pago total en cuotas
+                        PagoTCuotas(idplanp);
+                    }
+                });
+            }
         });
     </script>
+
+
     <script>
         // Obtén todos los checkboxes y el botón de Aceptar
         const checkboxes = document.querySelectorAll('.form-check-input');

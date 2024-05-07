@@ -101,4 +101,9 @@ switch ($_GET["op"]) {
         $datos = $com->validarMonto($ID_EMPLEADO,$MONTO_SOLICITADO);
         echo json_encode($datos);
     break;
+    case "obtenerIdEmpleado":
+        $ID_PRESTAMO = $body["ID_PRESTAMO"];
+        $datos = $com->obtenerIdEmpleado($ID_PRESTAMO);
+        echo json_encode($datos);
+    break;
 }

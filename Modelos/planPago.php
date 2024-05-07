@@ -171,7 +171,7 @@ class PlanPago extends Conectar
         }
     }
 
-    public function PagoTCuota($ID_PPAGO,$CREADO_POR)
+    public function PagoTCuota($ID_PPAGO, $CREADO_POR)
     {
         // Conectar a la base de datos
         $conectar = parent::conexion();
@@ -185,7 +185,7 @@ class PlanPago extends Conectar
                  FROM tbl_mp_planp 
                  WHERE ID_PLANP = :ID_PLANP";
 
-           
+
 
             // Preparar la consulta para el primer SQL
             $stmt1 = $conectar->prepare($sql1);
@@ -492,4 +492,90 @@ class PlanPago extends Conectar
             return "Error al Consultar el Estado del Plan de Pago: " . $e->getMessage();
         }
     }
+
+    public function CambiarEstadoPrestamosAPagado($ID_PRESTAMO)
+    {
+        try {
+            $conectar = parent::conexion();
+            parent::set_names();
+
+            $date = new DateTime(date("Y-m-d H:i:s"));
+            $dateMod = $date->modify("-7 hours");
+            $dateNew = $dateMod->format("Y-m-d H:i:s");
+
+            // Consulta SQL para actualizar el estado de los préstamos asociados al ID_PRESTAMO a "PAGADO"
+            $sql = "UPDATE tbl_mp_planp SET ESTADO = 'PAGADO', FECHA_R_PAGO = :FECHA_R_PAGO  WHERE ID_PRESTAMO = :ID_PRESTAMO";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmt->bindParam(':FECHA_R_PAGO', $dateNew, PDO::PARAM_STR);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                echo json_encode(array('message1' => 'Estados de préstamos actualizados correctamente a PAGADO'));
+            } else {
+                echo json_encode(array('message2' => 'No se encontraron préstamos para actualizar o los préstamos ya están en estado PAGADO'));
+            }
+        } catch (PDOException $e) {
+            echo json_encode(array('message3' => 'Error en la solicitud: ' . $e->getMessage()));
+        }
+    }
+
+
+    public function PagoTotalCuotas($ID_PLANP, $CREADO_POR)
+    {
+        // Conectar a la base de datos
+        $conectar = parent::conexion();
+        parent::set_names();
+    
+        try {
+            // Obtener el ID_PRESTAMO a partir del ID_PLANP
+            $sqlObtenerIdPrestamo = "SELECT ID_PRESTAMO FROM tbl_mp_planp WHERE ID_PLANP = :ID_PLANP";
+            $stmtObtenerIdPrestamo = $conectar->prepare($sqlObtenerIdPrestamo);
+            $stmtObtenerIdPrestamo->bindParam(':ID_PLANP', $ID_PLANP, PDO::PARAM_INT);
+            $stmtObtenerIdPrestamo->execute();
+            $idPrestamoResult = $stmtObtenerIdPrestamo->fetch(PDO::FETCH_ASSOC);
+            $ID_PRESTAMO = $idPrestamoResult['ID_PRESTAMO'];
+    
+            // Calcular el monto total a pagar sumando solo los valores del campo MONTO_ADEUDADO_CAP cuando el estado sea PENDIENTE
+            $sqlCalcularMontoTotal = "SELECT SUM(MONTO_ADEUDADO_CAP) AS MONTO_TOTAL 
+                                  FROM tbl_mp_planp 
+                                  WHERE ID_PRESTAMO = :ID_PRESTAMO 
+                                  AND ESTADO = 'PENDIENTE'";
+            $stmtCalcularMontoTotal = $conectar->prepare($sqlCalcularMontoTotal);
+            $stmtCalcularMontoTotal->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmtCalcularMontoTotal->execute();
+            $montoTotalResult = $stmtCalcularMontoTotal->fetch(PDO::FETCH_ASSOC);
+            $montoTotal = $montoTotalResult['MONTO_TOTAL'];
+    
+            // Realizar el pago total de todas las cuotas
+            $sqlPagoTotalCuotas = "UPDATE tbl_mp_planp SET MONTO_PAGADO_CAP = MONTO_ADEUDADO_CAP, MONTO_ADEUDADO_CAP = 0 
+                               WHERE ID_PRESTAMO = :ID_PRESTAMO AND MONTO_ADEUDADO_CAP > 0";
+            $stmtPagoTotalCuotas = $conectar->prepare($sqlPagoTotalCuotas);
+            $stmtPagoTotalCuotas->bindParam(':ID_PRESTAMO', $ID_PRESTAMO, PDO::PARAM_INT);
+            $stmtPagoTotalCuotas->execute();
+    
+            // Llamar a la función CambiarEstadoPrestamosAPagado después de realizar el pago total de cuotas
+            $this->CambiarEstadoPrestamosAPagado($ID_PRESTAMO);
+    
+            // Registrar la transacción del pago total
+            $sqlRegistrarTransaccion = "INSERT INTO tbl_transacciones (MONTO, CREADO_POR, FECHA, ID_TIPO_TRANSACCION, DESCRIPCION) 
+                                    VALUES (:MONTO, :CREADO_POR, NOW(), 8, :DESCRIPCION)";
+            $stmtRegistrarTransaccion = $conectar->prepare($sqlRegistrarTransaccion);
+            $stmtRegistrarTransaccion->bindParam(':MONTO', $montoTotal, PDO::PARAM_STR);
+            $stmtRegistrarTransaccion->bindParam(':CREADO_POR', $CREADO_POR, PDO::PARAM_STR);
+            $descripcion = "Pago total de cuotas del préstamo con ID: " . $ID_PRESTAMO;
+            $stmtRegistrarTransaccion->bindParam(':DESCRIPCION', $descripcion, PDO::PARAM_STR);
+            $stmtRegistrarTransaccion->execute();
+    
+            // Verificar si se realizaron cambios en la base de datos y enviar la respuesta correspondiente
+            if ($stmtPagoTotalCuotas->rowCount() > 0) {
+                echo json_encode(array('message' => 'Pago total de cuotas realizado con éxito'));
+                echo json_encode(array('monto' => $montoTotal));
+            } 
+           
+        } catch (PDOException $e) {
+            echo json_encode(array('error' => "Error al realizar el pago total de cuotas: " . $e->getMessage()));
+        }
+    }
+    
 }
