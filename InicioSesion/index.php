@@ -47,7 +47,7 @@ $id_objeto_Tipo_cuenta = "28";
 $id_objeto_MantCuenta = "29";
 //------------------PERMISOS DE LAS PESTAÑAS-------------------------------------
 $id_objeto_Seguridad = "25";
-$id_objeto_Empleado = "27";
+$id_objeto_Empleados = "27";
 $id_objeto_Cuentas = "36";
 $id_objeto_Prestamos = "35";
 //------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ $permisosTransaccion = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_obj
 $permisosTipoCuenta = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Tipo_cuenta);
 $permisosMantCuenta = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_MantCuenta);
 //------------------------------------------------------------------------------------
-$permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Empleado);
+$permisos = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Empleados);
 $permisos1 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Seguridad);
 $permisos2 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Cuentas);
 $permisos3 = $permisosUsuarios->get_Permisos_Usuarios($id_rol, $id_objeto_Prestamos);
