@@ -381,7 +381,7 @@ if (!isset($_SESSION['usuario'])) {
                         <input type="date" class="form-control" id="fechaFin" name="fechaFin">
                     </div>
                     <button type="submit" class="btn btn-primary">Generar Reporte</button>
-                    <button  type="submit" class="btn btn-primary" id="exportarPDF">Exportar a PDF</button>
+                    <button  type="submit" class="btn btn-danger" id="exportarPDF">Exportar a PDF</button>
 
                 </form>
                 <hr class="my-4">
@@ -410,19 +410,45 @@ if (!isset($_SESSION['usuario'])) {
             <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
             <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>            
-
             <script>
+                // Función para imprimir solo la columnas deseada
+                function imprimirFila(row, columnsToPrint) {
+                    // Crear una nueva fila para imprimir
+                    var newRow = document.createElement('tr');
+                    // Obtener las celdas específicas de la fila original basadas en las columnas que se desean imprimir
+                    columnsToPrint.forEach(columnIndex => {
+                        var cell = row.cells[columnIndex];
+                        // Clonar la celda y agregarla a la nueva fila
+                        var clonedCell = cell.cloneNode(true);
+                        newRow.appendChild(clonedCell);
+                    });
+
+                    // Crear una tabla temporal con los encabezados y la nueva fila
+                    var tableToPrint = document.createElement('table');
+                    var thead = document.createElement('thead');
+                    thead.innerHTML = row.closest('table').querySelector('thead').innerHTML; // Copiar encabezados de tabla original
+                    var tbody = document.createElement('tbody');
+                    tbody.appendChild(newRow);
+                    tableToPrint.appendChild(thead);
+                    tableToPrint.appendChild(tbody);
+
+                    // Estilo de la tabla
+                    tableToPrint.style.borderCollapse = 'collapse';
+                    tableToPrint.style.border = '1px solid black';
+                    tableToPrint.style.width = '100%';
+
+                    // Estilo de las celdas
+                    newRow.querySelectorAll('td, th').forEach(cell => {
+                        cell.style.border = '1px solid black';
+                        cell.style.padding = '8px';
+                    });
+
+                    // Imprimir la fila
+                    var printWindow = window.open('', '_blank');
+                    printWindow.document.title = 'Reporte de transacciones.'; // Establecer el título de la ventana de impresión
+                    printWindow.document.body.appendChild(tableToPrint);
+                    printWindow.print();
+                }
                 document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('reporteForm').addEventListener('submit', function(event) {
                         event.preventDefault(); // Evitar que se envíe el formulario normalmente
@@ -449,6 +475,7 @@ if (!isset($_SESSION['usuario'])) {
                                 tableHTML += '<th>FECHA</th>';
                                 tableHTML += '<th>MONTO</th>';
                                 tableHTML += '<th>DESCRIPCIÓN</th>';
+                                tableHTML += '<th>ACCIÓN</th>';
                                 tableHTML += '</tr></thead>';
                                 tableHTML += '<tbody>';
                                 data.forEach(item => {
@@ -461,6 +488,7 @@ if (!isset($_SESSION['usuario'])) {
                                     } else {
                                         tableHTML += '<td></td>';
                                     }
+                                    tableHTML += '<td><button class="imprimir-btn">Imprimir</button></td>'; // Botón de impresión en cada fila
                                     tableHTML += '</tr>';
                                 });
                                 tableHTML += '</tbody></table>';
@@ -469,28 +497,70 @@ if (!isset($_SESSION['usuario'])) {
 
                                 // Mostrar el botón de exportar PDF después de generar la tabla
                                 document.getElementById('exportarPDF').style.display = 'inline-block';
+                               // Agregar evento de clic a los botones de imprimir fila
+                                var imprimirButtons = document.querySelectorAll('.imprimir-btn');
+                                imprimirButtons.forEach(button => {
+                                    button.addEventListener('click', function() {
+                                        // Obtener la fila actual
+                                        var row = this.closest('tr');
+                                        // Especificar las columnas que se desean imprimir (índices basados en cero)
+                                        var columnsToPrint = [0, 1, 2, 3];
+                                        imprimirFila(row, columnsToPrint);
+                                    });
+                                });
                             })
                             .catch(error => {
                                 console.error('Error:', error);
                             });
                     });
 
-                    // Función para exportar la tabla a PDF al hacer clic en el botón "Exportar a PDF"
                     document.getElementById('exportarPDF').addEventListener('click', function() {
+                        // Obtener la tabla después de que se haya generado
                         const element = document.getElementById('reporteTable');
+                        const now = new Date(); // Obtener la fecha y hora actual
+                        const fechaHora = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`; // Formatear la fecha y hora
+
+                        // Crear un nuevo elemento div para agregar el encabezado
+                        const header = document.createElement('div');
+                        header.innerHTML = `<h2 style="font-size: 16px; font-family: 'Arial', sans-serif;">Reporte generado el ${fechaHora}</h2>`;
+
+                        // Agregar imagen al encabezado
+                        const img = document.createElement('img');
+                        img.src = '../../src/logo.png'; // Reemplaza 'ruta_de_la_imagen.jpg' por la ruta de tu imagen
+                        img.style.width = '65px'; // Ajusta el tamaño de la imagen según sea necesario
+                        img.style.height = 'auto'; // Ajusta el tamaño de la imagen según sea necesario
+                        img.style.position = 'absolute';
+                        img.style.top = '20px';
+                        img.style.right = '20px';
+                        header.appendChild(img)
+
+                        // Crear un clon de la tabla para no modificar la original
+                        const clonedTable = element.cloneNode(true);
+
+                        // Eliminar la columna 'ACCIÓN' de la tabla clonada
+                        clonedTable.querySelectorAll('td:nth-child(5), th:nth-child(5)').forEach(cell => {
+                            cell.parentNode.removeChild(cell);
+                        });
+
+                        // Crear un nuevo contenedor para el encabezado y la tabla
+                        const tableContainer = document.createElement('div');
+                        tableContainer.appendChild(header);
+                        tableContainer.appendChild(clonedTable);
+                        
+                        // Esperar a que se complete la tabla
                         html2pdf()
-                            .from(element)
+                            .from(tableContainer)
                             .set({
                                 margin: 1,
-                                filename: 'reporte.pdf',
+                                filename: 'Reporte general.pdf',
                                 html2canvas: {
                                     scale: 2
                                 }
                             })
-                            .save();
+                        .save();
                     });
                 });
-            </script>
+        </script>
 </body>
 
 </html>

@@ -308,16 +308,8 @@ if (!isset($_SESSION['usuario'])) {
     <a href="javascript:history.back()" class="icono"><i class="fas fa-chevron-circle-left"></i></a>
     <!-- Icono de Adelante -->
     <a href="javascript:history.forward()" class="icono"><i class="fas fa-chevron-circle-right"></i></a>
-    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-      <div class="input-group">
-        <input class="form-control" type="text" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" />
-        <div class="input-group-append">
-          <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
-        </div>
-      </div>
-    </form>
     <!-- Navbar-->
-    <ul class="navbar-nav ml-auto ml-md-0">
+    <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $usuario; ?><i class="fas fa-user fa-fw"></i></a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
